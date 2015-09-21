@@ -41,6 +41,9 @@
 }
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    
+    //注册讯飞语音
+    [self configIFlySpeech];
     //设置音乐后台播放的会话类型
     [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
     AVAudioSession *session = [AVAudioSession sharedInstance];
@@ -49,8 +52,7 @@
     //开启远程事件
     [application beginReceivingRemoteControlEvents];
     
-    //注册讯飞语音
-    [self configIFlySpeech];
+
     
     
     return YES;

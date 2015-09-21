@@ -24,8 +24,12 @@
 #import "PCSong.h"
 #import "PCPlaylist.h"
 #import "LEColorPicker.h"
-#import "PCBaiduNavController.h"
+#import "PCNaviController.h"
 #import "PCSettingViewController.h"
+#import "iflyMSC/IFlySpeechSynthesizer.h"
+#import "iflyMSC/IFlySpeechSynthesizerDelegate.h"
+#import "iflyMSC/IFlySpeechError.h"
+
 /** 播放模式 */
 typedef NS_ENUM(NSUInteger, PCAudioRepeatMode) {
     PCAudioRepeatModeSingle,
@@ -69,16 +73,16 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 /** 歌曲相关 */
 @property (nonatomic, assign) CGFloat progressOriginal;
 @property (nonatomic, assign) CGPoint originalPoint;
-@property (nonatomic, strong) PCSong *songPlaying;
 @property (nonatomic, strong) NSArray *songs;
 @property (nonatomic, assign) NSInteger index;
-@property (nonatomic, strong) NSArray *playItemArray;
 /**
  *  播放进度定时器
  */
 @property (nonatomic, strong) NSTimer *currentTimeTimer;
 @property (nonatomic, strong) NSTimer *PlayBackTimer;
 @property (nonatomic, readonly) PCAudioRepeatMode *repeatMode;
+@property (nonatomic, strong) IFlySpeechSynthesizer *iFlySpeechSynthesizer;
+
 @end
 
 @implementation ViewController
@@ -122,6 +126,22 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 - (BOOL)prefersStatusBarHidden {
     return YES;
 }
+- (FSAudioController *)audioController {
+    if (_audioController == nil) {
+        FSAudioController *audioController = [[FSAudioController alloc] init];
+        _audioController = audioController;
+    }
+    
+    return _audioController;
+}
+- (NSArray *)songs {
+    if (_songs == nil) {
+        _songs = [NSArray array];
+    }
+    
+    return _songs;
+}
+
 #pragma mark - 添加ScrollView
 - (void)setupScrollView {
     UIScrollView *scrollView = [[UIScrollView alloc] init];
@@ -296,8 +316,8 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     PCMyMusicViewController *myMusic  =[[PCMyMusicViewController alloc] init];
     [self setupSingleViewControllerToScrollView:myMusic hidden:YES];
     //导航页面
-    PCBaiduNavController *baidu = [[PCBaiduNavController alloc] init];
-    [self setupSingleViewControllerToScrollView:baidu hidden:YES];
+    PCNaviController *navi = [[PCNaviController alloc] init];
+    [self setupSingleViewControllerToScrollView:navi hidden:YES];
     //设置页面
     PCSettingViewController *setting = [[PCSettingViewController alloc] init];
     [self setupSingleViewControllerToScrollView:setting hidden:YES];
@@ -337,10 +357,15 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
         self.selectedView = nav.view;
     }
 }
+
 #pragma mark - 获取通知
 - (void)getNotification {
     NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
     [center addObserver:self selector:@selector(didSelectedSong:) name:@"selected" object:nil];
+    [center addObserver:self selector:@selector(speaking) name:@"speaking" object:nil];
+    [center addObserver:self selector:@selector(nonspeaking) name:@"nonspeaking" object:nil];
+    [center addObserver:self selector:@selector(bugReport) name:@"bug" object:nil];
+
 }
 - (void)didSelectedSong:(NSNotification *)sender {
     //滚到上层
@@ -351,48 +376,57 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     NSInteger index = [sender.userInfo[@"indexPath"] integerValue];
     self.songs = songs;
     self.index = index;
-    NSMutableArray *itemsArray = [NSMutableArray array];
-    for (int i = 0 ; i < songs.count; i++) {
-        FSPlaylistItem *item = [[FSPlaylistItem alloc] init];
-        PCSong *song = songs[i];
-        item.url = [NSURL URLWithString:song.URL];
-        [itemsArray addObject:item];
-        //获取当前播放歌曲模型
-        if (i == index) {
-            self.songPlaying = song;
-        }
-    }
-    self.playItemArray = itemsArray;
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self playFromPlaylist:itemsArray itemIndex:index state:PCAudioPlayStatePlay];
-        [self changePlayerInterfaceDuringUsing:self.songPlaying row:index state:PCAudioPlayStatePlay];
+        [self playFromPlaylist:songs itemIndex:index state:PCAudioPlayStatePlay];
+        [self changePlayerInterfaceDuringUsing:self.songs[index] row:index state:PCAudioPlayStatePlay];
     });
     
 }
+
+- (void)speaking {
+//    if (self.audioController.isPlaying) {
+        self.paused = NO;
+        self.audioController.volume = 0.1;
+//    }
+    if (self.audioController.isPlaying == 0) {
+        [self playOrPause];
+    }
+}
+
+- (void)nonspeaking {
+    if (self.audioController.isPlaying == 0) {
+        self.audioController.volume = 1;
+    }
+    [self playOrPause];
+
+}
+
+- (void)bugReport {
+    NSLog(@"%d",self.audioController.isPlaying);
+    [self playOrPause];
+}
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"selected" object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"speaking" object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"nonspeaking" object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"bug" object:nil];
 }
 #pragma mark - 播放相关
 /** 开始播放 */
 - (void)playFromPlaylist:(NSArray *)playlist itemIndex:(NSUInteger)index state:(PCAudioPlayState)state {
     self.paused = NO;
-    self.audioController = nil;
-    
-    FSAudioController *audioController = [[FSAudioController alloc] init];
-    self.audioController = audioController;
-    
     //检查文件是否已存在
     NSString *rootPath = [self dirDoc];
-    PCSong *song = self.songs[index];
+    PCSong *song = playlist[index];
     NSString *filePath = [rootPath  stringByAppendingPathComponent:[NSString stringWithFormat:@"%@ - %@.mp3",song.artist,song.songName]];
     NSFileManager *fileManager = [NSFileManager defaultManager];
+    //播放本地
     if ([fileManager fileExistsAtPath:filePath]) {
-        //播放本地
-        NSURL *URL = [NSURL fileURLWithPath:filePath];
-        FSPlaylistItem *item = playlist[index];
-        item.url = URL;
+        song.URL = filePath;
+        [self.audioController playFromURL:[NSURL fileURLWithPath:song.URL]];
+    } else {
+        [self.audioController playFromURL:[NSURL URLWithString:song.URL]];
     }
-    [self.audioController playFromPlaylist:playlist itemIndex:index];
     
     [self addCurrentTimeTimer];
     if (state == PCAudioPlayStatePlay) [MBProgressHUD showPlayState:@"playB" toView:self.backgroundView];
@@ -423,7 +457,6 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
         //修改专辑名
         self.albumLabel.text = song.album;
         self.albumLabel.textColor = [colorScheme primaryTextColor];
-        
         //设置锁屏信息
         NSMutableDictionary *info = [NSMutableDictionary dictionary];
         //设置专辑名称
@@ -436,7 +469,6 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
         info[MPMediaItemPropertyPlaybackDuration] = @(duration);
         [MPNowPlayingInfoCenter defaultCenter].nowPlayingInfo = info;
     }];
-    
 }
 /** 给播放器添加手势操作 */
 - (void)setupGestureRecognizer {
@@ -473,30 +505,32 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 }
 /** 下一首 */
 - (void)playNext {
-    NSInteger index = self.audioController.currentPlaylistItemIndex;
-    if (index == self.songs.count - 1) {
-        index = 0;
-        [self playFromPlaylist:self.playItemArray itemIndex:index state:PCAudioPlayStateNext];
+    if (self.index == self.songs.count - 1) {
+        self.index = 0;
     } else {
-        [self.audioController playNextItem];
-        
+        self.index = self.index + 1;
     }
-    PCSong *song = self.songs[self.audioController.currentPlaylistItemIndex];
-    [self changePlayerInterfaceDuringUsing:song row:self.audioController.currentPlaylistItemIndex state:PCAudioPlayStateNext];
+
+    [self playFromPlaylist:self.songs itemIndex:self.index state:PCAudioPlayStateNext];
+
+    PCSong *song = self.songs[self.index];
+    [self changePlayerInterfaceDuringUsing:song row:self.index state:PCAudioPlayStateNext];
     [MBProgressHUD showPlayState:@"nextB" toView:self.backgroundView];
 }
 /** 上一首 */
 - (void)playPrevious {
-    NSInteger index = self.audioController.currentPlaylistItemIndex;
-    if (index == 0) {
-        index = self.songs.count - 1;
-        [self playFromPlaylist:self.playItemArray itemIndex:index state:PCAudioPlayStatePrevious];
+#warning 没有添加播放小于五秒的上一首播放
+    if (self.index == 0) {
+        self.index = self.songs.count - 1;
     } else {
-        [self.audioController playPreviousItem];
-        
+        self.index = self.index - 1;
+        [self playFromPlaylist:self.songs itemIndex:self.index - 1 state:PCAudioPlayStatePrevious];
     }
-    PCSong *song = self.songs[self.audioController.currentPlaylistItemIndex];
-    [self changePlayerInterfaceDuringUsing:song row:self.audioController.currentPlaylistItemIndex state:PCAudioPlayStatePrevious];
+    
+    [self playFromPlaylist:self.songs itemIndex:self.index state:PCAudioPlayStatePrevious];
+
+    PCSong *song = self.songs[self.index];
+    [self changePlayerInterfaceDuringUsing:song row:self.index state:PCAudioPlayStatePrevious];
     [MBProgressHUD showPlayState:@"prevB" toView:self.backgroundView];
 }
 /** 快进快退 */
@@ -580,19 +614,13 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     self.currentTime.text = [NSString stringWithFormat:@"%d:%@",cur.minute, curSecond];
     self.leftTime.text = [NSString stringWithFormat:@"%@:%@",leftMin,leftSec];
     
-    if (self.audioController.currentPlaylistItemIndex != self.index) {
-        self.index = self.audioController.currentPlaylistItemIndex;
-        PCSong *song = self.songs[self.index];
-        [self changePlayerInterfaceDuringUsing:song row:self.index state:PCAudioPlayStateNext];
-    }
     
 #warning 没考虑好
-    
     //当播放停止或者暂停时移除监视器
-    //    if (totalLeftSecond == 1) {
-    //        [self playWithURL:self.audioController.url state:PCAudioPlayStatePlay];
-    //        [self nextSong:nil];
-    //    }
+    if (totalLeftSecond == 1) {
+        [self playNext];
+    }
+//    NSLog(@"%d",self.audioController.isPlaying);
 }
 
 - (void)updatePlayBackProgress {

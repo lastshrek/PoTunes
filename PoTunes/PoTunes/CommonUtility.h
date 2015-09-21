@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <AMapNaviKit/MAMapKit.h>
+#import <AMapNaviKit/AMapNaviKit.h>
 #import <AMapSearchKit/AMapSearchAPI.h>
 
 @interface CommonUtility : NSObject

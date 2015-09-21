@@ -1355,7 +1355,7 @@ public:
 
 - (void)pause
 {
-    NSAssert([NSThread isMainThread], @"FSAudioStream.pause needs to be called in the main thread");
+//    NSAssert([NSThread isMainThread], @"FSAudioStream.pause needs to be called in the main thread");
     
     [_private pause];
 }
@@ -1384,7 +1384,7 @@ public:
 
 - (BOOL)isPlaying
 {
-    NSAssert([NSThread isMainThread], @"FSAudioStream.isPlaying needs to be called in the main thread");
+//    NSAssert([NSThread isMainThread], @"FSAudioStream.isPlaying needs to be called in the main thread");
     
     return [_private isPlaying];
 }
@@ -1516,7 +1516,7 @@ public:
 
 - (void)setVolume:(float)volume
 {
-    NSAssert([NSThread isMainThread], @"FSAudioStream.setVolume needs to be called in the main thread");
+//    NSAssert([NSThread isMainThread], @"FSAudioStream.setVolume needs to be called in the main thread");
     
     [_private setVolume:volume];
 }
