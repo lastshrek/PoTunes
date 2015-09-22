@@ -13,23 +13,11 @@
 #import "iflyMSC/IFlySpeechSynthesizerDelegate.h"
 #import "iflyMSC/IFlySpeechError.h"
 #import "SharedMapView.h"
+#import <AVFoundation/AVFoundation.h>
+
+@interface PCNaviController() <MAMapViewDelegate, AMapNaviManagerDelegate, IFlySpeechSynthesizerDelegate, AMapNaviViewControllerDelegate, PCBaiduNavControllerDelegate, AVSpeechSynthesizerDelegate>
 
 
-@interface PCNaviController() <MAMapViewDelegate, AMapNaviManagerDelegate, IFlySpeechSynthesizerDelegate, AMapNaviViewControllerDelegate, PCBaiduNavControllerDelegate>
-
-//@property (nonatomic, weak) MAMapView *mapView;
-//@property (nonatomic, weak) UISearchBar *searchBar;
-//@property (nonatomic, strong) AMapSearchAPI *search;
-//@property (nonatomic, strong) AMapNaviViewController *naviViewController;
-//@property (nonatomic, strong) AMapNaviManager *naviManager;
-//@property (nonatomic, strong) IFlySpeechSynthesizer *iFlySpeechSynthesizer;
-//
-//
-////用户位置
-//@property (nonatomic, strong) MAUserLocation *userLocation;
-//@property (nonatomic, weak) UITableView *tableView;
-//@property (nonatomic, strong) NSMutableArray *tips;
-//
 @property (nonatomic, weak) MAMapView *mapView;
 
 @property (nonatomic, strong) AMapNaviManager *naviManager;
@@ -40,7 +28,7 @@
 @property (nonatomic, strong) AMapNaviPoint* startPoint;
 @property (nonatomic, strong) AMapNaviPoint* endPoint;
 @property (nonatomic, strong) NSTimer *currentTimer;
-
+@property (nonatomic, strong) AVSpeechSynthesizer *player;
 
 @end
 
@@ -74,7 +62,7 @@
     [self configNaviViewController];
     
     
-
+    
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -154,7 +142,7 @@
     endBtn.layer.borderWidth  = 0.5;
     endBtn.layer.cornerRadius = 5;
     [endBtn addTarget:self action:@selector(location:) forControlEvents:UIControlEventTouchUpInside];
-
+    
     [self.view addSubview:endBtn];
     
     
@@ -192,7 +180,7 @@
     [backButton addTarget:self action:@selector(backButtonAction) forControlEvents:UIControlEventTouchUpInside];
     
     [_naviViewController.view addSubview:backButton];
-
+    
 }
 
 #pragma mark - 添加定时器
@@ -210,11 +198,11 @@
     self.currentTimer = nil;
 }
 - (void)updateCurrentTime {
-//    NSLog(@"%d",self.iFlySpeechSynthesizer.isSpeaking);
+    //    NSLog(@"%d",self.iFlySpeechSynthesizer.isSpeaking);
     if (self.iFlySpeechSynthesizer.isSpeaking) {
-       
+        
     } else {
-           }
+    }
     
 }
 #pragma mark - Button Action
@@ -270,23 +258,27 @@
 - (void)naviManager:(AMapNaviManager *)naviManager didUpdateNaviInfo:(AMapNaviInfo *)naviInfo
 {
     
-//    [_naviInfoLabel setText:[NSString stringWithFormat:@"%@", naviInfo]];
+    //    [_naviInfoLabel setText:[NSString stringWithFormat:@"%@", naviInfo]];
 }
 
-- (void)naviManager:(AMapNaviManager *)naviManager playNaviSoundString:(NSString *)soundString soundStringType:(AMapNaviSoundType)soundStringType
-{
+- (void)naviManager:(AMapNaviManager *)naviManager playNaviSoundString:(NSString *)soundString soundStringType:(AMapNaviSoundType)soundStringType {
     NSLog(@"playNaviSoundString:{%ld:%@}", (long)soundStringType, soundString);
     
-    if (soundStringType == AMapNaviSoundTypePassedReminder)
-    {
-        //用系统自带的声音做简单例子，播放其他提示音需要另外配置
-//        AudioServicesPlaySystemSound(1009);
+    if (soundStringType == AMapNaviSoundTypePassedReminder) {
+        
     }
     else
     {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-            [_iFlySpeechSynthesizer startSpeaking:soundString];
-        });
+        
+        AVSpeechSynthesizer *player = [[AVSpeechSynthesizer alloc] init];
+        player.delegate = self;
+        self.player = player;
+        AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:soundString];
+        utterance.voice = [AVSpeechSynthesisVoice voiceWithLanguage:@"zh-CN"];
+        utterance.volume = 1.0;
+        utterance.rate = 0.5;
+        utterance.pitchMultiplier = 0.8;
+        [player speakUtterance:utterance];
     }
 }
 #pragma mark - AManNaviViewController Delegate
@@ -301,38 +293,24 @@
     
     [self.naviManager dismissNaviViewControllerAnimated:YES];
 }
-
 #pragma mark - iFlySpeechSynthesizer Delegate
 
-- (void)synthesize:(NSString *)text toUri:(NSString*)uri {
+- (void)speechSynthesizer:(AVSpeechSynthesizer *)synthesizer didStartSpeechUtterance:(AVSpeechUtterance *)utterance {
+    NSNotification *speaking = [NSNotification notificationWithName:@"speaking" object:nil userInfo:nil];
+    [[NSNotificationCenter defaultCenter] postNotification:speaking];
+}
+- (void)speechSynthesizer:(AVSpeechSynthesizer *)synthesizer didFinishSpeechUtterance:(AVSpeechUtterance *)utterance {
     NSNotification *nonspeaking = [NSNotification notificationWithName:@"nonspeaking" object:nil userInfo:nil];
     [[NSNotificationCenter defaultCenter] postNotification:nonspeaking];
 }
 
 
-- (void)onCompleted:(IFlySpeechError *)error
-{
-    NSNotification *bug = [NSNotification notificationWithName:@"bug" object:nil userInfo:nil];
-    [[NSNotificationCenter defaultCenter] postNotification:bug];
-    
-}
-- (void) onSpeakBegin {
-    NSNotification *speaking = [NSNotification notificationWithName:@"speaking" object:nil userInfo:nil];
-    [[NSNotificationCenter defaultCenter] postNotification:speaking];
-}
-
-- (void) onSpeakProgress:(int) progress {
-    if (progress == 100) {
-        NSNotification *nonspeaking = [NSNotification notificationWithName:@"nonspeaking" object:nil userInfo:nil];
-        [[NSNotificationCenter defaultCenter] postNotification:nonspeaking];
-    }
-}
 #pragma mark - PCBaiduNavControllerDelegate
 
 - (void)navController:(PCBaiduNavController *)navController didClickTheAnnotationAccessoryControlBySendingUserLocation:(AMapNaviPoint *)userLocation andDestinationLocation:(CLLocationCoordinate2D)destinationLocation {
     self.startPoint = [AMapNaviPoint locationWithLatitude:userLocation.latitude longitude:userLocation.longitude];
     self.endPoint   = [AMapNaviPoint locationWithLatitude:destinationLocation.latitude longitude:destinationLocation.longitude];
-
+    
 }
 
 @end

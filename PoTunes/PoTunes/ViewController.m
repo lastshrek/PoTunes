@@ -82,7 +82,8 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 @property (nonatomic, strong) NSTimer *PlayBackTimer;
 @property (nonatomic, readonly) PCAudioRepeatMode *repeatMode;
 @property (nonatomic, strong) IFlySpeechSynthesizer *iFlySpeechSynthesizer;
-
+//当前播放进度
+@property (nonatomic, assign) float nowProgress;
 @end
 
 @implementation ViewController
@@ -141,7 +142,12 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     
     return _songs;
 }
-
+- (float)nowProgress {
+    if (!_nowProgress) {
+        _nowProgress = 0;
+    }
+    return _nowProgress;
+}
 #pragma mark - 添加ScrollView
 - (void)setupScrollView {
     UIScrollView *scrollView = [[UIScrollView alloc] init];
@@ -364,8 +370,7 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     [center addObserver:self selector:@selector(didSelectedSong:) name:@"selected" object:nil];
     [center addObserver:self selector:@selector(speaking) name:@"speaking" object:nil];
     [center addObserver:self selector:@selector(nonspeaking) name:@"nonspeaking" object:nil];
-    [center addObserver:self selector:@selector(bugReport) name:@"bug" object:nil];
-
+    
 }
 - (void)didSelectedSong:(NSNotification *)sender {
     //滚到上层
@@ -384,32 +389,18 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 }
 
 - (void)speaking {
-//    if (self.audioController.isPlaying) {
-        self.paused = NO;
-        self.audioController.volume = 0.1;
-//    }
-    if (self.audioController.isPlaying == 0) {
-        [self playOrPause];
-    }
+    self.audioController.volume = 0.1;
 }
 
 - (void)nonspeaking {
-    if (self.audioController.isPlaying == 0) {
-        self.audioController.volume = 1;
-    }
-    [self playOrPause];
-
+    self.audioController.volume = 1;
 }
 
-- (void)bugReport {
-    NSLog(@"%d",self.audioController.isPlaying);
-    [self playOrPause];
-}
+
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"selected" object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"speaking" object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"nonspeaking" object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"bug" object:nil];
 }
 #pragma mark - 播放相关
 /** 开始播放 */
@@ -510,9 +501,9 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     } else {
         self.index = self.index + 1;
     }
-
+    
     [self playFromPlaylist:self.songs itemIndex:self.index state:PCAudioPlayStateNext];
-
+    
     PCSong *song = self.songs[self.index];
     [self changePlayerInterfaceDuringUsing:song row:self.index state:PCAudioPlayStateNext];
     [MBProgressHUD showPlayState:@"nextB" toView:self.backgroundView];
@@ -528,7 +519,7 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     }
     
     [self playFromPlaylist:self.songs itemIndex:self.index state:PCAudioPlayStatePrevious];
-
+    
     PCSong *song = self.songs[self.index];
     [self changePlayerInterfaceDuringUsing:song row:self.index state:PCAudioPlayStatePrevious];
     [MBProgressHUD showPlayState:@"prevB" toView:self.backgroundView];
@@ -620,7 +611,7 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     if (totalLeftSecond == 1) {
         [self playNext];
     }
-//    NSLog(@"%d",self.audioController.isPlaying);
+    //    NSLog(@"%d",self.audioController.isPlaying);
 }
 
 - (void)updatePlayBackProgress {

@@ -8,6 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		3C5813001BA7EFA00091E4FC /* PCNaviController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C5812FF1BA7EFA00091E4FC /* PCNaviController.m */; settings = {ASSET_TAGS = (); }; };
+		3CA224F41BAFB2080028387F /* AFSoundPlayback.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CA224EB1BAFB2080028387F /* AFSoundPlayback.m */; settings = {ASSET_TAGS = (); }; };
+		3CA224F51BAFB2080028387F /* AFSoundItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CA224ED1BAFB2080028387F /* AFSoundItem.m */; settings = {ASSET_TAGS = (); }; };
+		3CA224F61BAFB2080028387F /* AFSoundQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CA224EF1BAFB2080028387F /* AFSoundQueue.m */; settings = {ASSET_TAGS = (); }; };
+		3CA224F71BAFB2080028387F /* AFSoundRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CA224F11BAFB2080028387F /* AFSoundRecord.m */; settings = {ASSET_TAGS = (); }; };
+		3CA224F81BAFB2080028387F /* NSTimer+AFSoundManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CA224F31BAFB2080028387F /* NSTimer+AFSoundManager.m */; settings = {ASSET_TAGS = (); }; };
+		3CA224FE1BAFDCDC0028387F /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CA224FD1BAFDCDC0028387F /* CoreMedia.framework */; };
+		3CA225001BAFDD140028387F /* point1sec.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 3CA224FF1BAFDD140028387F /* point1sec.mp3 */; settings = {ASSET_TAGS = (); }; };
 		3CB2E2F81BA7B26800805D4F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB2E2F71BA7B26800805D4F /* main.m */; };
 		3CB2E2FB1BA7B26800805D4F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB2E2FA1BA7B26800805D4F /* AppDelegate.m */; };
 		3CB2E2FE1BA7B26800805D4F /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB2E2FD1BA7B26800805D4F /* ViewController.m */; };
@@ -127,6 +134,19 @@
 /* Begin PBXFileReference section */
 		3C5812FE1BA7EFA00091E4FC /* PCNaviController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCNaviController.h; sourceTree = "<group>"; };
 		3C5812FF1BA7EFA00091E4FC /* PCNaviController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCNaviController.m; sourceTree = "<group>"; };
+		3CA224E91BAFB2080028387F /* AFSoundManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFSoundManager.h; sourceTree = "<group>"; };
+		3CA224EA1BAFB2080028387F /* AFSoundPlayback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFSoundPlayback.h; sourceTree = "<group>"; };
+		3CA224EB1BAFB2080028387F /* AFSoundPlayback.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFSoundPlayback.m; sourceTree = "<group>"; };
+		3CA224EC1BAFB2080028387F /* AFSoundItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFSoundItem.h; sourceTree = "<group>"; };
+		3CA224ED1BAFB2080028387F /* AFSoundItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFSoundItem.m; sourceTree = "<group>"; };
+		3CA224EE1BAFB2080028387F /* AFSoundQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFSoundQueue.h; sourceTree = "<group>"; };
+		3CA224EF1BAFB2080028387F /* AFSoundQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFSoundQueue.m; sourceTree = "<group>"; };
+		3CA224F01BAFB2080028387F /* AFSoundRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFSoundRecord.h; sourceTree = "<group>"; };
+		3CA224F11BAFB2080028387F /* AFSoundRecord.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFSoundRecord.m; sourceTree = "<group>"; };
+		3CA224F21BAFB2080028387F /* NSTimer+AFSoundManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSTimer+AFSoundManager.h"; sourceTree = "<group>"; };
+		3CA224F31BAFB2080028387F /* NSTimer+AFSoundManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSTimer+AFSoundManager.m"; sourceTree = "<group>"; };
+		3CA224FD1BAFDCDC0028387F /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		3CA224FF1BAFDD140028387F /* point1sec.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = point1sec.mp3; sourceTree = "<group>"; };
 		3CB2E2F21BA7B26800805D4F /* PoTunes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PoTunes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3CB2E2F61BA7B26800805D4F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3CB2E2F71BA7B26800805D4F /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -330,6 +350,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3CA224FE1BAFDCDC0028387F /* CoreMedia.framework in Frameworks */,
 				3CB2E45A1BA7D4FA00805D4F /* AddressBook.framework in Frameworks */,
 				3CB2E4581BA7D4F200805D4F /* libstdc++.6.0.9.dylib in Frameworks */,
 				3CB2E4561BA7D4E600805D4F /* libz.1.2.5.dylib in Frameworks */,
@@ -355,9 +376,28 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3CA224E81BAFB1FA0028387F /* AFSoundManager */ = {
+			isa = PBXGroup;
+			children = (
+				3CA224E91BAFB2080028387F /* AFSoundManager.h */,
+				3CA224EA1BAFB2080028387F /* AFSoundPlayback.h */,
+				3CA224EB1BAFB2080028387F /* AFSoundPlayback.m */,
+				3CA224EC1BAFB2080028387F /* AFSoundItem.h */,
+				3CA224ED1BAFB2080028387F /* AFSoundItem.m */,
+				3CA224EE1BAFB2080028387F /* AFSoundQueue.h */,
+				3CA224EF1BAFB2080028387F /* AFSoundQueue.m */,
+				3CA224F01BAFB2080028387F /* AFSoundRecord.h */,
+				3CA224F11BAFB2080028387F /* AFSoundRecord.m */,
+				3CA224F21BAFB2080028387F /* NSTimer+AFSoundManager.h */,
+				3CA224F31BAFB2080028387F /* NSTimer+AFSoundManager.m */,
+			);
+			name = AFSoundManager;
+			sourceTree = "<group>";
+		};
 		3CB2E2E91BA7B26800805D4F = {
 			isa = PBXGroup;
 			children = (
+				3CA224FD1BAFDCDC0028387F /* CoreMedia.framework */,
 				3CB2E2F41BA7B26800805D4F /* PoTunes */,
 				3CB2E30E1BA7B26800805D4F /* PoTunesTests */,
 				3CB2E2F31BA7B26800805D4F /* Products */,
@@ -396,6 +436,7 @@
 		3CB2E2F51BA7B26800805D4F /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				3CA224FF1BAFDD140028387F /* point1sec.mp3 */,
 				3CB2E2F61BA7B26800805D4F /* Info.plist */,
 				3CB2E2F71BA7B26800805D4F /* main.m */,
 			);
@@ -495,6 +536,7 @@
 		3CB2E33A1BA7CD4D00805D4F /* 三方库 */ = {
 			isa = PBXGroup;
 			children = (
+				3CA224E81BAFB1FA0028387F /* AFSoundManager */,
 				3CB2E4421BA7D45800805D4F /* FMDB */,
 				3CB2E4071BA7D31E00805D4F /* LEColorPicker */,
 				3CB2E3C41BA7D0A500805D4F /* FSAudioStreamer */,
@@ -848,6 +890,11 @@
 				TargetAttributes = {
 					3CB2E2F11BA7B26800805D4F = {
 						CreatedOnToolsVersion = 6.4;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
 					};
 					3CB2E30A1BA7B26800805D4F = {
 						CreatedOnToolsVersion = 6.4;
@@ -885,6 +932,7 @@
 				3CB2E3061BA7B26800805D4F /* LaunchScreen.xib in Resources */,
 				3CB2E3B11BA7CF2200805D4F /* BebasNeue.otf in Resources */,
 				3CB2E3901BA7CEEE00805D4F /* MBProgressHUD.bundle in Resources */,
+				3CA225001BAFDD140028387F /* point1sec.mp3 in Resources */,
 				3CB2E34F1BA7CD7C00805D4F /* MJRefresh.bundle in Resources */,
 				3CB2E3031BA7B26800805D4F /* Images.xcassets in Resources */,
 			);
@@ -913,8 +961,10 @@
 				3CB2E3861BA7CE4000805D4F /* UIImage+WebP.m in Sources */,
 				3CB2E3881BA7CE4000805D4F /* UIImageView+WebCache.m in Sources */,
 				3CB2E3801BA7CE4000805D4F /* SDWebImageDownloaderOperation.m in Sources */,
+				3CA224F71BAFB2080028387F /* AFSoundRecord.m in Sources */,
 				3CB2E3AD1BA7CF0D00805D4F /* AFURLRequestSerialization.m in Sources */,
 				3CB2E3A91BA7CF0D00805D4F /* AFHTTPSessionManager.m in Sources */,
+				3CA224F51BAFB2080028387F /* AFSoundItem.m in Sources */,
 				3CB2E3DC1BA7D11E00805D4F /* FSParseRssPodcastFeedRequest.m in Sources */,
 				3CB2E3F61BA7D13B00805D4F /* file_stream.cpp in Sources */,
 				3CB2E2FE1BA7B26800805D4F /* ViewController.m in Sources */,
@@ -933,12 +983,14 @@
 				3CB2E37B1BA7CE4000805D4F /* NSData+ImageContentType.m in Sources */,
 				3CB2E34E1BA7CD7C00805D4F /* UIView+MJExtension.m in Sources */,
 				3CB2E3341BA7CC0700805D4F /* UIImage+Reflection.m in Sources */,
+				3CA224F41BAFB2080028387F /* AFSoundPlayback.m in Sources */,
 				3CB2E37C1BA7CE4000805D4F /* SDImageCache.m in Sources */,
 				3CB2E3F41BA7D13B00805D4F /* caching_stream.cpp in Sources */,
 				3CB2E3F71BA7D13B00805D4F /* http_stream.cpp in Sources */,
 				3CB2E3AE1BA7CF0D00805D4F /* AFURLResponseSerialization.m in Sources */,
 				3CB2E44E1BA7D46C00805D4F /* FMDatabase.m in Sources */,
 				3CB2E3DA1BA7D11E00805D4F /* FSCheckContentTypeRequest.m in Sources */,
+				3CA224F61BAFB2080028387F /* AFSoundQueue.m in Sources */,
 				3C5813001BA7EFA00091E4FC /* PCNaviController.m in Sources */,
 				3CB2E4511BA7D46C00805D4F /* FMDatabaseQueue.m in Sources */,
 				3CB2E3531BA7CD7C00805D4F /* MJRefreshHeaderView.m in Sources */,
@@ -985,6 +1037,7 @@
 				3CB2E44F1BA7D46C00805D4F /* FMDatabaseAdditions.m in Sources */,
 				3CB2E2FB1BA7B26800805D4F /* AppDelegate.m in Sources */,
 				3CB2E3291BA7CA5D00805D4F /* LDProgressView.m in Sources */,
+				3CA224F81BAFB2080028387F /* NSTimer+AFSoundManager.m in Sources */,
 				3CB2E3831BA7CE4000805D4F /* UIButton+WebCache.m in Sources */,
 				3CB2E2F81BA7B26800805D4F /* main.m in Sources */,
 				3CB2E3AF1BA7CF0D00805D4F /* AFURLSessionManager.m in Sources */,

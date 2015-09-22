@@ -33,10 +33,10 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>哈哈哈哈</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>哈哈哈哈哈哈</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>哈哈哈哈</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>BebasNeue.otf</string>
