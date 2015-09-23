@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import <AMapNaviKit/AMapNaviKit.h>
+#import <AMapNaviKit/MAMapKit.h>
+
 
 @class PCBaiduNavController;
 
@@ -15,7 +17,7 @@
 
 @optional
 
-- (void)navController:(PCBaiduNavController *)navController didClickTheAnnotationAccessoryControlBySendingUserLocation:(AMapNaviPoint *)userLocation andDestinationLocation:(CLLocationCoordinate2D)destinationLocation;
+- (void)navController:(PCBaiduNavController *)navController didClickTheAnnotationAccessoryControlBySendingUserLocation:(CLLocationCoordinate2D)userLocation andDestinationLocation:(CLLocationCoordinate2D)destinationLocation mapView:(MAMapView *)mapView title:(NSString *)title destinationTitle:(NSString *)destinationTitle;
 
 @end
 

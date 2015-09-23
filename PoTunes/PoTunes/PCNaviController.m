@@ -9,60 +9,49 @@
 #import "PCNaviController.h"
 #import "PCBaiduNavController.h"
 #import <AMapNaviKit/AMapNaviKit.h>
-#import "iflyMSC/IFlySpeechSynthesizer.h"
-#import "iflyMSC/IFlySpeechSynthesizerDelegate.h"
-#import "iflyMSC/IFlySpeechError.h"
 #import "SharedMapView.h"
 #import <AVFoundation/AVFoundation.h>
+#import "Common.h"
+#import "MBProgressHUD+MJ.h"
+typedef NS_ENUM(NSInteger, TravelTypes) {
+    TravelTypeCar = 0,      // 驾车方式
+    TravelTypeWalk,         // 步行方式
+};
 
-@interface PCNaviController() <MAMapViewDelegate, AMapNaviManagerDelegate, IFlySpeechSynthesizerDelegate, AMapNaviViewControllerDelegate, PCBaiduNavControllerDelegate, AVSpeechSynthesizerDelegate>
+@interface PCNaviController() <MAMapViewDelegate, AMapNaviManagerDelegate, AMapNaviViewControllerDelegate, PCBaiduNavControllerDelegate, AVSpeechSynthesizerDelegate>
 
 
 @property (nonatomic, weak) MAMapView *mapView;
-
 @property (nonatomic, strong) AMapNaviManager *naviManager;
-
-@property (nonatomic, strong) IFlySpeechSynthesizer *iFlySpeechSynthesizer;
 @property (nonatomic, strong) AMapNaviViewController *naviViewController;
-
-@property (nonatomic, strong) AMapNaviPoint* startPoint;
-@property (nonatomic, strong) AMapNaviPoint* endPoint;
+@property (nonatomic, strong) AMapNaviPoint *startPoint;
+@property (nonatomic, strong) AMapNaviPoint *endPoint;
 @property (nonatomic, strong) NSTimer *currentTimer;
 @property (nonatomic, strong) AVSpeechSynthesizer *player;
+@property (nonatomic) TravelTypes travelType;
+@property (nonatomic, weak) UISegmentedControl *segmentedDrivingStrategy;
+@property (nonatomic, weak) UIButton *navBtn;
+@property (nonatomic, weak) UIButton *startBtn;
+@property (nonatomic, weak) UIButton *endBtn;
+
+
+@property (nonatomic, assign) AMapNaviDrivingStrategy drivingStrategy;
 
 @end
 
 @implementation PCNaviController
 
-- (id)init
-{
-    self = [super init];
-    if (self)
-    {
-        
-    }
-    return self;
-}
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor whiteColor];
+    self.view.backgroundColor = [UIColor blackColor];
+    
     [MAMapServices sharedServices].apiKey = @"62443358a250ee522aba69dfa3c1d247";
     [AMapNaviServices sharedServices].apiKey = @"62443358a250ee522aba69dfa3c1d247";
-    [self initMapView];
-    
     [self initNaviManager];
-    
-    [self initIFlySpeech];
-    
-    [self initNaviViewController];
-    
     [self configSubViews];
-    
     [self configNaviViewController];
-    
-    
-    
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -88,7 +77,6 @@
 }
 
 #pragma mark - Init & Construct
-
 - (void)initMapView {
     
     if (self.mapView == nil) {
@@ -110,37 +98,49 @@
     
     self.naviManager.delegate = self;
 }
-- (void)initIFlySpeech {
-    if (self.iFlySpeechSynthesizer == nil) {
-        _iFlySpeechSynthesizer = [IFlySpeechSynthesizer sharedInstance];
-    }
-    
-    _iFlySpeechSynthesizer.delegate = self;
-}
-- (void)initNaviViewController {
-    if (_naviViewController == nil) {
-        _naviViewController = [[AMapNaviViewController alloc] initWithMapView:self.mapView delegate:self];
-    }
-}
 - (void)configSubViews {
-    UIButton *startBtn = [[UIButton alloc] initWithFrame:CGRectMake(60, 100, 200, 30)];
+    
+    CGFloat width = self.view.bounds.size.width - 20 * 2;
+    CGFloat height = self.view.bounds.size.height;
+    
+    //出行方式
+    UISegmentedControl *segmentedTravleType = [[UISegmentedControl alloc] initWithItems:@[@"驾车", @"步行"]];
+    segmentedTravleType.frame = CGRectMake(20, 60, width, 50);
+    segmentedTravleType.selectedSegmentIndex = 0;
+    segmentedTravleType.tintColor = PCColor(214, 14, 241, 1);
+    [segmentedTravleType addTarget:self action:@selector(travelTypeChanged:) forControlEvents:UIControlEventValueChanged];
+    [self.view addSubview:segmentedTravleType];
+    
+    UISegmentedControl *segmentedDrivingStrategy = [[UISegmentedControl alloc] initWithItems:@[@"速度优先", @"路况优先"]];
+    segmentedDrivingStrategy.frame = CGRectMake(20, CGRectGetMaxY(segmentedTravleType.frame) + 30, width, 50);
+    segmentedDrivingStrategy.selectedSegmentIndex = 0;
+    segmentedDrivingStrategy.tintColor = PCColor(214, 14, 241, 1);
+    [segmentedDrivingStrategy addTarget:self action:@selector(drivingStrategyChanged:) forControlEvents:UIControlEventValueChanged];
+    [self.view addSubview:segmentedDrivingStrategy];
+    self.segmentedDrivingStrategy = segmentedDrivingStrategy;
+    
+    UIButton *startBtn = [[UIButton alloc] initWithFrame:CGRectMake(20, CGRectGetMaxY(segmentedDrivingStrategy.frame) + 30, width, 50)];
     [startBtn setTitle:@"我的位置" forState:UIControlStateNormal];
-    [startBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [startBtn setTitleColor:PCColor(214, 14, 241, 1) forState:UIControlStateNormal];
     startBtn.titleLabel.font = [UIFont fontWithName:@"BebasNeue.otf" size:16];
-    startBtn.layer.borderColor  = [UIColor lightGrayColor].CGColor;
+    startBtn.layer.borderColor  = PCColor(214, 14, 241, 1).CGColor;
     startBtn.layer.borderWidth  = 0.5;
     startBtn.layer.cornerRadius = 5;
     [startBtn addTarget:self action:@selector(location:) forControlEvents:UIControlEventTouchUpInside];
+    startBtn.tag = 1;
     [self.view addSubview:startBtn];
+    self.startBtn = startBtn;
     
     
-    UIButton *endBtn = [[UIButton alloc] initWithFrame:CGRectMake(60, 150, 200, 30)];
+    UIButton *endBtn = [[UIButton alloc] initWithFrame:CGRectMake(20, CGRectGetMaxY(startBtn.frame) + 30, width, 50)];
     [endBtn setTitle:@"目的地" forState:UIControlStateNormal];
-    [endBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [endBtn setTitleColor:PCColor(214, 14, 241, 1) forState:UIControlStateNormal];
     endBtn.titleLabel.font = [UIFont fontWithName:@"BebasNeue.otf" size:16];
-    endBtn.layer.borderColor  = [UIColor lightGrayColor].CGColor;
+    endBtn.layer.borderColor  = PCColor(214, 14, 241, 1).CGColor;
     endBtn.layer.borderWidth  = 0.5;
     endBtn.layer.cornerRadius = 5;
+    endBtn.tag = 2;
+    self.endBtn = endBtn;
     [endBtn addTarget:self action:@selector(location:) forControlEvents:UIControlEventTouchUpInside];
     
     [self.view addSubview:endBtn];
@@ -148,89 +148,102 @@
     
     UIButton *navBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     
-    navBtn.layer.borderColor  = [UIColor lightGrayColor].CGColor;
+    navBtn.layer.borderColor  = PCColor(214, 14, 241, 1).CGColor;
     navBtn.layer.borderWidth  = 0.5;
     navBtn.layer.cornerRadius = 5;
     
-    [navBtn setFrame:CGRectMake(60, 200, 200, 30)];
+    [navBtn setFrame:CGRectMake(20, height - 80, width, 50)];
     [navBtn setTitle:@"开始导航" forState:UIControlStateNormal];
-    [navBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [navBtn setTitleColor:PCColor(214, 14, 241, 1) forState:UIControlStateNormal];
     navBtn.titleLabel.font = [UIFont fontWithName:@"BebasNeue.otf" size:16];
-    
+    self.navBtn = navBtn;
     [navBtn addTarget:self action:@selector(startGPSNavi:) forControlEvents:UIControlEventTouchUpInside];
     
     [self.view addSubview:navBtn];
 }
 - (void)configNaviViewController {
-    [_naviViewController setShowUIElements:NO];
     
-    
-    UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    
-    backButton.layer.borderColor  = [UIColor lightGrayColor].CGColor;
-    backButton.layer.borderWidth  = 0.5;
-    backButton.layer.cornerRadius = 5;
-    
-    [backButton setFrame:CGRectMake(60, 210, 200, 30)];
-    [backButton setTitle:@"返回" forState:UIControlStateNormal];
-    [backButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [backButton setBackgroundColor:[UIColor whiteColor]];
-    backButton.titleLabel.font = [UIFont systemFontOfSize: 14.0];
-    
-    [backButton addTarget:self action:@selector(backButtonAction) forControlEvents:UIControlEventTouchUpInside];
-    
-    [_naviViewController.view addSubview:backButton];
-    
-}
+    [_naviViewController setShowUIElements:YES];
 
-#pragma mark - 添加定时器
-- (void)addCurrentTimeTimer {
-    [self removeCurrentTimeTimer];
-    //保证定时器的工作是即时的
-    [self updateCurrentTime];
-    self.currentTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(updateCurrentTime) userInfo:nil repeats:YES];
-    [[NSRunLoop mainRunLoop] addTimer:self.currentTimer forMode:NSRunLoopCommonModes];
-    
-}
-
-- (void)removeCurrentTimeTimer {
-    [self.currentTimer invalidate];
-    self.currentTimer = nil;
-}
-- (void)updateCurrentTime {
-    //    NSLog(@"%d",self.iFlySpeechSynthesizer.isSpeaking);
-    if (self.iFlySpeechSynthesizer.isSpeaking) {
-        
-    } else {
-    }
-    
 }
 #pragma mark - Button Action
 
-- (void)location:(UIButton *)btn {
-    PCBaiduNavController *baidu = [[PCBaiduNavController alloc] init];
-    [self.navigationController pushViewController:baidu animated:YES];
-    baidu.delegate = self;
+- (void)travelTypeChanged:(id)item {
+
+    UISegmentedControl *segCtrl = (UISegmentedControl *)item;
+
+    TravelTypes travelType = segCtrl.selectedSegmentIndex;
+    if (travelType != self.travelType) {
+        self.travelType = travelType;
+    }
+    if (segCtrl.selectedSegmentIndex == 1) {
+        self.segmentedDrivingStrategy.hidden = YES;
+    } else {
+        self.segmentedDrivingStrategy.hidden = NO;
+    }
 }
 
-- (void)startGPSNavi:(id)sender {
+- (void)drivingStrategyChanged:(id)item {
+    UISegmentedControl *segCtrl = (UISegmentedControl *)item;
+    switch (segCtrl.selectedSegmentIndex) {
+        case 0:
+            self.drivingStrategy = AMapNaviDrivingStrategyDefault;
+            break;
+            
+//            AMapNaviDrivingStrategyDefault = 0,             //0 速度优先
+//            AMapNaviDrivingStrategySaveMoney = 1,           //1 费用优先
+//            AMapNaviDrivingStrategyShortDistance = 2,       //2 距离优先
+//            AMapNaviDrivingStrategyNoExpressways = 3,       //3 普通路优先（不走快速路、高速路）
+//            AMapNaviDrivingStrategyFastestTime = 4,         //4 时间优先，躲避拥堵
+//            AMapNaviDrivingStrategyAvoidCongestion = 12,    //12 躲避拥堵且不走收费道路.注意：当选择驾车策略12（躲避拥堵且不走收费道路）进行路径规划时，返回的策略值为4（时间优先，躲避拥堵）
+            
+            
+        default:
+            self.drivingStrategy = AMapNaviDrivingStrategyFastestTime;
+            break;
+    }
+}
+
+- (void)location:(UIButton *)btn {
+    
+    PCBaiduNavController *baidu = [[PCBaiduNavController alloc] init];
+    baidu.delegate = self;
+    baidu.title = btn.titleLabel.text;
+    baidu.view.tag = btn.tag;
+    [self.navigationController pushViewController:baidu animated:YES];
+    
+}
+
+- (void)startGPSNavi:(UIButton *)button {
     // 算路
-    [self calculateRoute];
+    if ([self.endBtn.titleLabel.text isEqualToString:@"目的地"]) {
+        
+        [MBProgressHUD showError:@"请选择目的地位置"];
+        
+    } else {
+        
+        [self calculateRoute];
+        
+    }
 }
 
 - (void)calculateRoute {
+    
     NSArray *startPoints = @[_startPoint];
     NSArray *endPoints   = @[_endPoint];
     
-    [self.naviManager calculateDriveRouteWithStartPoints:startPoints endPoints:endPoints wayPoints:nil drivingStrategy:0];
+    if (self.travelType == 0) {
+            [self.naviManager calculateDriveRouteWithStartPoints:startPoints
+                                                       endPoints:endPoints
+                                                       wayPoints:nil
+                                                 drivingStrategy:self.drivingStrategy];
+    } else {
+        [self.naviManager calculateWalkRouteWithStartPoints:startPoints
+                                                  endPoints:endPoints];
+    }
 }
 
-- (void)backButtonAction
-{
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-        [self.iFlySpeechSynthesizer stopSpeaking];
-        [self removeCurrentTimeTimer];
-    });
+- (void)backButtonAction {
     
     [self.naviManager stopNavi];
     
@@ -238,12 +251,9 @@
 }
 #pragma mark - AMapNaviManager Delegate
 
-
-
-
 - (void)naviManager:(AMapNaviManager *)naviManager didPresentNaviViewController:(UIViewController *)naviViewController {
     
-    [self.naviManager startEmulatorNavi];
+    [self.naviManager startGPSNavi];
 }
 
 - (void)naviManagerOnCalculateRouteSuccess:(AMapNaviManager *)naviManager
@@ -258,47 +268,36 @@
 - (void)naviManager:(AMapNaviManager *)naviManager didUpdateNaviInfo:(AMapNaviInfo *)naviInfo
 {
     
-    //    [_naviInfoLabel setText:[NSString stringWithFormat:@"%@", naviInfo]];
 }
-
+//语音播报
 - (void)naviManager:(AMapNaviManager *)naviManager playNaviSoundString:(NSString *)soundString soundStringType:(AMapNaviSoundType)soundStringType {
-    NSLog(@"playNaviSoundString:{%ld:%@}", (long)soundStringType, soundString);
+
+    AVSpeechSynthesizer *player = [[AVSpeechSynthesizer alloc] init];
+    player.delegate = self;
+    self.player = player;
+    AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:soundString];
+    utterance.voice = [AVSpeechSynthesisVoice voiceWithLanguage:@"zh-CN"];
+    utterance.volume = 1.0;
+    utterance.rate = 0.2;
+    utterance.pitchMultiplier = 0.8;
+    [player speakUtterance:utterance];
     
-    if (soundStringType == AMapNaviSoundTypePassedReminder) {
-        
-    }
-    else
-    {
-        
-        AVSpeechSynthesizer *player = [[AVSpeechSynthesizer alloc] init];
-        player.delegate = self;
-        self.player = player;
-        AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:soundString];
-        utterance.voice = [AVSpeechSynthesisVoice voiceWithLanguage:@"zh-CN"];
-        utterance.volume = 1.0;
-        utterance.rate = 0.5;
-        utterance.pitchMultiplier = 0.8;
-        [player speakUtterance:utterance];
-    }
 }
 #pragma mark - AManNaviViewController Delegate
 
-- (void)naviViewControllerCloseButtonClicked:(AMapNaviViewController *)naviViewController
-{
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-        [self.iFlySpeechSynthesizer stopSpeaking];
-    });
+- (void)naviViewControllerCloseButtonClicked:(AMapNaviViewController *)naviViewController {
     
     [self.naviManager stopNavi];
     
     [self.naviManager dismissNaviViewControllerAnimated:YES];
 }
 #pragma mark - iFlySpeechSynthesizer Delegate
-
+//语音开始播放发送通知
 - (void)speechSynthesizer:(AVSpeechSynthesizer *)synthesizer didStartSpeechUtterance:(AVSpeechUtterance *)utterance {
     NSNotification *speaking = [NSNotification notificationWithName:@"speaking" object:nil userInfo:nil];
     [[NSNotificationCenter defaultCenter] postNotification:speaking];
 }
+//语音播放结束发送通知
 - (void)speechSynthesizer:(AVSpeechSynthesizer *)synthesizer didFinishSpeechUtterance:(AVSpeechUtterance *)utterance {
     NSNotification *nonspeaking = [NSNotification notificationWithName:@"nonspeaking" object:nil userInfo:nil];
     [[NSNotificationCenter defaultCenter] postNotification:nonspeaking];
@@ -307,10 +306,21 @@
 
 #pragma mark - PCBaiduNavControllerDelegate
 
-- (void)navController:(PCBaiduNavController *)navController didClickTheAnnotationAccessoryControlBySendingUserLocation:(AMapNaviPoint *)userLocation andDestinationLocation:(CLLocationCoordinate2D)destinationLocation {
-    self.startPoint = [AMapNaviPoint locationWithLatitude:userLocation.latitude longitude:userLocation.longitude];
-    self.endPoint   = [AMapNaviPoint locationWithLatitude:destinationLocation.latitude longitude:destinationLocation.longitude];
+- (void)navController:(PCBaiduNavController *)navController didClickTheAnnotationAccessoryControlBySendingUserLocation:(CLLocationCoordinate2D)userLocation andDestinationLocation:(CLLocationCoordinate2D)destinationLocation mapView:(MAMapView *)mapView title:(NSString *)title destinationTitle:(NSString *)destinationTitle {
     
+    if ([title isEqualToString:self.startBtn.titleLabel.text]) {
+        [self.startBtn setTitle:destinationTitle forState:UIControlStateNormal];
+        self.startPoint = [AMapNaviPoint locationWithLatitude:userLocation.latitude longitude:userLocation.longitude];
+
+    } else {
+        [self.endBtn setTitle:destinationTitle forState:UIControlStateNormal];
+        self.endPoint = [AMapNaviPoint locationWithLatitude:destinationLocation.latitude longitude:destinationLocation.longitude];
+        if (self.startPoint == nil) {
+            self.startPoint = [AMapNaviPoint locationWithLatitude:userLocation.latitude longitude:userLocation.longitude];
+        }
+
+    }
+    self.naviViewController = [[AMapNaviViewController alloc] initWithMapView:mapView delegate:self];
 }
 
 @end

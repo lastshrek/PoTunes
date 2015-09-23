@@ -10,28 +10,9 @@
 #import <AMapSearchKit/AMapSearchAPI.h>
 #import "GeocodeAnnotation.h"
 #import "UIView+Geometry.h"
-#import "SharedMapView.h"
 #import "CommonUtility.h"
-typedef NS_ENUM(NSInteger, TravelTypes)
-{
-    TravelTypeCar = 0,      // 驾车方式
-    TravelTypeWalk,         // 步行方式
-};
+#import "SharedMapView.h"
 
-
-typedef NS_ENUM(NSInteger, NavigationTypes)
-{
-    NavigationTypeNone = 0,
-    NavigationTypeSimulator, // 模拟导航
-    NavigationTypeGPS,       // 实时导航
-};
-typedef NS_ENUM(NSInteger, MapSelectPointState)
-{
-    MapSelectPointStateNone = 0,
-    MapSelectPointStateStartPoint, // 当前操作为选择起始点
-    MapSelectPointStateWayPoint,   // 当前操作为选择途径点
-    MapSelectPointStateEndPoint,   // 当前操作为选择终止点
-};
 @interface PCBaiduNavController()<MAMapViewDelegate, UISearchBarDelegate, AMapSearchDelegate, UITableViewDelegate, UITableViewDataSource>
 
 @property (nonatomic, weak) MAMapView *mapView;
@@ -41,12 +22,15 @@ typedef NS_ENUM(NSInteger, MapSelectPointState)
 @property (nonatomic, strong) NSMutableArray *tips;
 @property (nonatomic, weak) UITableView *tableView;
 //用户位置
-@property (nonatomic, strong) AMapNaviPoint *userLocation;
+@property (nonatomic, assign) CLLocationCoordinate2D userLocation;
+//用户选择的起始位置
+//目的位置
+@property (nonatomic, assign) CLLocationCoordinate2D selectedstartLocation;
+@property (nonatomic, assign) BOOL isSelected;
 //目的位置
 @property (nonatomic, assign) CLLocationCoordinate2D destinationLocation;
 
-@property (nonatomic) TravelTypes travelType;
-
+@property (nonatomic, copy) NSString *destinationTitle;
 @property (nonatomic, strong) NSMutableArray *annotations;
 
 
@@ -57,19 +41,11 @@ typedef NS_ENUM(NSInteger, MapSelectPointState)
 - (void)viewDidLoad {
     [super viewDidLoad];
 //    self.view.backgroundColor = [UIColor whiteColor];
-    [MAMapServices sharedServices].apiKey = @"62443358a250ee522aba69dfa3c1d247";
-    [AMapNaviServices sharedServices].apiKey = @"62443358a250ee522aba69dfa3c1d247";
-    
-    
     [self initMapView];
     
     [self initSearchBar];
     
     [self initTableView];
-//    [self initNaviManager];
-//    [self initIFlySpeech];
-//    [self initNaviViewController];
-//    [self configSubViews];
     
 }
 
@@ -86,7 +62,11 @@ typedef NS_ENUM(NSInteger, MapSelectPointState)
     }
     return self;
 }
+
 - (void)initMapView {
+    
+    [MAMapServices sharedServices].apiKey = @"62443358a250ee522aba69dfa3c1d247";
+    [AMapNaviServices sharedServices].apiKey = @"62443358a250ee522aba69dfa3c1d247";
     
     if (self.mapView == nil) {
         self.mapView = [[SharedMapView sharedInstance] mapView];
@@ -152,7 +132,9 @@ typedef NS_ENUM(NSInteger, MapSelectPointState)
 
 /* 清除annotation. */
 - (void)clear {
+    
     [self.mapView removeAnnotations:self.mapView.annotations];
+    
 }
 
 /* 地理编码 搜索. */
@@ -176,47 +158,54 @@ typedef NS_ENUM(NSInteger, MapSelectPointState)
     
     if(userLocation != nil) {
         //取出当前位置的坐标
-        CLLocationDegrees lati = userLocation.location.coordinate.latitude;
-        CLLocationDegrees longi = userLocation.location.coordinate.longitude;
-                
-        self.userLocation = [AMapNaviPoint locationWithLatitude:lati longitude:longi];;
-        
-        NSLog(@"%f,%f",userLocation.coordinate.latitude,userLocation.coordinate.longitude);
+        self.userLocation = CLLocationCoordinate2DMake(userLocation.location.coordinate.latitude, userLocation.location.coordinate.longitude);
     }
 }
 
 - (void)mapView:(MAMapView *)mapView annotationView:(MAAnnotationView *)view calloutAccessoryControlTapped:(UIControl *)control {
+    
     if ([view.annotation isKindOfClass:[GeocodeAnnotation class]]) {
         
-        if ([self.delegate respondsToSelector:@selector(navController:didClickTheAnnotationAccessoryControlBySendingUserLocation:andDestinationLocation:)]) {
-            [self.delegate navController:self didClickTheAnnotationAccessoryControlBySendingUserLocation:self.userLocation andDestinationLocation:self.destinationLocation];
+        GeocodeAnnotation *annotation = view.annotation;
+        
+        if (self.view.tag == 1 && self.isSelected) {
+            self.userLocation = CLLocationCoordinate2DMake(annotation.coordinate.latitude, annotation.coordinate.longitude);            
         }
+        
+        if ([self.delegate respondsToSelector:@selector(navController:didClickTheAnnotationAccessoryControlBySendingUserLocation:andDestinationLocation: mapView: title: destinationTitle:)]) {
+            
+            
+            [self.delegate navController:self didClickTheAnnotationAccessoryControlBySendingUserLocation:self.userLocation andDestinationLocation:self.destinationLocation mapView:self.mapView title:self.title destinationTitle:self.destinationTitle];
+        
         [self.navigationController popViewControllerAnimated:YES];
+        
+        }
+    
     }
 }
 
 - (MAAnnotationView *)mapView:(MAMapView *)mapView viewForAnnotation:(id<MAAnnotation>)annotation {
-    
     if ([annotation isKindOfClass:[GeocodeAnnotation class]]) {
         
         static NSString *geoCellIdentifier = @"geoCellIdentifier";
         
         MAPinAnnotationView *poiAnnotationView = (MAPinAnnotationView*)[self.mapView dequeueReusableAnnotationViewWithIdentifier:geoCellIdentifier];
+       
         if (poiAnnotationView == nil) {
+        
             poiAnnotationView = [[MAPinAnnotationView alloc] initWithAnnotation:annotation
                                                                 reuseIdentifier:geoCellIdentifier];
         }
         
-        poiAnnotationView.canShowCallout = YES;
-        
+        poiAnnotationView.canShowCallout            = YES;
         poiAnnotationView.rightCalloutAccessoryView = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
-        
         
         return poiAnnotationView;
     }
     
     return nil;
 }
+
 
 #pragma mark - AMapSearchDelegate
 /* 地理编码回调.*/
@@ -230,12 +219,21 @@ typedef NS_ENUM(NSInteger, MapSelectPointState)
 
         GeocodeAnnotation *geocodeAnnotation = [[GeocodeAnnotation alloc] initWithGeocode:obj];
         
+        if (self.view.tag == 1) {
+            
+            self.selectedstartLocation = CLLocationCoordinate2DMake(geocodeAnnotation.coordinate.latitude, geocodeAnnotation.coordinate.longitude);
+            
+            self.isSelected = YES;
+            
+        } else if (self.view.tag == 2){
+         
+            self.destinationLocation =  CLLocationCoordinate2DMake(geocodeAnnotation.coordinate.latitude, geocodeAnnotation.coordinate.longitude);
+            self.isSelected = NO;
+            
+        }
         
+        self.destinationTitle = geocodeAnnotation.title;
         
-        self.destinationLocation =  geocodeAnnotation.coordinate;
-        
-        NSLog(@"%f",self.destinationLocation.latitude);
-
         [annotations addObject:geocodeAnnotation];
     }];
 
@@ -282,6 +280,7 @@ typedef NS_ENUM(NSInteger, MapSelectPointState)
     }
 
 }
+
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
 
     if (searchBar.text.length > 0) {
@@ -308,19 +307,28 @@ typedef NS_ENUM(NSInteger, MapSelectPointState)
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return self.tips.count;
 }
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
     static NSString *tipCellIdentifier = @"tipCellIdentifier";
+    
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:tipCellIdentifier];
+    
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:tipCellIdentifier];
     }
+    
     AMapTip *tip = self.tips[indexPath.row];
+    
     cell.textLabel.text = tip.name;
+    
     return cell;
 }
 
 #pragma mark - UITableViewDelegate
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
     AMapTip *tip = self.tips[indexPath.row];
 
     [self clearAndSearchGeocodeWithKey:tip.name];

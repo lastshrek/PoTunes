@@ -8,42 +8,16 @@
 
 #import "AppDelegate.h"
 #import <AVFoundation/AVFoundation.h>
-#import "iflyMSC/IFlySpeechSynthesizer.h"
-#import "iflyMSC/IFlySpeechSynthesizerDelegate.h"
-#import "iflyMSC/IFlySpeechConstant.h"
-#import "iflyMSC/IFlySpeechUtility.h"
-#import "iflyMSC/IFlySetting.h"
 @interface AppDelegate ()
 
 @end
 
 @implementation AppDelegate
 
-- (void)configIFlySpeech
-{
-    [IFlySpeechUtility createUtility:[NSString stringWithFormat:@"appid=%@,timeout=%@",@"5565399b",@"20000"]];
-    
-    [IFlySetting setLogFile:LVL_NONE];
-    [IFlySetting showLogcat:NO];
-    
-    // 设置语音合成的参数
-    [[IFlySpeechSynthesizer sharedInstance] setParameter:@"50" forKey:[IFlySpeechConstant SPEED]];//合成的语速,取值范围 0~100
-    [[IFlySpeechSynthesizer sharedInstance] setParameter:@"50" forKey:[IFlySpeechConstant VOLUME]];//合成的音量;取值范围 0~100
-    
-    // 发音人,默认为”xiaoyan”;可以设置的参数列表可参考个 性化发音人列表;
-    [[IFlySpeechSynthesizer sharedInstance] setParameter:@"xiaoyan" forKey:[IFlySpeechConstant VOICE_NAME]];
-    
-    // 音频采样率,目前支持的采样率有 16000 和 8000;
-    [[IFlySpeechSynthesizer sharedInstance] setParameter:@"8000" forKey:[IFlySpeechConstant SAMPLE_RATE]];
-    
-    // 当你再不需要保存音频时，请在必要的地方加上这行。
-    [[IFlySpeechSynthesizer sharedInstance] setParameter:nil forKey:[IFlySpeechConstant TTS_AUDIO_PATH]];
-}
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     
-    //注册讯飞语音
-    [self configIFlySpeech];
+
     //设置音乐后台播放的会话类型
     [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
     AVAudioSession *session = [AVAudioSession sharedInstance];
@@ -51,9 +25,6 @@
     [session setCategory:AVAudioSessionCategoryPlayback error:nil];
     //开启远程事件
     [application beginReceivingRemoteControlEvents];
-    
-
-    
     
     return YES;
 }

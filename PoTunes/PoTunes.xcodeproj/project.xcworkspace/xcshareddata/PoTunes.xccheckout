@@ -7,14 +7,14 @@
 	<key>IDESourceControlProjectIdentifier</key>
 	<string>D709F7B2-B7F9-48F8-88FF-695E858D4F39</string>
 	<key>IDESourceControlProjectName</key>
-	<string>PoTunes</string>
+	<string>project</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
 		<key>650EEB659FF654EFE7DC30B4FC2F89FABE042C3B</key>
 		<string>https://github.com/lastshrek/PoTunes.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>PoTunes/PoTunes.xcodeproj</string>
+	<string>PoTunes/PoTunes.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>650EEB659FF654EFE7DC30B4FC2F89FABE042C3B</key>
