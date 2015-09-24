@@ -184,7 +184,9 @@ typedef NS_ENUM(NSInteger, TravelTypes) {
 }
 
 - (void)drivingStrategyChanged:(id)item {
+    
     UISegmentedControl *segCtrl = (UISegmentedControl *)item;
+    
     switch (segCtrl.selectedSegmentIndex) {
         case 0:
             self.drivingStrategy = AMapNaviDrivingStrategyDefault;
@@ -222,7 +224,12 @@ typedef NS_ENUM(NSInteger, TravelTypes) {
         
     } else {
         
-        [self calculateRoute];
+        if ([button.currentTitle isEqualToString:@"开始导航"]) {
+            [self calculateRoute];
+        } else {
+            [self.naviManager presentNaviViewController:self.naviViewController animated:YES];
+        }
+        
         
     }
 }
@@ -233,31 +240,33 @@ typedef NS_ENUM(NSInteger, TravelTypes) {
     NSArray *endPoints   = @[_endPoint];
     
     if (self.travelType == 0) {
+        
             [self.naviManager calculateDriveRouteWithStartPoints:startPoints
                                                        endPoints:endPoints
                                                        wayPoints:nil
                                                  drivingStrategy:self.drivingStrategy];
     } else {
+        
         [self.naviManager calculateWalkRouteWithStartPoints:startPoints
                                                   endPoints:endPoints];
     }
 }
 
-- (void)backButtonAction {
-    
-    [self.naviManager stopNavi];
-    
-    [self.naviManager dismissNaviViewControllerAnimated:YES];
-}
+
 #pragma mark - AMapNaviManager Delegate
 
 - (void)naviManager:(AMapNaviManager *)naviManager didPresentNaviViewController:(UIViewController *)naviViewController {
     
+//    [self.naviManager startEmulatorNavi];
+    
     [self.naviManager startGPSNavi];
+
+    
+    [self.navBtn setTitle:@"继续导航" forState:UIControlStateNormal];
 }
 
-- (void)naviManagerOnCalculateRouteSuccess:(AMapNaviManager *)naviManager
-{
+- (void)naviManagerOnCalculateRouteSuccess:(AMapNaviManager *)naviManager {
+    
     [self.naviManager presentNaviViewController:self.naviViewController animated:YES];
 }
 
@@ -276,10 +285,10 @@ typedef NS_ENUM(NSInteger, TravelTypes) {
     player.delegate = self;
     self.player = player;
     AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:soundString];
-    utterance.voice = [AVSpeechSynthesisVoice voiceWithLanguage:@"zh-CN"];
+    utterance.voice = [AVSpeechSynthesisVoice voiceWithLanguage:@"zh-TW"];
     utterance.volume = 1.0;
     utterance.rate = 0.2;
-    utterance.pitchMultiplier = 0.8;
+    utterance.pitchMultiplier = 0.7;
     [player speakUtterance:utterance];
     
 }
@@ -290,17 +299,32 @@ typedef NS_ENUM(NSInteger, TravelTypes) {
     [self.naviManager stopNavi];
     
     [self.naviManager dismissNaviViewControllerAnimated:YES];
+    
+    [self.player stopSpeakingAtBoundary:AVSpeechBoundaryImmediate];
+    
+    [self.navBtn setTitle:@"开始导航" forState:UIControlStateNormal];
+
+}
+
+- (void)naviViewControllerMoreButtonClicked:(AMapNaviViewController *)naviViewController {
+    
+    [self.naviManager dismissNaviViewControllerAnimated:YES];
+
 }
 #pragma mark - iFlySpeechSynthesizer Delegate
 //语音开始播放发送通知
 - (void)speechSynthesizer:(AVSpeechSynthesizer *)synthesizer didStartSpeechUtterance:(AVSpeechUtterance *)utterance {
+    
     NSNotification *speaking = [NSNotification notificationWithName:@"speaking" object:nil userInfo:nil];
     [[NSNotificationCenter defaultCenter] postNotification:speaking];
+
 }
 //语音播放结束发送通知
 - (void)speechSynthesizer:(AVSpeechSynthesizer *)synthesizer didFinishSpeechUtterance:(AVSpeechUtterance *)utterance {
+
     NSNotification *nonspeaking = [NSNotification notificationWithName:@"nonspeaking" object:nil userInfo:nil];
     [[NSNotificationCenter defaultCenter] postNotification:nonspeaking];
+
 }
 
 
@@ -309,10 +333,12 @@ typedef NS_ENUM(NSInteger, TravelTypes) {
 - (void)navController:(PCBaiduNavController *)navController didClickTheAnnotationAccessoryControlBySendingUserLocation:(CLLocationCoordinate2D)userLocation andDestinationLocation:(CLLocationCoordinate2D)destinationLocation mapView:(MAMapView *)mapView title:(NSString *)title destinationTitle:(NSString *)destinationTitle {
     
     if ([title isEqualToString:self.startBtn.titleLabel.text]) {
+        
         [self.startBtn setTitle:destinationTitle forState:UIControlStateNormal];
         self.startPoint = [AMapNaviPoint locationWithLatitude:userLocation.latitude longitude:userLocation.longitude];
 
     } else {
+        
         [self.endBtn setTitle:destinationTitle forState:UIControlStateNormal];
         self.endPoint = [AMapNaviPoint locationWithLatitude:destinationLocation.latitude longitude:destinationLocation.longitude];
         if (self.startPoint == nil) {
@@ -320,6 +346,7 @@ typedef NS_ENUM(NSInteger, TravelTypes) {
         }
 
     }
+    
     self.naviViewController = [[AMapNaviViewController alloc] initWithMapView:mapView delegate:self];
 }
 

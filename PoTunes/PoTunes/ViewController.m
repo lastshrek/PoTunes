@@ -23,12 +23,12 @@
 #import "FSPlaylistItem.h"
 #import "PCSong.h"
 #import "PCPlaylist.h"
-#import "LEColorPicker.h"
 #import "PCNaviController.h"
 #import "PCSettingViewController.h"
 #import "iflyMSC/IFlySpeechSynthesizer.h"
 #import "iflyMSC/IFlySpeechSynthesizerDelegate.h"
 #import "iflyMSC/IFlySpeechError.h"
+#import "TDImageColors.h"
 
 /** 播放模式 */
 typedef NS_ENUM(NSUInteger, PCAudioRepeatMode) {
@@ -123,6 +123,7 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
         }
     };
 }
+
 #pragma mark - 隐藏statusBar
 - (BOOL)prefersStatusBarHidden {
     return YES;
@@ -370,7 +371,6 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     [center addObserver:self selector:@selector(didSelectedSong:) name:@"selected" object:nil];
     [center addObserver:self selector:@selector(speaking) name:@"speaking" object:nil];
     [center addObserver:self selector:@selector(nonspeaking) name:@"nonspeaking" object:nil];
-    
 }
 - (void)didSelectedSong:(NSNotification *)sender {
     //滚到上层
@@ -381,21 +381,19 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     NSInteger index = [sender.userInfo[@"indexPath"] integerValue];
     self.songs = songs;
     self.index = index;
+    
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self playFromPlaylist:songs itemIndex:index state:PCAudioPlayStatePlay];
         [self changePlayerInterfaceDuringUsing:self.songs[index] row:index state:PCAudioPlayStatePlay];
     });
     
 }
-
 - (void)speaking {
     self.audioController.volume = 0.1;
 }
-
 - (void)nonspeaking {
     self.audioController.volume = 1;
 }
-
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"selected" object:nil];
@@ -424,30 +422,22 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     if (state == PCAudioPlayStatePause) [MBProgressHUD showPlayState:@"pauseB" toView:self.backgroundView];
     
 }
-#pragma mark - 获取文件主路径
-- (NSString *)dirDoc{
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0];
-    return documentsDirectory;
-}
 - (void)changePlayerInterfaceDuringUsing:(PCSong *)song row:(NSInteger)row state:(PCAudioPlayState)state{
     self.progress.progress = 0;
     //倒影封面
     [self.cover sd_setImageWithURL:[NSURL URLWithString:song.cover] placeholderImage:self.cover.image completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         self.reflectionCover.image = [self.cover.image reflectionWithAlpha:0.3];
         //修改进度条颜色
-        LEColorPicker *colorPicker = [[LEColorPicker alloc] init];
-        LEColorScheme *colorScheme = [colorPicker colorSchemeFromImage:self.cover.image];
-        
-        self.progress.color = [colorScheme primaryTextColor];
+        TDImageColors *imageColors = [[TDImageColors alloc] initWithImage:self.cover.image count:5];
+        self.progress.color = imageColors.colors[1];
         //修改歌名
         self.songLabel.text = song.songName;
         //修改歌手名
         self.artistLabel.text = song.artist;
-        self.artistLabel.textColor = [colorScheme primaryTextColor];
+        self.artistLabel.textColor = imageColors.colors[1];
         //修改专辑名
         self.albumLabel.text = song.album;
-        self.albumLabel.textColor = [colorScheme primaryTextColor];
+        self.albumLabel.textColor = imageColors.colors[1];
         //设置锁屏信息
         NSMutableDictionary *info = [NSMutableDictionary dictionary];
         //设置专辑名称
@@ -455,12 +445,22 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
         info[MPMediaItemPropertyArtist] = song.artist;
         info[MPMediaItemPropertyTitle] = song.songName;
         MPMediaItemArtwork *artwork = [[MPMediaItemArtwork alloc] initWithImage:self.cover.image];
+        
+        
+        
         info[MPMediaItemPropertyArtwork] = artwork;
         NSTimeInterval duration = self.audioController.activeStream.duration.minute * 60 + self.audioController.activeStream.duration.second;
         info[MPMediaItemPropertyPlaybackDuration] = @(duration);
         [MPNowPlayingInfoCenter defaultCenter].nowPlayingInfo = info;
     }];
 }
+#pragma mark - 获取文件主路径
+- (NSString *)dirDoc{
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    return documentsDirectory;
+}
+
 /** 给播放器添加手势操作 */
 - (void)setupGestureRecognizer {
     //播放和暂停
@@ -514,8 +514,7 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     if (self.index == 0) {
         self.index = self.songs.count - 1;
     } else {
-        self.index = self.index - 1;
-        [self playFromPlaylist:self.songs itemIndex:self.index - 1 state:PCAudioPlayStatePrevious];
+        self.index = (int)self.index - 1;
     }
     
     [self playFromPlaylist:self.songs itemIndex:self.index state:PCAudioPlayStatePrevious];
@@ -564,22 +563,28 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 #pragma mark - 添加定时器
 - (void)addCurrentTimeTimer {
     if (self.paused == YES) return;
+    
     [self removeCurrentTimeTimer];
     //保证定时器的工作是即时的
     [self updateCurrentTime];
     [self updatePlayBackProgress];
+    
     self.currentTimeTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(updateCurrentTime) userInfo:nil repeats:YES];
     self.PlayBackTimer = [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(updatePlayBackProgress) userInfo:nil repeats:YES];
+    
     [[NSRunLoop mainRunLoop] addTimer:self.currentTimeTimer forMode:NSRunLoopCommonModes];
     [[NSRunLoop mainRunLoop] addTimer:self.PlayBackTimer forMode:NSRunLoopCommonModes];
     
 }
 #pragma mark - 移除定时器
 - (void)removeCurrentTimeTimer {
+    
     [self.currentTimeTimer invalidate];
-    self.currentTimeTimer = nil;
     [self.PlayBackTimer invalidate];
+    
+    self.currentTimeTimer = nil;
     self.PlayBackTimer = nil;
+    
 }
 /** 更新播放进度 */
 - (void)updateCurrentTime {
@@ -608,21 +613,23 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     
 #warning 没考虑好
     //当播放停止或者暂停时移除监视器
-    if (totalLeftSecond == 1) {
+    if (totalLeftSecond <= 1) {
         [self playNext];
     }
-    //    NSLog(@"%d",self.audioController.isPlaying);
 }
 
 - (void)updatePlayBackProgress {
     if (self.audioController.activeStream.contentLength > 0) {
+        
         if (self.bufferingIndicator.progress >= 1.0) {
             [self.PlayBackTimer invalidate];
         }
+        
         FSSeekByteOffset currentOffset = self.audioController.activeStream.currentSeekByteOffset;
         UInt64 totalBufferedData = currentOffset.start + self.audioController.activeStream.prebufferedByteCount;
         float bufferedDataFromTotal = (float)totalBufferedData / self.audioController.activeStream.contentLength;
         self.bufferingIndicator.progress = bufferedDataFromTotal;
+        
     } else {
         self.bufferingIndicator.progress = (float)self.audioController.activeStream.prebufferedByteCount / _maxPrebufferedByteCount;
     }

@@ -4,6 +4,16 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>Notification - PoTunes WatchKit App.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>2</integer>
+		</dict>
+		<key>PoTunes WatchKit App.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>1</integer>
+		</dict>
 		<key>PoTunes.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
@@ -18,6 +28,11 @@
 			<true/>
 		</dict>
 		<key>3CB2E30A1BA7B26800805D4F</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>3CB3DA711BB2E1B000DD2F72</key>
 		<dict>
 			<key>primary</key>
 			<true/>
