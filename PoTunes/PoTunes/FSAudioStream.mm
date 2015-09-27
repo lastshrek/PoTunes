@@ -89,8 +89,8 @@ static NSInteger sortCacheObjects(id co1, id co2, void *keyForSorting)
         self.maxBounceCount    = 4;   // Max number of bufferings in bounceInterval seconds
         self.startupWatchdogPeriod = 30; // If the stream doesn't start to play in this seconds, the watchdog will fail it
 #ifdef __LP64__
-        /* Increase the max in-memory cache to 20 MB with newer 64 bit devices */
-        self.maxPrebufferedByteCount = 20000000; // 20 MB
+        /* Increase the max in-memory cache to 10 MB with newer 64 bit devices */
+        self.maxPrebufferedByteCount = 20000000; // 10 MB
 #else
         self.maxPrebufferedByteCount = 1000000; // 1 MB
 #endif
@@ -1355,7 +1355,7 @@ public:
 
 - (void)pause
 {
-//    NSAssert([NSThread isMainThread], @"FSAudioStream.pause needs to be called in the main thread");
+    NSAssert([NSThread isMainThread], @"FSAudioStream.pause needs to be called in the main thread");
     
     [_private pause];
 }
@@ -1384,7 +1384,7 @@ public:
 
 - (BOOL)isPlaying
 {
-//    NSAssert([NSThread isMainThread], @"FSAudioStream.isPlaying needs to be called in the main thread");
+    NSAssert([NSThread isMainThread], @"FSAudioStream.isPlaying needs to be called in the main thread");
     
     return [_private isPlaying];
 }
@@ -1516,7 +1516,7 @@ public:
 
 - (void)setVolume:(float)volume
 {
-//    NSAssert([NSThread isMainThread], @"FSAudioStream.setVolume needs to be called in the main thread");
+    NSAssert([NSThread isMainThread], @"FSAudioStream.setVolume needs to be called in the main thread");
     
     [_private setVolume:volume];
 }

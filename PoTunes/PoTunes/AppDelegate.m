@@ -55,4 +55,19 @@
         self.remoteEventBlock(event);
     }
 }
+
+- (void)application:(UIApplication *)application handleWatchKitExtensionRequest:(NSDictionary *)userInfo reply:(void(^)(NSDictionary *replyInfo))reply{
+    
+    if(userInfo){
+        NSNotification *watchSelectd = [NSNotification notificationWithName:@"watchSelected" object:nil userInfo:userInfo];
+        [[NSNotificationCenter defaultCenter] postNotification:watchSelectd];
+      
+        NSMutableDictionary *replyInfo = [NSMutableDictionary dictionary];
+        [replyInfo setObject:@"Hello World!" forKey:@"words"];
+        //主应用处理完成后，回调来自watchkit extension的 reply(replyInfo)，否则方法响应失败
+        reply(replyInfo);
+    }
+    
+    
+}
 @end

@@ -11,6 +11,8 @@
 #import "AFNetworking.h"
 #import "PCSong.h"
 #import "MBProgressHUD+MJ.h"
+#import "SDWebImageManager.h"
+#import "DarwinNotificationHelper.h"
 @interface PCArticleDetailViewController ()
 
 @property (nonatomic, strong) NSIndexPath *selectedIndexPath;
@@ -65,7 +67,10 @@
     NSURL *imageURL = [NSURL URLWithString:song.cover];
     cell.imageView.frame = CGRectMake(0, 0, cell.frame.size.height, cell.frame.size.height);
     cell.imageView.contentMode = UIViewContentModeScaleAspectFill;
-    [cell.imageView sd_setImageWithURL:imageURL placeholderImage:[UIImage imageNamed:@"defaultCover"]];
+    [cell.imageView sd_setImageWithURL:imageURL placeholderImage:[UIImage imageNamed:@"defaultCover"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+        
+        
+    }];
     cell.detailTextLabel.text = [NSString stringWithFormat:@"%@",song.album];
     cell.backgroundColor = [UIColor blackColor];
     cell.textLabel.textColor = [UIColor whiteColor];
@@ -111,8 +116,8 @@
                                                                                                   @"songs":self.songs}];
             [[NSNotificationCenter defaultCenter] postNotification:download];
             
-            //修改歌曲的url
-            song.URL = filePath;
+//            //修改歌曲的url
+//            song.URL = filePath;
 
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             NSLog(@"%@",error);
@@ -130,6 +135,11 @@
                               @{@"indexPath":[NSNumber numberWithInteger:indexPath.row],
                                 @"songs":self.songs}];
     [[NSNotificationCenter defaultCenter] postNotification:select];
+    
+    
+ 
+    
+    
 
 }
 #pragma mark - 获取文件主路径

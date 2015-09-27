@@ -62,10 +62,13 @@
 }
 
 - (void)loadNewArticle {
+    
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    
     [manager POST:@"http://simin.ren/?json=get_recent_posts" parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
         [MBProgressHUD showMessage:@"正在获取" toView:self.view];
     } success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    
         [MBProgressHUD hideHUDForView:self.view];
         [MBProgressHUD showSuccess:@"加载完成" toView:self.view];
         [self.tableView headerEndRefreshing];
@@ -85,8 +88,13 @@
         NSString *doc = [self dirDoc];
         NSString *path = [doc stringByAppendingPathComponent:@"article.plist"];
         
-        // 3. 写入数组
+        // 写入数组
         [self.articles writeToFile:path atomically:YES];
+        // 写入共享数据
+        NSUserDefaults *shared = [[NSUserDefaults alloc] initWithSuiteName:@"group.fm.poche.potunes"];
+        [shared setObject:self.articles forKey:@"articles"];
+        [shared synchronize];
+        //刷新数据
         [self.tableView reloadData];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         

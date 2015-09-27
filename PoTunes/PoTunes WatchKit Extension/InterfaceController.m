@@ -11,6 +11,9 @@
 
 @interface InterfaceController()
 
+
+
+
 @end
 
 
@@ -18,13 +21,16 @@
 
 - (void)awakeWithContext:(id)context {
     [super awakeWithContext:context];
-
     // Configure interface objects here.
+    NSString *identifier = @"group.fm.poche.potunes";
+    NSURL *url = [[NSFileManager defaultManager] containerURLForSecurityApplicationGroupIdentifier:identifier];
+    NSLog(@"%@",url);
 }
 
 - (void)willActivate {
     // This method is called when watch view controller is about to be visible to user
     [super willActivate];
+    
 }
 
 - (void)didDeactivate {

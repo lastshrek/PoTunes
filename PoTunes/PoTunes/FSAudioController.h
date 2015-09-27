@@ -171,12 +171,7 @@
  * than the volume currently set by the user. For example, if
  * requesting a volume of 0.5, then the volume will be 50%
  * lower than the current playback volume set by the user.
- 
- 
  */
-/** 当前播放index */
-@property (nonatomic,assign) NSUInteger currentPlaylistItemIndex;
-
 @property (nonatomic,assign) float volume;
 /**
  * The controller URL.

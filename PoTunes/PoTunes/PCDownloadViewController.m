@@ -52,13 +52,14 @@
     NSArray *songArray = sender.userInfo[@"songs"];
     PCSong *song = songArray[[index intValue]];
     song.index = index;
-
-    PCSong *existSong = self.songs[0];
-    if ([song.album isEqualToString:existSong.album]) {
-        [self.songs addObject:song];
-        [self.tableView reloadData];
-    }
     
+    if (self.songs.count != 0) {
+        PCSong *existSong = self.songs[0];
+        if ([song.album isEqualToString:existSong.album]) {
+            [self.songs addObject:song];
+            [self.tableView reloadData];
+        }
+    }
 }
 
 #pragma mark - 移除通知
@@ -129,19 +130,19 @@
         if ([fileManager fileExistsAtPath:filePath]) {
             [fileManager removeItemAtPath:filePath error:nil];
         }
-        
-        //删除缓存
-        for (NSString *file in [[NSFileManager defaultManager] contentsOfDirectoryAtPath:[self dirDoc] error:nil]) {
-            if ([file hasPrefix:@"FSCache-"]) {
-                NSString *fullPath = [rootPath stringByAppendingPathComponent:file];
-                [fileManager removeItemAtPath:fullPath error:nil];
-            }
-        }
+#warning 如果歌曲数量为0自动pop出上一级菜单
+//        //删除缓存
+//        for (NSString *file in [[NSFileManager defaultManager] contentsOfDirectoryAtPath:[self dirDoc] error:nil]) {
+//            if ([file hasPrefix:@"FSCache-"]) {
+//                NSString *fullPath = [rootPath stringByAppendingPathComponent:file];
+//                [fileManager removeItemAtPath:fullPath error:nil];
+//            }
+//        }
 
     }
 }
 - (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return @"删除";
+    return @"你真要删呐？";
 }
 #pragma mark - 立即播放
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {

@@ -25,6 +25,7 @@
 @property (readonly) FSParsePlaylistRequest *parsePlaylistRequest;
 @property (readonly) FSParseRssPodcastFeedRequest *parseRssPodcastFeedRequest;
 @property (nonatomic,assign) BOOL readyToPlay;
+@property (nonatomic,assign) NSUInteger currentPlaylistItemIndex;
 @property (nonatomic,strong) NSMutableArray *playlistItems;
 @property (nonatomic,strong) NSMutableArray *streams;
 @property (nonatomic,assign) BOOL needToSetVolume;

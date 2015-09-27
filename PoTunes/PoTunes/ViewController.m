@@ -25,10 +25,8 @@
 #import "PCPlaylist.h"
 #import "PCNaviController.h"
 #import "PCSettingViewController.h"
-#import "iflyMSC/IFlySpeechSynthesizer.h"
-#import "iflyMSC/IFlySpeechSynthesizerDelegate.h"
-#import "iflyMSC/IFlySpeechError.h"
 #import "TDImageColors.h"
+#import "DarwinNotificationHelper.h"
 
 /** 播放模式 */
 typedef NS_ENUM(NSUInteger, PCAudioRepeatMode) {
@@ -81,9 +79,8 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 @property (nonatomic, strong) NSTimer *currentTimeTimer;
 @property (nonatomic, strong) NSTimer *PlayBackTimer;
 @property (nonatomic, readonly) PCAudioRepeatMode *repeatMode;
-@property (nonatomic, strong) IFlySpeechSynthesizer *iFlySpeechSynthesizer;
-//当前播放进度
-@property (nonatomic, assign) float nowProgress;
+
+
 @end
 
 @implementation ViewController
@@ -103,51 +100,25 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     /** 注册通知 */
     [self getNotification];
     //设置appdelegate的block
-    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    appDelegate.remoteEventBlock = ^(UIEvent *event) {
-        switch (event.subtype) {
-            case UIEventSubtypeRemoteControlPlay:
-                [self playOrPause];
-                break;
-            case UIEventSubtypeRemoteControlPause:
-                [self playOrPause];
-                break;
-            case UIEventSubtypeRemoteControlNextTrack:
-                [self playNext];
-                break;
-            case UIEventSubtypeRemoteControlPreviousTrack:
-                [self playPrevious];
-                break;
-            default:
-                break;
-        }
-    };
+    [self setupDelegateBlock];
+    
+    NSLog(@"%@",[self dirDoc]);
+
 }
+
+
 
 #pragma mark - 隐藏statusBar
 - (BOOL)prefersStatusBarHidden {
     return YES;
 }
-- (FSAudioController *)audioController {
-    if (_audioController == nil) {
-        FSAudioController *audioController = [[FSAudioController alloc] init];
-        _audioController = audioController;
-    }
-    
-    return _audioController;
-}
+
 - (NSArray *)songs {
     if (_songs == nil) {
         _songs = [NSArray array];
     }
     
     return _songs;
-}
-- (float)nowProgress {
-    if (!_nowProgress) {
-        _nowProgress = 0;
-    }
-    return _nowProgress;
 }
 #pragma mark - 添加ScrollView
 - (void)setupScrollView {
@@ -364,6 +335,27 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
         self.selectedView = nav.view;
     }
 }
+- (void)setupDelegateBlock {
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    appDelegate.remoteEventBlock = ^(UIEvent *event) {
+        switch (event.subtype) {
+            case UIEventSubtypeRemoteControlPlay:
+                [self playOrPause];
+                break;
+            case UIEventSubtypeRemoteControlPause:
+                [self playOrPause];
+                break;
+            case UIEventSubtypeRemoteControlNextTrack:
+                [self playNext];
+                break;
+            case UIEventSubtypeRemoteControlPreviousTrack:
+                [self playPrevious];
+                break;
+            default:
+                break;
+        }
+    };
+}
 
 #pragma mark - 获取通知
 - (void)getNotification {
@@ -371,6 +363,41 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     [center addObserver:self selector:@selector(didSelectedSong:) name:@"selected" object:nil];
     [center addObserver:self selector:@selector(speaking) name:@"speaking" object:nil];
     [center addObserver:self selector:@selector(nonspeaking) name:@"nonspeaking" object:nil];
+    
+    DarwinNotificationHelper *helper = [DarwinNotificationHelper sharedHelper];
+    //手表选中
+    [helper registerForNotificationName:@"watchSelected" callback:^{
+        //获取手机共享数据
+        NSString *identifier = @"group.fm.poche.potunes";
+        NSUserDefaults *defaults = [[NSUserDefaults alloc] initWithSuiteName:identifier];
+        NSArray *songs = [defaults valueForKey:@"songs"];
+        NSNumber *rowIndex = [defaults valueForKey:@"index"];
+        
+        NSMutableArray *songArray = [NSMutableArray array];
+        for (NSDictionary *songDic in songs) {
+            PCSong *song = [[PCSong alloc] init];
+            song.URL = songDic[@"URL"];
+            song.album = songDic[@"title"];
+            song.songName = songDic[@"songName"];
+            song.cover = songDic[@"cover"];
+            song.artist = songDic[@"artist"];
+            [songArray addObject:song];
+        }
+        self.songs = songArray;
+        [self playFromPlaylist:songArray itemIndex:[rowIndex integerValue] state:PCAudioPlayStatePlay];
+        NSInteger index = [rowIndex integerValue];
+        [self changePlayerInterfaceDuringUsing:self.songs[index] row:[rowIndex integerValue] state:PCAudioPlayStatePlay];
+    }];
+    [helper registerForNotificationName:@"previous" callback:^{
+        [self playPrevious];
+    }];
+    [helper registerForNotificationName:@"playOrPause" callback:^{
+        [self playOrPause];
+    }];
+    [helper registerForNotificationName:@"next" callback:^{
+        [self playNext];
+    }];
+
 }
 - (void)didSelectedSong:(NSNotification *)sender {
     //滚到上层
@@ -404,6 +431,16 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 /** 开始播放 */
 - (void)playFromPlaylist:(NSArray *)playlist itemIndex:(NSUInteger)index state:(PCAudioPlayState)state {
     self.paused = NO;
+    
+    // 写入共享数据
+    NSUserDefaults *shared = [[NSUserDefaults alloc] initWithSuiteName:@"group.fm.poche.potunes"];
+    [shared setObject:[NSString stringWithFormat:@"%d",self.paused] forKey:@"isPlaying"];
+    [shared synchronize];
+    DarwinNotificationHelper *helper = [DarwinNotificationHelper sharedHelper];
+    [helper postNotificationWithName:@"isPlaying"];
+    
+    self.audioController = nil;
+    self.audioController = [[FSAudioController alloc] init];
     //检查文件是否已存在
     NSString *rootPath = [self dirDoc];
     PCSong *song = playlist[index];
@@ -411,10 +448,9 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     NSFileManager *fileManager = [NSFileManager defaultManager];
     //播放本地
     if ([fileManager fileExistsAtPath:filePath]) {
-        song.URL = filePath;
-        [self.audioController playFromURL:[NSURL fileURLWithPath:song.URL]];
+        [self.audioController.activeStream playFromURL:[NSURL fileURLWithPath:filePath]];
     } else {
-        [self.audioController playFromURL:[NSURL URLWithString:song.URL]];
+        [self.audioController.activeStream playFromURL:[NSURL URLWithString:song.URL]];
     }
     
     [self addCurrentTimeTimer];
@@ -445,44 +481,20 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
         info[MPMediaItemPropertyArtist] = song.artist;
         info[MPMediaItemPropertyTitle] = song.songName;
         MPMediaItemArtwork *artwork = [[MPMediaItemArtwork alloc] initWithImage:self.cover.image];
-        
-        
-        
         info[MPMediaItemPropertyArtwork] = artwork;
         NSTimeInterval duration = self.audioController.activeStream.duration.minute * 60 + self.audioController.activeStream.duration.second;
         info[MPMediaItemPropertyPlaybackDuration] = @(duration);
         [MPNowPlayingInfoCenter defaultCenter].nowPlayingInfo = info;
+        // 设置手表封面
+        NSData *imageData = UIImagePNGRepresentation(self.cover.image);
+        NSUserDefaults *shared = [[NSUserDefaults alloc] initWithSuiteName:@"group.fm.poche.potunes"];
+        [shared setObject:imageData forKey:@"imageData"];
+        [shared synchronize];
+        DarwinNotificationHelper *helper = [DarwinNotificationHelper sharedHelper];
+        [helper postNotificationWithName:@"imageData"];
     }];
 }
-#pragma mark - 获取文件主路径
-- (NSString *)dirDoc{
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0];
-    return documentsDirectory;
-}
 
-/** 给播放器添加手势操作 */
-- (void)setupGestureRecognizer {
-    //播放和暂停
-    UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(playOrPause)];
-    singleTap.numberOfTapsRequired = 1;
-    [self.backgroundView addGestureRecognizer:singleTap];
-    //上一首
-    UISwipeGestureRecognizer *swipeFromLeft = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(playPrevious)];
-    [swipeFromLeft setDirection:UISwipeGestureRecognizerDirectionRight];
-    swipeFromLeft.numberOfTouchesRequired = 1;
-    [self.backgroundView addGestureRecognizer:swipeFromLeft];
-    //下一首
-    UISwipeGestureRecognizer *swipeFromRight = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(playNext)];
-    swipeFromRight.numberOfTouchesRequired = 1;
-    [swipeFromRight setDirection:UISwipeGestureRecognizerDirectionLeft];
-    [self.backgroundView addGestureRecognizer:swipeFromRight];
-    //快进
-    UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(doSeeking:)];
-    longPress.numberOfTouchesRequired = 1;
-    longPress.minimumPressDuration = 0.5;
-    [self.backgroundView addGestureRecognizer:longPress];
-}
 /** 播放或者暂停 */
 - (void)playOrPause {
     [self.audioController pause];
@@ -493,6 +505,13 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
         [MBProgressHUD showPlayState:@"pauseB" toView:self.backgroundView];
         self.paused = YES;
     }
+    // 写入共享数据
+    NSUserDefaults *shared = [[NSUserDefaults alloc] initWithSuiteName:@"group.fm.poche.potunes"];
+    [shared setObject:[NSString stringWithFormat:@"%d",self.paused] forKey:@"isPlaying"];
+    [shared synchronize];
+    DarwinNotificationHelper *helper = [DarwinNotificationHelper sharedHelper];
+    [helper postNotificationWithName:@"isPlaying"];
+
 }
 /** 下一首 */
 - (void)playNext {
@@ -560,6 +579,36 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     }
 }
 
+#pragma mark - 获取文件主路径
+- (NSString *)dirDoc{
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    return documentsDirectory;
+}
+
+/** 给播放器添加手势操作 */
+- (void)setupGestureRecognizer {
+    //播放和暂停
+    UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(playOrPause)];
+    singleTap.numberOfTapsRequired = 1;
+    [self.backgroundView addGestureRecognizer:singleTap];
+    //上一首
+    UISwipeGestureRecognizer *swipeFromLeft = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(playPrevious)];
+    [swipeFromLeft setDirection:UISwipeGestureRecognizerDirectionRight];
+    swipeFromLeft.numberOfTouchesRequired = 1;
+    [self.backgroundView addGestureRecognizer:swipeFromLeft];
+    //下一首
+    UISwipeGestureRecognizer *swipeFromRight = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(playNext)];
+    swipeFromRight.numberOfTouchesRequired = 1;
+    [swipeFromRight setDirection:UISwipeGestureRecognizerDirectionLeft];
+    [self.backgroundView addGestureRecognizer:swipeFromRight];
+    //快进
+    UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(doSeeking:)];
+    longPress.numberOfTouchesRequired = 1;
+    longPress.minimumPressDuration = 0.5;
+    [self.backgroundView addGestureRecognizer:longPress];
+}
+
 #pragma mark - 添加定时器
 - (void)addCurrentTimeTimer {
     if (self.paused == YES) return;
@@ -596,6 +645,9 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     //设置进度条进度
     double progress = (float)(cur.minute * 60 + cur.second) / (float)(total.minute * 60 + total.second);
     self.progress.progress = progress;
+    
+    
+    
     //设置当前时间以及剩余时间
     NSString *curSecond = [NSString stringWithFormat:@"%d",cur.second];
     int totalLeftSecond = total.minute * 60 + total.second - cur.minute * 60 - cur.second;
@@ -611,11 +663,26 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     self.leftTime.text = [NSString stringWithFormat:@"%@:%@",leftMin,leftSec];
     
     
-#warning 没考虑好
+    // 写入共享数据
+    NSUserDefaults *shared = [[NSUserDefaults alloc] initWithSuiteName:@"group.fm.poche.potunes"];
+    [shared setObject:@(progress) forKey:@"progress"];
+    [shared setObject:@(totalLeftSecond) forKey:@"leftTime"];
+    [shared synchronize];
+    //给手表发送通知
+    DarwinNotificationHelper *helper = [DarwinNotificationHelper sharedHelper];
+    [helper postNotificationWithName:@"progress"];
+    
+    __weak ViewController *weakSelf = self;
+    self.audioController.onStateChange = ^(FSAudioStreamState state) {
+        if (state == kFsAudioStreamPlaybackCompleted) {
+            [weakSelf playNext];
+        }
+    };
+    
     //当播放停止或者暂停时移除监视器
-    if (totalLeftSecond <= 1) {
-        [self playNext];
-    }
+//    if (totalLeftSecond <= 1) {
+//        [self playNext];
+//    }
 }
 
 - (void)updatePlayBackProgress {
