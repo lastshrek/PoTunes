@@ -28,7 +28,6 @@
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.backgroundColor = [UIColor blackColor];
     self.tableView.rowHeight = 80;
-    
     //创建歌曲模型！
     NSMutableArray *tempArray = [NSMutableArray array];
     for (int i = 0; i < self.songName.count; i++) {

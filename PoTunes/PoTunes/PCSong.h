@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface PCSong : NSObject
+@interface PCSong : NSObject<NSCoding>
 
 
 /** 所属专辑 */

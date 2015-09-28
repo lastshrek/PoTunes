@@ -101,18 +101,18 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     [self getNotification];
     //设置appdelegate的block
     [self setupDelegateBlock];
-    
+    //获取上次播放曲目
+    [self getLastPlaySong];
     NSLog(@"%@",[self dirDoc]);
+    NSLog(@"%ld",self.songs.count);
 
 }
-
 
 
 #pragma mark - 隐藏statusBar
 - (BOOL)prefersStatusBarHidden {
     return YES;
 }
-
 - (NSArray *)songs {
     if (_songs == nil) {
         _songs = [NSArray array];
@@ -356,7 +356,18 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
         }
     };
 }
-
+- (void)getLastPlaySong {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSData *songsData = [defaults objectForKey:@"songsData"];
+    if (songsData == nil) {
+        return;
+    }
+    NSArray *songs = [NSKeyedUnarchiver unarchiveObjectWithData:songsData];
+    NSNumber *index = [defaults objectForKey:@"index"];
+    self.songs = songs;
+    self.index = [index integerValue];
+    [self changePlayerInterfaceDuringUsing:self.songs[self.index] row:self.index];
+}
 #pragma mark - 获取通知
 - (void)getNotification {
     NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
@@ -384,9 +395,10 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
             [songArray addObject:song];
         }
         self.songs = songArray;
+        self.index = [rowIndex integerValue];
         [self playFromPlaylist:songArray itemIndex:[rowIndex integerValue] state:PCAudioPlayStatePlay];
         NSInteger index = [rowIndex integerValue];
-        [self changePlayerInterfaceDuringUsing:self.songs[index] row:[rowIndex integerValue] state:PCAudioPlayStatePlay];
+        [self changePlayerInterfaceDuringUsing:self.songs[index] row:[rowIndex integerValue] ];
     }];
     [helper registerForNotificationName:@"previous" callback:^{
         [self playPrevious];
@@ -411,7 +423,7 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self playFromPlaylist:songs itemIndex:index state:PCAudioPlayStatePlay];
-        [self changePlayerInterfaceDuringUsing:self.songs[index] row:index state:PCAudioPlayStatePlay];
+        [self changePlayerInterfaceDuringUsing:self.songs[index] row:index];
     });
     
 }
@@ -421,7 +433,6 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 - (void)nonspeaking {
     self.audioController.volume = 1;
 }
-
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"selected" object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"speaking" object:nil];
@@ -458,7 +469,7 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     if (state == PCAudioPlayStatePause) [MBProgressHUD showPlayState:@"pauseB" toView:self.backgroundView];
     
 }
-- (void)changePlayerInterfaceDuringUsing:(PCSong *)song row:(NSInteger)row state:(PCAudioPlayState)state{
+- (void)changePlayerInterfaceDuringUsing:(PCSong *)song row:(NSInteger)row{
     self.progress.progress = 0;
     //倒影封面
     [self.cover sd_setImageWithURL:[NSURL URLWithString:song.cover] placeholderImage:self.cover.image completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
@@ -486,17 +497,31 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
         info[MPMediaItemPropertyPlaybackDuration] = @(duration);
         [MPNowPlayingInfoCenter defaultCenter].nowPlayingInfo = info;
         // 设置手表封面
-        NSData *imageData = UIImagePNGRepresentation(self.cover.image);
+        NSData *imageData = UIImagePNGRepresentation(image);
         NSUserDefaults *shared = [[NSUserDefaults alloc] initWithSuiteName:@"group.fm.poche.potunes"];
         [shared setObject:imageData forKey:@"imageData"];
         [shared synchronize];
         DarwinNotificationHelper *helper = [DarwinNotificationHelper sharedHelper];
         [helper postNotificationWithName:@"imageData"];
+        
+        //记录最后一次播放的歌曲
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        NSData *songsData = [NSKeyedArchiver archivedDataWithRootObject:self.songs];
+        [defaults setObject:songsData forKey:@"songsData"];
+        [defaults setObject:@(self.index) forKey:@"index"];
     }];
 }
 
 /** 播放或者暂停 */
 - (void)playOrPause {
+    if (self.songs.count == 0) {
+        [MBProgressHUD showError:@"大爷，先选歌撒！"];
+        return;
+    }
+    if (self.audioController.activeStream == nil) {
+        [self playFromPlaylist:self.songs itemIndex:self.index state:PCAudioPlayStatePlay];
+        return;
+    }
     [self.audioController pause];
     if (self.audioController.isPlaying) {
         [MBProgressHUD showPlayState:@"playB" toView:self.backgroundView];
@@ -515,6 +540,11 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 }
 /** 下一首 */
 - (void)playNext {
+    if (self.songs.count == 0) {
+        [MBProgressHUD showError:@"大爷，先选歌撒！"];
+        return;
+    }
+
     if (self.index == self.songs.count - 1) {
         self.index = 0;
     } else {
@@ -524,11 +554,16 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     [self playFromPlaylist:self.songs itemIndex:self.index state:PCAudioPlayStateNext];
     
     PCSong *song = self.songs[self.index];
-    [self changePlayerInterfaceDuringUsing:song row:self.index state:PCAudioPlayStateNext];
+    [self changePlayerInterfaceDuringUsing:song row:self.index];
     [MBProgressHUD showPlayState:@"nextB" toView:self.backgroundView];
 }
 /** 上一首 */
 - (void)playPrevious {
+    if (self.songs.count == 0) {
+        [MBProgressHUD showError:@"大爷，先选歌撒！"];
+        return;
+    }
+
 #warning 没有添加播放小于五秒的上一首播放
     if (self.index == 0) {
         self.index = self.songs.count - 1;
@@ -539,7 +574,7 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     [self playFromPlaylist:self.songs itemIndex:self.index state:PCAudioPlayStatePrevious];
     
     PCSong *song = self.songs[self.index];
-    [self changePlayerInterfaceDuringUsing:song row:self.index state:PCAudioPlayStatePrevious];
+    [self changePlayerInterfaceDuringUsing:song row:self.index];
     [MBProgressHUD showPlayState:@"prevB" toView:self.backgroundView];
 }
 /** 快进快退 */

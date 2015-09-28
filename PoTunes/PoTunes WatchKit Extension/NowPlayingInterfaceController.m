@@ -62,7 +62,9 @@
 
     }
     
-    
+//    NSUserDefaults *shared = [[NSUserDefaults alloc] initWithSuiteName:@"group.fm.poche.potunes"];
+//    NSData *imageData = [shared objectForKey:@"imageData"];
+//    [self.cover setImageData:imageData];
 }
 
 - (void)willActivate {
@@ -99,8 +101,13 @@
         }
     }];
     [helper registerForNotificationName:@"imageData" callback:^{
-        NSData *imageData = [shared objectForKey:@"imageData"];
-        [self.cover setImageData:imageData];
+        
+        dispatch_queue_t concurrentQueue = dispatch_queue_create("my.concurrent.queue", DISPATCH_QUEUE_CONCURRENT);
+        dispatch_async(concurrentQueue, ^(){
+            NSData *imageData = [shared objectForKey:@"imageData"];
+            UIImage *image = [UIImage imageWithData: imageData];
+            [self.cover setImage:image];
+        });
     }];
     //进度条走起
     [helper registerForNotificationName:@"progress" callback:^{
