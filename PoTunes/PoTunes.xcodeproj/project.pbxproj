@@ -7,10 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3C0CCAC51BB929DD00AAA5C6 /* PCSongListTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C0CCAC41BB929DD00AAA5C6 /* PCSongListTableViewCell.m */; };
+		3C24788E1BBA620500101EC8 /* EVCircularProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C24788D1BBA620500101EC8 /* EVCircularProgressView.m */; };
 		3C5813001BA7EFA00091E4FC /* PCNaviController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C5812FF1BA7EFA00091E4FC /* PCNaviController.m */; };
-		3C66DA331BB40F4200CEA31F /* AlbumRowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C66DA321BB40F4200CEA31F /* AlbumRowController.m */; };
-		3C66DA361BB4167900CEA31F /* AlbumInterfaceController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C66DA351BB4167900CEA31F /* AlbumInterfaceController.m */; };
-		3C66DA391BB41E4E00CEA31F /* SongListInterfaceController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C66DA381BB41E4E00CEA31F /* SongListInterfaceController.m */; };
 		3C66DA481BB4E6B300CEA31F /* FSAudioController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C66DA3B1BB4E6B300CEA31F /* FSAudioController.m */; };
 		3C66DA491BB4E6B300CEA31F /* FSAudioStream.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3C66DA3D1BB4E6B300CEA31F /* FSAudioStream.mm */; };
 		3C66DA4A1BB4E6B300CEA31F /* FSCheckContentTypeRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C66DA3F1BB4E6B300CEA31F /* FSCheckContentTypeRequest.m */; };
@@ -18,8 +17,7 @@
 		3C66DA4C1BB4E6B300CEA31F /* FSParseRssPodcastFeedRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C66DA431BB4E6B300CEA31F /* FSParseRssPodcastFeedRequest.m */; };
 		3C66DA4D1BB4E6B300CEA31F /* FSPlaylistItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C66DA451BB4E6B300CEA31F /* FSPlaylistItem.m */; };
 		3C66DA4E1BB4E6B300CEA31F /* FSXMLHttpRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C66DA471BB4E6B300CEA31F /* FSXMLHttpRequest.m */; };
-		3C66DA531BB51B1B00CEA31F /* PCSong.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C66DA521BB51B1B00CEA31F /* PCSong.m */; };
-		3C66DA561BB5222A00CEA31F /* NowPlayingInterfaceController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C66DA551BB5222A00CEA31F /* NowPlayingInterfaceController.m */; };
+		3C9038051BB8F4780089076B /* DarwinNotificationHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C9038041BB8F4780089076B /* DarwinNotificationHelper.m */; };
 		3CA224F41BAFB2080028387F /* AFSoundPlayback.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CA224EB1BAFB2080028387F /* AFSoundPlayback.m */; };
 		3CA224F51BAFB2080028387F /* AFSoundItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CA224ED1BAFB2080028387F /* AFSoundItem.m */; };
 		3CA224F61BAFB2080028387F /* AFSoundQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CA224EF1BAFB2080028387F /* AFSoundQueue.m */; };
@@ -116,19 +114,11 @@
 		3CB2E45A1BA7D4FA00805D4F /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CB2E4591BA7D4FA00805D4F /* AddressBook.framework */; };
 		3CB2E45D1BA7D53E00805D4F /* AMap.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 3CB2E45B1BA7D53E00805D4F /* AMap.bundle */; };
 		3CB2E45E1BA7D53E00805D4F /* AMapNavi.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 3CB2E45C1BA7D53E00805D4F /* AMapNavi.bundle */; };
-		3CB3DA6A1BB2E1B000DD2F72 /* InterfaceController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB3DA691BB2E1B000DD2F72 /* InterfaceController.m */; };
-		3CB3DA6D1BB2E1B000DD2F72 /* NotificationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB3DA6C1BB2E1B000DD2F72 /* NotificationController.m */; };
-		3CB3DA6F1BB2E1B000DD2F72 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3CB3DA6E1BB2E1B000DD2F72 /* Images.xcassets */; };
-		3CB3DA731BB2E1B000DD2F72 /* PoTunes WatchKit App.app in Resources */ = {isa = PBXBuildFile; fileRef = 3CB3DA721BB2E1B000DD2F72 /* PoTunes WatchKit App.app */; };
-		3CB3DA7B1BB2E1B000DD2F72 /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3CB3DA791BB2E1B000DD2F72 /* Interface.storyboard */; };
-		3CB3DA7D1BB2E1B000DD2F72 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3CB3DA7C1BB2E1B000DD2F72 /* Images.xcassets */; };
-		3CB3DA801BB2E1B000DD2F72 /* PoTunes WatchKit Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 3CB3DA631BB2E1B000DD2F72 /* PoTunes WatchKit Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		3CCA14F01BA8080700D45C52 /* SharedMapView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CCA14EF1BA8080700D45C52 /* SharedMapView.m */; };
+		3CD22AD81BDE2A280064E7B0 /* PCDownloadingTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CD22AD71BDE2A280064E7B0 /* PCDownloadingTableViewController.m */; };
 		3CD5C5C71BB3C07B00CB6F6B /* TDImageColors.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CD5C5C21BB3C07B00CB6F6B /* TDImageColors.m */; };
 		3CD5C5C81BB3C07B00CB6F6B /* UIColor+TDAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CD5C5C41BB3C07B00CB6F6B /* UIColor+TDAdditions.m */; };
 		3CD5C5C91BB3C07B00CB6F6B /* UIImage+TDAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CD5C5C61BB3C07B00CB6F6B /* UIImage+TDAdditions.m */; };
-		3CDF85601BB5A2B500A1F8CE /* DarwinNotificationHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CDF855F1BB5A2B500A1F8CE /* DarwinNotificationHelper.m */; };
-		3CDF85611BB5A2B500A1F8CE /* DarwinNotificationHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CDF855F1BB5A2B500A1F8CE /* DarwinNotificationHelper.m */; };
 		3CF7AFBC1BAA997D00F764BD /* GeocodeAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CF7AFBB1BAA997D00F764BD /* GeocodeAnnotation.m */; };
 		3CF7AFBF1BAAA14000F764BD /* CommonUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CF7AFBE1BAAA14000F764BD /* CommonUtility.m */; };
 		3CF7AFC21BAAA19500F764BD /* LineDashPolyline.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CF7AFC11BAAA19500F764BD /* LineDashPolyline.m */; };
@@ -142,45 +132,28 @@
 			remoteGlobalIDString = 3CB2E2F11BA7B26800805D4F;
 			remoteInfo = PoTunes;
 		};
-		3CB3DA741BB2E1B000DD2F72 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 3CB2E2EA1BA7B26800805D4F /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 3CB3DA711BB2E1B000DD2F72;
-			remoteInfo = "PoTunes WatchKit App";
-		};
-		3CB3DA7E1BB2E1B000DD2F72 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 3CB2E2EA1BA7B26800805D4F /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 3CB3DA621BB2E1B000DD2F72;
-			remoteInfo = "PoTunes WatchKit Extension";
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		3CB3DA871BB2E1B000DD2F72 /* Embed App Extensions */ = {
+		3C4835691BB8DFF800FAC481 /* Embed Watch Content */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 13;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
 			files = (
-				3CB3DA801BB2E1B000DD2F72 /* PoTunes WatchKit Extension.appex in Embed App Extensions */,
 			);
-			name = "Embed App Extensions";
+			name = "Embed Watch Content";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		3C0CCAC31BB929DD00AAA5C6 /* PCSongListTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCSongListTableViewCell.h; sourceTree = "<group>"; };
+		3C0CCAC41BB929DD00AAA5C6 /* PCSongListTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCSongListTableViewCell.m; sourceTree = "<group>"; };
+		3C24788C1BBA620500101EC8 /* EVCircularProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EVCircularProgressView.h; sourceTree = "<group>"; };
+		3C24788D1BBA620500101EC8 /* EVCircularProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EVCircularProgressView.m; sourceTree = "<group>"; };
 		3C5812FE1BA7EFA00091E4FC /* PCNaviController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCNaviController.h; sourceTree = "<group>"; };
 		3C5812FF1BA7EFA00091E4FC /* PCNaviController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCNaviController.m; sourceTree = "<group>"; };
-		3C66DA311BB40F4200CEA31F /* AlbumRowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlbumRowController.h; sourceTree = "<group>"; };
-		3C66DA321BB40F4200CEA31F /* AlbumRowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlbumRowController.m; sourceTree = "<group>"; };
-		3C66DA341BB4167900CEA31F /* AlbumInterfaceController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlbumInterfaceController.h; sourceTree = "<group>"; };
-		3C66DA351BB4167900CEA31F /* AlbumInterfaceController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlbumInterfaceController.m; sourceTree = "<group>"; };
-		3C66DA371BB41E4E00CEA31F /* SongListInterfaceController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SongListInterfaceController.h; sourceTree = "<group>"; };
-		3C66DA381BB41E4E00CEA31F /* SongListInterfaceController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SongListInterfaceController.m; sourceTree = "<group>"; };
 		3C66DA3A1BB4E6B300CEA31F /* FSAudioController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSAudioController.h; sourceTree = "<group>"; };
 		3C66DA3B1BB4E6B300CEA31F /* FSAudioController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSAudioController.m; sourceTree = "<group>"; };
 		3C66DA3C1BB4E6B300CEA31F /* FSAudioStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSAudioStream.h; sourceTree = "<group>"; };
@@ -196,12 +169,8 @@
 		3C66DA461BB4E6B300CEA31F /* FSXMLHttpRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSXMLHttpRequest.h; sourceTree = "<group>"; };
 		3C66DA471BB4E6B300CEA31F /* FSXMLHttpRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSXMLHttpRequest.m; sourceTree = "<group>"; };
 		3C66DA4F1BB5028C00CEA31F /* PoTunes.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PoTunes.entitlements; sourceTree = "<group>"; };
-		3C66DA501BB502C700CEA31F /* PoTunes WatchKit Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "PoTunes WatchKit Extension.entitlements"; sourceTree = "<group>"; };
-		3C66DA511BB51B1B00CEA31F /* PCSong.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCSong.h; sourceTree = "<group>"; };
-		3C66DA521BB51B1B00CEA31F /* PCSong.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCSong.m; sourceTree = "<group>"; };
-		3C66DA541BB5222A00CEA31F /* NowPlayingInterfaceController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NowPlayingInterfaceController.h; sourceTree = "<group>"; };
-		3C66DA551BB5222A00CEA31F /* NowPlayingInterfaceController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NowPlayingInterfaceController.m; sourceTree = "<group>"; };
-		3C947D491BB7BA23008039B9 /* PoTunes WatchKit App.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "PoTunes WatchKit App.entitlements"; sourceTree = "<group>"; };
+		3C9038031BB8F4780089076B /* DarwinNotificationHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DarwinNotificationHelper.h; sourceTree = "<group>"; };
+		3C9038041BB8F4780089076B /* DarwinNotificationHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DarwinNotificationHelper.m; sourceTree = "<group>"; };
 		3CA224E91BAFB2080028387F /* AFSoundManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFSoundManager.h; sourceTree = "<group>"; };
 		3CA224EA1BAFB2080028387F /* AFSoundPlayback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFSoundPlayback.h; sourceTree = "<group>"; };
 		3CA224EB1BAFB2080028387F /* AFSoundPlayback.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFSoundPlayback.m; sourceTree = "<group>"; };
@@ -382,28 +351,16 @@
 		3CB2E4591BA7D4FA00805D4F /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		3CB2E45B1BA7D53E00805D4F /* AMap.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = AMap.bundle; path = AMapNaviKit.framework/Versions/1.3.1.cf2678a/Resources/AMap.bundle; sourceTree = "<group>"; };
 		3CB2E45C1BA7D53E00805D4F /* AMapNavi.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = AMapNavi.bundle; path = AMapNaviKit.framework/Versions/1.3.1.cf2678a/Resources/AMapNavi.bundle; sourceTree = "<group>"; };
-		3CB3DA631BB2E1B000DD2F72 /* PoTunes WatchKit Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "PoTunes WatchKit Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
-		3CB3DA661BB2E1B000DD2F72 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		3CB3DA671BB2E1B000DD2F72 /* PushNotificationPayload.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = PushNotificationPayload.apns; sourceTree = "<group>"; };
-		3CB3DA681BB2E1B000DD2F72 /* InterfaceController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InterfaceController.h; sourceTree = "<group>"; };
-		3CB3DA691BB2E1B000DD2F72 /* InterfaceController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InterfaceController.m; sourceTree = "<group>"; };
-		3CB3DA6B1BB2E1B000DD2F72 /* NotificationController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NotificationController.h; sourceTree = "<group>"; };
-		3CB3DA6C1BB2E1B000DD2F72 /* NotificationController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NotificationController.m; sourceTree = "<group>"; };
-		3CB3DA6E1BB2E1B000DD2F72 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		3CB3DA721BB2E1B000DD2F72 /* PoTunes WatchKit App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "PoTunes WatchKit App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		3CB3DA781BB2E1B000DD2F72 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		3CB3DA7A1BB2E1B000DD2F72 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
-		3CB3DA7C1BB2E1B000DD2F72 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		3CCA14EE1BA8080700D45C52 /* SharedMapView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SharedMapView.h; sourceTree = "<group>"; };
 		3CCA14EF1BA8080700D45C52 /* SharedMapView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SharedMapView.m; sourceTree = "<group>"; };
+		3CD22AD61BDE2A280064E7B0 /* PCDownloadingTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCDownloadingTableViewController.h; sourceTree = "<group>"; };
+		3CD22AD71BDE2A280064E7B0 /* PCDownloadingTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCDownloadingTableViewController.m; sourceTree = "<group>"; };
 		3CD5C5C11BB3C07B00CB6F6B /* TDImageColors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDImageColors.h; sourceTree = "<group>"; };
 		3CD5C5C21BB3C07B00CB6F6B /* TDImageColors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDImageColors.m; sourceTree = "<group>"; };
 		3CD5C5C31BB3C07B00CB6F6B /* UIColor+TDAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+TDAdditions.h"; sourceTree = "<group>"; };
 		3CD5C5C41BB3C07B00CB6F6B /* UIColor+TDAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+TDAdditions.m"; sourceTree = "<group>"; };
 		3CD5C5C51BB3C07B00CB6F6B /* UIImage+TDAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+TDAdditions.h"; sourceTree = "<group>"; };
 		3CD5C5C61BB3C07B00CB6F6B /* UIImage+TDAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+TDAdditions.m"; sourceTree = "<group>"; };
-		3CDF855E1BB5A2B500A1F8CE /* DarwinNotificationHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DarwinNotificationHelper.h; sourceTree = "<group>"; };
-		3CDF855F1BB5A2B500A1F8CE /* DarwinNotificationHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DarwinNotificationHelper.m; sourceTree = "<group>"; };
 		3CF7AFBA1BAA997D00F764BD /* GeocodeAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeocodeAnnotation.h; sourceTree = "<group>"; };
 		3CF7AFBB1BAA997D00F764BD /* GeocodeAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeocodeAnnotation.m; sourceTree = "<group>"; };
 		3CF7AFBD1BAAA14000F764BD /* CommonUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonUtility.h; sourceTree = "<group>"; };
@@ -440,13 +397,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		3CB3DA601BB2E1B000DD2F72 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -473,8 +423,6 @@
 			children = (
 				3CB2E2F41BA7B26800805D4F /* PoTunes */,
 				3CB2E30E1BA7B26800805D4F /* PoTunesTests */,
-				3CB3DA641BB2E1B000DD2F72 /* PoTunes WatchKit Extension */,
-				3CB3DA761BB2E1B000DD2F72 /* PoTunes WatchKit App */,
 				3CB2E2F31BA7B26800805D4F /* Products */,
 			);
 			sourceTree = "<group>";
@@ -484,8 +432,6 @@
 			children = (
 				3CB2E2F21BA7B26800805D4F /* PoTunes.app */,
 				3CB2E30B1BA7B26800805D4F /* PoTunesTests.xctest */,
-				3CB3DA631BB2E1B000DD2F72 /* PoTunes WatchKit Extension.appex */,
-				3CB3DA721BB2E1B000DD2F72 /* PoTunes WatchKit App.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -503,10 +449,10 @@
 				3CB2E2F91BA7B26800805D4F /* AppDelegate.h */,
 				3CB2E2FA1BA7B26800805D4F /* AppDelegate.m */,
 				3CB2E2FF1BA7B26800805D4F /* Main.storyboard */,
+				3CB2E2F51BA7B26800805D4F /* Supporting Files */,
 				3CB2E4061BA7D28600805D4F /* FreeStreamerMobile-Prefix.pch */,
 				3CB2E3021BA7B26800805D4F /* Images.xcassets */,
 				3CB2E3041BA7B26800805D4F /* LaunchScreen.xib */,
-				3CB2E2F51BA7B26800805D4F /* Supporting Files */,
 			);
 			path = PoTunes;
 			sourceTree = "<group>";
@@ -550,6 +496,7 @@
 		3CB2E31D1BA7C96A00805D4F /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				3CD22AD41BDE29F90064E7B0 /* 正在下载歌曲页 */,
 				3CB2E43E1BA7D44100805D4F /* 歌曲列表页 */,
 				3CB2E4341BA7D38400805D4F /* 设置页 */,
 				3CB2E40F1BA7D35B00805D4F /* 高德导航页 */,
@@ -574,6 +521,8 @@
 		3CB2E31F1BA7CA4500805D4F /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				3C24788C1BBA620500101EC8 /* EVCircularProgressView.h */,
+				3C24788D1BBA620500101EC8 /* EVCircularProgressView.m */,
 				3CCA14EE1BA8080700D45C52 /* SharedMapView.h */,
 				3CCA14EF1BA8080700D45C52 /* SharedMapView.m */,
 				3CB2E3201BA7CA5D00805D4F /* PCArticleCell.h */,
@@ -584,6 +533,8 @@
 				3CB2E3251BA7CA5D00805D4F /* PCLabel.m */,
 				3CB2E3261BA7CA5D00805D4F /* PCButton.h */,
 				3CB2E3271BA7CA5D00805D4F /* PCButton.m */,
+				3C0CCAC31BB929DD00AAA5C6 /* PCSongListTableViewCell.h */,
+				3C0CCAC41BB929DD00AAA5C6 /* PCSongListTableViewCell.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -613,6 +564,8 @@
 		3CB2E33A1BA7CD4D00805D4F /* 三方库 */ = {
 			isa = PBXGroup;
 			children = (
+				3C9038031BB8F4780089076B /* DarwinNotificationHelper.h */,
+				3C9038041BB8F4780089076B /* DarwinNotificationHelper.m */,
 				3CD5C5C01BB3C06B00CB6F6B /* TDImageColors */,
 				3CA224E81BAFB1FA0028387F /* AFSoundManager */,
 				3CB2E4421BA7D45800805D4F /* FMDB */,
@@ -906,57 +859,13 @@
 			name = FMDB;
 			sourceTree = "<group>";
 		};
-		3CB3DA641BB2E1B000DD2F72 /* PoTunes WatchKit Extension */ = {
+		3CD22AD41BDE29F90064E7B0 /* 正在下载歌曲页 */ = {
 			isa = PBXGroup;
 			children = (
-				3CDF855D1BB5A2A700A1F8CE /* DarwinNotificationHelper */,
-				3C66DA501BB502C700CEA31F /* PoTunes WatchKit Extension.entitlements */,
-				3C66DA511BB51B1B00CEA31F /* PCSong.h */,
-				3C66DA521BB51B1B00CEA31F /* PCSong.m */,
-				3CB3DA681BB2E1B000DD2F72 /* InterfaceController.h */,
-				3CB3DA691BB2E1B000DD2F72 /* InterfaceController.m */,
-				3C66DA341BB4167900CEA31F /* AlbumInterfaceController.h */,
-				3C66DA351BB4167900CEA31F /* AlbumInterfaceController.m */,
-				3C66DA371BB41E4E00CEA31F /* SongListInterfaceController.h */,
-				3C66DA381BB41E4E00CEA31F /* SongListInterfaceController.m */,
-				3C66DA541BB5222A00CEA31F /* NowPlayingInterfaceController.h */,
-				3C66DA551BB5222A00CEA31F /* NowPlayingInterfaceController.m */,
-				3C66DA311BB40F4200CEA31F /* AlbumRowController.h */,
-				3C66DA321BB40F4200CEA31F /* AlbumRowController.m */,
-				3CB3DA6B1BB2E1B000DD2F72 /* NotificationController.h */,
-				3CB3DA6C1BB2E1B000DD2F72 /* NotificationController.m */,
-				3CB3DA6E1BB2E1B000DD2F72 /* Images.xcassets */,
-				3CB3DA651BB2E1B000DD2F72 /* Supporting Files */,
+				3CD22AD61BDE2A280064E7B0 /* PCDownloadingTableViewController.h */,
+				3CD22AD71BDE2A280064E7B0 /* PCDownloadingTableViewController.m */,
 			);
-			path = "PoTunes WatchKit Extension";
-			sourceTree = "<group>";
-		};
-		3CB3DA651BB2E1B000DD2F72 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				3CB3DA661BB2E1B000DD2F72 /* Info.plist */,
-				3CB3DA671BB2E1B000DD2F72 /* PushNotificationPayload.apns */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		3CB3DA761BB2E1B000DD2F72 /* PoTunes WatchKit App */ = {
-			isa = PBXGroup;
-			children = (
-				3C947D491BB7BA23008039B9 /* PoTunes WatchKit App.entitlements */,
-				3CB3DA791BB2E1B000DD2F72 /* Interface.storyboard */,
-				3CB3DA7C1BB2E1B000DD2F72 /* Images.xcassets */,
-				3CB3DA771BB2E1B000DD2F72 /* Supporting Files */,
-			);
-			path = "PoTunes WatchKit App";
-			sourceTree = "<group>";
-		};
-		3CB3DA771BB2E1B000DD2F72 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				3CB3DA781BB2E1B000DD2F72 /* Info.plist */,
-			);
-			name = "Supporting Files";
+			name = "正在下载歌曲页";
 			sourceTree = "<group>";
 		};
 		3CD5C5C01BB3C06B00CB6F6B /* TDImageColors */ = {
@@ -972,15 +881,6 @@
 			name = TDImageColors;
 			sourceTree = "<group>";
 		};
-		3CDF855D1BB5A2A700A1F8CE /* DarwinNotificationHelper */ = {
-			isa = PBXGroup;
-			children = (
-				3CDF855E1BB5A2B500A1F8CE /* DarwinNotificationHelper.h */,
-				3CDF855F1BB5A2B500A1F8CE /* DarwinNotificationHelper.m */,
-			);
-			name = DarwinNotificationHelper;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -991,12 +891,11 @@
 				3CB2E2EE1BA7B26800805D4F /* Sources */,
 				3CB2E2EF1BA7B26800805D4F /* Frameworks */,
 				3CB2E2F01BA7B26800805D4F /* Resources */,
-				3CB3DA871BB2E1B000DD2F72 /* Embed App Extensions */,
+				3C4835691BB8DFF800FAC481 /* Embed Watch Content */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				3CB3DA7F1BB2E1B000DD2F72 /* PBXTargetDependency */,
 			);
 			name = PoTunes;
 			productName = PoTunes;
@@ -1021,46 +920,13 @@
 			productReference = 3CB2E30B1BA7B26800805D4F /* PoTunesTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		3CB3DA621BB2E1B000DD2F72 /* PoTunes WatchKit Extension */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 3CB3DA861BB2E1B000DD2F72 /* Build configuration list for PBXNativeTarget "PoTunes WatchKit Extension" */;
-			buildPhases = (
-				3CB3DA5F1BB2E1B000DD2F72 /* Sources */,
-				3CB3DA601BB2E1B000DD2F72 /* Frameworks */,
-				3CB3DA611BB2E1B000DD2F72 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				3CB3DA751BB2E1B000DD2F72 /* PBXTargetDependency */,
-			);
-			name = "PoTunes WatchKit Extension";
-			productName = "PoTunes WatchKit Extension";
-			productReference = 3CB3DA631BB2E1B000DD2F72 /* PoTunes WatchKit Extension.appex */;
-			productType = "com.apple.product-type.watchkit-extension";
-		};
-		3CB3DA711BB2E1B000DD2F72 /* PoTunes WatchKit App */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 3CB3DA851BB2E1B000DD2F72 /* Build configuration list for PBXNativeTarget "PoTunes WatchKit App" */;
-			buildPhases = (
-				3CB3DA701BB2E1B000DD2F72 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = "PoTunes WatchKit App";
-			productName = "PoTunes WatchKit App";
-			productReference = 3CB3DA721BB2E1B000DD2F72 /* PoTunes WatchKit App.app */;
-			productType = "com.apple.product-type.application.watchapp";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		3CB2E2EA1BA7B26800805D4F /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0640;
+				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = Purchas;
 				TargetAttributes = {
 					3CB2E2F11BA7B26800805D4F = {
@@ -1080,24 +946,6 @@
 						DevelopmentTeam = 7LKFCH3GR5;
 						TestTargetID = 3CB2E2F11BA7B26800805D4F;
 					};
-					3CB3DA621BB2E1B000DD2F72 = {
-						CreatedOnToolsVersion = 6.4;
-						DevelopmentTeam = 7LKFCH3GR5;
-						SystemCapabilities = {
-							com.apple.ApplicationGroups.iOS = {
-								enabled = 1;
-							};
-						};
-					};
-					3CB3DA711BB2E1B000DD2F72 = {
-						CreatedOnToolsVersion = 6.4;
-						DevelopmentTeam = 7LKFCH3GR5;
-						SystemCapabilities = {
-							com.apple.ApplicationGroups.iOS = {
-								enabled = 1;
-							};
-						};
-					};
 				};
 			};
 			buildConfigurationList = 3CB2E2ED1BA7B26800805D4F /* Build configuration list for PBXProject "PoTunes" */;
@@ -1115,8 +963,6 @@
 			targets = (
 				3CB2E2F11BA7B26800805D4F /* PoTunes */,
 				3CB2E30A1BA7B26800805D4F /* PoTunesTests */,
-				3CB3DA621BB2E1B000DD2F72 /* PoTunes WatchKit Extension */,
-				3CB3DA711BB2E1B000DD2F72 /* PoTunes WatchKit App */,
 			);
 		};
 /* End PBXProject section */
@@ -1144,24 +990,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		3CB3DA611BB2E1B000DD2F72 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				3CB3DA6F1BB2E1B000DD2F72 /* Images.xcassets in Resources */,
-				3CB3DA731BB2E1B000DD2F72 /* PoTunes WatchKit App.app in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		3CB3DA701BB2E1B000DD2F72 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				3CB3DA7B1BB2E1B000DD2F72 /* Interface.storyboard in Resources */,
-				3CB3DA7D1BB2E1B000DD2F72 /* Images.xcassets in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -1186,6 +1014,7 @@
 				3CB2E3F61BA7D13B00805D4F /* file_stream.cpp in Sources */,
 				3CB2E2FE1BA7B26800805D4F /* ViewController.m in Sources */,
 				3CB2E3871BA7CE4000805D4F /* UIImageView+HighlightedWebCache.m in Sources */,
+				3C9038051BB8F4780089076B /* DarwinNotificationHelper.m in Sources */,
 				3CB2E3AC1BA7CF0D00805D4F /* AFURLConnectionOperation.m in Sources */,
 				3CB2E3BB1BA7CF7000805D4F /* PCArticle.m in Sources */,
 				3CB2E3BA1BA7CF7000805D4F /* PCPlaylist.m in Sources */,
@@ -1200,11 +1029,13 @@
 				3CB2E34E1BA7CD7C00805D4F /* UIView+MJExtension.m in Sources */,
 				3C66DA4D1BB4E6B300CEA31F /* FSPlaylistItem.m in Sources */,
 				3CB2E3341BA7CC0700805D4F /* UIImage+Reflection.m in Sources */,
+				3C0CCAC51BB929DD00AAA5C6 /* PCSongListTableViewCell.m in Sources */,
 				3CA224F41BAFB2080028387F /* AFSoundPlayback.m in Sources */,
 				3CB2E37C1BA7CE4000805D4F /* SDImageCache.m in Sources */,
 				3CB2E3F41BA7D13B00805D4F /* caching_stream.cpp in Sources */,
 				3CB2E3F71BA7D13B00805D4F /* http_stream.cpp in Sources */,
 				3CB2E3AE1BA7CF0D00805D4F /* AFURLResponseSerialization.m in Sources */,
+				3CD22AD81BDE2A280064E7B0 /* PCDownloadingTableViewController.m in Sources */,
 				3CB2E44E1BA7D46C00805D4F /* FMDatabase.m in Sources */,
 				3CA224F61BAFB2080028387F /* AFSoundQueue.m in Sources */,
 				3C5813001BA7EFA00091E4FC /* PCNaviController.m in Sources */,
@@ -1217,8 +1048,8 @@
 				3CB2E3F31BA7D13B00805D4F /* audio_stream.cpp in Sources */,
 				3CB2E3811BA7CE4000805D4F /* SDWebImageManager.m in Sources */,
 				3C66DA4E1BB4E6B300CEA31F /* FSXMLHttpRequest.m in Sources */,
+				3C24788E1BBA620500101EC8 /* EVCircularProgressView.m in Sources */,
 				3CB2E3F81BA7D13B00805D4F /* id3_parser.cpp in Sources */,
-				3CDF85601BB5A2B500A1F8CE /* DarwinNotificationHelper.m in Sources */,
 				3C66DA4B1BB4E6B300CEA31F /* FSParsePlaylistRequest.m in Sources */,
 				3CB2E3891BA7CE4000805D4F /* UIView+WebCacheOperation.m in Sources */,
 				3CB2E3A81BA7CF0D00805D4F /* AFHTTPRequestOperationManager.m in Sources */,
@@ -1270,21 +1101,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		3CB3DA5F1BB2E1B000DD2F72 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				3CB3DA6D1BB2E1B000DD2F72 /* NotificationController.m in Sources */,
-				3C66DA391BB41E4E00CEA31F /* SongListInterfaceController.m in Sources */,
-				3CDF85611BB5A2B500A1F8CE /* DarwinNotificationHelper.m in Sources */,
-				3CB3DA6A1BB2E1B000DD2F72 /* InterfaceController.m in Sources */,
-				3C66DA531BB51B1B00CEA31F /* PCSong.m in Sources */,
-				3C66DA331BB40F4200CEA31F /* AlbumRowController.m in Sources */,
-				3C66DA561BB5222A00CEA31F /* NowPlayingInterfaceController.m in Sources */,
-				3C66DA361BB4167900CEA31F /* AlbumInterfaceController.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -1292,16 +1108,6 @@
 			isa = PBXTargetDependency;
 			target = 3CB2E2F11BA7B26800805D4F /* PoTunes */;
 			targetProxy = 3CB2E30C1BA7B26800805D4F /* PBXContainerItemProxy */;
-		};
-		3CB3DA751BB2E1B000DD2F72 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 3CB3DA711BB2E1B000DD2F72 /* PoTunes WatchKit App */;
-			targetProxy = 3CB3DA741BB2E1B000DD2F72 /* PBXContainerItemProxy */;
-		};
-		3CB3DA7F1BB2E1B000DD2F72 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 3CB3DA621BB2E1B000DD2F72 /* PoTunes WatchKit Extension */;
-			targetProxy = 3CB3DA7E1BB2E1B000DD2F72 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1320,14 +1126,6 @@
 				3CB2E3051BA7B26800805D4F /* Base */,
 			);
 			name = LaunchScreen.xib;
-			sourceTree = "<group>";
-		};
-		3CB3DA791BB2E1B000DD2F72 /* Interface.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				3CB3DA7A1BB2E1B000DD2F72 /* Base */,
-			);
-			name = Interface.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -1364,9 +1162,9 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
-				PROVISIONING_PROFILE = "99e217f4-954c-482c-a489-f87de7e7820e";
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -1376,6 +1174,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = PoTunes/PoTunes.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: PengCheng Zhao (7LKFCH3GR5)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: PengCheng Zhao (7LKFCH3GR5)";
@@ -1395,8 +1194,9 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_BUNDLE_IDENTIFIER = "$(PRODUCT_BUNDLE_IDENTIFIER)fm.poche.PoTunes";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "99e217f4-954c-482c-a489-f87de7e7820e";
+				PROVISIONING_PROFILE = "";
 			};
 			name = "ad hoc distribution";
 		};
@@ -1412,41 +1212,10 @@
 				);
 				INFOPLIST_FILE = PoTunesTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "fm.poche.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PoTunes.app/PoTunes";
-			};
-			name = "ad hoc distribution";
-		};
-		3C947D4D1BB7BBBA008039B9 /* ad hoc distribution */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "PoTunes WatchKit Extension/PoTunes WatchKit Extension.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Distribution: PengCheng Zhao (7LKFCH3GR5)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: PengCheng Zhao (7LKFCH3GR5)";
-				INFOPLIST_FILE = "PoTunes WatchKit Extension/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				PRODUCT_NAME = "${TARGET_NAME}";
-				PROVISIONING_PROFILE = "";
-				SKIP_INSTALL = YES;
-			};
-			name = "ad hoc distribution";
-		};
-		3C947D4E1BB7BBBA008039B9 /* ad hoc distribution */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = "PoTunes WatchKit App/PoTunes WatchKit App.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Distribution: PengCheng Zhao (7LKFCH3GR5)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: PengCheng Zhao (7LKFCH3GR5)";
-				IBSC_MODULE = PoTunes_WatchKit_Extension;
-				INFOPLIST_FILE = "PoTunes WatchKit App/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = 4;
-				"TARGETED_DEVICE_FAMILY[sdk=iphonesimulator*]" = "1,4";
 			};
 			name = "ad hoc distribution";
 		};
@@ -1472,6 +1241,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -1487,10 +1257,10 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				PROVISIONING_PROFILE = "99e217f4-954c-482c-a489-f87de7e7820e";
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -1526,9 +1296,9 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
-				PROVISIONING_PROFILE = "99e217f4-954c-482c-a489-f87de7e7820e";
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -1538,8 +1308,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = PoTunes/PoTunes.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: PengCheng Zhao (2P9E2Y5942)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1557,8 +1328,9 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_BUNDLE_IDENTIFIER = "$(PRODUCT_BUNDLE_IDENTIFIER)fm.poche.PoTunes";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "99e217f4-954c-482c-a489-f87de7e7820e";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -1566,6 +1338,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = PoTunes/PoTunes.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -1585,8 +1358,9 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_BUNDLE_IDENTIFIER = "$(PRODUCT_BUNDLE_IDENTIFIER)fm.poche.PoTunes";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "99e217f4-954c-482c-a489-f87de7e7820e";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};
@@ -1606,6 +1380,7 @@
 				);
 				INFOPLIST_FILE = PoTunesTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "fm.poche.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PoTunes.app/PoTunes";
@@ -1624,81 +1399,10 @@
 				);
 				INFOPLIST_FILE = PoTunesTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "fm.poche.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PoTunes.app/PoTunes";
-			};
-			name = Release;
-		};
-		3CB3DA811BB2E1B000DD2F72 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "PoTunes WatchKit Extension/PoTunes WatchKit Extension.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = "PoTunes WatchKit Extension/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				PRODUCT_NAME = "${TARGET_NAME}";
-				PROVISIONING_PROFILE = "";
-				SKIP_INSTALL = YES;
-			};
-			name = Debug;
-		};
-		3CB3DA821BB2E1B000DD2F72 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "PoTunes WatchKit Extension/PoTunes WatchKit Extension.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				INFOPLIST_FILE = "PoTunes WatchKit Extension/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				PRODUCT_NAME = "${TARGET_NAME}";
-				PROVISIONING_PROFILE = "";
-				SKIP_INSTALL = YES;
-			};
-			name = Release;
-		};
-		3CB3DA831BB2E1B000DD2F72 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = "PoTunes WatchKit App/PoTunes WatchKit App.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				IBSC_MODULE = PoTunes_WatchKit_Extension;
-				INFOPLIST_FILE = "PoTunes WatchKit App/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = 4;
-				"TARGETED_DEVICE_FAMILY[sdk=iphonesimulator*]" = "1,4";
-			};
-			name = Debug;
-		};
-		3CB3DA841BB2E1B000DD2F72 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = "PoTunes WatchKit App/PoTunes WatchKit App.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				IBSC_MODULE = PoTunes_WatchKit_Extension;
-				INFOPLIST_FILE = "PoTunes WatchKit App/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = 4;
-				"TARGETED_DEVICE_FAMILY[sdk=iphonesimulator*]" = "1,4";
 			};
 			name = Release;
 		};
@@ -1731,26 +1435,6 @@
 				3CB2E3191BA7B26800805D4F /* Debug */,
 				3CB2E31A1BA7B26800805D4F /* Release */,
 				3C947D4C1BB7BBBA008039B9 /* ad hoc distribution */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		3CB3DA851BB2E1B000DD2F72 /* Build configuration list for PBXNativeTarget "PoTunes WatchKit App" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				3CB3DA831BB2E1B000DD2F72 /* Debug */,
-				3CB3DA841BB2E1B000DD2F72 /* Release */,
-				3C947D4E1BB7BBBA008039B9 /* ad hoc distribution */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		3CB3DA861BB2E1B000DD2F72 /* Build configuration list for PBXNativeTarget "PoTunes WatchKit Extension" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				3CB3DA811BB2E1B000DD2F72 /* Debug */,
-				3CB3DA821BB2E1B000DD2F72 /* Release */,
-				3C947D4D1BB7BBBA008039B9 /* ad hoc distribution */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

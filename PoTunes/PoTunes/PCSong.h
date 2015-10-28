@@ -14,13 +14,13 @@
 /** 所属专辑 */
 @property (nonatomic, copy) NSString *album;
 /** 艺人 */
-@property (nonatomic, copy) NSString *artist;
+@property (nonatomic, copy) NSString *author;
 /** 歌曲名 */
-@property (nonatomic, copy) NSString *songName;
+@property (nonatomic, copy) NSString *title;
 /** 专辑封面 */
-@property (nonatomic, copy) NSString *cover;
+@property (nonatomic, copy) NSString *thumb;
 /** 下载地址 */
-@property (nonatomic, copy) NSString *URL;
+@property (nonatomic, copy) NSString *sourceURL;
 /** 所在专辑suoyin */
 @property (nonatomic, assign) NSNumber *index;
 

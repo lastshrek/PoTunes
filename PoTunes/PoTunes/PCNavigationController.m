@@ -18,20 +18,6 @@
     /** 1.设置导航栏样式 */
     UINavigationBar * navBar = [UINavigationBar appearance];
     navBar.hidden = YES;
-//    [navBar setBackgroundImage:[UIImage imageNamed:@"navBar"] forBarMetrics:UIBarMetricsDefault];
-//    /** 设置返回图标颜色 */
-//    navBar.tintColor = [UIColor whiteColor];
-//    NSMutableDictionary * textAttrs = [NSMutableDictionary dictionary];
-//    textAttrs[NSForegroundColorAttributeName] = [UIColor whiteColor];
-//    textAttrs[NSFontAttributeName] = [UIFont systemFontOfSize:18];
-//    [navBar setTitleTextAttributes:textAttrs];
-//    /** 2.设置BarButtonItem的主题 */
-//    UIBarButtonItem * item = [UIBarButtonItem appearance];
-//    /** 设置文字颜色 */
-//    NSMutableDictionary * itemAttrs = [NSMutableDictionary dictionary];
-//    itemAttrs[NSForegroundColorAttributeName] = [UIColor whiteColor];
-//    itemAttrs[NSFontAttributeName] = [UIFont systemFontOfSize:14];
-//    [item setTitleTextAttributes:itemAttrs forState:UIControlStateNormal];
 }
 
 - (void)viewDidLoad {

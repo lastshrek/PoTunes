@@ -28,22 +28,6 @@
     return cell;
 }
 
-//- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
-//    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
-//    if (self) {
-//        /** 子控件的创建和初始化 */
-//        /** 图片 */
-//        UIImageView *picView = [[UIImageView alloc] init];
-//        [self.contentView addSubview:picView];
-//        self.picView = picView;
-//        /** 文字 */
-//        UILabel *titleLabel = [[UILabel alloc] init];
-//        [self.contentView addSubview:titleLabel];
-//        self.titleLabel = titleLabel;
-//    }
-//    return self;
-//}
-
 - (void)layoutSubviews {
     [super layoutSubviews];
     self.contentView.frame = CGRectMake(30, 20, self.frame.size.width - 60, self.frame.size.height - 40);

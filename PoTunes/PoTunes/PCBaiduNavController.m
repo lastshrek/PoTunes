@@ -40,13 +40,14 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-//    self.view.backgroundColor = [UIColor whiteColor];
+
     [self initMapView];
     
     [self initSearchBar];
     
     [self initTableView];
     
+    [self getNotification];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -152,6 +153,25 @@
     AMapInputTipsSearchRequest *tips = [[AMapInputTipsSearchRequest alloc] init];
     tips.keywords = key;
     [self.search AMapInputTipsSearch:tips];
+}
+
+
+- (void)getNotification {
+    
+    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+    
+    [center addObserver:self selector:@selector(pop) name:@"pop" object:nil];
+}
+
+- (void)pop {
+    
+    [self.navigationController popToRootViewControllerAnimated:YES];
+    
+}
+- (void)dealloc {
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"pop" object:nil];
+    
 }
 #pragma mark - MAMapViewDelegate
 - (void)mapView:(MAMapView *)mapView didUpdateUserLocation:(MAUserLocation *)userLocation updatingLocation:(BOOL)updatingLocation {

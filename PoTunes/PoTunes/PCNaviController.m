@@ -107,23 +107,23 @@ typedef NS_ENUM(NSInteger, TravelTypes) {
     UISegmentedControl *segmentedTravleType = [[UISegmentedControl alloc] initWithItems:@[@"驾车", @"步行"]];
     segmentedTravleType.frame = CGRectMake(20, 60, width, 50);
     segmentedTravleType.selectedSegmentIndex = 0;
-    segmentedTravleType.tintColor = PCColor(214, 14, 241, 1);
+    segmentedTravleType.tintColor = PCColor(207, 22, 232, 1.0);
     [segmentedTravleType addTarget:self action:@selector(travelTypeChanged:) forControlEvents:UIControlEventValueChanged];
     [self.view addSubview:segmentedTravleType];
     
     UISegmentedControl *segmentedDrivingStrategy = [[UISegmentedControl alloc] initWithItems:@[@"速度优先", @"路况优先"]];
     segmentedDrivingStrategy.frame = CGRectMake(20, CGRectGetMaxY(segmentedTravleType.frame) + 30, width, 50);
     segmentedDrivingStrategy.selectedSegmentIndex = 0;
-    segmentedDrivingStrategy.tintColor = PCColor(214, 14, 241, 1);
+    segmentedDrivingStrategy.tintColor = PCColor(207, 22, 232, 1.0);
     [segmentedDrivingStrategy addTarget:self action:@selector(drivingStrategyChanged:) forControlEvents:UIControlEventValueChanged];
     [self.view addSubview:segmentedDrivingStrategy];
     self.segmentedDrivingStrategy = segmentedDrivingStrategy;
     
     UIButton *startBtn = [[UIButton alloc] initWithFrame:CGRectMake(20, CGRectGetMaxY(segmentedDrivingStrategy.frame) + 30, width, 50)];
     [startBtn setTitle:@"我的位置" forState:UIControlStateNormal];
-    [startBtn setTitleColor:PCColor(214, 14, 241, 1) forState:UIControlStateNormal];
+    [startBtn setTitleColor:PCColor(207, 22, 232, 1.0) forState:UIControlStateNormal];
     startBtn.titleLabel.font = [UIFont fontWithName:@"BebasNeue.otf" size:16];
-    startBtn.layer.borderColor  = PCColor(214, 14, 241, 1).CGColor;
+    startBtn.layer.borderColor  = PCColor(207, 22, 232, 1.0).CGColor;
     startBtn.layer.borderWidth  = 0.5;
     startBtn.layer.cornerRadius = 5;
     [startBtn addTarget:self action:@selector(location:) forControlEvents:UIControlEventTouchUpInside];
@@ -134,9 +134,9 @@ typedef NS_ENUM(NSInteger, TravelTypes) {
     
     UIButton *endBtn = [[UIButton alloc] initWithFrame:CGRectMake(20, CGRectGetMaxY(startBtn.frame) + 30, width, 50)];
     [endBtn setTitle:@"目的地" forState:UIControlStateNormal];
-    [endBtn setTitleColor:PCColor(214, 14, 241, 1) forState:UIControlStateNormal];
+    [endBtn setTitleColor:PCColor(207, 22, 232, 1.0) forState:UIControlStateNormal];
     endBtn.titleLabel.font = [UIFont fontWithName:@"BebasNeue.otf" size:16];
-    endBtn.layer.borderColor  = PCColor(214, 14, 241, 1).CGColor;
+    endBtn.layer.borderColor  = PCColor(207, 22, 232, 1.0).CGColor;
     endBtn.layer.borderWidth  = 0.5;
     endBtn.layer.cornerRadius = 5;
     endBtn.tag = 2;
@@ -148,13 +148,13 @@ typedef NS_ENUM(NSInteger, TravelTypes) {
     
     UIButton *navBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     
-    navBtn.layer.borderColor  = PCColor(214, 14, 241, 1).CGColor;
+    navBtn.layer.borderColor  = PCColor(207, 22, 232, 1.0).CGColor;
     navBtn.layer.borderWidth  = 0.5;
     navBtn.layer.cornerRadius = 5;
     
     [navBtn setFrame:CGRectMake(20, height - 80, width, 50)];
     [navBtn setTitle:@"开始导航" forState:UIControlStateNormal];
-    [navBtn setTitleColor:PCColor(214, 14, 241, 1) forState:UIControlStateNormal];
+    [navBtn setTitleColor:PCColor(207, 22, 232, 1.0) forState:UIControlStateNormal];
     navBtn.titleLabel.font = [UIFont fontWithName:@"BebasNeue.otf" size:16];
     self.navBtn = navBtn;
     [navBtn addTarget:self action:@selector(startGPSNavi:) forControlEvents:UIControlEventTouchUpInside];
@@ -166,6 +166,8 @@ typedef NS_ENUM(NSInteger, TravelTypes) {
     [_naviViewController setShowUIElements:YES];
 
 }
+
+
 #pragma mark - Button Action
 
 - (void)travelTypeChanged:(id)item {
@@ -287,7 +289,7 @@ typedef NS_ENUM(NSInteger, TravelTypes) {
     AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:soundString];
     utterance.voice = [AVSpeechSynthesisVoice voiceWithLanguage:@"zh-TW"];
     utterance.volume = 1.0;
-    utterance.rate = 0.2;
+    utterance.rate = 0.8;
     utterance.pitchMultiplier = 0.7;
     [player speakUtterance:utterance];
     
@@ -331,7 +333,7 @@ typedef NS_ENUM(NSInteger, TravelTypes) {
 #pragma mark - PCBaiduNavControllerDelegate
 
 - (void)navController:(PCBaiduNavController *)navController didClickTheAnnotationAccessoryControlBySendingUserLocation:(CLLocationCoordinate2D)userLocation andDestinationLocation:(CLLocationCoordinate2D)destinationLocation mapView:(MAMapView *)mapView title:(NSString *)title destinationTitle:(NSString *)destinationTitle {
-    
+        
     if ([title isEqualToString:self.startBtn.titleLabel.text]) {
         
         [self.startBtn setTitle:destinationTitle forState:UIControlStateNormal];
@@ -348,6 +350,7 @@ typedef NS_ENUM(NSInteger, TravelTypes) {
     }
     
     self.naviViewController = [[AMapNaviViewController alloc] initWithMapView:mapView delegate:self];
+    
 }
 
 @end

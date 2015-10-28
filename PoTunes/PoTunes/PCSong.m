@@ -11,36 +11,39 @@
 @implementation PCSong
 
 + (instancetype)songWithDict:(NSDictionary *)dict {
+    
     return [[self alloc] initWithDict:dict];
+
 }
 - (instancetype)initWithDict:(NSDictionary *)dict {
     if (self = [super init]) {
-        self.songName = dict[@"songName"];
-        self.cover = dict[@"songCover"];
-        self.artist = dict[@"artists"];
-        self.album = dict[@"title"];
-        self.URL = dict[@"songURL"];
-        self.index = dict[@"indexPath"];
+        self.title = dict[@"title"];
+        self.thumb = dict[@"thumb"];
+        self.author = dict[@"author"];
+        self.sourceURL = dict[@"sourceUrl"];
+        self.index = dict[@"index"];
+        self.album = dict[@"album"];
     }
     return self;
 }
 - (void)encodeWithCoder:(NSCoder *)aCoder {
-    [aCoder encodeObject:self.songName forKey:@"songName"];
-    [aCoder encodeObject:self.cover forKey:@"cover"];
-    [aCoder encodeObject:self.artist forKey:@"artist"];
-    [aCoder encodeObject:self.album forKey:@"title"];
-    [aCoder encodeObject:self.URL forKey:@"URL"];
+    [aCoder encodeObject:self.title forKey:@"title"];
+    [aCoder encodeObject:self.thumb forKey:@"thumb"];
+    [aCoder encodeObject:self.author forKey:@"author"];
+    [aCoder encodeObject:self.sourceURL forKey:@"sourceUrl"];
     [aCoder encodeObject:self.index forKey:@"index"];
+    [aCoder encodeObject:self.album forKey:@"album"];
+
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super init]) {
-        self.songName = [aDecoder decodeObjectForKey:@"songName"];
-        self.cover = [aDecoder decodeObjectForKey:@"cover"];
-        self.artist = [aDecoder decodeObjectForKey:@"artist"];
-        self.album = [aDecoder decodeObjectForKey:@"title"];
-        self.URL = [aDecoder decodeObjectForKey:@"URL"];
+        self.title = [aDecoder decodeObjectForKey:@"title"];
+        self.thumb = [aDecoder decodeObjectForKey:@"thumb"];
+        self.author = [aDecoder decodeObjectForKey:@"author"];
+        self.sourceURL = [aDecoder decodeObjectForKey:@"sourceUrl"];
         self.index = [aDecoder decodeObjectForKey:@"index"];
+        self.album = [aDecoder decodeObjectForKey:@"album"];
     }
     return self;
 }
