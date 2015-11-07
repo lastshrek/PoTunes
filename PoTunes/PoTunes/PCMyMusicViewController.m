@@ -13,47 +13,85 @@
 #import "PCSong.h"
 #import "PCDownloadViewController.h"
 #import "Common.h"
-#import "PCSongListTableViewCell.h"
+#import "PCDownLoadedCell.h"
 #import "FMDB.h"
 #import "PCDownloadingTableViewController.h"
-
+#import "DBHelper.h"
 @interface PCMyMusicViewController()<PCDownloadingTableViewControllerDelegate, PCDownloadViewControllerDelegate>
 /** 下载专辑 */
 @property (nonatomic, strong) NSMutableArray *downloadAlbums;
 /** 正在下载的歌曲 */
 @property (nonatomic, strong) NSMutableArray *downloadingArray;
-/** 下载歌曲数据库 */
-@property (nonatomic, strong) FMDatabase *downloadedSongDB;
+
 /** 下载op */
 @property (nonatomic, strong) AFHTTPRequestOperation *op;
+/** 数据库Queue */
+@property(nonatomic,strong) FMDatabaseQueue *queue;
+
+@property (nonatomic, strong) DBHelper *helper;
+
 
 @end
 
 @implementation PCMyMusicViewController
 
 
-- (FMDatabase *)downloadedSongDB {
-   
-    if (_downloadedSongDB == nil) {
-        
-        //打开数据库
-        NSString *path = [[self dirDoc] stringByAppendingPathComponent:@"downloadingSong.db"];
-    
-        _downloadedSongDB = [FMDatabase databaseWithPath:path];
-        
-        [_downloadedSongDB open];
-        
-        //创表
 
-        
-        [_downloadedSongDB executeUpdate:@"CREATE TABLE IF NOT EXISTS t_downloading (id integer PRIMARY KEY, author text, title text, sourceURL text,indexPath integer,thumb text,album text,downloaded bool);"];
-        
-        _downloadedSongDB.shouldCacheStatements = YES;
+
+- (FMDatabaseQueue *)queue {
     
+    if (_queue == nil) {
+        
+        //打开数据库        
+        DBHelper *helper = [DBHelper getSharedInstance];
+        
+        self.helper = helper;
+        
+        [helper inDatabase:^(FMDatabase *db) {
+            
+            [db executeUpdate:@"CREATE TABLE IF NOT EXISTS t_downloading (id integer PRIMARY KEY, author text, title text, sourceURL text,indexPath integer,thumb text,album text,downloaded bool);"];
+            
+        }];
+        
+        _queue = helper.queue;
     }
     
-    return _downloadedSongDB;
+    return _queue;
+}
+
+- (NSMutableArray *)downloadAlbums {
     
+    if (_downloadAlbums == nil) {
+        
+        _downloadAlbums = [NSMutableArray array];
+        
+        //查询专辑名称并去掉重复
+        NSString *distinct = [NSString stringWithFormat:@"SELECT distinct album FROM t_downloading;"];
+        
+        NSMutableArray *tempArray = [NSMutableArray array];
+
+        
+        [self.queue inDatabase:^(FMDatabase *db) {
+            
+            FMResultSet *s = [db executeQuery:distinct];
+            
+            while (s.next) {
+
+                NSString *album = [s stringForColumn:@"album"];
+                
+                [tempArray addObject:album];
+            }
+            
+            _downloadAlbums = tempArray;
+            
+            [s close];
+        }];
+        
+        
+        
+    }
+    
+    return _downloadAlbums;
 }
 
 - (void)viewDidLoad {
@@ -65,10 +103,16 @@
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     
     //初始化已下载专辑数组
-    self.downloadAlbums = [self setArrayWithPlistName:@"albumdownloaded.plist"];
+//    self.downloadAlbums = [self setArrayWithPlistName:@"albumdownloaded.plist"];
+    
+    //去掉重复
+    
+    
     
     //初始化正在下载歌曲数组
     self.downloadingArray = [self setArrayWithPlistName:@"downloading.plist"];
+    
+    self.helper = [DBHelper getSharedInstance];
 
     /** 注册通知 */
     [self getNotification];
@@ -110,6 +154,8 @@
    
     [center addObserver:self selector:@selector(download:) name:@"download" object:nil];
     
+    [center addObserver:self selector:@selector(fullAlbum:) name:@"fullAlbum" object:nil];
+    
 
 }
 
@@ -145,18 +191,23 @@
     
     NSString *songName = [song.title stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
     
-    NSString *album = [song.album stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
+    NSString *album = [[[sender.userInfo[@"title"] stringByReplacingOccurrencesOfString:@"'" withString:@"''"] componentsSeparatedByString:@" - "] lastObject];
     
     NSString *sql = [NSString stringWithFormat: @"INSERT INTO t_downloading(author,title,sourceURL,indexPath,thumb,album,downloaded) VALUES('%@','%@','%@','%ld','%@','%@','0');",artist,songName,song.sourceURL,[indexPath integerValue],song.thumb,album];
     
-    [self.downloadedSongDB executeUpdate:sql];
+    [self.queue inDatabase:^(FMDatabase *db) {
+        
+        [db executeUpdate:sql];
+
+    }];
+    
 
 
     //初始化专辑表
 
     if ([self.downloadAlbums indexOfObject:song.album] != NSNotFound) return;
        
-    [self.downloadAlbums addObject:song.album];
+    [self.downloadAlbums addObject:album];
     
     NSString *path = [doc stringByAppendingPathComponent:@"albumdownloaded.plist"];
     
@@ -164,7 +215,78 @@
     
     [self.downloadAlbums writeToFile:path atomically:YES];
     
+    
     [self.tableView reloadData];
+        
+    
+}
+
+- (void)fullAlbum:(NSNotification *)sender {
+    
+    NSString *doc = [self dirDoc];
+
+    //获取通知内容
+    
+    NSMutableArray *songArray = sender.userInfo[@"songs"];
+    
+    NSString *album = sender.userInfo[@"title"];
+    
+    if ([self.downloadAlbums indexOfObject:album] == NSNotFound) {
+        
+        [self.downloadAlbums addObject:album];
+        
+        NSString *path = [doc stringByAppendingPathComponent:@"albumdownloaded.plist"];
+        
+        //3. 写入数组
+        
+        [self.downloadAlbums writeToFile:path atomically:YES];
+        
+        [self.tableView reloadData];
+
+
+    }
+    
+    for (PCSong *song in songArray) {
+        
+        NSString *identifier = [NSString stringWithFormat:@"%@ - %@",song.author, song.title];
+        
+        if ([self.downloadingArray indexOfObject:identifier] == NSNotFound) {
+            
+            [self.downloadingArray addObject:identifier];
+        }
+        
+        if (self.op == nil || self.op.isCancelled || self.op.isFinished || self.op.isPaused) {
+            
+            [self beginDownloadWithIdentifier:identifier URL:song.sourceURL];
+            
+        }
+        
+        //写入正在下载歌曲plist
+        [self writeToDownloadingPlist:self.downloadingArray WithName:@"downloading.plist"];
+        
+        //添加到下载队列 先处理带有单引号歌曲名称
+        NSString *artist = [song.author stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
+        
+        NSString *songName = [song.title stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
+        
+        NSString *album = [sender.userInfo[@"title"] stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
+        
+
+        
+        NSString *sql = [NSString stringWithFormat: @"INSERT INTO t_downloading(author,title,sourceURL,indexPath,thumb,album,downloaded) VALUES('%@','%@','%@','%ld','%@','%@','0');",artist,songName,song.sourceURL,[song.position integerValue],song.thumb,album];
+        
+        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            
+            [self.queue inTransaction:^(FMDatabase *db, BOOL *rollback) {
+            
+                [db executeUpdate:sql];
+                
+            }];
+        });
+        
+        
+    }
 }
 /** 下载歌曲 */
 - (void)beginDownloadWithIdentifier:(NSString *)identifier URL:(NSString *)URLString{
@@ -208,14 +330,16 @@
         
         double downloadProgress = totalBytesRead / (double)totalBytesExpectedToRead;
         
-        NSNotification *percent = [NSNotification notificationWithName:@"percent"
-                                                                object:nil
-                                                              userInfo:@{@"percent":@(downloadProgress),@"index":dict[@"index"]}];
+        int progress = downloadProgress * 100;
         
-        [[NSNotificationCenter defaultCenter] postNotification:percent];
-        
-        NSLog(@"%f",downloadProgress);
+        if (progress % 10 == 0) {
+            NSNotification *percent = [NSNotification notificationWithName:@"percent"
+                                                                    object:nil
+                                                                  userInfo:@{@"percent":@(downloadProgress),@"index":dict[@"index"]}];
+            
+            [[NSNotificationCenter defaultCenter] postNotification:percent];
 
+        }
     }];
     
     [op setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
@@ -223,10 +347,15 @@
         //改变歌曲下载状态
         NSArray *separatedArray = [identifier componentsSeparatedByString:@" - "];
         
-        [self.downloadedSongDB executeUpdate:@"UPDATE t_downloading SET downloaded = 1 WHERE author = ? and title = ?",separatedArray[0], separatedArray[1]];
-        
+        [self.helper.queue inTransaction:^(FMDatabase *db, BOOL *rollback) {
+            
+            [db executeUpdate:@"UPDATE t_downloading SET downloaded = 1 WHERE author = ? and title = ?",separatedArray[0], separatedArray[1]];
+            
+        }];
+
+
+
         //删除已下载完歌曲的identifier及相关信息
-        
         
         [self.downloadingArray removeObjectAtIndex:[dict[@"index"] integerValue]];
         
@@ -262,15 +391,23 @@
             
             NSString *query = [NSString stringWithFormat:@"SELECT * FROM t_downloading WHERE author = '%@' and title = '%@';", author, title];
             
-            FMResultSet *s = [self.downloadedSongDB executeQuery:query];
+            [self.queue inDatabase:^(FMDatabase *db) {
+                
+                FMResultSet *s = [db executeQuery:query];
+                
+                if (s.next) {
+                    
+                    NSString *URLStr = [s stringForColumn:@"sourceURL"];
+                    
+                    [self beginDownloadWithIdentifier:identifier URL:URLStr];
+                    
+                }
+                
+                [s close];
+
+            }];
             
-            if (s.next) {
-                
-                NSString *URLStr = [s stringForColumn:@"sourceURL"];
-                
-                [self beginDownloadWithIdentifier:identifier URL:URLStr];
-                
-            }
+            
         }
 
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -298,6 +435,9 @@
     
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"download" object:nil];
     
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"fullAlbum" object:nil];
+
+    
 }
 #pragma mark - 获取文件主路径
 - (NSString *)dirDoc {
@@ -309,8 +449,8 @@
     return documentsDirectory;
     
 }
-#pragma mark - UITableViewDataSource
 
+#pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     
     return 2;
@@ -332,13 +472,14 @@
 #pragma mark - UITableViewDelegate
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    PCSongListTableViewCell *cell = [PCSongListTableViewCell cellWithTableView:tableView];
+    PCDownLoadedCell *cell = [PCDownLoadedCell cellWithTableView:tableView];
     
     if (indexPath.section == 0) {
        
         cell.imageView.image = [UIImage imageNamed:@"noArtwork.jpg"];
         
-        cell.textLabel.text = @"正在下载的歌曲";
+        cell.textLabel.text = @"正在下载";
+        
     } else {
         
         NSString *album = self.downloadAlbums[indexPath.row];
@@ -346,18 +487,26 @@
         cell.textLabel.text = album;
         
         NSString *query = [NSString stringWithFormat:@"SELECT * FROM t_downloading WHERE album = '%@';",album];
-
-        FMResultSet *s = [self.downloadedSongDB executeQuery:query];
         
-        if ([s next]) {
+        [self.queue inDatabase:^(FMDatabase *db) {
             
-            NSString *URLStr = [s stringForColumn:@"thumb"];
+            FMResultSet *s = [db executeQuery:query];
             
-            NSURL *URL = [NSURL URLWithString:URLStr];
+            if ([s next]) {
+                
+                NSString *URLStr = [s stringForColumn:@"thumb"];
+                
+                NSURL *URL = [NSURL URLWithString:URLStr];
+                
+                [cell.imageView sd_setImageWithURL:URL placeholderImage:[UIImage imageNamed:@"defaultCover"]];
+                
+            }
             
-            [cell.imageView sd_setImageWithURL:URL placeholderImage:[UIImage imageNamed:@"defaultCover"]];
-            
-        }
+            [s close];
+
+        }];
+
+        
     }
     
     cell.progressView.hidden = YES;
@@ -366,7 +515,7 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 80;
+    return 66;
 }
 //跳转至已下载歌曲页面
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -377,39 +526,51 @@
         
         PCDownloadViewController *download = [[PCDownloadViewController alloc] init];
         
-        NSString *query = [NSString stringWithFormat:@"SELECT * FROM t_downloading WHERE album = '%@' and downloaded = 1;",self.downloadAlbums[indexPath.row]];
-        
-        FMResultSet *s = [self.downloadedSongDB executeQuery:query];
-        
         NSMutableArray *songArray = [NSMutableArray array];
         
-        PCSongListTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+        NSString *title = self.downloadAlbums[indexPath.row];
         
-        NSString *album = [[cell.textLabel.text componentsSeparatedByString:@" – "] lastObject];
+        NSString *query = [NSString stringWithFormat:@"SELECT * FROM t_downloading WHERE album = '%@' and downloaded = 1;",title];
         
-        while ([s next]) {
-            
-            PCSong *song = [[PCSong alloc] init];
-            
-            song.author = [s stringForColumn:@"author"];
-            
-            song.title = [s stringForColumn:@"title"];
-            
-            song.sourceURL = [s stringForColumn:@"sourceURL"];
-            
-            NSInteger index = [[s stringForColumn:@"indexPath"] integerValue];
-            
-            song.index = [NSNumber numberWithInteger:index];
-            
-            song.thumb = [s stringForColumn:@"thumb"];
-            
-            song.album = album;
-            
-            [songArray addObject:song];
-            
-        }
+        [self.queue inDatabase:^(FMDatabase *db) {
         
-        download.songs = songArray;
+            FMResultSet *s = [db executeQuery:query];
+
+            PCSongListTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+            
+            NSString *album = [[cell.textLabel.text componentsSeparatedByString:@" – "] lastObject];
+            
+            while ([s next]) {
+                
+                PCSong *song = [[PCSong alloc] init];
+                
+                song.author = [s stringForColumn:@"author"];
+                
+                song.title = [s stringForColumn:@"title"];
+                
+                song.sourceURL = [s stringForColumn:@"sourceURL"];
+                
+                NSInteger index = [[s stringForColumn:@"indexPath"] integerValue];
+                
+                song.position = [NSNumber numberWithInteger:index];
+                
+                song.thumb = [s stringForColumn:@"thumb"];
+                
+                song.album = album;
+                
+                [songArray addObject:song];
+                
+            }
+            
+            [s close];
+        }];
+        
+        
+        
+        
+        //根据歌曲序号进行排序
+        
+        download.songs = [self sort:songArray];
         
         download.delegate = self;
         
@@ -436,8 +597,28 @@
     }
 }
 
+//选择排序
+- (NSMutableArray *)sort:(NSMutableArray *)arr {
+    for (int i = 0; i < arr.count; i ++) {
+        
+        for (int j = i + 1; j < arr.count; j ++) {
+        
+            PCSong *foreSong = arr[i];
+            
+            PCSong *backSong = arr[j];
+            
+            if (foreSong.position > backSong.position) {
+                
+                arr[i] = backSong;
+                
+                arr[j] = foreSong;
+            }
+        }
+    }
+    
+    return arr;
+}
 #pragma mark - PCDownloadingTableViewControllerDelegate
-
 - (void)PCDownloadingTableViewController:(PCDownloadingTableViewController *)controller didClickThePauseButton:(UIButton *)button {
     
     if (self.op == nil) {
@@ -452,15 +633,22 @@
         
         NSString *query = [NSString stringWithFormat:@"SELECT * FROM t_downloading WHERE author = '%@' and title = '%@';", author, title];
         
-        FMResultSet *s = [self.downloadedSongDB executeQuery:query];
+        [self.queue inDatabase:^(FMDatabase *db) {
+            
+            FMResultSet *s = [db executeQuery:query];
+            
+            if (s.next) {
+                
+                NSString *URLStr = [s stringForColumn:@"sourceURL"];
+                
+                [self beginDownloadWithIdentifier:identifier URL:URLStr];
+                
+            }
+            
+            [s close];
+
+        }];
         
-        if (s.next) {
-            
-            NSString *URLStr = [s stringForColumn:@"sourceURL"];
-            
-            [self beginDownloadWithIdentifier:identifier URL:URLStr];
-            
-        }
         return;
     }
     
@@ -482,29 +670,69 @@
     //删除本地文件
     NSString *select = [NSString stringWithFormat:@"SELECT * FROM t_downloading WHERE downloaded = 0;"];
     
-    FMResultSet *s = [self.downloadedSongDB executeQuery:select];
-    
     NSFileManager *fileManager = [NSFileManager defaultManager];
     
     NSString *rootPath = [self dirDoc];
     
     
-    while (s.next) {
+    [self.queue inDatabase:^(FMDatabase *db) {
+       
+        FMResultSet *s = [db executeQuery:select];
         
-        NSString *identifier = [NSString stringWithFormat:@"%@ - %@",[s stringForColumn:@"author"], [s stringForColumn:@"title"]];
+        while (s.next) {
+            
+            NSString *identifier = [NSString stringWithFormat:@"%@ - %@",[s stringForColumn:@"author"], [s stringForColumn:@"title"]];
+            
+            NSString *filePath = [rootPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.mp3", identifier]];
+            
+            filePath = [filePath stringByReplacingOccurrencesOfString:@" / " withString:@" "];
+            
+            [fileManager removeItemAtPath:filePath error:nil];
+            
+        }
         
-        NSString *filePath = [rootPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.mp3", identifier]];
-        
-        filePath = [filePath stringByReplacingOccurrencesOfString:@" / " withString:@" "];
-        
-        [fileManager removeItemAtPath:filePath error:nil];
+        [s close];
 
-    }
+    }];
+    
+    
+
     //删除数据库中未下载文件
     NSString *delete = [NSString stringWithFormat:@"DELETE FROM t_downloading WHERE downloaded = 0;"];
     
-    [self.downloadedSongDB executeUpdate:delete];
+    [self.queue inDatabase:^(FMDatabase *db) {
+        
+        [db executeUpdate:delete];
     
+    }];
+    
+    //查询专辑名称并去掉重复
+    NSString *distinct = [NSString stringWithFormat:@"SELECT distinct album FROM t_downloading;"];
+    
+    NSMutableArray *tempArray = [NSMutableArray array];
+    
+    
+    [self.queue inDatabase:^(FMDatabase *db) {
+        
+        FMResultSet *s = [db executeQuery:distinct];
+        
+        while (s.next) {
+            
+            NSString *album = [s stringForColumn:@"album"];
+            
+            [tempArray addObject:album];
+        }
+        
+        self.downloadAlbums = tempArray;
+        
+        [s close];
+    }];
+    
+    [self.downloadingArray removeAllObjects];
+    
+    [self.tableView reloadData];
+    
+
 }
 
 #pragma mark - PCDownloadViewControllerDelegate
@@ -519,30 +747,44 @@
     
     NSString *delete = [NSString stringWithFormat:@"DELETE FROM t_downloading WHERE author = '%@' and title = '%@';", author, title];
     
-    [self.downloadedSongDB executeUpdate:delete];
+    [self.queue inDatabase:^(FMDatabase *db) {
+        
+        [db executeUpdate:delete];
+
+    }];
+    
     
     NSString *query = [NSString stringWithFormat:@"SELECT * FROM t_downloading WHERE album = '%@';",album];
     
-    FMResultSet *s = [self.downloadedSongDB executeQuery:query];
-    
-    if (!s.next) {
+    [self.queue inDatabase:^(FMDatabase *db) {
         
-        for (int i = 0 ; i < self.downloadAlbums.count ; i++ ) {
+        FMResultSet *s = [db executeQuery:query];
+        
+        if (!s.next) {
             
-            if ([song.album isEqualToString:self.downloadAlbums[i]]) {
+            for (int i = 0 ; i < self.downloadAlbums.count ; i++ ) {
                 
-                [self.downloadAlbums removeObjectAtIndex:i];
-                
-                [self writeToDownloadingPlist:self.downloadAlbums WithName:@"albumdownloaded.plist"];
-                
-                [self.tableView reloadData];
-                
-                break;
+                if ([song.album isEqualToString:self.downloadAlbums[i]]) {
+                    
+                    [self.downloadAlbums removeObjectAtIndex:i];
+                    
+                    [self writeToDownloadingPlist:self.downloadAlbums WithName:@"albumdownloaded.plist"];
+                    
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        
+                        [self.tableView reloadData];
+                        
+                    });
+                    
+                    break;
+                }
             }
         }
-    }
+
+        [s close];
+
+    }];
     
 }
-#warning 清空缓存/Library/Caches/com.apple.nsurlsessiond/Downloads/fm.poche.PoTunes/
 
 @end

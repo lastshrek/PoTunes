@@ -21,7 +21,7 @@
         self.thumb = dict[@"thumb"];
         self.author = dict[@"author"];
         self.sourceURL = dict[@"sourceUrl"];
-        self.index = dict[@"index"];
+        self.position = dict[@"position"];
         self.album = dict[@"album"];
     }
     return self;
@@ -31,7 +31,7 @@
     [aCoder encodeObject:self.thumb forKey:@"thumb"];
     [aCoder encodeObject:self.author forKey:@"author"];
     [aCoder encodeObject:self.sourceURL forKey:@"sourceUrl"];
-    [aCoder encodeObject:self.index forKey:@"index"];
+    [aCoder encodeObject:self.position forKey:@"position"];
     [aCoder encodeObject:self.album forKey:@"album"];
 
 }
@@ -42,7 +42,7 @@
         self.thumb = [aDecoder decodeObjectForKey:@"thumb"];
         self.author = [aDecoder decodeObjectForKey:@"author"];
         self.sourceURL = [aDecoder decodeObjectForKey:@"sourceUrl"];
-        self.index = [aDecoder decodeObjectForKey:@"index"];
+        self.position = [aDecoder decodeObjectForKey:@"position"];
         self.album = [aDecoder decodeObjectForKey:@"album"];
     }
     return self;

@@ -22,7 +22,7 @@
 /** 下载地址 */
 @property (nonatomic, copy) NSString *sourceURL;
 /** 所在专辑suoyin */
-@property (nonatomic, assign) NSNumber *index;
+@property (nonatomic, assign) NSNumber *position;
 
 + (instancetype)songWithDict:(NSDictionary *)dict;
 - (instancetype)initWithDict:(NSDictionary *)dict;

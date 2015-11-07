@@ -7,6 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "PCSong.h"
+#import "UIImageView+WebCache.h"
+#import "PCSongListTableViewCell.h"
+#import "AFNetworking.h"
+#import "MBProgressHUD+MJ.h"
 
 @class PCDownloadViewController,PCSong;
 
@@ -26,5 +31,15 @@
 @property (nonatomic, weak) id<PCDownloadViewControllerDelegate> delegate;
 
 
+
+@property (nonatomic, weak) UITableView *shareTable;
+
+@property (nonatomic, weak) UIView *coverView;
+
+@property (nonatomic, strong) PCSong *sharedSong;
+
+- (NSString *)dirDoc;
+
+- (void)shareToWeixin:(UIGestureRecognizer *)recognizer;
 
 @end

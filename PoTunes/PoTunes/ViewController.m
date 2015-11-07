@@ -82,12 +82,39 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 @property (nonatomic, strong) NSTimer *currentTimeTimer;
 @property (nonatomic, strong) NSTimer *PlayBackTimer;
 @property (nonatomic, assign) PCAudioRepeatMode audioRepeatMode;
+/** 下载歌曲数据库 */
+@property (nonatomic, strong) FMDatabase *downloadedSongDB;
+
 
 
 
 @end
 
 @implementation ViewController
+
+- (FMDatabase *)downloadedSongDB {
+    
+    if (_downloadedSongDB == nil) {
+        
+        //打开数据库
+        NSString *path = [[self dirDoc] stringByAppendingPathComponent:@"downloadingSong.db"];
+        
+        _downloadedSongDB = [FMDatabase databaseWithPath:path];
+        
+        [_downloadedSongDB open];
+        
+        //创表
+        
+        
+        [_downloadedSongDB executeUpdate:@"CREATE TABLE IF NOT EXISTS t_downloading (id integer PRIMARY KEY, author text, title text, sourceURL text,indexPath integer,thumb text,album text,downloaded bool);"];
+        
+        _downloadedSongDB.shouldCacheStatements = YES;
+        
+    }
+    
+    return _downloadedSongDB;
+    
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -365,13 +392,19 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     
     appDelegate.remoteEventBlock = ^(UIEvent *event) {
-    
+        
+        
+        
         switch (event.subtype) {
         
+            case UIEventSubtypeRemoteControlTogglePlayPause | UIEventSubtypeRemoteControlPlay | UIEventSubtypeRemoteControlPause:
+                [self playOrPause];
+                break;
+                
             case UIEventSubtypeRemoteControlPlay:
                 [self playOrPause];
                 break;
-            
+                
             case UIEventSubtypeRemoteControlPause:
                 [self playOrPause];
                 break;
@@ -397,7 +430,11 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     NSData *songsData = [defaults objectForKey:@"songsData"];
     
     if (songsData == nil) {
-#warning 应直接显示上次播放界面
+        
+#warning 在这里添加新手提示引导
+        
+        self.audioRepeatMode = PCAudioRepeatModePlaylist;
+        
         return;
     
     }
@@ -543,13 +580,37 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     
     NSString *filePath = [rootPath  stringByAppendingPathComponent:[NSString stringWithFormat:@"%@ - %@.mp3",song.author,song.title]];
     
+    NSString *realPath = [filePath stringByReplacingOccurrencesOfString:@" / " withString:@" "];
+    
     NSFileManager *fileManager = [NSFileManager defaultManager];
     //播放本地
     
-    if ([fileManager fileExistsAtPath:filePath]) {
-    
-        [self.audioController.activeStream playFromURL:[NSURL fileURLWithPath:filePath]];
-    
+    if ([fileManager fileExistsAtPath:realPath]) {
+        
+        NSString *author = [song.author stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
+        
+        NSString *title = [song.title stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
+        
+        
+        NSString *query = [NSString stringWithFormat:@"SELECT * FROM t_downloading WHERE author = '%@' and title = '%@';", author, title];
+        
+        FMResultSet *s = [self.downloadedSongDB executeQuery:query];
+
+        if (s.next) {
+            
+            BOOL downloaded = [s stringForColumn:@"downloaded"];
+            
+            if (downloaded) {
+                
+                [self.audioController.activeStream playFromURL:[NSURL fileURLWithPath:realPath]];
+                
+            } else {
+                
+                [self.audioController.activeStream playFromURL:[NSURL URLWithString:song.sourceURL]];
+
+            }
+        }
+
     } else {
     
         [self.audioController.activeStream playFromURL:[NSURL URLWithString:song.sourceURL]];
@@ -656,6 +717,11 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 /** 播放或者暂停 */
 - (void)playOrPause {
     
+//    __weak ViewController *weakSelf = self;
+//    self.audioController.onStateChange = ^(FSAudioStreamState state) {
+//        NSLog(@"%u",state);
+//        
+//    };
     if (self.songs.count == 0) {
         [MBProgressHUD showError:@"大爷，先选歌撒！"];
         return;
@@ -670,6 +736,7 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
         self.paused = NO;
     } else {
         [MBProgressHUD showPlayState:@"pauseB" toView:self.backgroundView];
+
         self.paused = YES;
     }
     // 写入共享数据
@@ -730,34 +797,40 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     
     }
     
-    if (self.audioRepeatMode == PCAudioRepeatModeShuffle) {
-        
-        self.index = arc4random() % self.songs.count;
+    FSStreamPosition cur = self.audioController.activeStream.currentTimePlayed;
     
-    } else if (self.audioRepeatMode == PCAudioRepeatModeSingle) {
+    if (cur.minute == 0 || cur.second <= 5) {
         
-        self.index = self.index;
-        
-    } else {
-        
-        if (self.index == 0) {
-        
-            self.index = self.songs.count - 1;
-        
+        if (self.audioRepeatMode == PCAudioRepeatModeShuffle) {
+            
+            self.index = arc4random() % self.songs.count;
+            
+        } else if (self.audioRepeatMode == PCAudioRepeatModeSingle) {
+            
+            self.index = self.index;
+            
         } else {
-        
-            self.index = (int)self.index - 1;
-        
+            
+            if (self.index == 0) {
+                
+                self.index = self.songs.count - 1;
+                
+            } else {
+                
+                self.index = (int)self.index - 1;
+                
+            }
         }
     }
-#warning 没有添加播放小于五秒的上一首播放
-    
     
     [self playFromPlaylist:self.songs itemIndex:self.index state:PCAudioPlayStatePrevious];
     
     PCSong *song = self.songs[self.index];
+    
     [self changePlayerInterfaceDuringUsing:song row:self.index];
+    
     [MBProgressHUD showPlayState:@"prevB" toView:self.backgroundView];
+    
 }
 /** 快进快退 */
 - (void)doSeeking:(UILongPressGestureRecognizer *)recognizer {
@@ -967,8 +1040,7 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     UIViewController *controller = self.controllers[btn.tag];
     controller.view.hidden = NO;
     self.selectedView = controller.view;
-    
-    if (btn.tag == 1 || btn.tag == 2) {
+    if (btn.tag == 1 || btn.tag == 2 || btn.tag == 3) {
         NSNotification *pop = [NSNotification notificationWithName:@"pop" object:nil userInfo:nil];
         [[NSNotificationCenter defaultCenter] postNotification:pop];
     }

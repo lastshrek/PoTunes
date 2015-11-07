@@ -289,7 +289,7 @@ typedef NS_ENUM(NSInteger, TravelTypes) {
     AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:soundString];
     utterance.voice = [AVSpeechSynthesisVoice voiceWithLanguage:@"zh-TW"];
     utterance.volume = 1.0;
-    utterance.rate = 0.8;
+    utterance.rate = 0.5;
     utterance.pitchMultiplier = 0.7;
     [player speakUtterance:utterance];
     

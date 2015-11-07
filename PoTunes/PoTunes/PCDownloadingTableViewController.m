@@ -7,7 +7,7 @@
 //
 
 #import "PCDownloadingTableViewController.h"
-#import "PCSongListTableViewCell.h"
+#import "PCSongDownloadingCell.h"
 #import "Common.h"
 #import "PCButton.h"
 #import "MBProgressHUD+MJ.h"
@@ -35,10 +35,10 @@
     
     CGFloat width = self.view.bounds.size.width;
     CGFloat height = self.view.bounds.size.height;
-    
+#warning 有空封装一发发
     //开始按钮
     UIButton *startBtn = [[PCButton alloc] init];
-    startBtn.frame = CGRectMake(0, 44, width / 2, 44);
+    startBtn.frame = CGRectMake((width / 2 - 100) / 2, 44 + 7, 100, 30);
     self.startBtn = startBtn;
     [self.view addSubview:startBtn];
     if (self.paused == 0) {
@@ -50,23 +50,27 @@
         [startBtn setTitle:@"全部开始" forState:UIControlStateNormal];
 
     }
-    
+    startBtn.layer.borderColor = PCColor(207, 22, 232, 1.0).CGColor;
+    startBtn.layer.borderWidth = 1;
+    startBtn.layer.cornerRadius = 5;
+    startBtn.layer.masksToBounds = YES;
     [startBtn setBackgroundColor:[UIColor blackColor]];
     [startBtn setTitleColor:PCColor(207, 22, 232, 1.0) forState:UIControlStateNormal];
     [startBtn addTarget:self action:@selector(pause:) forControlEvents:UIControlEventTouchUpInside];
+    
     //删除按钮
     UIButton *deleteBtn = [[PCButton alloc] init];
-    deleteBtn.frame = CGRectMake(width / 2, 44, width / 2, 44);
+    deleteBtn.frame = CGRectMake(width / 2 + CGRectGetMinX(startBtn.frame), 44 + 7, 100, 30);
+    deleteBtn.layer.borderColor = PCColor(207, 22, 232, 1.0).CGColor;
+    deleteBtn.layer.borderWidth = 1;
+    deleteBtn.layer.cornerRadius = 5;
+    deleteBtn.layer.masksToBounds = YES;
     [self.view addSubview:deleteBtn];
     [deleteBtn setTitle:@"全部删除" forState:UIControlStateNormal];
     [deleteBtn setBackgroundColor:[UIColor blackColor]];
     [deleteBtn setTitleColor:PCColor(207, 22, 232, 1.0) forState:UIControlStateNormal];
     [deleteBtn addTarget:self action:@selector(deleteAll) forControlEvents:UIControlEventTouchUpInside];
-    //分割线
-    UIView *divider = [[UIView alloc] init];
-    divider.frame = CGRectMake(width / 2 - 0.5, 44, 1, 44);
-    divider.backgroundColor = PCColor(207, 22, 232, 1.0);
-    [self.view addSubview:divider];
+
     //创建tableView
     UITableView *tableView= [[UITableView alloc] init];
     tableView.frame = CGRectMake(0, 88, width, height - 88);
@@ -204,6 +208,8 @@
         
         [self.startBtn setTitle:@"全部开始" forState:UIControlStateNormal];
         
+        [self pop];
+        
     }
 
 }
@@ -245,7 +251,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
    
-    PCSongListTableViewCell *cell = [PCSongListTableViewCell cellWithTableView:tableView];
+    PCSongDownloadingCell *cell = [PCSongDownloadingCell cellWithTableView:tableView];
     
     cell.textLabel.text = self.downloadingArray[indexPath.row];
 

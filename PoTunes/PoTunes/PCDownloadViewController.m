@@ -7,13 +7,12 @@
 //
 
 #import "PCDownloadViewController.h"
-#import "PCSong.h"
-#import "UIImageView+WebCache.h"
-#import "PCSongListTableViewCell.h"
-#import "AFNetworking.h"
-#import "MBProgressHUD+MJ.h"
+#import "WXApiObject.h"
+#import "WXApi.h"
 
-@interface PCDownloadViewController()<NSURLSessionDelegate>
+@interface PCDownloadViewController()
+
+
 
 @end
 
@@ -28,7 +27,7 @@
     
     self.tableView.backgroundColor = [UIColor blackColor];
     
-    self.tableView.rowHeight = 80;
+    self.tableView.rowHeight = 66;
 
     [self getNotification];
     
@@ -66,35 +65,83 @@
 
 }
 
-#pragma mark - TableViewDataSource
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    
-    return 1;
+#pragma mark - Table view data source
 
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    return self.songs.count;
-
+    if (tableView.tag == 2) {
+        
+        return 2;
+        
+    } else {
+        
+        return self.songs.count;
+        
+    }
+    
 }
 
 #pragma mark - TableViewDelegate
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    PCSongListTableViewCell *cell = [PCSongListTableViewCell cellWithTableView:tableView];
+    if (tableView.tag != 2) {
+        
+        PCSongListTableViewCell *cell = [PCSongListTableViewCell cellWithTableView:tableView];
+        
+        PCSong *song = self.songs[indexPath.row];
+        
+        cell.textLabel.text = song.title;
+        
+        cell.detailTextLabel.text = song.author;
+        
+        NSURL *imageURL = [NSURL URLWithString:song.thumb];
+        
+        [cell.imageView sd_setImageWithURL:imageURL placeholderImage:[UIImage imageNamed:@"defaultCover"]];
+        
+        cell.progressView.hidden = YES;
+        
+        //添加分享手势
+        UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(shareToWeixin:)];
+        
+        [cell addGestureRecognizer:longPress];
+        
+        return cell;
+        
+    } else {
+        
+        static NSString *ID = @"weixin";
+        
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ID];
+        
+        if (cell == nil) {
+            
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ID];
+            
+            if (indexPath.row == 0) {
+                
+                cell.textLabel.text = @"分享给微信好友";
+                
+                cell.imageView.image = [UIImage imageNamed:@"cm2_mlogo_weixin"];
+                
+            } else {
+                
+                cell.textLabel.text = @"分享到微信朋友圈";
+                
+                cell.imageView.image = [UIImage imageNamed:@"cm2_mlogo_pyq"];
+                
+                
+            }
+        }
+        
+        return cell;
+        
+    }
     
-    PCSong *song = self.songs[indexPath.row];
     
-    cell.textLabel.text = song.title;
-    
-    NSURL *imageURL = [NSURL URLWithString:song.thumb];
-    
-    [cell.imageView sd_setImageWithURL:imageURL placeholderImage:[UIImage imageNamed:@"songsButton"]];
-    
-    cell.detailTextLabel.text = [NSString stringWithFormat:@"%@",song.author];
-    
-    return cell;
 }
 
 /** 删除 */
@@ -103,14 +150,6 @@
     return YES;
     
 }
-
-/**
- *  删除歌曲
- *
- *  @param tableView    歌曲列表
- *  @param editingStyle 修改类型
- *  @param indexPath    所在行号
- */
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (editingStyle == UITableViewCellEditingStyleDelete) {
@@ -133,7 +172,11 @@
         //检查文件是否已存在并删除之
         NSString *rootPath = [self dirDoc];
         
-        NSString *filePath = [rootPath  stringByAppendingPathComponent:[NSString stringWithFormat:@"%@ - %@.mp3",song.author,song.title]];
+        NSString *author = [song.author stringByReplacingOccurrencesOfString:@" / " withString:@" "];
+        
+        NSString *title = [song.title stringByReplacingOccurrencesOfString:@" / " withString:@" "];
+        
+        NSString *filePath = [rootPath  stringByAppendingPathComponent:[NSString stringWithFormat:@"%@ - %@.mp3",author,title]];
 
         NSFileManager *fileManager = [NSFileManager defaultManager];
         
@@ -148,18 +191,6 @@
             [self.navigationController popToRootViewControllerAnimated:YES];
             
         }
-        
-        
-        
-#warning 同时删除该专辑plist identifier;
-//        //删除缓存
-//        for (NSString *file in [[NSFileManager defaultManager] contentsOfDirectoryAtPath:[self dirDoc] error:nil]) {
-//            if ([file hasPrefix:@"FSCache-"]) {
-//                NSString *fullPath = [rootPath stringByAppendingPathComponent:file];
-//                [fileManager removeItemAtPath:fullPath error:nil];
-//            }
-//        }
-
     }
 }
 - (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -169,14 +200,164 @@
 }
 #pragma mark - 立即播放
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    NSNotification *select = [NSNotification notificationWithName:@"selected" object:nil userInfo:
-                              @{@"indexPath":[NSNumber numberWithInteger:indexPath.row],
-                                @"songs":self.songs}];
-    [[NSNotificationCenter defaultCenter] postNotification:select];
+    
+    if (tableView.tag == 2) {
+        
+        WXMediaMessage *message = [WXMediaMessage message];
+        message.title = self.sharedSong.title;
+        message.description = self.sharedSong.author;
+        
+        [message setThumbImage:[UIImage imageNamed:@"cm2_default_cover"]];
+        
+        WXMusicObject *ext = [WXMusicObject object];
+        ext.musicUrl = @"http://poche.fm";
+        ext.musicDataUrl = self.sharedSong.sourceURL;
+        
+        message.mediaObject = ext;
+        
+        SendMessageToWXReq *req = [[SendMessageToWXReq alloc] init];
+        req.bText = NO;
+        req.message = message;
+
+        if (indexPath.row == 0) {
+            
+            req.scene = WXSceneSession;
+            
+        } else {
+            
+            req.scene = WXSceneTimeline;
+        }
+        
+        [WXApi sendReq:req];
+        
+    } else {
+        
+        NSNotification *select = [NSNotification notificationWithName:@"selected" object:nil userInfo:
+                                  @{@"indexPath":[NSNumber numberWithInteger:indexPath.row],
+                                    @"songs":self.songs}];
+        
+        [[NSNotificationCenter defaultCenter] postNotification:select];
+        
+    }
 }
-
-
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if (tableView.tag != 2) {
+        
+        return 66;
+        
+    } else {
+        
+        return 44;
+    }
+}
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if (tableView.tag != 2) {
+        
+        CGFloat rotationAngleDegrees = 0;
+        
+        CGFloat rotationAngleRadians = rotationAngleDegrees * (M_PI/180);
+        
+        CGPoint offsetPositioning = CGPointMake(-200, -20);
+        
+        CATransform3D transform = CATransform3DIdentity;
+        
+        transform = CATransform3DRotate(transform, rotationAngleRadians, 0.0, 0.0, 1.0);
+        
+        transform = CATransform3DTranslate(transform, offsetPositioning.x, offsetPositioning.y, 0.0);
+        
+        UIView *card = [cell contentView];
+        
+        card.layer.transform = transform;
+        
+        card.layer.opacity = 0.8;
+        
+        [UIView animateWithDuration:0.2f animations:^{
+            
+            card.layer.transform = CATransform3DIdentity;
+            
+            card.layer.opacity = 1;
+        }];
+    }
+    
+}
+#pragma mark - 分享至微信
+- (void)shareToWeixin:(UIGestureRecognizer *)recognizer {
+    
+    if (recognizer.state == 1) {
+        
+        [self.coverView removeFromSuperview];
+        
+        [self.shareTable removeFromSuperview];
+        
+        self.sharedSong = nil;
+        
+        //创建coverView
+        
+        CGFloat height = self.view.bounds.size.height;
+        
+        CGFloat width = self.view.bounds.size.width;
+        
+        UIView *coverView = [[UIView alloc] init];
+        
+        coverView.frame = self.view.bounds;
+        
+        coverView.backgroundColor = [UIColor blackColor];
+        
+        coverView.alpha = 0;
+        
+        self.coverView = coverView;
+        
+        [self.tableView.superview addSubview:coverView];
+        
+        //添加手势
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissCoverView:)];
+        
+        [self.coverView addGestureRecognizer:tap];
+        
+        //创建分享TableView
+        UITableView *shareTable = [[UITableView alloc] initWithFrame:CGRectMake(0, height + 88, width, 88) style:UITableViewStylePlain];
+        
+        shareTable.tag = 2;
+        
+        self.shareTable = shareTable;
+        
+        shareTable.delegate = self;
+        
+        shareTable.dataSource = self;
+        
+        [self.tableView.superview addSubview:shareTable];
+        
+        [UIView animateWithDuration:0.2 animations:^{
+            
+            shareTable.frame = CGRectMake(0, height - 88, width, 88);
+            
+            coverView.alpha = 0.5;
+            
+        }];
+        
+        //确定要分享的歌曲
+        
+        CGPoint position = [recognizer locationInView:self.tableView];
+        
+        NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:position];
+        
+        PCSong *song = self.songs[indexPath.row];
+        
+        self.sharedSong = song;
+    }
+    
+}
+- (void)dismissCoverView:(UIGestureRecognizer *)recognizer {
+    
+    [self.coverView removeFromSuperview];
+    
+    [self.shareTable removeFromSuperview];
+    
+}
 
 
 @end

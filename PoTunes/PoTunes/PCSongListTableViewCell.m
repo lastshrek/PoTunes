@@ -9,15 +9,16 @@
 #import "PCSongListTableViewCell.h"
 #import "Common.h"
 #import "AFNetworking.h"
+
 @interface PCSongListTableViewCell()
 
-@property (nonatomic, weak) UIView *divider;
 
 @end
 
 @implementation PCSongListTableViewCell
 
 + (instancetype)cellWithTableView:(UITableView *)tableView {
+    
     static NSString *ID = @"Song";
     
     PCSongListTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ID];
@@ -42,6 +43,9 @@
         cell.accessoryView = progressView;
         progressView.tintColor = PCColor(207, 22, 232, 1.0);
         cell.progressView = progressView;
+        
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+
     }
     return cell;
 }

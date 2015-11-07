@@ -14,7 +14,7 @@
 
 @property (nonatomic, assign) CGFloat progress;
 @property (nonatomic, strong) EVCircularProgressView *progressView;
-@property (nonatomic, copy) NSString *identy;
+@property (nonatomic, weak) UIView *divider;
 
 + (instancetype)cellWithTableView:(UITableView *)tableView;
 

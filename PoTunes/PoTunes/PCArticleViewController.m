@@ -12,46 +12,99 @@
 #import "AFNetworking.h"
 #import "MBProgressHUD+MJ.h"
 #import "UIImageView+WebCache.h"
-#import "PCArticleDetailViewController.h"
 #import "PCPlaylist.h"
 #import "PCSong.h"
 #import "FMDB.h"
+#import "PCSongDetailViewController.h"
+#import "FMDB.h"
+
 @interface PCArticleViewController ()
 
 @property (nonatomic, strong) NSMutableArray *articles;
+
+/** 下载歌曲数据库 */
+@property (nonatomic, strong) FMDatabase *downloadedSongDB;
+
+
 
 @end
 
 @implementation PCArticleViewController
 
+- (FMDatabase *)downloadedSongDB {
+    
+    if (_downloadedSongDB == nil) {
+        
+        //打开数据库
+        NSString *path = [[self dirDoc] stringByAppendingPathComponent:@"downloadingSong.db"];
+        
+        _downloadedSongDB = [FMDatabase databaseWithPath:path];
+        
+        [_downloadedSongDB open];
+        
+        //创表
+        
+        
+        [_downloadedSongDB executeUpdate:@"CREATE TABLE IF NOT EXISTS t_downloading (id integer PRIMARY KEY, author text, title text, sourceURL text,indexPath integer,thumb text,album text,downloaded bool);"];
+        
+        _downloadedSongDB.shouldCacheStatements = YES;
+        
+    }
+    
+    return _downloadedSongDB;
+    
+}
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-//    [self.tableView addFooterWithTarget:self action:@selector(loadPreviousArticle)];
     [self.tableView addHeaderWithTarget:self action:@selector(loadNewArticle)];
-    self.tableView.rowHeight = 160;
+    
+    CGFloat width = self.view.bounds.size.width;
+    
+    if (width == 414) {
+       
+        self.tableView.rowHeight = width * 300 / 640;
+
+    } else {
+        
+        self.tableView.rowHeight = width * 300 / 640;
+        
+    }
 
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    
     self.tableView.backgroundColor = [UIColor blackColor];
     
-    
     if (self.articles == nil) {
+        
         NSString *rootPath = [self dirDoc];
+        
         NSString *filePath = [rootPath  stringByAppendingPathComponent:[NSString stringWithFormat:@"article.plist"]];
+        
         NSArray * dictArray= [NSArray arrayWithContentsOfFile:filePath];
+        
         if (dictArray == nil) {
+        
             [self.tableView headerBeginRefreshing];
+        
         } else {
+        
             NSMutableArray *contentArray = [NSMutableArray array];
+            
             for (NSDictionary *dict in dictArray) {
+            
                 [contentArray addObject:dict];
             }
+            
             self.articles = contentArray;
         }
     }
 
     [self getNotification];
+    
+//    NSLog(@"%f",self.view.bounds.size.width);
 }
 #pragma mark - 获取通知
 - (void)getNotification {
@@ -59,6 +112,7 @@
     NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
     
     [center addObserver:self selector:@selector(pop) name:@"pop" object:nil];
+    
 }
 - (void)pop {
     
@@ -110,6 +164,11 @@
                 [addArray addObject:newDic];
             
             }
+            
+            if ([newDic[@"id"] integerValue] == [firstDic[@"id"] integerValue]) {
+                
+                self.articles[0] = newDic;
+            }
         }
         
         [addArray addObjectsFromArray:self.articles];
@@ -155,28 +214,33 @@
     
     PCArticleCell *cell = [PCArticleCell cellWithTableView:tableView];
     
-    cell.textLabel.text = [self.articles[indexPath.row] objectForKey:@"title"];
+    cell.textLabel.text = [NSString stringWithFormat:@"『%@』",[self.articles[indexPath.row] objectForKey:@"title"]];
     
-    NSArray *songArray = [self.articles[indexPath.row] objectForKey:@"mp3_list"];
-    
-    NSDictionary *song = songArray[0];
-    
-    NSString *imageURL = song[@"thumb"];
+    NSString *imageURL = [self.articles[indexPath.row] objectForKey:@"contentImage"];
     
     NSURL *downloadURL = [NSURL URLWithString:imageURL];
     
     [cell.imageView sd_setImageWithURL:downloadURL placeholderImage:[UIImage imageNamed:@"defaultCover"]];
     
+    //添加下载手势
+    UISwipeGestureRecognizer *downloadSwipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(download:)];
+    
+    [downloadSwipe setDirection:UISwipeGestureRecognizerDirectionRight];
+    
+    downloadSwipe.numberOfTouchesRequired = 1;
+    
+    [cell addGestureRecognizer:downloadSwipe];
+    
     return cell;
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    [tableView deselectRowAtIndexPath:indexPath animated:NO];
     
     /** 专辑名称 */
     NSString *albumTitle = [[[self.articles[indexPath.row] objectForKey:@"title"] componentsSeparatedByString:@" – "] lastObject];
     
-    PCArticleDetailViewController *detail = [[PCArticleDetailViewController alloc] init];
+    PCSongDetailViewController *detail = [[PCSongDetailViewController alloc] init];
     /** 歌曲名称 */
     NSArray *songArray = [self.articles[indexPath.row] objectForKey:@"mp3_list"];
     
@@ -199,5 +263,76 @@
     
 }
 
+#pragma mark - 下载
+- (void)download:(UIGestureRecognizer *)recognizer {
+    
+    CGPoint position = [recognizer locationInView:self.tableView];
+    
+    NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:position];
+    
+    //获得专辑名称
+    NSString *fullName = [self.articles[indexPath.row] objectForKey:@"title"];
+    
+    NSArray *separatedArray = [fullName componentsSeparatedByString:@" - "];
+    
+    NSString *album = [separatedArray lastObject];
+    
+    NSMutableArray *tempArray = [self.articles[indexPath.row] objectForKey:@"mp3_list"];
+    
+    NSMutableArray *songArray = [NSMutableArray array];
+    
+    for (NSDictionary *dict in tempArray) {
+        
+        PCSong *song = [PCSong songWithDict:dict];
+        
+        NSInteger position = [dict[@"index"] integerValue];
+        
+        song.position = [NSNumber numberWithInteger:position];
+        
+        song.album = album;
+        
+        [songArray addObject:song];
+    }
+    
+    NSMutableArray *downloadArray = [NSMutableArray array];
+    
+    for (int i = 0; i < songArray.count; i++) {
+        
+        PCSong *song = songArray[i];
+        
+        NSString *author = [song.author stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
+        
+        NSString *title = [song.title stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
+        
+        NSString *query = [NSString stringWithFormat:@"SELECT * FROM t_downloading WHERE author = '%@' and title = '%@';", author, title];
+        
+        FMResultSet *s = [self.downloadedSongDB executeQuery:query];
+        
+        
+        if (!s.next) {
+            
+            [downloadArray addObject:song];
+            
+        }
+    }
+    
+    if (downloadArray.count == 0) {
+        
+        [MBProgressHUD showSuccess:@"专辑已下载"];
+
+    } else {
+        
+        NSNotification *fullAlbum = [NSNotification notificationWithName:@"fullAlbum" object:nil userInfo:
+                                     @{@"songs":downloadArray,
+                                       @"title":[separatedArray lastObject]}];
+        
+        [[NSNotificationCenter defaultCenter] postNotification:fullAlbum];
+        
+        [MBProgressHUD showSuccess:@"开始下载"];
+
+
+    }
+
+}
 
 @end

@@ -2,8 +2,8 @@
 //  PCSettingViewController.h
 //  PoTunes
 //
-//  Created by Purchas on 15/9/12.
-//  Copyright © 2015年 Purchas. All rights reserved.
+//  Created by Purchas on 10/29/15.
+//  Copyright © 2015 Purchas. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>guide</key>
+		<array>
+			<string>播放/暂停：播放器界面单击</string>
+			<string>上一首：播放器界面从左向右滑动</string>
+			<string>下一首：播放器界面从右向左滑动</string>
+			<string>快进/快退：按住屏幕右、左滑动</string>
+			<string>单曲下载：在歌曲列表每行左向右滑动</string>
+			<string>专辑下载：在文章列表每行左向右滑动</string>
+			<string>返回上级：点击上方tab/从屏幕左侧边缘向右滑动</string>
+			<string>微信分享：长按歌曲列表歌曲</string>
+		</array>
+		<key>title</key>
+		<string>单指操作</string>
+	</dict>
+	<dict>
+		<key>guide</key>
+		<array>
+			<string>单曲循环/取消：播放器界面双指单击</string>
+			<string>顺序播放：播放器界面双指左向右滑动</string>
+			<string>随机播放：播放器界面双指右向左滑动</string>
+		</array>
+		<key>title</key>
+		<string>双指操作</string>
+	</dict>
+</array>
+</plist>
