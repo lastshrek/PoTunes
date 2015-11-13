@@ -21,8 +21,10 @@
 @property (nonatomic, copy) NSString *thumb;
 /** 下载地址 */
 @property (nonatomic, copy) NSString *sourceURL;
-/** 所在专辑suoyin */
+/** 所在专辑索引 */
 @property (nonatomic, assign) NSNumber *position;
+/** 歌词 */
+@property (nonatomic, copy) NSString *lrc;
 
 + (instancetype)songWithDict:(NSDictionary *)dict;
 - (instancetype)initWithDict:(NSDictionary *)dict;

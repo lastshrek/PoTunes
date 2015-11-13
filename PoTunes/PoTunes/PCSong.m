@@ -23,6 +23,7 @@
         self.sourceURL = dict[@"sourceUrl"];
         self.position = dict[@"position"];
         self.album = dict[@"album"];
+        self.lrc = dict[@"lrc"];
     }
     return self;
 }
@@ -33,6 +34,7 @@
     [aCoder encodeObject:self.sourceURL forKey:@"sourceUrl"];
     [aCoder encodeObject:self.position forKey:@"position"];
     [aCoder encodeObject:self.album forKey:@"album"];
+    [aCoder encodeObject:self.lrc forKey:@"lrc"];
 
 }
 
@@ -44,6 +46,7 @@
         self.sourceURL = [aDecoder decodeObjectForKey:@"sourceUrl"];
         self.position = [aDecoder decodeObjectForKey:@"position"];
         self.album = [aDecoder decodeObjectForKey:@"album"];
+        self.lrc = [aDecoder decodeObjectForKey:@"lrc"];
     }
     return self;
 }

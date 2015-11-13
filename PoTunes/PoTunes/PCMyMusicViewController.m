@@ -182,7 +182,7 @@
 
     }
 
-    
+    [self beginDownloadLyricWithIdentifier:identifier URL:song.lrc];
     //写入正在下载歌曲plist
     [self writeToDownloadingPlist:self.downloadingArray WithName:@"downloading.plist"];
 
@@ -285,7 +285,7 @@
             }];
         });
         
-        
+        [self beginDownloadLyricWithIdentifier:identifier URL:song.lrc];
     }
 }
 /** 下载歌曲 */
@@ -413,6 +413,36 @@
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         
         NSLog(@"%@",error);
+        
+    }];
+    
+    //开始下载
+    [queue addOperation:op];
+}
+
+- (void)beginDownloadLyricWithIdentifier:(NSString *)identifier URL:(NSString *)URLString {
+    
+    NSString *rootPath = [self dirDoc];
+    
+    //保存路径
+    NSString *filePath = [rootPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.lrc", identifier]];
+    
+    filePath = [filePath stringByReplacingOccurrencesOfString:@" / " withString:@" "];
+    
+    //初始化队列
+    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+    
+    NSURL *URL = [NSURL URLWithString:URLString];
+    
+    NSURLRequest *request = [NSURLRequest requestWithURL:URL];
+    
+    AFHTTPRequestOperation *op = [[AFHTTPRequestOperation alloc] initWithRequest:request];
+    
+    op.outputStream = [NSOutputStream outputStreamToFileAtPath:filePath append:NO];
+    
+    [op setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         
     }];
     

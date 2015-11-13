@@ -233,6 +233,7 @@
     
     return cell;
 }
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
@@ -251,6 +252,10 @@
         PCSong *song = [PCSong songWithDict:dic];
         
         song.album = albumTitle;
+        
+        NSString *lrc = dic[@"sourceUrl"];
+        
+        song.lrc = [lrc stringByReplacingOccurrencesOfString:@".mp3" withString:@".lrc"];
         
         [tempArray addObject:song];
     }
@@ -290,6 +295,10 @@
         song.position = [NSNumber numberWithInteger:position];
         
         song.album = album;
+        
+        NSString *lrc = dict[@"sourceUrl"];
+        
+        song.lrc = [lrc stringByReplacingOccurrencesOfString:@".mp3" withString:@".lrc"];
         
         [songArray addObject:song];
     }

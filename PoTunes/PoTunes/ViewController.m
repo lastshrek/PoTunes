@@ -28,6 +28,9 @@
 #import "TDImageColors.h"
 #import "DarwinNotificationHelper.h"
 #import "FMDB.h"
+#import "PCBlurView.h"
+#import "FXBlurView.h"
+#import "AFNetworking.h"
 
 /** 播放模式 */
 typedef NS_ENUM(NSUInteger, PCAudioRepeatMode) {
@@ -84,9 +87,12 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 @property (nonatomic, assign) PCAudioRepeatMode audioRepeatMode;
 /** 下载歌曲数据库 */
 @property (nonatomic, strong) FMDatabase *downloadedSongDB;
-
-
-
+/** 歌词 */
+@property (nonatomic, weak) PCBlurView *lrcView;
+/** 显示歌词的定时器 */
+@property (nonatomic, strong) CADisplayLink *lrcTimer;
+/** 存储专辑封面 */
+@property (nonatomic, weak) UIImage *originalImage;
 
 @end
 
@@ -144,7 +150,6 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 }
 #pragma mark - 隐藏statusBar
 - (BOOL)prefersStatusBarHidden {
-    
     return YES;
 }
 
@@ -158,6 +163,7 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     
     return _songs;
 }
+
 #pragma mark - 添加ScrollView
 - (void)setupScrollView {
     UIScrollView *scrollView = [[UIScrollView alloc] init];
@@ -167,6 +173,7 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     self.scrollView = scrollView;
     /** 设置内容滚动尺寸 */
     scrollView.contentSize = CGSizeMake(0, self.height * 2);
+    scrollView.bounces = NO;
     scrollView.showsVerticalScrollIndicator = NO;
     scrollView.pagingEnabled = YES;
     [self.view addSubview:scrollView];
@@ -290,8 +297,8 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     albumLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleTopMargin;
     [self.backgroundView addSubview:albumLabel];
     
-    int height = self.view.bounds.size.height;
-    switch (height) {
+    
+    switch ((int)self.height) {
         case 480:
             songLabel.frame = CGRectMake(0, CGRectGetMaxY(timeView.frame) + 15, self.width, 40);
             songLabel.font = [UIFont fontWithName:@"BebasNeue" size:30];
@@ -327,6 +334,15 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     playModeImageView.contentMode = UIViewContentModeScaleAspectFit;
     self.playModeImageView = playModeImageView;
     [self.backgroundView addSubview:playModeImageView];
+    
+    //添加歌词
+    PCBlurView *lrcView = [[PCBlurView alloc] initWithFrame:CGRectMake(0, 0, self.width, self.width)];
+    lrcView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    lrcView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
+    lrcView.hidden = YES;
+    self.lrcView = lrcView;
+    [self.backgroundView addSubview:lrcView];
+    
 }
 #pragma mark - 添加TabBar界面
 - (void)setupTabBar {
@@ -369,6 +385,7 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
         [self.scrollView addSubview:button];
     }
 }
+
 - (void)setupSingleViewControllerToScrollView:(UIViewController *)controller hidden:(BOOL)hidden {
     
     PCNavigationController *nav = [[PCNavigationController alloc] initWithRootViewController:controller];
@@ -387,6 +404,7 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     
     }
 }
+
 - (void)setupDelegateBlock {
     
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
@@ -422,6 +440,7 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
         }
     };
 }
+
 #pragma mark - 获取上次播放进度以及状态
 - (void)getLastPlaySongAndPlayState {
     
@@ -430,9 +449,7 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     NSData *songsData = [defaults objectForKey:@"songsData"];
     
     if (songsData == nil) {
-        
-#warning 在这里添加新手提示引导
-        
+                
         self.audioRepeatMode = PCAudioRepeatModePlaylist;
         
         return;
@@ -468,6 +485,7 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     [self changePlayerInterfaceDuringUsing:self.songs[self.index] row:self.index];
     
 }
+
 #pragma mark - 获取通知
 - (void)getNotification {
     NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
@@ -511,6 +529,7 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     }];
 
 }
+
 - (void)didSelectedSong:(NSNotification *)sender {
     //滚到上层
     self.scrollView.scrollEnabled = YES;
@@ -534,16 +553,19 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     });
     
 }
+
 - (void)speaking {
     
     self.audioController.volume = 0.1;
     
 }
+
 - (void)nonspeaking {
    
     self.audioController.volume = 1;
     
 }
+
 - (void)dealloc {
     
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"selected" object:nil];
@@ -616,8 +638,11 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
         [self.audioController.activeStream playFromURL:[NSURL URLWithString:song.sourceURL]];
     
     }
-    
+    //添加进度条定时器
     [self addCurrentTimeTimer];
+    //添加歌词定时器
+    [self addLrcTimer];
+    
     
     if (self.audioRepeatMode != PCAudioRepeatModeSingle && self.audioRepeatMode != PCAudioRepeatModeShuffle) {
         
@@ -627,33 +652,120 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
         
     }
 }
-- (void)changePlayerInterfaceDuringUsing:(PCSong *)song row:(NSInteger)row{
+
+- (void)changePlayerInterfaceDuringUsing:(PCSong *)song row:(NSInteger)row {
     self.progress.progress = 0;
     //倒影封面
     [self.cover sd_setImageWithURL:[NSURL URLWithString:song.thumb] placeholderImage:self.cover.image completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+        
         self.reflectionCover.image = [self.cover.image reflectionWithAlpha:0.3];
+        
         //修改进度条颜色
         TDImageColors *imageColors = [[TDImageColors alloc] initWithImage:self.cover.image count:5];
         self.progress.color = imageColors.colors[1];
+        
         //修改歌名
         self.songLabel.text = song.title;
+        
         //修改歌手名
         self.artistLabel.text = song.author;
         self.artistLabel.textColor = imageColors.colors[1];
+        
         //修改专辑名
         self.albumLabel.text = song.album;
         self.albumLabel.textColor = imageColors.colors[1];
+        
+        //存储原专辑封面
+        self.originalImage = image;
+        
+        //设置歌词
+        NSString *identifier = [NSString stringWithFormat:@"%@ - %@",song.author, song.title];
+        
+        NSString *lrcString = [song.sourceURL stringByReplacingOccurrencesOfString:@".mp3" withString:@".lrc"];
+        
+        identifier = [identifier stringByReplacingOccurrencesOfString:@" / " withString:@" "];
+        
+        NSString *rootPath = [self dirDoc];
+        
+        NSString *filePath = [rootPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.lrc", identifier]];
+        
+        filePath = [filePath stringByReplacingOccurrencesOfString:@" / " withString:@" "];
+        
+        NSFileManager *manager = [NSFileManager defaultManager];
+        
+        if ([manager fileExistsAtPath:filePath]) {
+            
+            self.lrcView.lrcName = [identifier stringByAppendingString:@".lrc"];
+            
+            self.lrcView.noLrcLabel.hidden = YES;
+            
+            if ([manager fileExistsAtPath:[filePath stringByReplacingOccurrencesOfString:@".lrc" withString:@"ch.lrc"]]) {
+                
+                self.lrcView.chLrcName = [identifier stringByAppendingString:@"ch.lrc"];
+                
+            } else {
+                
+                [self beginDownloadLyricWithIdentifier:[identifier stringByAppendingString:@"ch"] URL:[lrcString stringByReplacingOccurrencesOfString:@".lrc" withString:@"ch.lrc"] success:^(id responseObject) {
+                    
+                    self.lrcView.chLrcName = [identifier stringByAppendingString:@"ch.lrc"];
+                    
+                } failure:^(NSError *error) {
+                    
+                    [manager removeItemAtPath:[filePath stringByReplacingOccurrencesOfString:@".lrc" withString:@"ch.lrc"] error:nil];
+
+                }];
+            }
+            
+        } else {
+            
+            self.lrcView.noLrcLabel.text = @"正在下载";
+            
+            [self beginDownloadLyricWithIdentifier:identifier URL:lrcString success:^(id responseObject) {
+               
+                self.lrcView.lrcName = [identifier stringByAppendingString:@".lrc"];
+                
+                self.lrcView.noLrcLabel.hidden = YES;
+                
+                [self beginDownloadLyricWithIdentifier:[identifier stringByAppendingString:@"ch"] URL:[lrcString stringByReplacingOccurrencesOfString:@".lrc" withString:@"ch.lrc"] success:^(id responseObject) {
+                    
+                    self.lrcView.chLrcName = [identifier stringByAppendingString:@"ch.lrc"];
+                
+                } failure:^(NSError *error) {
+                
+                    [manager removeItemAtPath:[filePath stringByReplacingOccurrencesOfString:@".lrc" withString:@"ch.lrc"] error:nil];
+                
+                }];
+
+            
+            } failure:^(NSError *error) {
+                
+                self.lrcView.noLrcLabel.text = @"暂无歌词";
+                
+                self.lrcView.noLrcLabel.hidden = NO;
+                
+                self.lrcView.lrcName = nil;
+                
+                [manager removeItemAtPath:filePath error:nil];
+                
+            }];
+            
+        }
+
+        
+        
+        
         //设置锁屏信息
         NSMutableDictionary *info = [NSMutableDictionary dictionary];
         //设置专辑名称
         info[MPMediaItemPropertyAlbumTitle] = song.album;
         info[MPMediaItemPropertyArtist] = song.author;
         info[MPMediaItemPropertyTitle] = song.title;
-        MPMediaItemArtwork *artwork = [[MPMediaItemArtwork alloc] initWithImage:self.cover.image];
+        MPMediaItemArtwork *artwork = [[MPMediaItemArtwork alloc] initWithImage:self.originalImage];
         info[MPMediaItemPropertyArtwork] = artwork;
         NSTimeInterval duration = self.audioController.activeStream.duration.minute * 60 + self.audioController.activeStream.duration.second;
         info[MPMediaItemPropertyPlaybackDuration] = @(duration);
         [MPNowPlayingInfoCenter defaultCenter].nowPlayingInfo = info;
+        
         // 设置手表封面
         NSData *imageData = UIImagePNGRepresentation(image);
         NSUserDefaults *shared = [[NSUserDefaults alloc] initWithSuiteName:@"group.fm.poche.potunes"];
@@ -672,11 +784,48 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
         
     }];
 }
+
+- (void)beginDownloadLyricWithIdentifier:(NSString *)identifier URL:(NSString *)URLString success:(void (^)(id responseObject))success failure:(void (^)(NSError *error))failure {
+    
+    NSString *rootPath = [self dirDoc];
+    
+    //保存路径
+    NSString *filePath = [rootPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.lrc", identifier]];
+    
+    filePath = [filePath stringByReplacingOccurrencesOfString:@" / " withString:@" "];
+    
+    //初始化队列
+    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+    
+    NSURL *URL = [NSURL URLWithString:URLString];
+    
+    NSURLRequest *request = [NSURLRequest requestWithURL:URL];
+    
+    AFHTTPRequestOperation *op = [[AFHTTPRequestOperation alloc] initWithRequest:request];
+    
+    op.outputStream = [NSOutputStream outputStreamToFileAtPath:filePath append:NO];
+    
+    [op setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        
+        success(responseObject);
+        
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        
+        failure(error);
+        
+    }];
+    
+    //开始下载
+    [queue addOperation:op];
+}
 #pragma mark - 给播放器添加手势操作
 - (void)setupGestureRecognizer {
     //播放和暂停
     UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(playOrPause)];
     singleTap.numberOfTapsRequired = 1;
+    singleTap.numberOfTouchesRequired = 1;
     [self.backgroundView addGestureRecognizer:singleTap];
     //上一首
     UISwipeGestureRecognizer *swipeFromLeft = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(playPrevious:)];
@@ -706,12 +855,20 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     [self.backgroundView addGestureRecognizer:doubleswipeFromLeft];
     
     //单曲循环
-    UITapGestureRecognizer *doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(playSingle)];
-    doubleTap.numberOfTouchesRequired = 2;
-    doubleTap.numberOfTapsRequired = 1;
+    UITapGestureRecognizer *doubleTouch = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(playSingle)];
+    doubleTouch.numberOfTouchesRequired = 2;
+    doubleTouch.numberOfTapsRequired = 1;
+    [self.backgroundView addGestureRecognizer:doubleTouch];
+    
+    //展示歌词
+    UITapGestureRecognizer *doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showLyrics)];
+    doubleTap.numberOfTapsRequired = 2;
+    doubleTap.numberOfTouchesRequired = 1;
     [self.backgroundView addGestureRecognizer:doubleTap];
     
-    //列表循环
+    //当识别不出这是双击时才开启单击识别
+    [singleTap requireGestureRecognizerToFail:doubleTap];
+    
     
 }
 /** 播放或者暂停 */
@@ -726,18 +883,26 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
         [MBProgressHUD showError:@"大爷，先选歌撒！"];
         return;
     }
+    
     if (self.audioController.activeStream == nil) {
         [self playFromPlaylist:self.songs itemIndex:self.index state:PCAudioPlayStatePlay];
         return;
     }
+    
     [self.audioController pause];
+    
     if (self.audioController.isPlaying) {
+    
         [MBProgressHUD showPlayState:@"playB" toView:self.backgroundView];
+        
         self.paused = NO;
+    
     } else {
+        
         [MBProgressHUD showPlayState:@"pauseB" toView:self.backgroundView];
 
         self.paused = YES;
+    
     }
     // 写入共享数据
     NSUserDefaults *shared = [[NSUserDefaults alloc] initWithSuiteName:@"group.fm.poche.potunes"];
@@ -924,8 +1089,53 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     
     [defaults setObject:@(self.audioRepeatMode) forKey:@"repeatMode"];
 }
+/** 展示歌词 */
+- (void)showLyrics {
+    //歌词
+    if (self.lrcView.hidden == YES) {
+        
+        self.lrcView.hidden = NO;
+
+        self.lrcView.alpha = 0;
+        
+        [UIView animateWithDuration:0.5 animations:^{
+        
+            self.lrcView.alpha = 1;
+            
+            self.lrcView.blurView.underlyingView = self.cover;
+
+        }];
+        
+        [UIView commitAnimations];
+        
+        [self addLrcTimer];
+    
+    } else {
+        
+        
+        self.lrcView.alpha = 1;
+        
+        [UIView animateWithDuration:0.5 animations:^{
+            
+            self.lrcView.alpha = 0;
+
+        }];
+        
+        [UIView commitAnimations];
+        
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        
+            self.lrcView.hidden = YES;
+
+        });
+
+    }
+    
+}
+
 
 #pragma mark - 添加定时器
+/** 进度条定时 */
 - (void)addCurrentTimeTimer {
     
     if (self.paused == YES) return;
@@ -945,6 +1155,26 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     [[NSRunLoop mainRunLoop] addTimer:self.PlayBackTimer forMode:NSRunLoopCommonModes];
     
 }
+/** 歌词定时器 */
+- (void)addLrcTimer {
+    
+    if (self.lrcView.hidden == YES) return;
+    
+    if (self.audioController.activeStream.isPlaying == NO && self.lrcTimer) {
+    
+        [self updateLrcTimer];
+        
+        return;
+    }
+    
+    [self removeLrcTimer];
+    
+    [self updateLrcTimer];
+    
+    self.lrcTimer = [CADisplayLink displayLinkWithTarget:self selector:@selector(updateLrcTimer)];
+    
+    [self.lrcTimer addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
+}
 #pragma mark - 移除定时器
 - (void)removeCurrentTimeTimer {
     
@@ -956,6 +1186,22 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     
     self.PlayBackTimer = nil;
     
+}
+
+- (void)removeLrcTimer {
+    
+    [self.lrcTimer invalidate];
+    
+    self.lrcTimer = nil;
+    
+}
+
+- (void)updateLrcTimer {
+    
+    //取出当前播放时长以及总时长
+    FSStreamPosition cur = self.audioController.activeStream.currentTimePlayed;
+    
+    self.lrcView.currentTime = cur.minute * 60 + cur.second;
 }
 /** 更新播放进度以及缓冲进度 */
 - (void)updateCurrentTime {
@@ -995,9 +1241,13 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     [helper postNotificationWithName:@"progress"];
     
     __weak ViewController *weakSelf = self;
+    
     self.audioController.onStateChange = ^(FSAudioStreamState state) {
+    
         if (state == kFsAudioStreamPlaybackCompleted) {
+        
             [weakSelf playNext:weakSelf.audioRepeatMode];
+        
         }
         
     };
