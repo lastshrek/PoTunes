@@ -6,11 +6,11 @@
 //  Copyright © 2015 Purchas. All rights reserved.
 //
 
-#import "FXBlurView.h"
 
-#import "FXBlurView.h"
+#import "DRNRealTimeBlurView.h"
 
-@interface PCBlurView : UIView
+
+@interface PCBlurView : DRNRealTimeBlurView
 
 @property (nonatomic, copy) NSString *lrcName;
 
@@ -20,5 +20,6 @@
 
 @property (nonatomic, weak) UILabel *noLrcLabel;
 
-@property (nonatomic, weak) FXBlurView *blurView;
+
+
 @end

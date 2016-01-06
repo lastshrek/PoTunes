@@ -29,7 +29,6 @@
 #import "DarwinNotificationHelper.h"
 #import "FMDB.h"
 #import "PCBlurView.h"
-#import "FXBlurView.h"
 #import "AFNetworking.h"
 
 /** 播放模式 */
@@ -204,9 +203,8 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     //专辑封面
     UIImageView *cover = [[UIImageView alloc] init];
     cover.autoresizingMask = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth;
-    cover.image = [UIImage imageNamed:@"defaultCover"];
+    cover.image = [UIImage imageNamed:@"noArtwork.jpg"];
     cover.frame = CGRectMake(0, 0, self.width, self.width);
-    [cover.image reflectionWithAlpha:0.5];
     self.cover = cover;
     [self.backgroundView addSubview:cover];
     //倒影封面
@@ -337,15 +335,16 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     
     //添加歌词
     PCBlurView *lrcView = [[PCBlurView alloc] initWithFrame:CGRectMake(0, 0, self.width, self.width)];
-    lrcView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    lrcView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
+    lrcView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
     lrcView.hidden = YES;
     self.lrcView = lrcView;
     [self.backgroundView addSubview:lrcView];
     
+    
 }
 #pragma mark - 添加TabBar界面
 - (void)setupTabBar {
+    
     self.controllers = [NSMutableArray array];
     //每月文章列表页
     PCArticleViewController *article = [[PCArticleViewController alloc] init];
@@ -381,7 +380,12 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
         }
         button.tag = i;
         [button addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
-        [button addTarget:self action:@selector(panTheButton:) forControlEvents:UIControlEventTouchDragInside];
+//        [button addTarget:self action:@selector(panTheButton:) forControlEvents:UIControlEventTouchDragInside];
+        UISwipeGestureRecognizer *swipeFromTop = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(panTheButton:)];
+        [swipeFromTop setDirection:UISwipeGestureRecognizerDirectionDown];
+        swipeFromTop.numberOfTouchesRequired = 1;
+        [button addGestureRecognizer:swipeFromTop];
+        
         [self.scrollView addSubview:button];
     }
 }
@@ -655,14 +659,31 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 
 - (void)changePlayerInterfaceDuringUsing:(PCSong *)song row:(NSInteger)row {
     self.progress.progress = 0;
+    self.lrcView.lrcName = nil;
+    self.lrcView.chLrcName = nil;
+    self.lrcView.noLrcLabel.text = @"暂无歌词";
+
     //倒影封面
     [self.cover sd_setImageWithURL:[NSURL URLWithString:song.thumb] placeholderImage:self.cover.image completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         
-        self.reflectionCover.image = [self.cover.image reflectionWithAlpha:0.3];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            self.lrcView.renderStatic = NO;
+        });
+        
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            self.lrcView.renderStatic = YES;
+        });
+        
+        self.reflectionCover.image = [image reflectionWithAlpha:0.3];
+        
+        TDImageColors *imageColors = [[TDImageColors alloc] initWithImage:self.cover.image count:2];
+
+        
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.8 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            self.progress.color = imageColors.colors[1];
+        });
         
         //修改进度条颜色
-        TDImageColors *imageColors = [[TDImageColors alloc] initWithImage:self.cover.image count:5];
-        self.progress.color = imageColors.colors[1];
         
         //修改歌名
         self.songLabel.text = song.title;
@@ -674,9 +695,6 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
         //修改专辑名
         self.albumLabel.text = song.album;
         self.albumLabel.textColor = imageColors.colors[1];
-        
-        //存储原专辑封面
-        self.originalImage = image;
         
         //设置歌词
         NSString *identifier = [NSString stringWithFormat:@"%@ - %@",song.author, song.title];
@@ -760,28 +778,28 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
         info[MPMediaItemPropertyAlbumTitle] = song.album;
         info[MPMediaItemPropertyArtist] = song.author;
         info[MPMediaItemPropertyTitle] = song.title;
-        MPMediaItemArtwork *artwork = [[MPMediaItemArtwork alloc] initWithImage:self.originalImage];
+        MPMediaItemArtwork *artwork = [[MPMediaItemArtwork alloc] initWithImage:self.cover.image];
         info[MPMediaItemPropertyArtwork] = artwork;
         NSTimeInterval duration = self.audioController.activeStream.duration.minute * 60 + self.audioController.activeStream.duration.second;
         info[MPMediaItemPropertyPlaybackDuration] = @(duration);
         [MPNowPlayingInfoCenter defaultCenter].nowPlayingInfo = info;
         
         // 设置手表封面
-        NSData *imageData = UIImagePNGRepresentation(image);
-        NSUserDefaults *shared = [[NSUserDefaults alloc] initWithSuiteName:@"group.fm.poche.potunes"];
-        [shared setObject:imageData forKey:@"imageData"];
-        [shared synchronize];
-        DarwinNotificationHelper *helper = [DarwinNotificationHelper sharedHelper];
-        [helper postNotificationWithName:@"imageData"];
+//        NSData *imageData = UIImagePNGRepresentation(image);
+//        NSUserDefaults *shared = [[NSUserDefaults alloc] initWithSuiteName:@"group.fm.poche.potunes"];
+//        [shared setObject:imageData forKey:@"imageData"];
+//        [shared synchronize];
+//        DarwinNotificationHelper *helper = [DarwinNotificationHelper sharedHelper];
+//        [helper postNotificationWithName:@"imageData"];
         
         //记录最后一次播放的歌曲以及播放模式
-        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-        [defaults setObject:@(self.audioRepeatMode) forKey:@"repeatMode"];
-
-        NSData *songsData = [NSKeyedArchiver archivedDataWithRootObject:self.songs];
-        [defaults setObject:songsData forKey:@"songsData"];
-        [defaults setObject:@(self.index) forKey:@"index"];
-        
+//        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+//        [defaults setObject:@(self.audioRepeatMode) forKey:@"repeatMode"];
+//
+//        NSData *songsData = [NSKeyedArchiver archivedDataWithRootObject:self.songs];
+//        [defaults setObject:songsData forKey:@"songsData"];
+//        [defaults setObject:@(self.index) forKey:@"index"];
+//        
     }];
 }
 
@@ -905,11 +923,11 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     
     }
     // 写入共享数据
-    NSUserDefaults *shared = [[NSUserDefaults alloc] initWithSuiteName:@"group.fm.poche.potunes"];
-    [shared setObject:[NSString stringWithFormat:@"%d",self.paused] forKey:@"isPlaying"];
-    [shared synchronize];
-    DarwinNotificationHelper *helper = [DarwinNotificationHelper sharedHelper];
-    [helper postNotificationWithName:@"isPlaying"];
+//    NSUserDefaults *shared = [[NSUserDefaults alloc] initWithSuiteName:@"group.fm.poche.potunes"];
+//    [shared setObject:[NSString stringWithFormat:@"%d",self.paused] forKey:@"isPlaying"];
+//    [shared synchronize];
+//    DarwinNotificationHelper *helper = [DarwinNotificationHelper sharedHelper];
+//    [helper postNotificationWithName:@"isPlaying"];
     
 }
 /** 下一首 */
@@ -1071,8 +1089,6 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
         self.audioRepeatMode = PCAudioRepeatModeTowards;
         
         self.playModeImageView.image = [UIImage imageNamed:@"repeatOnB"];
-
-
     
     } else {
         
@@ -1102,8 +1118,6 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
         
             self.lrcView.alpha = 1;
             
-            self.lrcView.blurView.underlyingView = self.cover;
-
         }];
         
         [UIView commitAnimations];
@@ -1111,7 +1125,6 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
         [self addLrcTimer];
     
     } else {
-        
         
         self.lrcView.alpha = 1;
         
@@ -1175,6 +1188,7 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     
     [self.lrcTimer addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
 }
+
 #pragma mark - 移除定时器
 - (void)removeCurrentTimeTimer {
     

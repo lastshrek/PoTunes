@@ -140,7 +140,7 @@
     
     [MBProgressHUD showMessage:@"正在获取" toView:self.view];
    
-    [manager GET:@"http://121.41.121.87:3000/api/list" parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [manager GET:@"http://121.41.121.87:3000/api/v1/lists" parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
     
         [MBProgressHUD hideHUDForView:self.view];
         
@@ -148,34 +148,9 @@
         
         [self.tableView headerEndRefreshing];
         
-        
         NSMutableArray *result = (NSMutableArray *)responseObject;
         
-        NSMutableArray *addArray = [[NSMutableArray alloc] init];
-        
-        for (int i = 0; i < result.count; i++) {
-        
-            NSDictionary *newDic = result[i];
-            
-            NSDictionary *firstDic = self.articles[0];
-            
-            if ([newDic[@"id"] integerValue] > [firstDic[@"id"] integerValue]) {
-        
-                [addArray addObject:newDic];
-            
-            }
-            
-            if ([newDic[@"id"] integerValue] == [firstDic[@"id"] integerValue]) {
-                
-                self.articles[0] = newDic;
-            }
-        }
-        
-        [addArray addObjectsFromArray:self.articles];
-
-        
-        self.articles = addArray;
-        
+        self.articles = result;
         
         NSString *doc = [self dirDoc];
         
@@ -204,6 +179,7 @@
     return 1;
 
 }
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
   
     return self.articles.count;
@@ -216,7 +192,7 @@
     
     cell.textLabel.text = [NSString stringWithFormat:@"『%@』",[self.articles[indexPath.row] objectForKey:@"title"]];
     
-    NSString *imageURL = [self.articles[indexPath.row] objectForKey:@"contentImage"];
+    NSString *imageURL = [self.articles[indexPath.row] objectForKey:@"coverImage"];
     
     NSURL *downloadURL = [NSURL URLWithString:imageURL];
     
@@ -238,34 +214,48 @@
     
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
     
-    /** 专辑名称 */
-    NSString *albumTitle = [[[self.articles[indexPath.row] objectForKey:@"title"] componentsSeparatedByString:@" – "] lastObject];
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     
-    PCSongDetailViewController *detail = [[PCSongDetailViewController alloc] init];
-    /** 歌曲名称 */
-    NSArray *songArray = [self.articles[indexPath.row] objectForKey:@"mp3_list"];
+    [MBProgressHUD showMessage:@"加载歌曲" toView:self.view];
     
-    NSMutableArray *tempArray = [NSMutableArray array];
+    NSDictionary *articleDic = self.articles[indexPath.row];
     
-    for (NSDictionary *dic in songArray) {
-      
-        PCSong *song = [PCSong songWithDict:dic];
+    NSString *index = articleDic[@"id"];
+    
+    NSString *urlString = [NSString stringWithFormat:@"http://121.41.121.87:3000/api/v1/list-mp3s?id=%@", index];
+    
+    [manager GET:urlString parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
-        song.album = albumTitle;
+        [MBProgressHUD hideHUDForView:self.view];
         
-        NSString *lrc = dic[@"sourceUrl"];
+        PCSongDetailViewController *detail = [[PCSongDetailViewController alloc] init];
         
-        song.lrc = [lrc stringByReplacingOccurrencesOfString:@".mp3" withString:@".lrc"];
+        NSMutableArray *tempArray = [NSMutableArray array];
         
-        [tempArray addObject:song];
-    }
+        for (NSDictionary *dic in responseObject) {
+            
+            PCSong *song = [PCSong songWithDict:dic];
+            
+            song.album = self.articles[indexPath.row][@"title"];
+            
+            NSString *lrc = dic[@"sourceUrl"];
+            
+            song.lrc = [lrc stringByReplacingOccurrencesOfString:@".mp3" withString:@".lrc"];
+            
+            [tempArray addObject:song];
+        }
+        
+        detail.songs = tempArray;
+        
+        detail.title = self.articles[indexPath.row][@"title"];
+        
+        [self.navigationController pushViewController:detail animated:YES];
 
-    detail.songs = tempArray;
-    
-    detail.title = albumTitle;
-    
-    [self.navigationController pushViewController:detail animated:YES];
-    
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                
+    }];
+  
 }
 
 #pragma mark - 下载
@@ -278,70 +268,78 @@
     //获得专辑名称
     NSString *fullName = [self.articles[indexPath.row] objectForKey:@"title"];
     
-    NSArray *separatedArray = [fullName componentsSeparatedByString:@" - "];
+    //专辑ID
+    NSString *index = [self.articles[indexPath.row] objectForKey:@"id"];
     
-    NSString *album = [separatedArray lastObject];
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     
-    NSMutableArray *tempArray = [self.articles[indexPath.row] objectForKey:@"mp3_list"];
+    NSString *urlString = [NSString stringWithFormat:@"http://121.41.121.87:3000/api/v1/list-mp3s?id=%@", index];
     
-    NSMutableArray *songArray = [NSMutableArray array];
+    [MBProgressHUD showMessage:@"开始下载" toView:self.view];
     
-    for (NSDictionary *dict in tempArray) {
+    [manager GET:urlString parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
-        PCSong *song = [PCSong songWithDict:dict];
+        [MBProgressHUD hideHUDForView:self.view];
         
-        NSInteger position = [dict[@"index"] integerValue];
+        NSMutableArray *songArray = [NSMutableArray array];
         
-        song.position = [NSNumber numberWithInteger:position];
+        NSMutableArray *downloadArray = [NSMutableArray array];
         
-        song.album = album;
-        
-        NSString *lrc = dict[@"sourceUrl"];
-        
-        song.lrc = [lrc stringByReplacingOccurrencesOfString:@".mp3" withString:@".lrc"];
-        
-        [songArray addObject:song];
-    }
-    
-    NSMutableArray *downloadArray = [NSMutableArray array];
-    
-    for (int i = 0; i < songArray.count; i++) {
-        
-        PCSong *song = songArray[i];
-        
-        NSString *author = [song.author stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
-        
-        NSString *title = [song.title stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
-        
-        NSString *query = [NSString stringWithFormat:@"SELECT * FROM t_downloading WHERE author = '%@' and title = '%@';", author, title];
-        
-        FMResultSet *s = [self.downloadedSongDB executeQuery:query];
-        
-        
-        if (!s.next) {
+        for (NSDictionary *dict in responseObject) {
             
-            [downloadArray addObject:song];
+            PCSong *song = [PCSong songWithDict:dict];
+            
+            NSInteger position = [dict[@"index"] integerValue];
+            
+            song.position = [NSNumber numberWithInteger:position];
+            
+            song.album = fullName;
+            
+            NSString *lrc = dict[@"sourceUrl"];
+            
+            song.lrc = [lrc stringByReplacingOccurrencesOfString:@".mp3" withString:@".lrc"];
+            
+            [songArray addObject:song];
             
         }
-    }
-    
-    if (downloadArray.count == 0) {
         
-        [MBProgressHUD showSuccess:@"专辑已下载"];
+        for (int i = 0; i < songArray.count; i++) {
+            
+            PCSong *song = songArray[i];
+            
+            NSString *author = [song.author stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
+            
+            NSString *title = [song.title stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
+            
+            NSString *query = [NSString stringWithFormat:@"SELECT * FROM t_downloading WHERE author = '%@' and title = '%@';", author, title];
+            
+            FMResultSet *s = [self.downloadedSongDB executeQuery:query];
+            
+            if (!s.next) {
+                
+                [downloadArray addObject:song];
+                
+            }
+        }
 
-    } else {
+        if (downloadArray.count == 0) {
+            
+            [MBProgressHUD showSuccess:@"专辑已下载"];
+            
+        } else {
+            
+            NSNotification *fullAlbum = [NSNotification notificationWithName:@"fullAlbum" object:nil userInfo:
+                                         @{@"songs":downloadArray,
+                                           @"title":fullName}];
+            
+            [[NSNotificationCenter defaultCenter] postNotification:fullAlbum];
+                        
+        }
+
         
-        NSNotification *fullAlbum = [NSNotification notificationWithName:@"fullAlbum" object:nil userInfo:
-                                     @{@"songs":downloadArray,
-                                       @"title":[separatedArray lastObject]}];
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         
-        [[NSNotificationCenter defaultCenter] postNotification:fullAlbum];
-        
-        [MBProgressHUD showSuccess:@"开始下载"];
-
-
-    }
-
+    }];
 }
 
 @end

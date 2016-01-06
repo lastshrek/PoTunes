@@ -8,6 +8,7 @@
 
 #import "PCSongDetailViewController.h"
 #import "FMDB.h"
+
 @interface PCSongDetailViewController ()
 
 
@@ -44,7 +45,9 @@
 }
 
 - (void)viewDidLoad {
+    
     [super viewDidLoad];
+
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -159,7 +162,7 @@
                                       @"songs":self.songs,
                                       @"title":self.title,
                                       @"identifier":identifier}];
-        
+                
         [[NSNotificationCenter defaultCenter] postNotification:download];
         
         [MBProgressHUD showSuccess:@"开始下载"];

@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		3C0CCAC51BB929DD00AAA5C6 /* PCSongListTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C0CCAC41BB929DD00AAA5C6 /* PCSongListTableViewCell.m */; };
 		3C24788E1BBA620500101EC8 /* EVCircularProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C24788D1BBA620500101EC8 /* EVCircularProgressView.m */; };
+		3C3984561BF65EED000629DE /* UIImage+BoxBlur.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3984551BF65EED000629DE /* UIImage+BoxBlur.m */; };
+		3C3984591BF65F03000629DE /* ANBlurredImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3984581BF65F03000629DE /* ANBlurredImageView.m */; };
 		3C5813001BA7EFA00091E4FC /* PCNaviController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C5812FF1BA7EFA00091E4FC /* PCNaviController.m */; };
 		3C5813621BE48C050012C689 /* PCWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C5813601BE48C050012C689 /* PCWebViewController.m */; };
 		3C5813631BE48C050012C689 /* PCWebViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3C5813611BE48C050012C689 /* PCWebViewController.xib */; };
@@ -25,6 +27,7 @@
 		3C66DA4C1BB4E6B300CEA31F /* FSParseRssPodcastFeedRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C66DA431BB4E6B300CEA31F /* FSParseRssPodcastFeedRequest.m */; };
 		3C66DA4D1BB4E6B300CEA31F /* FSPlaylistItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C66DA451BB4E6B300CEA31F /* FSPlaylistItem.m */; };
 		3C66DA4E1BB4E6B300CEA31F /* FSXMLHttpRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C66DA471BB4E6B300CEA31F /* FSXMLHttpRequest.m */; };
+		3C734CF11BF7469800A95D1C /* DRNRealTimeBlurView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C734CF01BF7469800A95D1C /* DRNRealTimeBlurView.m */; };
 		3C77D2401BE3BD4E0029AB70 /* PgySDk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C77D23E1BE3BD4E0029AB70 /* PgySDk.framework */; };
 		3C77D2411BE3BD4E0029AB70 /* PgyUpdate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C77D23F1BE3BD4E0029AB70 /* PgyUpdate.framework */; };
 		3C77D24C1BE3D0DF0029AB70 /* libBPush.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C77D24B1BE3D0DF0029AB70 /* libBPush.a */; };
@@ -170,6 +173,10 @@
 		3C0CCAC41BB929DD00AAA5C6 /* PCSongListTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCSongListTableViewCell.m; sourceTree = "<group>"; };
 		3C24788C1BBA620500101EC8 /* EVCircularProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EVCircularProgressView.h; sourceTree = "<group>"; };
 		3C24788D1BBA620500101EC8 /* EVCircularProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EVCircularProgressView.m; sourceTree = "<group>"; };
+		3C3984541BF65EED000629DE /* UIImage+BoxBlur.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+BoxBlur.h"; sourceTree = "<group>"; };
+		3C3984551BF65EED000629DE /* UIImage+BoxBlur.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+BoxBlur.m"; sourceTree = "<group>"; };
+		3C3984571BF65F03000629DE /* ANBlurredImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ANBlurredImageView.h; sourceTree = "<group>"; };
+		3C3984581BF65F03000629DE /* ANBlurredImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ANBlurredImageView.m; sourceTree = "<group>"; };
 		3C5812FE1BA7EFA00091E4FC /* PCNaviController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCNaviController.h; sourceTree = "<group>"; };
 		3C5812FF1BA7EFA00091E4FC /* PCNaviController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCNaviController.m; sourceTree = "<group>"; };
 		3C58135F1BE48C050012C689 /* PCWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCWebViewController.h; sourceTree = "<group>"; };
@@ -201,6 +208,8 @@
 		3C66DA461BB4E6B300CEA31F /* FSXMLHttpRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSXMLHttpRequest.h; sourceTree = "<group>"; };
 		3C66DA471BB4E6B300CEA31F /* FSXMLHttpRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSXMLHttpRequest.m; sourceTree = "<group>"; };
 		3C66DA4F1BB5028C00CEA31F /* PoTunes.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PoTunes.entitlements; sourceTree = "<group>"; };
+		3C734CEF1BF7469800A95D1C /* DRNRealTimeBlurView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DRNRealTimeBlurView.h; sourceTree = "<group>"; };
+		3C734CF01BF7469800A95D1C /* DRNRealTimeBlurView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DRNRealTimeBlurView.m; sourceTree = "<group>"; };
 		3C77D23E1BE3BD4E0029AB70 /* PgySDk.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = PgySDk.framework; sourceTree = "<group>"; };
 		3C77D23F1BE3BD4E0029AB70 /* PgyUpdate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = PgyUpdate.framework; sourceTree = "<group>"; };
 		3C77D2421BE3BD8C0029AB70 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
@@ -601,6 +610,10 @@
 		3CB2E31F1BA7CA4500805D4F /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				3C3984571BF65F03000629DE /* ANBlurredImageView.h */,
+				3C3984581BF65F03000629DE /* ANBlurredImageView.m */,
+				3C734CEF1BF7469800A95D1C /* DRNRealTimeBlurView.h */,
+				3C734CF01BF7469800A95D1C /* DRNRealTimeBlurView.m */,
 				3CD735441BF101AD00262D69 /* LrcCell.h */,
 				3CD735451BF101AD00262D69 /* LrcCell.m */,
 				3C5813721BE634AE0012C689 /* PCShareBtn.h */,
@@ -636,6 +649,8 @@
 				3CB2E3311BA7CC0700805D4F /* UIImage+Reflection.m */,
 				3CB2E3321BA7CC0700805D4F /* UIView+Geometry.h */,
 				3CB2E3331BA7CC0700805D4F /* UIView+Geometry.m */,
+				3C3984541BF65EED000629DE /* UIImage+BoxBlur.h */,
+				3C3984551BF65EED000629DE /* UIImage+BoxBlur.m */,
 				3CB2E32D1BA7CB7A00805D4F /* UIColor+RGBValues.h */,
 				3CB2E32E1BA7CB7A00805D4F /* UIColor+RGBValues.m */,
 			);
@@ -1137,6 +1152,7 @@
 				3C66DA481BB4E6B300CEA31F /* FSAudioController.m in Sources */,
 				3CA297021BE1C71E0073CF1A /* PCSongDownloadingCell.m in Sources */,
 				3CA224F71BAFB2080028387F /* AFSoundRecord.m in Sources */,
+				3C734CF11BF7469800A95D1C /* DRNRealTimeBlurView.m in Sources */,
 				3CB2E3AD1BA7CF0D00805D4F /* AFURLRequestSerialization.m in Sources */,
 				3CB2E3A91BA7CF0D00805D4F /* AFHTTPSessionManager.m in Sources */,
 				3CA224F51BAFB2080028387F /* AFSoundItem.m in Sources */,
@@ -1146,6 +1162,7 @@
 				3CA297121BE1EBB50073CF1A /* PCSettingViewController.m in Sources */,
 				3C9038051BB8F4780089076B /* DarwinNotificationHelper.m in Sources */,
 				3CB2E3AC1BA7CF0D00805D4F /* AFURLConnectionOperation.m in Sources */,
+				3C3984561BF65EED000629DE /* UIImage+BoxBlur.m in Sources */,
 				3CB2E3BB1BA7CF7000805D4F /* PCArticle.m in Sources */,
 				3C58136E1BE4B0000012C689 /* PCGuideController.m in Sources */,
 				3CB2E3BA1BA7CF7000805D4F /* PCPlaylist.m in Sources */,
@@ -1194,6 +1211,7 @@
 				3CB2E3BF1BA7CFBA00805D4F /* PCDownloadViewController.m in Sources */,
 				3CB2E3521BA7CD7C00805D4F /* MJRefreshFooterView.m in Sources */,
 				3CB2E3511BA7CD7C00805D4F /* MJRefreshConst.m in Sources */,
+				3C3984591BF65F03000629DE /* ANBlurredImageView.m in Sources */,
 				3CD735461BF101AD00262D69 /* LrcCell.m in Sources */,
 				3CB2E37F1BA7CE4000805D4F /* SDWebImageDownloader.m in Sources */,
 				3CD735401BEE3DF100262D69 /* PCBlurView.m in Sources */,

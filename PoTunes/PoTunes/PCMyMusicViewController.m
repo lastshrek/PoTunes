@@ -182,7 +182,7 @@
 
     }
 
-    [self beginDownloadLyricWithIdentifier:identifier URL:song.lrc];
+//    [self beginDownloadLyricWithIdentifier:identifier URL:song.lrc];
     //写入正在下载歌曲plist
     [self writeToDownloadingPlist:self.downloadingArray WithName:@"downloading.plist"];
 
@@ -191,7 +191,7 @@
     
     NSString *songName = [song.title stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
     
-    NSString *album = [[[sender.userInfo[@"title"] stringByReplacingOccurrencesOfString:@"'" withString:@"''"] componentsSeparatedByString:@" - "] lastObject];
+    NSString *album = [sender.userInfo[@"title"] stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
     
     NSString *sql = [NSString stringWithFormat: @"INSERT INTO t_downloading(author,title,sourceURL,indexPath,thumb,album,downloaded) VALUES('%@','%@','%@','%ld','%@','%@','0');",artist,songName,song.sourceURL,[indexPath integerValue],song.thumb,album];
     
@@ -285,7 +285,7 @@
             }];
         });
         
-        [self beginDownloadLyricWithIdentifier:identifier URL:song.lrc];
+//        [self beginDownloadLyricWithIdentifier:identifier URL:song.lrc];
     }
 }
 /** 下载歌曲 */

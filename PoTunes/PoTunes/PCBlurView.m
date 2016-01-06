@@ -26,9 +26,10 @@
 - (NSMutableArray *)lyricsLines {
     
     if (_lyricsLines == nil) {
+        
         self.lyricsLines = [NSMutableArray array];
+        
     }
-    
     return _lyricsLines;
 }
 
@@ -41,8 +42,11 @@
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
+    
     if (self = [super initWithCoder:aDecoder]) {
+    
         [self setup];
+    
     }
     return self;
 }
@@ -188,25 +192,7 @@
 }
 
 - (void)setup {
-    
-    FXBlurView *blurView = [[FXBlurView alloc] init];
-    
-//    blurView.backgroundColor = [UIColor whiteColor];
-    
-//    [blurView setDynamic:YES];
-    
-    [blurView setBlurEnabled:YES];
-    
-    [blurView setTintColor:[UIColor blackColor]];
-    
-    [blurView setBlurRadius:20];
-    
-    [blurView setIterations:2];
-        
-    self.blurView = blurView;
-    
-    [self addSubview:blurView];
-    
+      
     UILabel *nolrcLabel = [[UILabel alloc] init];
     
     nolrcLabel.backgroundColor = [UIColor clearColor];
@@ -235,9 +221,9 @@
     
     [self addSubview:tableView];
     
-    
-    
     self.tableView = tableView;
+    
+    self.renderStatic = YES;
 }
 
 - (void)layoutSubviews {
@@ -249,8 +235,7 @@
     self.tableView.contentInset = UIEdgeInsetsMake(self.bounds.size.height * 0.5, 0, self.bounds.size.height * 0.5, 0);
     
     self.noLrcLabel.frame = self.bounds;
-    
-    self.blurView.frame = self.bounds;
+          
 }
 
 - (NSString *)dirDoc {
