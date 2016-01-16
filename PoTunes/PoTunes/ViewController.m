@@ -720,11 +720,15 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
                 
                 self.lrcView.chLrcName = [identifier stringByAppendingString:@"ch.lrc"];
                 
+                [manager removeItemAtPath:[filePath stringByReplacingOccurrencesOfString:@".lrc" withString:@"ch.lrc"] error:nil];
+                
             } else {
                 
                 [self beginDownloadLyricWithIdentifier:[identifier stringByAppendingString:@"ch"] URL:[lrcString stringByReplacingOccurrencesOfString:@".lrc" withString:@"ch.lrc"] success:^(id responseObject) {
                     
                     self.lrcView.chLrcName = [identifier stringByAppendingString:@"ch.lrc"];
+                    
+                    [manager removeItemAtPath:[filePath stringByReplacingOccurrencesOfString:@".lrc" withString:@"ch.lrc"] error:nil];
                     
                 } failure:^(NSError *error) {
                     
@@ -746,12 +750,14 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
                 [self beginDownloadLyricWithIdentifier:[identifier stringByAppendingString:@"ch"] URL:[lrcString stringByReplacingOccurrencesOfString:@".lrc" withString:@"ch.lrc"] success:^(id responseObject) {
                     
                     self.lrcView.chLrcName = [identifier stringByAppendingString:@"ch.lrc"];
-                
-                } failure:^(NSError *error) {
-                
+                    
                     [manager removeItemAtPath:[filePath stringByReplacingOccurrencesOfString:@".lrc" withString:@"ch.lrc"] error:nil];
-                
+                    
+                } failure:^(NSError *error) {
+                                    
                 }];
+                
+                [manager removeItemAtPath:filePath error:nil];
 
             
             } failure:^(NSError *error) {
@@ -1243,10 +1249,10 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     
     
     // 写入共享数据
-    NSUserDefaults *shared = [[NSUserDefaults alloc] initWithSuiteName:@"group.fm.poche.potunes"];
-    [shared setObject:@(progress) forKey:@"progress"];
-    [shared setObject:@(totalLeftSecond) forKey:@"leftTime"];
-    [shared synchronize];
+//    NSUserDefaults *shared = [[NSUserDefaults alloc] initWithSuiteName:@"group.fm.poche.potunes"];
+//    [shared setObject:@(progress) forKey:@"progress"];
+//    [shared setObject:@(totalLeftSecond) forKey:@"leftTime"];
+//    [shared synchronize];
     //给手表发送通知
 //    DarwinNotificationHelper *helper = [DarwinNotificationHelper sharedHelper];
 //    [helper postNotificationWithName:@"progress"];
