@@ -22,7 +22,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
     self.hidden = self.view.hidden;
 }
 
@@ -32,6 +31,7 @@
     if (self.viewControllers.count > 0) {
         viewController.hidesBottomBarWhenPushed = YES;
     }
+    
     [super pushViewController:viewController animated:animated];
 }
 

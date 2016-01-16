@@ -380,7 +380,6 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
         }
         button.tag = i;
         [button addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
-//        [button addTarget:self action:@selector(panTheButton:) forControlEvents:UIControlEventTouchDragInside];
         UISwipeGestureRecognizer *swipeFromTop = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(panTheButton:)];
         [swipeFromTop setDirection:UISwipeGestureRecognizerDirectionDown];
         swipeFromTop.numberOfTouchesRequired = 1;
@@ -793,13 +792,13 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 //        [helper postNotificationWithName:@"imageData"];
         
         //记录最后一次播放的歌曲以及播放模式
-//        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-//        [defaults setObject:@(self.audioRepeatMode) forKey:@"repeatMode"];
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        [defaults setObject:@(self.audioRepeatMode) forKey:@"repeatMode"];
+
+        NSData *songsData = [NSKeyedArchiver archivedDataWithRootObject:self.songs];
+        [defaults setObject:songsData forKey:@"songsData"];
+        [defaults setObject:@(self.index) forKey:@"index"];
 //
-//        NSData *songsData = [NSKeyedArchiver archivedDataWithRootObject:self.songs];
-//        [defaults setObject:songsData forKey:@"songsData"];
-//        [defaults setObject:@(self.index) forKey:@"index"];
-//        
     }];
 }
 
@@ -825,9 +824,7 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     
     [op setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
         
-        
         success(responseObject);
-        
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         
@@ -1160,8 +1157,8 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     [self updatePlayBackProgress];
     
     self.currentTimeTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(updateCurrentTime) userInfo:nil repeats:YES];
-    self.PlayBackTimer = [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(updatePlayBackProgress) userInfo:nil repeats:YES];
     
+    self.PlayBackTimer = [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(updatePlayBackProgress) userInfo:nil repeats:YES];
     
     [[NSRunLoop mainRunLoop] addTimer:self.currentTimeTimer forMode:NSRunLoopCommonModes];
     
@@ -1251,8 +1248,8 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     [shared setObject:@(totalLeftSecond) forKey:@"leftTime"];
     [shared synchronize];
     //给手表发送通知
-    DarwinNotificationHelper *helper = [DarwinNotificationHelper sharedHelper];
-    [helper postNotificationWithName:@"progress"];
+//    DarwinNotificationHelper *helper = [DarwinNotificationHelper sharedHelper];
+//    [helper postNotificationWithName:@"progress"];
     
     __weak ViewController *weakSelf = self;
     
@@ -1265,11 +1262,6 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
         }
         
     };
-    
-    //当播放停止或者暂停时移除监视器
-//    if (totalLeftSecond <= 1) {
-//        [self playNext];
-//    }
 }
 - (void)updatePlayBackProgress {
    
@@ -1304,18 +1296,14 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     UIViewController *controller = self.controllers[btn.tag];
     controller.view.hidden = NO;
     self.selectedView = controller.view;
-    if (btn.tag == 1 || btn.tag == 2 || btn.tag == 3) {
-        NSNotification *pop = [NSNotification notificationWithName:@"pop" object:nil userInfo:nil];
-        [[NSNotificationCenter defaultCenter] postNotification:pop];
-    }
+    NSNotification *pop = [NSNotification notificationWithName:@"pop" object:nil userInfo:nil];
+    [[NSNotificationCenter defaultCenter] postNotification:pop];
+
 }
 #pragma mark - 下拉Button事件
 - (void)panTheButton:(PCButton *)btn {
-    
     [self.scrollView setContentOffset:CGPointMake(0, 0) animated:YES];
-    
     self.scrollView.scrollEnabled = YES;
-    
 }
 #pragma mark - scrollView代理方法
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {

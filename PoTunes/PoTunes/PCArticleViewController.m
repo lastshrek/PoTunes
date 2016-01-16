@@ -140,7 +140,7 @@
     
     [MBProgressHUD showMessage:@"正在获取" toView:self.view];
    
-    [manager GET:@"http://121.41.121.87:3000/api/v1/lists" parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [manager GET:@"http://121.41.121.87:3000/api/v1/lists?v=1.0.0" parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
     
         [MBProgressHUD hideHUDForView:self.view];
         
@@ -169,6 +169,10 @@
         [self.tableView reloadData];
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        
+        [MBProgressHUD hideHUDForView:self.view];
+        
+        [MBProgressHUD showError:@"请检查网络" toView:self.view];
         
     }];
 }
