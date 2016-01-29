@@ -17,15 +17,14 @@
 #import "FMDB.h"
 #import "PCSongDetailViewController.h"
 #import "FMDB.h"
-
+#import "DMCTrack.h"
+#import "DMCPlayback.h"
 @interface PCArticleViewController ()
 
 @property (nonatomic, strong) NSMutableArray *articles;
 
 /** 下载歌曲数据库 */
 @property (nonatomic, strong) FMDatabase *downloadedSongDB;
-
-
 
 @end
 
@@ -57,6 +56,7 @@
 
 
 - (void)viewDidLoad {
+    
     [super viewDidLoad];
     
     [self.tableView addHeaderWithTarget:self action:@selector(loadNewArticle)];
@@ -139,8 +139,14 @@
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     
     [MBProgressHUD showMessage:@"正在获取" toView:self.view];
+    
+    //获取系统版本号
+    
+    NSString *version = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
+    
+    NSString *getAlbums = [NSString stringWithFormat:@"http://121.41.121.87:3000/api/v1/lists?v=%@", version];
    
-    [manager GET:@"http://121.41.121.87:3000/api/v1/lists?v=1.0.0" parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [manager GET:getAlbums parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
     
         [MBProgressHUD hideHUDForView:self.view];
         
@@ -226,7 +232,9 @@
     
     NSString *index = articleDic[@"id"];
     
-    NSString *urlString = [NSString stringWithFormat:@"http://121.41.121.87:3000/api/v1/list-mp3s?id=%@", index];
+    NSString *version = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
+    
+    NSString *urlString = [NSString stringWithFormat:@"http://121.41.121.87:3000/api/v1/list-mp3s?id=%@&v=%@", index, version];
     
     [manager GET:urlString parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
@@ -245,19 +253,21 @@
             NSString *lrc = dic[@"sourceUrl"];
             
             song.lrc = [lrc stringByReplacingOccurrencesOfString:@".mp3" withString:@".lrc"];
-            
+                        
             [tempArray addObject:song];
+            
         }
         
         detail.songs = tempArray;
         
-        detail.title = self.articles[indexPath.row][@"title"];
-        
         [self.navigationController pushViewController:detail animated:YES];
-
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-                
+        
+        [MBProgressHUD hideHUDForView:self.view];
+
+        [MBProgressHUD showError:@"加载失败" toView:self.view];
+        
     }];
   
 }

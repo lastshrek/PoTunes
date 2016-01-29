@@ -90,9 +90,9 @@ static NSInteger sortCacheObjects(id co1, id co2, void *keyForSorting)
         self.startupWatchdogPeriod = 30; // If the stream doesn't start to play in this seconds, the watchdog will fail it
 #ifdef __LP64__
         /* Increase the max in-memory cache to 10 MB with newer 64 bit devices */
-        self.maxPrebufferedByteCount = 20000000; // 10 MB
+        self.maxPrebufferedByteCount = 200000000; // 10 MB
 #else
-        self.maxPrebufferedByteCount = 1000000; // 1 MB
+        self.maxPrebufferedByteCount = 10000000; // 1 MB
 #endif
         self.userAgent = [NSString stringWithFormat:@"FreeStreamer/%@ (%@)", freeStreamerReleaseVersion(), systemVersion];
         self.cacheEnabled = YES;

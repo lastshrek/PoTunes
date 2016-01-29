@@ -8,11 +8,10 @@
 
 #import "AppDelegate.h"
 #import <AVFoundation/AVFoundation.h>
-#import <PgySDk/PgyManager.h>
-#import <PgyUpdate/PgyUpdateManager.h>
 #import "BPush.h"
 #import "WXApi.h"
 #import "MBProgressHUD+MJ.h"
+#import "DMCAccountTool.h"
 @interface AppDelegate ()<WXApiDelegate>
 
 @end
@@ -21,7 +20,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
-    [NSThread sleepForTimeInterval:0.3];
+    [NSThread sleepForTimeInterval:1];
     
     //设置音乐后台播放的会话类型
     [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
@@ -31,9 +30,7 @@
     //开启远程事件
     [application beginReceivingRemoteControlEvents];
     
-    //注册版本更新提示
-    [[PgyUpdateManager sharedPgyManager] startManagerWithAppId:@"805102582aafc7403e762ee928756037"];
-    [[PgyUpdateManager sharedPgyManager] checkUpdate];
+
 
     //注册通知·
     // iOS8 下需要使用新的 API
@@ -63,6 +60,9 @@
     
     //向微信注册
     [WXApi registerApp:@"wx0fc8d0673ec86694"];
+    
+    //注册DMCkey
+    [DMCAccountTool registerApp:@"86ba1b987f19656168531f17a74516d9" clientID:@"topdmc"];
     
     return YES;
 }

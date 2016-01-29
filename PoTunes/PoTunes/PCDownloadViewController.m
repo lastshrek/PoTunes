@@ -31,7 +31,6 @@
 
     [self getNotification];
     
-//    NSLog(@"%@",self.title);
 }
 
 #pragma mark - 获取文件主路径

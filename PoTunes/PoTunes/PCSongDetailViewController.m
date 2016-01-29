@@ -8,10 +8,9 @@
 
 #import "PCSongDetailViewController.h"
 #import "FMDB.h"
+#import "DMCPlayback.h"
 
 @interface PCSongDetailViewController ()
-
-
 
 /** 下载歌曲数据库 */
 @property (nonatomic, strong) FMDatabase *downloadedSongDB;
@@ -32,8 +31,7 @@
         [_downloadedSongDB open];
         
         //创表
-        
-        
+
         [_downloadedSongDB executeUpdate:@"CREATE TABLE IF NOT EXISTS t_downloading (id integer PRIMARY KEY, author text, title text, sourceURL text,indexPath integer,thumb text,album text,downloaded bool);"];
         
         _downloadedSongDB.shouldCacheStatements = YES;
@@ -59,6 +57,41 @@
         PCSongListTableViewCell *cell = [PCSongListTableViewCell cellWithTableView:tableView];
         
         PCSong *song = self.songs[indexPath.row];
+            
+        if (song.title.length == 0) {
+            
+            [DMCPlayback getTrackInfoWithTrackID:song.author success:^(DMCTrack *track) {
+                
+                song.album = track.album.name;
+                
+                song.sourceURL = [NSString stringWithFormat:@"%@", song.author];
+
+                NSMutableArray *artistsArray = [NSMutableArray array];
+                
+                for (DMCArtist *artist in track.artists) {
+                    
+                    [artistsArray addObject:artist.name];
+                    
+                }
+                
+                song.author = [artistsArray componentsJoinedByString:@" / "];
+
+                
+                song.title = track.name;
+                
+                song.thumb = track.album.photo;
+                
+                song.position = [NSNumber numberWithInteger:indexPath.row];
+                
+                [self.songs replaceObjectAtIndex:indexPath.row withObject:song];
+                                
+                [tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath, nil] withRowAnimation:UITableViewRowAnimationFade];
+                
+                                
+            } failure:^(NSString *error) {
+                
+            }];
+        }
         
         cell.textLabel.text = song.title;
         
@@ -113,7 +146,6 @@
         }
         
         return cell;
-        
     }
 }
 
@@ -138,7 +170,7 @@
     
     if (s.next) {
         
-        BOOL downloaded = [s stringForColumn:@"downloaded"];
+        BOOL downloaded = (BOOL)[s stringForColumn:@"downloaded"];
         
         if (downloaded) {
             
@@ -166,7 +198,6 @@
         [[NSNotificationCenter defaultCenter] postNotification:download];
         
         [MBProgressHUD showSuccess:@"开始下载"];
-
     }
 }
 

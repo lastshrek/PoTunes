@@ -45,7 +45,7 @@
 }
 
 - (void)clearCaches {
-            //删除缓存
+    //删除缓存
     NSFileManager *fileManager = [NSFileManager defaultManager];
 
     NSString *rootPath = [self dirDoc];

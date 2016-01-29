@@ -9,8 +9,12 @@
 /* Begin PBXBuildFile section */
 		3C0CCAC51BB929DD00AAA5C6 /* PCSongListTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C0CCAC41BB929DD00AAA5C6 /* PCSongListTableViewCell.m */; };
 		3C24788E1BBA620500101EC8 /* EVCircularProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C24788D1BBA620500101EC8 /* EVCircularProgressView.m */; };
+		3C26B5721C4FD2AA0037893F /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CB2E3FD1BA7D19300805D4F /* AudioToolbox.framework */; };
+		3C26B6861C50CA750037893F /* libWeChatSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C26B6851C50CA750037893F /* libWeChatSDK.a */; };
 		3C3984561BF65EED000629DE /* UIImage+BoxBlur.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3984551BF65EED000629DE /* UIImage+BoxBlur.m */; };
 		3C3984591BF65F03000629DE /* ANBlurredImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3984581BF65F03000629DE /* ANBlurredImageView.m */; };
+		3C41AA3D1C5B0C51000B9364 /* PoTunes.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = 3C41AA3C1C5B0C51000B9364 /* PoTunes.entitlements */; };
+		3C41AA401C5B1899000B9364 /* libDMCPlayback.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C41AA3F1C5B1899000B9364 /* libDMCPlayback.a */; };
 		3C5813001BA7EFA00091E4FC /* PCNaviController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C5812FF1BA7EFA00091E4FC /* PCNaviController.m */; };
 		3C5813621BE48C050012C689 /* PCWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C5813601BE48C050012C689 /* PCWebViewController.m */; };
 		3C5813631BE48C050012C689 /* PCWebViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3C5813611BE48C050012C689 /* PCWebViewController.xib */; };
@@ -28,17 +32,10 @@
 		3C66DA4D1BB4E6B300CEA31F /* FSPlaylistItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C66DA451BB4E6B300CEA31F /* FSPlaylistItem.m */; };
 		3C66DA4E1BB4E6B300CEA31F /* FSXMLHttpRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C66DA471BB4E6B300CEA31F /* FSXMLHttpRequest.m */; };
 		3C734CF11BF7469800A95D1C /* DRNRealTimeBlurView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C734CF01BF7469800A95D1C /* DRNRealTimeBlurView.m */; };
-		3C77D2401BE3BD4E0029AB70 /* PgySDk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C77D23E1BE3BD4E0029AB70 /* PgySDk.framework */; };
-		3C77D2411BE3BD4E0029AB70 /* PgyUpdate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C77D23F1BE3BD4E0029AB70 /* PgyUpdate.framework */; };
 		3C77D24C1BE3D0DF0029AB70 /* libBPush.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C77D24B1BE3D0DF0029AB70 /* libBPush.a */; };
 		3C77D24D1BE3D0F00029AB70 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C77D2421BE3BD8C0029AB70 /* CoreTelephony.framework */; };
 		3C77D24E1BE3D1110029AB70 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C77D2441BE3BD940029AB70 /* SystemConfiguration.framework */; };
 		3C9038051BB8F4780089076B /* DarwinNotificationHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C9038041BB8F4780089076B /* DarwinNotificationHelper.m */; };
-		3CA224F41BAFB2080028387F /* AFSoundPlayback.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CA224EB1BAFB2080028387F /* AFSoundPlayback.m */; };
-		3CA224F51BAFB2080028387F /* AFSoundItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CA224ED1BAFB2080028387F /* AFSoundItem.m */; };
-		3CA224F61BAFB2080028387F /* AFSoundQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CA224EF1BAFB2080028387F /* AFSoundQueue.m */; };
-		3CA224F71BAFB2080028387F /* AFSoundRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CA224F11BAFB2080028387F /* AFSoundRecord.m */; };
-		3CA224F81BAFB2080028387F /* NSTimer+AFSoundManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CA224F31BAFB2080028387F /* NSTimer+AFSoundManager.m */; };
 		3CA224FE1BAFDCDC0028387F /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CA224FD1BAFDCDC0028387F /* CoreMedia.framework */; };
 		3CA296FF1BE1C1950073CF1A /* PCDownLoadedCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CA296FE1BE1C1950073CF1A /* PCDownLoadedCell.m */; };
 		3CA297021BE1C71E0073CF1A /* PCSongDownloadingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CA297011BE1C71E0073CF1A /* PCSongDownloadingCell.m */; };
@@ -118,7 +115,6 @@
 		3CB2E4321BA7D36A00805D4F /* PCBaiduNavController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB2E4251BA7D36A00805D4F /* PCBaiduNavController.m */; };
 		3CB2E43B1BA7D42200805D4F /* AMapNaviKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CB2E4381BA7D42200805D4F /* AMapNaviKit.framework */; };
 		3CB2E43C1BA7D42200805D4F /* AMapSearchKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CB2E4391BA7D42200805D4F /* AMapSearchKit.framework */; };
-		3CB2E43D1BA7D42200805D4F /* iflyMSC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CB2E43A1BA7D42200805D4F /* iflyMSC.framework */; };
 		3CB2E44E1BA7D46C00805D4F /* FMDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB2E4441BA7D46C00805D4F /* FMDatabase.m */; };
 		3CB2E44F1BA7D46C00805D4F /* FMDatabaseAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB2E4461BA7D46C00805D4F /* FMDatabaseAdditions.m */; };
 		3CB2E4501BA7D46C00805D4F /* FMDatabasePool.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB2E4481BA7D46C00805D4F /* FMDatabasePool.m */; };
@@ -173,10 +169,19 @@
 		3C0CCAC41BB929DD00AAA5C6 /* PCSongListTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCSongListTableViewCell.m; sourceTree = "<group>"; };
 		3C24788C1BBA620500101EC8 /* EVCircularProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EVCircularProgressView.h; sourceTree = "<group>"; };
 		3C24788D1BBA620500101EC8 /* EVCircularProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EVCircularProgressView.m; sourceTree = "<group>"; };
+		3C26B6851C50CA750037893F /* libWeChatSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libWeChatSDK.a; sourceTree = "<group>"; };
 		3C3984541BF65EED000629DE /* UIImage+BoxBlur.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+BoxBlur.h"; sourceTree = "<group>"; };
 		3C3984551BF65EED000629DE /* UIImage+BoxBlur.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+BoxBlur.m"; sourceTree = "<group>"; };
 		3C3984571BF65F03000629DE /* ANBlurredImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ANBlurredImageView.h; sourceTree = "<group>"; };
 		3C3984581BF65F03000629DE /* ANBlurredImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ANBlurredImageView.m; sourceTree = "<group>"; };
+		3C41A9791C591B92000B9364 /* DMCAccountTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DMCAccountTool.h; sourceTree = "<group>"; };
+		3C41A97A1C591B92000B9364 /* DMCAlbum.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DMCAlbum.h; sourceTree = "<group>"; };
+		3C41A97B1C591B92000B9364 /* DMCAlbums.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DMCAlbums.h; sourceTree = "<group>"; };
+		3C41A97C1C591B92000B9364 /* DMCArtist.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DMCArtist.h; sourceTree = "<group>"; };
+		3C41A97E1C591B92000B9364 /* DMCTrack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DMCTrack.h; sourceTree = "<group>"; };
+		3C41AA3C1C5B0C51000B9364 /* PoTunes.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = PoTunes.entitlements; sourceTree = "<group>"; };
+		3C41AA3E1C5B1890000B9364 /* DMCPlayback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DMCPlayback.h; sourceTree = "<group>"; };
+		3C41AA3F1C5B1899000B9364 /* libDMCPlayback.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libDMCPlayback.a; sourceTree = "<group>"; };
 		3C5812FE1BA7EFA00091E4FC /* PCNaviController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCNaviController.h; sourceTree = "<group>"; };
 		3C5812FF1BA7EFA00091E4FC /* PCNaviController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCNaviController.m; sourceTree = "<group>"; };
 		3C58135F1BE48C050012C689 /* PCWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCWebViewController.h; sourceTree = "<group>"; };
@@ -207,11 +212,8 @@
 		3C66DA451BB4E6B300CEA31F /* FSPlaylistItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSPlaylistItem.m; sourceTree = "<group>"; };
 		3C66DA461BB4E6B300CEA31F /* FSXMLHttpRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSXMLHttpRequest.h; sourceTree = "<group>"; };
 		3C66DA471BB4E6B300CEA31F /* FSXMLHttpRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSXMLHttpRequest.m; sourceTree = "<group>"; };
-		3C66DA4F1BB5028C00CEA31F /* PoTunes.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PoTunes.entitlements; sourceTree = "<group>"; };
 		3C734CEF1BF7469800A95D1C /* DRNRealTimeBlurView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DRNRealTimeBlurView.h; sourceTree = "<group>"; };
 		3C734CF01BF7469800A95D1C /* DRNRealTimeBlurView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DRNRealTimeBlurView.m; sourceTree = "<group>"; };
-		3C77D23E1BE3BD4E0029AB70 /* PgySDk.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = PgySDk.framework; sourceTree = "<group>"; };
-		3C77D23F1BE3BD4E0029AB70 /* PgyUpdate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = PgyUpdate.framework; sourceTree = "<group>"; };
 		3C77D2421BE3BD8C0029AB70 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		3C77D2441BE3BD940029AB70 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		3C77D2461BE3BDAF0029AB70 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
@@ -220,17 +222,6 @@
 		3C77D24B1BE3D0DF0029AB70 /* libBPush.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libBPush.a; sourceTree = "<group>"; };
 		3C9038031BB8F4780089076B /* DarwinNotificationHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DarwinNotificationHelper.h; sourceTree = "<group>"; };
 		3C9038041BB8F4780089076B /* DarwinNotificationHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DarwinNotificationHelper.m; sourceTree = "<group>"; };
-		3CA224E91BAFB2080028387F /* AFSoundManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFSoundManager.h; sourceTree = "<group>"; };
-		3CA224EA1BAFB2080028387F /* AFSoundPlayback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFSoundPlayback.h; sourceTree = "<group>"; };
-		3CA224EB1BAFB2080028387F /* AFSoundPlayback.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFSoundPlayback.m; sourceTree = "<group>"; };
-		3CA224EC1BAFB2080028387F /* AFSoundItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFSoundItem.h; sourceTree = "<group>"; };
-		3CA224ED1BAFB2080028387F /* AFSoundItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFSoundItem.m; sourceTree = "<group>"; };
-		3CA224EE1BAFB2080028387F /* AFSoundQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFSoundQueue.h; sourceTree = "<group>"; };
-		3CA224EF1BAFB2080028387F /* AFSoundQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFSoundQueue.m; sourceTree = "<group>"; };
-		3CA224F01BAFB2080028387F /* AFSoundRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFSoundRecord.h; sourceTree = "<group>"; };
-		3CA224F11BAFB2080028387F /* AFSoundRecord.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFSoundRecord.m; sourceTree = "<group>"; };
-		3CA224F21BAFB2080028387F /* NSTimer+AFSoundManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSTimer+AFSoundManager.h"; sourceTree = "<group>"; };
-		3CA224F31BAFB2080028387F /* NSTimer+AFSoundManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSTimer+AFSoundManager.m"; sourceTree = "<group>"; };
 		3CA224FD1BAFDCDC0028387F /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		3CA296FD1BE1C1950073CF1A /* PCDownLoadedCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCDownLoadedCell.h; sourceTree = "<group>"; };
 		3CA296FE1BE1C1950073CF1A /* PCDownLoadedCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCDownLoadedCell.m; sourceTree = "<group>"; };
@@ -384,7 +375,6 @@
 		3CB2E4251BA7D36A00805D4F /* PCBaiduNavController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCBaiduNavController.m; sourceTree = "<group>"; };
 		3CB2E4381BA7D42200805D4F /* AMapNaviKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AMapNaviKit.framework; sourceTree = "<group>"; };
 		3CB2E4391BA7D42200805D4F /* AMapSearchKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AMapSearchKit.framework; sourceTree = "<group>"; };
-		3CB2E43A1BA7D42200805D4F /* iflyMSC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = iflyMSC.framework; sourceTree = "<group>"; };
 		3CB2E4431BA7D46C00805D4F /* FMDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabase.h; sourceTree = "<group>"; };
 		3CB2E4441BA7D46C00805D4F /* FMDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabase.m; sourceTree = "<group>"; };
 		3CB2E4451BA7D46C00805D4F /* FMDatabaseAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabaseAdditions.h; sourceTree = "<group>"; };
@@ -435,6 +425,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3C26B5721C4FD2AA0037893F /* AudioToolbox.framework in Frameworks */,
+				3C41AA401C5B1899000B9364 /* libDMCPlayback.a in Frameworks */,
 				3C77D24E1BE3D1110029AB70 /* SystemConfiguration.framework in Frameworks */,
 				3C77D24D1BE3D0F00029AB70 /* CoreTelephony.framework in Frameworks */,
 				3C5813691BE49E8B0012C689 /* libWeChatSDK.a in Frameworks */,
@@ -443,12 +435,10 @@
 				3CB2E45A1BA7D4FA00805D4F /* AddressBook.framework in Frameworks */,
 				3CB2E4581BA7D4F200805D4F /* libstdc++.6.0.9.dylib in Frameworks */,
 				3CB2E4561BA7D4E600805D4F /* libz.1.2.5.dylib in Frameworks */,
-				3C77D2401BE3BD4E0029AB70 /* PgySDk.framework in Frameworks */,
 				3CB2E4541BA7D49100805D4F /* libsqlite3.0.dylib in Frameworks */,
 				3CB2E43B1BA7D42200805D4F /* AMapNaviKit.framework in Frameworks */,
 				3CB2E43C1BA7D42200805D4F /* AMapSearchKit.framework in Frameworks */,
-				3CB2E43D1BA7D42200805D4F /* iflyMSC.framework in Frameworks */,
-				3C77D2411BE3BD4E0029AB70 /* PgyUpdate.framework in Frameworks */,
+				3C26B6861C50CA750037893F /* libWeChatSDK.a in Frameworks */,
 				3CB2E4041BA7D1CB00805D4F /* MediaPlayer.framework in Frameworks */,
 				3CB2E4021BA7D1BC00805D4F /* libxml2.2.dylib in Frameworks */,
 				3CB2E4001BA7D1B300805D4F /* AVFoundation.framework in Frameworks */,
@@ -486,24 +476,6 @@
 			name = "新手教程";
 			sourceTree = "<group>";
 		};
-		3CA224E81BAFB1FA0028387F /* AFSoundManager */ = {
-			isa = PBXGroup;
-			children = (
-				3CA224E91BAFB2080028387F /* AFSoundManager.h */,
-				3CA224EA1BAFB2080028387F /* AFSoundPlayback.h */,
-				3CA224EB1BAFB2080028387F /* AFSoundPlayback.m */,
-				3CA224EC1BAFB2080028387F /* AFSoundItem.h */,
-				3CA224ED1BAFB2080028387F /* AFSoundItem.m */,
-				3CA224EE1BAFB2080028387F /* AFSoundQueue.h */,
-				3CA224EF1BAFB2080028387F /* AFSoundQueue.m */,
-				3CA224F01BAFB2080028387F /* AFSoundRecord.h */,
-				3CA224F11BAFB2080028387F /* AFSoundRecord.m */,
-				3CA224F21BAFB2080028387F /* NSTimer+AFSoundManager.h */,
-				3CA224F31BAFB2080028387F /* NSTimer+AFSoundManager.m */,
-			);
-			name = AFSoundManager;
-			sourceTree = "<group>";
-		};
 		3CB2E2E91BA7B26800805D4F = {
 			isa = PBXGroup;
 			children = (
@@ -525,7 +497,6 @@
 		3CB2E2F41BA7B26800805D4F /* PoTunes */ = {
 			isa = PBXGroup;
 			children = (
-				3C66DA4F1BB5028C00CEA31F /* PoTunes.entitlements */,
 				3CB2E4051BA7D1D200805D4F /* 框架 */,
 				3CB2E3B21BA7CF6100805D4F /* Model */,
 				3CB2E33A1BA7CD4D00805D4F /* 三方库 */,
@@ -669,12 +640,20 @@
 		3CB2E33A1BA7CD4D00805D4F /* 三方库 */ = {
 			isa = PBXGroup;
 			children = (
+				3C41AA3C1C5B0C51000B9364 /* PoTunes.entitlements */,
+				3C41AA3F1C5B1899000B9364 /* libDMCPlayback.a */,
+				3C41A9791C591B92000B9364 /* DMCAccountTool.h */,
+				3C41A97A1C591B92000B9364 /* DMCAlbum.h */,
+				3C41A97B1C591B92000B9364 /* DMCAlbums.h */,
+				3C41AA3E1C5B1890000B9364 /* DMCPlayback.h */,
+				3C41A97C1C591B92000B9364 /* DMCArtist.h */,
+				3C41A97E1C591B92000B9364 /* DMCTrack.h */,
+				3C26B6851C50CA750037893F /* libWeChatSDK.a */,
 				3CD7353B1BEE3DD500262D69 /* FXBlurView.h */,
 				3CD7353C1BEE3DD500262D69 /* FXBlurView.m */,
 				3C9038031BB8F4780089076B /* DarwinNotificationHelper.h */,
 				3C9038041BB8F4780089076B /* DarwinNotificationHelper.m */,
 				3CD5C5C01BB3C06B00CB6F6B /* TDImageColors */,
-				3CA224E81BAFB1FA0028387F /* AFSoundManager */,
 				3CB2E4421BA7D45800805D4F /* FMDB */,
 				3CB2E3C41BA7D0A500805D4F /* FSAudioStreamer */,
 				3CB2E3931BA7CEFF00805D4F /* AFNetworking */,
@@ -913,8 +892,6 @@
 				3C77D2461BE3BDAF0029AB70 /* OpenGLES.framework */,
 				3C77D2441BE3BD940029AB70 /* SystemConfiguration.framework */,
 				3C77D2421BE3BD8C0029AB70 /* CoreTelephony.framework */,
-				3C77D23E1BE3BD4E0029AB70 /* PgySDk.framework */,
-				3C77D23F1BE3BD4E0029AB70 /* PgyUpdate.framework */,
 				3CA224FD1BAFDCDC0028387F /* CoreMedia.framework */,
 				3CB2E45B1BA7D53E00805D4F /* AMap.bundle */,
 				3CB2E45C1BA7D53E00805D4F /* AMapNavi.bundle */,
@@ -924,7 +901,6 @@
 				3CB2E4531BA7D49100805D4F /* libsqlite3.0.dylib */,
 				3CB2E4381BA7D42200805D4F /* AMapNaviKit.framework */,
 				3CB2E4391BA7D42200805D4F /* AMapSearchKit.framework */,
-				3CB2E43A1BA7D42200805D4F /* iflyMSC.framework */,
 				3CB2E4031BA7D1CB00805D4F /* MediaPlayer.framework */,
 				3CB2E4011BA7D1BC00805D4F /* libxml2.2.dylib */,
 				3CB2E3FF1BA7D1B300805D4F /* AVFoundation.framework */,
@@ -1099,6 +1075,7 @@
 				3CB2E45E1BA7D53E00805D4F /* AMapNavi.bundle in Resources */,
 				3CB2E3011BA7B26800805D4F /* Main.storyboard in Resources */,
 				3CB2E3061BA7B26800805D4F /* LaunchScreen.xib in Resources */,
+				3C41AA3D1C5B0C51000B9364 /* PoTunes.entitlements in Resources */,
 				3CB2E3B11BA7CF2200805D4F /* BebasNeue.otf in Resources */,
 				3CB2E3901BA7CEEE00805D4F /* MBProgressHUD.bundle in Resources */,
 				3C5813631BE48C050012C689 /* PCWebViewController.xib in Resources */,
@@ -1151,11 +1128,9 @@
 				3CB2E3801BA7CE4000805D4F /* SDWebImageDownloaderOperation.m in Sources */,
 				3C66DA481BB4E6B300CEA31F /* FSAudioController.m in Sources */,
 				3CA297021BE1C71E0073CF1A /* PCSongDownloadingCell.m in Sources */,
-				3CA224F71BAFB2080028387F /* AFSoundRecord.m in Sources */,
 				3C734CF11BF7469800A95D1C /* DRNRealTimeBlurView.m in Sources */,
 				3CB2E3AD1BA7CF0D00805D4F /* AFURLRequestSerialization.m in Sources */,
 				3CB2E3A91BA7CF0D00805D4F /* AFHTTPSessionManager.m in Sources */,
-				3CA224F51BAFB2080028387F /* AFSoundItem.m in Sources */,
 				3CB2E3F61BA7D13B00805D4F /* file_stream.cpp in Sources */,
 				3CB2E2FE1BA7B26800805D4F /* ViewController.m in Sources */,
 				3CB2E3871BA7CE4000805D4F /* UIImageView+HighlightedWebCache.m in Sources */,
@@ -1180,14 +1155,12 @@
 				3CB2E3341BA7CC0700805D4F /* UIImage+Reflection.m in Sources */,
 				3CD7353D1BEE3DD500262D69 /* FXBlurView.m in Sources */,
 				3C0CCAC51BB929DD00AAA5C6 /* PCSongListTableViewCell.m in Sources */,
-				3CA224F41BAFB2080028387F /* AFSoundPlayback.m in Sources */,
 				3CB2E37C1BA7CE4000805D4F /* SDImageCache.m in Sources */,
 				3CB2E3F41BA7D13B00805D4F /* caching_stream.cpp in Sources */,
 				3CB2E3F71BA7D13B00805D4F /* http_stream.cpp in Sources */,
 				3CB2E3AE1BA7CF0D00805D4F /* AFURLResponseSerialization.m in Sources */,
 				3CD22AD81BDE2A280064E7B0 /* PCDownloadingTableViewController.m in Sources */,
 				3CB2E44E1BA7D46C00805D4F /* FMDatabase.m in Sources */,
-				3CA224F61BAFB2080028387F /* AFSoundQueue.m in Sources */,
 				3C5813001BA7EFA00091E4FC /* PCNaviController.m in Sources */,
 				3CB2E4511BA7D46C00805D4F /* FMDatabaseQueue.m in Sources */,
 				3CB2E3531BA7CD7C00805D4F /* MJRefreshHeaderView.m in Sources */,
@@ -1239,7 +1212,6 @@
 				3CB45FBC1BE7B52C0011AEA4 /* DBHelper.m in Sources */,
 				3CB2E2FB1BA7B26800805D4F /* AppDelegate.m in Sources */,
 				3CB2E3291BA7CA5D00805D4F /* LDProgressView.m in Sources */,
-				3CA224F81BAFB2080028387F /* NSTimer+AFSoundManager.m in Sources */,
 				3C66DA4A1BB4E6B300CEA31F /* FSCheckContentTypeRequest.m in Sources */,
 				3CB2E3831BA7CE4000805D4F /* UIButton+WebCache.m in Sources */,
 				3CB2E2F81BA7B26800805D4F /* main.m in Sources */,
@@ -1352,7 +1324,10 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/PoTunes",
 				);
-				OTHER_LDFLAGS = "-ObjC";
+				OTHER_LDFLAGS = (
+					"$(OTHER_LDFLAGS)",
+					"-ObjC",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = fm.poche.PoTunes;
 				PRODUCT_NAME = "破音万里";
 				PROVISIONING_PROFILE = "";
@@ -1469,8 +1444,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = PoTunes/PoTunes.entitlements;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: PengCheng Zhao (2P9E2Y5942)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: PengCheng Zhao (2P9E2Y5942)";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1490,7 +1465,10 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/PoTunes",
 				);
-				OTHER_LDFLAGS = "-ObjC";
+				OTHER_LDFLAGS = (
+					"$(OTHER_LDFLAGS)",
+					"-ObjC",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = fm.poche.PoTunes;
 				PRODUCT_NAME = "破音万里";
 				PROVISIONING_PROFILE = "";
@@ -1503,8 +1481,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = PoTunes/PoTunes.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: PengCheng Zhao (7LKFCH3GR5)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: PengCheng Zhao (7LKFCH3GR5)";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1524,7 +1502,10 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/PoTunes",
 				);
-				OTHER_LDFLAGS = "-ObjC";
+				OTHER_LDFLAGS = (
+					"$(OTHER_LDFLAGS)",
+					"-ObjC",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = fm.poche.PoTunes;
 				PRODUCT_NAME = "破音万里";
 				PROVISIONING_PROFILE = "";
