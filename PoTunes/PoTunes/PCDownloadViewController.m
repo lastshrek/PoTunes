@@ -171,11 +171,13 @@
         //检查文件是否已存在并删除之
         NSString *rootPath = [self dirDoc];
         
-        NSString *author = [song.author stringByReplacingOccurrencesOfString:@" / " withString:@" "];
+        NSArray *urlComponent = [song.sourceURL componentsSeparatedByString:@"/"];
         
-        NSString *title = [song.title stringByReplacingOccurrencesOfString:@" / " withString:@" "];
+        NSInteger count = urlComponent.count;
         
-        NSString *filePath = [rootPath  stringByAppendingPathComponent:[NSString stringWithFormat:@"%@ - %@.mp3",author,title]];
+        NSString *identifier = [NSString stringWithFormat:@"%@%@%@",urlComponent[count - 3], urlComponent[count - 2], urlComponent[count - 1]];
+        
+        NSString *filePath = [rootPath  stringByAppendingPathComponent:identifier];
 
         NSFileManager *fileManager = [NSFileManager defaultManager];
         
