@@ -32,7 +32,12 @@
         
         //创表
 
-        [_downloadedSongDB executeUpdate:@"CREATE TABLE IF NOT EXISTS t_downloading (id integer PRIMARY KEY, author text, title text, sourceURL text,indexPath integer,thumb text,album text,downloaded bool);"];
+        [_downloadedSongDB executeUpdate:@"CREATE TABLE IF NOT EXISTS t_downloading (id integer PRIMARY KEY, author text, title text, sourceURL text,indexPath integer,thumb text,album text,downloaded bool, identifier text);"];
+        
+        if (![_downloadedSongDB columnExists:@"identifier" inTableWithName:@"t_downloading"]) {
+            NSString *sql = [NSString stringWithFormat:@"ALTER TABLE %@ ADD %@ text", @"t_downloading", @"identifier"];
+            [_downloadedSongDB executeUpdate:sql];
+        }
         
         _downloadedSongDB.shouldCacheStatements = YES;
         
@@ -152,6 +157,12 @@
 #pragma mark - 下载
 - (void)download:(UIGestureRecognizer *)recognizer {
     
+    NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
+    
+    NSString *online = [user objectForKey:@"online"];
+    
+    if (online == nil) return;
+    
     CGPoint position = [recognizer locationInView:self.tableView];
     
     NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:position];
@@ -159,6 +170,7 @@
     PCSong *song = self.songs[indexPath.row];
     
     song.position = [NSNumber numberWithInteger:indexPath.row];
+    
     
     NSString *author = [song.author stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
     
@@ -186,8 +198,14 @@
     
     } else {
         
-        NSString *identifier = [NSString stringWithFormat:@"%@ - %@",song.author,song.title];
-
+        
+        NSArray *urlComponent = [song.sourceURL componentsSeparatedByString:@"/"];
+        
+        NSInteger count = urlComponent.count;
+        
+        NSString *identifier = [NSString stringWithFormat:@"%@%@%@",urlComponent[count - 3], urlComponent[count - 2], urlComponent[count - 1]];
+        
+        identifier = [identifier substringToIndex:identifier.length - 4];
         
         NSNotification *download = [NSNotification notificationWithName:@"download" object:nil userInfo:
                                     @{@"indexPath":[NSNumber numberWithInteger:indexPath.row],

@@ -36,8 +36,6 @@
 @implementation PCMyMusicViewController
 
 
-
-
 - (FMDatabaseQueue *)queue {
     
     if (_queue == nil) {
@@ -49,7 +47,12 @@
         
         [helper inDatabase:^(FMDatabase *db) {
             
-            [db executeUpdate:@"CREATE TABLE IF NOT EXISTS t_downloading (id integer PRIMARY KEY, author text, title text, sourceURL text,indexPath integer,thumb text,album text,downloaded bool);"];
+            [db executeUpdate:@"CREATE TABLE IF NOT EXISTS t_downloading (id integer PRIMARY KEY, author text, title text, sourceURL text,indexPath integer,thumb text,album text,downloaded bool, identifier text);"];
+            
+            if (![db columnExists:@"identifier" inTableWithName:@"t_downloading"]) {
+                NSString *sql = [NSString stringWithFormat:@"ALTER TABLE %@ ADD %@ text", @"t_downloading", @"identifier"];
+                [db executeUpdate:sql];
+            }
             
         }];
         
@@ -101,12 +104,6 @@
     self.tableView.backgroundColor = [UIColor blackColor];
     
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    
-    //初始化已下载专辑数组
-//    self.downloadAlbums = [self setArrayWithPlistName:@"albumdownloaded.plist"];
-    
-    //去掉重复
-    
     
     
     //初始化正在下载歌曲数组
@@ -181,8 +178,6 @@
         [self beginDownloadWithIdentifier:identifier URL:song.sourceURL];
 
     }
-
-//    [self beginDownloadLyricWithIdentifier:identifier URL:song.lrc];
     //写入正在下载歌曲plist
     [self writeToDownloadingPlist:self.downloadingArray WithName:@"downloading.plist"];
 
@@ -193,7 +188,7 @@
     
     NSString *album = [sender.userInfo[@"title"] stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
     
-    NSString *sql = [NSString stringWithFormat: @"INSERT INTO t_downloading(author,title,sourceURL,indexPath,thumb,album,downloaded) VALUES('%@','%@','%@','%ld','%@','%@','0');",artist,songName,song.sourceURL,[indexPath integerValue],song.thumb,album];
+    NSString *sql = [NSString stringWithFormat: @"INSERT INTO t_downloading(author,title,sourceURL,indexPath,thumb,album,downloaded,identifier) VALUES('%@','%@','%@','%ld','%@','%@','0', '%@');",artist,songName,song.sourceURL,[indexPath integerValue],song.thumb,album,identifier];
     
     [self.queue inDatabase:^(FMDatabase *db) {
         
@@ -248,7 +243,11 @@
     
     for (PCSong *song in songArray) {
         
-        NSString *identifier = [NSString stringWithFormat:@"%@ - %@",song.author, song.title];
+        NSArray *urlComponent = [song.sourceURL componentsSeparatedByString:@"/"];
+        
+        NSInteger count = urlComponent.count;
+        
+        NSString *identifier = [NSString stringWithFormat:@"%@%@%@",urlComponent[count - 3], urlComponent[count - 2], urlComponent[count - 1]];
         
         if ([self.downloadingArray indexOfObject:identifier] == NSNotFound) {
             
@@ -271,9 +270,7 @@
         
         NSString *album = [sender.userInfo[@"title"] stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
         
-
-        
-        NSString *sql = [NSString stringWithFormat: @"INSERT INTO t_downloading(author,title,sourceURL,indexPath,thumb,album,downloaded) VALUES('%@','%@','%@','%ld','%@','%@','0');",artist,songName,song.sourceURL,[song.position integerValue],song.thumb,album];
+        NSString *sql = [NSString stringWithFormat: @"INSERT INTO t_downloading(author,title,sourceURL,indexPath,thumb,album,downloaded,identifier) VALUES('%@','%@','%@','%ld','%@','%@','0', '%@');",artist,songName,song.sourceURL,[song.position integerValue],song.thumb,album,identifier];
         
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -284,24 +281,20 @@
                 
             }];
         });
-        
-//        [self beginDownloadLyricWithIdentifier:identifier URL:song.lrc];
     }
 }
 /** 下载歌曲 */
-- (void)beginDownloadWithIdentifier:(NSString *)identifier URL:(NSString *)URLString{
+- (void)beginDownloadWithIdentifier:(NSString *)identifier URL:(NSString *)urlString {
     
     NSString *rootPath = [self dirDoc];
     
     //保存路径
-    NSString *filePath = [rootPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.mp3", identifier]];
-    
-    filePath = [filePath stringByReplacingOccurrencesOfString:@" / " withString:@" "];
+    NSString *filePath = [rootPath stringByAppendingPathComponent:identifier];
     
     //初始化队列
     NSOperationQueue *queue = [[NSOperationQueue alloc] init];
     
-    NSURL *URL = [NSURL URLWithString:URLString];
+    NSURL *URL = [NSURL URLWithString:urlString];
     
     NSURLRequest *request = [NSURLRequest requestWithURL:URL];
     
@@ -310,7 +303,6 @@
     self.op = op;
     
     op.outputStream = [NSOutputStream outputStreamToFileAtPath:filePath append:NO];
-    
     
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
     
@@ -333,6 +325,7 @@
         int progress = downloadProgress * 100;
         
         if (progress % 10 == 0) {
+            
             NSNotification *percent = [NSNotification notificationWithName:@"percent"
                                                                     object:nil
                                                                   userInfo:@{@"percent":@(downloadProgress),@"index":dict[@"index"]}];
@@ -345,11 +338,10 @@
     [op setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
         
         //改变歌曲下载状态
-        NSArray *separatedArray = [identifier componentsSeparatedByString:@" - "];
         
         [self.helper.queue inTransaction:^(FMDatabase *db, BOOL *rollback) {
             
-            [db executeUpdate:@"UPDATE t_downloading SET downloaded = 1 WHERE author = ? and title = ?",separatedArray[0], separatedArray[1]];
+            [db executeUpdate:@"UPDATE t_downloading SET downloaded = 1 WHERE identifier = ?;", identifier];
             
         }];
 
@@ -382,14 +374,7 @@
                 
             }
             
-            
-            NSArray *separatedArray = [identifier componentsSeparatedByString:@" - "];
-            
-            NSString *author = [separatedArray[0] stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
-            
-            NSString *title = [separatedArray[1] stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
-            
-            NSString *query = [NSString stringWithFormat:@"SELECT * FROM t_downloading WHERE author = '%@' and title = '%@';", author, title];
+            NSString *query = [NSString stringWithFormat:@"SELECT * FROM t_downloading WHERE identifier = '%@';", identifier];
             
             [self.queue inDatabase:^(FMDatabase *db) {
                 
@@ -508,7 +493,7 @@
        
         cell.imageView.image = [UIImage imageNamed:@"noArtwork.jpg"];
         
-        cell.textLabel.text = @"正在下载";
+        cell.textLabel.text = @"正在缓存";
         
     } else {
         
@@ -655,13 +640,7 @@
         
         NSString *identifier = self.downloadingArray[0];
         
-        NSArray *separatedArray = [identifier componentsSeparatedByString:@" - "];
-        
-        NSString *author = [separatedArray[0] stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
-        
-        NSString *title = [separatedArray[1] stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
-        
-        NSString *query = [NSString stringWithFormat:@"SELECT * FROM t_downloading WHERE author = '%@' and title = '%@';", author, title];
+        NSString *query = [NSString stringWithFormat:@"SELECT * FROM t_downloading WHERE identifier = '%@';", identifier];
         
         [self.queue inDatabase:^(FMDatabase *db) {
             
@@ -711,11 +690,9 @@
         
         while (s.next) {
             
-            NSString *identifier = [NSString stringWithFormat:@"%@ - %@",[s stringForColumn:@"author"], [s stringForColumn:@"title"]];
+            NSString *identifier = [NSString stringWithFormat:@"%@",[s stringForColumn:@"identifier"]];
             
             NSString *filePath = [rootPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.mp3", identifier]];
-            
-            filePath = [filePath stringByReplacingOccurrencesOfString:@" / " withString:@" "];
             
             [fileManager removeItemAtPath:filePath error:nil];
             

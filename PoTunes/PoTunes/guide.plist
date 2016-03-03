@@ -9,9 +9,10 @@
 			<string>上一首：播放器界面从左向右滑动</string>
 			<string>下一首：播放器界面从右向左滑动</string>
 			<string>快进/快退：按住屏幕右、左滑动</string>
-			<string>单曲下载：在歌曲列表每行左向右滑动</string>
-			<string>专辑下载：在文章列表每行左向右滑动</string>
+			<string>单曲缓存：在歌曲列表每行左向右滑动</string>
+			<string>专辑缓存：在文章列表每行左向右滑动</string>
 			<string>返回上级：点击上方tab/从屏幕左侧边缘向右滑动</string>
+			<string>歌词：双击专辑封面区域</string>
 			<string>微信分享：长按歌曲列表歌曲</string>
 		</array>
 		<key>title</key>

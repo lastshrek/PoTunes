@@ -115,9 +115,13 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
         [_downloadedSongDB open];
         
         //创表
+
+        [_downloadedSongDB executeUpdate:@"CREATE TABLE IF NOT EXISTS t_downloading (id integer PRIMARY KEY, author text, title text, sourceURL text,indexPath integer,thumb text,album text,downloaded bool, identifier text);"];
         
-        
-        [_downloadedSongDB executeUpdate:@"CREATE TABLE IF NOT EXISTS t_downloading (id integer PRIMARY KEY, author text, title text, sourceURL text,indexPath integer,thumb text,album text,downloaded bool);"];
+        if (![_downloadedSongDB columnExists:@"identifier" inTableWithName:@"t_downloading"]) {
+            NSString *sql = [NSString stringWithFormat:@"ALTER TABLE %@ ADD %@ text", @"t_downloading", @"identifier"];
+            [_downloadedSongDB executeUpdate:sql];
+        }
         
         _downloadedSongDB.shouldCacheStatements = YES;
         
@@ -142,8 +146,20 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     /** 添加播放器界面 */
     [self setupPlayerInterface];
     
+    NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
+    
+    NSString *online = [user objectForKey:@"online"];
+    
+    if (online == nil) {
+        [self setupTabBarWithCount:3];
+    }
+    
+    if ([online isEqualToString:@"online"]) {
+        [self setupTabBarWithCount:4];
+
+    }
+    
     /** 添加TabBar */
-    [self setupTabBar];
     
     /** 注册通知 */
     [self getNotification];
@@ -153,12 +169,15 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     
     //获取上次播放曲目
     [self getLastPlaySongAndPlayState];
-//    NSLog(@"%@",[self dirDoc]);
+    
+    NSLog(@"%@",[self dirDoc]);
+    
     self.paused = YES;
     
     DMCPlayback *player = [[DMCPlayback alloc] init];
     
     self.player = player;
+    
 }
 #pragma mark - 获取文件主路径
 - (NSString *)dirDoc{
@@ -360,15 +379,16 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     
 }
 #pragma mark - 添加TabBar界面
-- (void)setupTabBar {
-    
+- (void)setupTabBarWithCount:(int)count {
     self.controllers = [NSMutableArray array];
     //每月文章列表页
     PCArticleViewController *article = [[PCArticleViewController alloc] init];
     [self setupSingleViewControllerToScrollView:article hidden:NO];
     //已下载歌曲页面
-    PCMyMusicViewController *myMusic  =[[PCMyMusicViewController alloc] init];
-    [self setupSingleViewControllerToScrollView:myMusic hidden:YES];
+    if (count == 4) {
+        PCMyMusicViewController *myMusic  =[[PCMyMusicViewController alloc] init];
+        [self setupSingleViewControllerToScrollView:myMusic hidden:YES];
+    }
     //导航页面
     PCNaviController *navi = [[PCNaviController alloc] init];
     [self setupSingleViewControllerToScrollView:navi hidden:YES];
@@ -376,24 +396,10 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     PCSettingViewController *setting = [[PCSettingViewController alloc] init];
     [self setupSingleViewControllerToScrollView:setting hidden:YES];
     /** 添加Button */
-    for (int i = 0; i < 4; i++) {
-        PCButton *button;
-        switch (i) {
-            case 0:
-                button = [[PCButton alloc] initWithFrame:CGRectMake(i * self.width / 4, self.height, self.width / 4, 64) image:@"songsButton"];
-                [self buttonClick:button];
-                break;
-            case 1:
-                button = [[PCButton alloc] initWithFrame:CGRectMake(i * self.width / 4, self.height, self.width / 4, 64) image:@"albumsButton"];
-                break;
-            case 2:
-                button = [[PCButton alloc] initWithFrame:CGRectMake(i * self.width / 4, self.height, self.width / 4, 64) image:@"artistsButtonInverted"];
-                break;
-            case 3:
-                button = [[PCButton alloc] initWithFrame:CGRectMake(i * self.width / 4, self.height, self.width / 4, 64) image:@"podcastsButton"];
-                break;
-            default:
-                break;
+    for (int i = 0; i < count; i++) {
+        PCButton *button = [[PCButton alloc] initWithFrame:CGRectMake(i * self.width / count, self.height, self.width / count, 64) image:[NSString stringWithFormat:@"%d", i + 1]];
+        if (i == 0) {
+            [self buttonClick:button];
         }
         button.tag = i;
         [button addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
@@ -401,10 +407,10 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
         [swipeFromTop setDirection:UISwipeGestureRecognizerDirectionDown];
         swipeFromTop.numberOfTouchesRequired = 1;
         [button addGestureRecognizer:swipeFromTop];
-        
         [self.scrollView addSubview:button];
     }
 }
+
 - (void)setupSingleViewControllerToScrollView:(UIViewController *)controller hidden:(BOOL)hidden {
     
     PCNavigationController *nav = [[PCNavigationController alloc] initWithRootViewController:controller];
@@ -510,6 +516,8 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     [center addObserver:self selector:@selector(speaking) name:@"speaking" object:nil];
     
     [center addObserver:self selector:@selector(nonspeaking) name:@"nonspeaking" object:nil];
+    
+    [center addObserver:self selector:@selector(setupFullTabBar) name:@"finishLoading" object:nil];
 }
 - (void)didSelectedSong:(NSNotification *)sender {
     //滚到上层
@@ -545,6 +553,9 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     self.audioController.volume = 1;
     
 }
+- (void)setupFullTabBar {
+    [self setupTabBarWithCount:4];
+}
 - (void)dealloc {
     
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"selected" object:nil];
@@ -552,6 +563,9 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"speaking" object:nil];
     
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"nonspeaking" object:nil];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"finishLoading" object:nil];
+
 }
 #pragma mark - 播放相关
 /** 开始播放 */

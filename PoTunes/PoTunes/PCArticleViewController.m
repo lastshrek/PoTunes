@@ -44,7 +44,12 @@
         //创表
         
         
-        [_downloadedSongDB executeUpdate:@"CREATE TABLE IF NOT EXISTS t_downloading (id integer PRIMARY KEY, author text, title text, sourceURL text,indexPath integer,thumb text,album text,downloaded bool);"];
+        [_downloadedSongDB executeUpdate:@"CREATE TABLE IF NOT EXISTS t_downloading (id integer PRIMARY KEY, author text, title text, sourceURL text,indexPath integer,thumb text,album text,downloaded bool, identifier text);"];
+        
+        if (![_downloadedSongDB columnExists:@"identifier" inTableWithName:@"t_downloading"]) {
+            NSString *sql = [NSString stringWithFormat:@"ALTER TABLE %@ ADD %@ text", @"t_downloading", @"identifier"];
+            [_downloadedSongDB executeUpdate:sql];
+        }
         
         _downloadedSongDB.shouldCacheStatements = YES;
         
@@ -156,6 +161,17 @@
         
         NSMutableArray *result = (NSMutableArray *)responseObject;
         
+        if (result.count > 3) {
+            //发送通知重设tabBar个数
+            NSNotification *finishLoading = [NSNotification notificationWithName:@"finishLoading" object:nil userInfo:nil];
+            
+            [[NSNotificationCenter defaultCenter] postNotification:finishLoading];
+            
+            NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
+            
+            [user setObject:@"online" forKey:@"online"];
+        }
+        
         self.articles = result;
         
         NSString *doc = [self dirDoc];
@@ -206,7 +222,13 @@
     
     NSURL *downloadURL = [NSURL URLWithString:imageURL];
     
-    [cell.imageView sd_setImageWithURL:downloadURL placeholderImage:[UIImage imageNamed:@"defaultCover"]];
+    if (self.articles.count == 3) {
+        cell.imageView.image = [UIImage imageNamed:@"defaultArtCover"];
+    }
+    if (self.articles.count != 3) {
+        [cell.imageView sd_setImageWithURL:downloadURL placeholderImage:[UIImage imageNamed:@"defaultArtCover"]];
+    }
+    
     
     //添加下载手势
     UISwipeGestureRecognizer *downloadSwipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(download:)];
@@ -260,6 +282,8 @@
         
         detail.songs = tempArray;
         
+        detail.title = [self.articles[indexPath.row] objectForKey:@"title"];
+        
         [self.navigationController pushViewController:detail animated:YES];
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -274,6 +298,12 @@
 
 #pragma mark - 下载
 - (void)download:(UIGestureRecognizer *)recognizer {
+    
+    NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
+    
+    NSString *online = [user objectForKey:@"online"];
+    
+    if (online == nil) return;
     
     CGPoint position = [recognizer locationInView:self.tableView];
     
