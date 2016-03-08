@@ -22,12 +22,10 @@
 
 @interface PCDownloadingTableViewController : UIViewController
 
-@property (nonatomic, strong) NSMutableArray *downloadingArray;
-
 @property (nonatomic, weak) id<PCDownloadingTableViewControllerDelegate> delegate;
 
 @property (nonatomic, assign) BOOL paused;
 
-
+@property (nonatomic, strong) NSMutableArray *downloadingArray;
 
 @end

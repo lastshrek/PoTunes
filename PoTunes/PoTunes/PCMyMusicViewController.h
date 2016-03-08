@@ -8,6 +8,18 @@
 
 #import <UIKit/UIKit.h>
 
+@class PCMyMusicViewController;
+
+@protocol PCMyMusicViewControllerdelegate <NSObject>
+
+@optional
+
+- (void)PCMyMusicViewController:(PCMyMusicViewController *)controller isDownloadingMusic:(int)progress;
+
+@end
+
 @interface PCMyMusicViewController : UITableViewController
+
+@property (nonatomic, weak) id<PCMyMusicViewControllerdelegate> delegate;
 
 @end

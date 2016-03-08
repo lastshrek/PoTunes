@@ -223,10 +223,14 @@
     NSURL *downloadURL = [NSURL URLWithString:imageURL];
     
     if (self.articles.count == 3) {
+       
         cell.imageView.image = [UIImage imageNamed:@"defaultArtCover"];
+    
     }
     if (self.articles.count != 3) {
+    
         [cell.imageView sd_setImageWithURL:downloadURL placeholderImage:[UIImage imageNamed:@"defaultArtCover"]];
+    
     }
     
     

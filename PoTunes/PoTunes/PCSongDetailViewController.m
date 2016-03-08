@@ -44,7 +44,6 @@
     }
     
     return _downloadedSongDB;
-    
 }
 
 - (void)viewDidLoad {
@@ -171,7 +170,6 @@
     
     song.position = [NSNumber numberWithInteger:indexPath.row];
     
-    
     NSString *author = [song.author stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
     
     NSString *title = [song.title stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
@@ -204,9 +202,7 @@
         NSInteger count = urlComponent.count;
         
         NSString *identifier = [NSString stringWithFormat:@"%@%@%@",urlComponent[count - 3], urlComponent[count - 2], urlComponent[count - 1]];
-        
-        identifier = [identifier substringToIndex:identifier.length - 4];
-        
+                
         NSNotification *download = [NSNotification notificationWithName:@"download" object:nil userInfo:
                                     @{@"indexPath":[NSNumber numberWithInteger:indexPath.row],
                                       @"songs":self.songs,

@@ -145,9 +145,7 @@
 
 /** 删除 */
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    
     return YES;
-    
 }
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     
@@ -167,7 +165,6 @@
         
         [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath, nil] withRowAnimation:UITableViewRowAnimationTop];
         
-        //删除本地数据
         //检查文件是否已存在并删除之
         NSString *rootPath = [self dirDoc];
         

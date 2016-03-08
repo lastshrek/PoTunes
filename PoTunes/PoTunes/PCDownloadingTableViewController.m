@@ -11,11 +11,21 @@
 #import "Common.h"
 #import "PCButton.h"
 #import "MBProgressHUD+MJ.h"
-@interface PCDownloadingTableViewController ()<UITableViewDataSource,UITableViewDelegate>
+#import "FMDB.h"
+#import "PCMyMusicViewController.h"
+#import "DBHelper.h"
+#import "AFNetworking.h"
+#import "PCDownloadManager.h"
+#import "PCSong.h"
+
+@interface PCDownloadingTableViewController ()<UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic, weak) UITableView *tableView;
 
 @property (nonatomic, weak) UIButton *startBtn;
+
+@property (nonatomic, assign) NSInteger index;
+
 
 @end
 
@@ -28,7 +38,6 @@
     [self initSubviews];
     //接收通知
     [self getNotification];
-
 }
 
 - (void)initSubviews {
@@ -123,13 +132,7 @@
     }
     
     [self.downloadingArray removeAllObjects];
-    
-    NSString *doc = [self dirDoc];
-    
-    NSString *path = [doc stringByAppendingPathComponent:@"downloading.plist"];
-    
-    [self.downloadingArray writeToFile:path atomically:YES];
-    
+        
     [self.tableView reloadData];
     
     if (self.downloadingArray.count == 0) {
@@ -150,12 +153,13 @@
     [center addObserver:self selector:@selector(pop) name:@"pop" object:nil];
     
     [center addObserver:self selector:@selector(downloadComplete:) name:@"downloadComplete" object:nil];
-
 }
 
 - (void)percentChange:(NSNotification *)notification {
     
     NSInteger index = [notification.userInfo[@"index"] integerValue];
+    
+    self.index = index;
     
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
     
@@ -170,49 +174,29 @@
     [self.navigationController popToRootViewControllerAnimated:YES];
     
 }
-
+#warning 修改
 - (void)downloadComplete:(NSNotification *)notification {
     
-    NSString *doc = [self dirDoc];
-    
-    NSString *path = [doc stringByAppendingPathComponent:@"downloading.plist"];
-    
-    NSArray *dictArray= [NSArray arrayWithContentsOfFile:path];
-    
-    NSMutableArray *thisArray = [NSMutableArray array];
-    
-    if (dictArray == nil) {
-        
-        self.downloadingArray = thisArray;
-        
-    } else {
-        
-        NSMutableArray *contentArray = [NSMutableArray array];
-        
-        for (NSString *identifier in dictArray) {
-            
-            [contentArray addObject:identifier];
-            
-        }
-        
-        self.downloadingArray = contentArray;
-    }
+    [self.downloadingArray removeObjectAtIndex:self.index];
     
     dispatch_async(dispatch_get_main_queue(), ^{
         
         [self.tableView reloadData];
+        
+        if (self.downloadingArray.count == 0) {
+            
+            [self.startBtn setTitle:@"全部开始" forState:UIControlStateNormal];
+            
+            [self pop];
+            
+        }
 
     });
     
-    if (self.downloadingArray.count == 0) {
-        
-        [self.startBtn setTitle:@"全部开始" forState:UIControlStateNormal];
-        
-        [self pop];
-        
-    }
+
 
 }
+
 
 - (void)dealloc {
     
@@ -221,7 +205,6 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"pop" object:nil];
     
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"downloadComplete" object:nil];
-    
 }
 
 #pragma mark - 获取文件主路径
@@ -263,7 +246,6 @@
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
     
 }
-
 
 
 @end
