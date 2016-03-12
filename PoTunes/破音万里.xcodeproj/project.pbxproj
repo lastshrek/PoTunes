@@ -229,7 +229,7 @@
 		3CA297011BE1C71E0073CF1A /* PCSongDownloadingCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCSongDownloadingCell.m; sourceTree = "<group>"; };
 		3CA297101BE1EBB50073CF1A /* PCSettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCSettingViewController.h; sourceTree = "<group>"; };
 		3CA297111BE1EBB50073CF1A /* PCSettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCSettingViewController.m; sourceTree = "<group>"; };
-		3CB2E2F21BA7B26800805D4F /* 破音万里.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "破音万里.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		3CB2E2F21BA7B26800805D4F /* PoTunes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PoTunes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3CB2E2F61BA7B26800805D4F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3CB2E2F71BA7B26800805D4F /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		3CB2E2F91BA7B26800805D4F /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -488,7 +488,7 @@
 		3CB2E2F31BA7B26800805D4F /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				3CB2E2F21BA7B26800805D4F /* 破音万里.app */,
+				3CB2E2F21BA7B26800805D4F /* PoTunes.app */,
 				3CB2E30B1BA7B26800805D4F /* 破音万里.xctest */,
 			);
 			name = Products;
@@ -998,7 +998,7 @@
 			);
 			name = "破音万里";
 			productName = PoTunes;
-			productReference = 3CB2E2F21BA7B26800805D4F /* 破音万里.app */;
+			productReference = 3CB2E2F21BA7B26800805D4F /* PoTunes.app */;
 			productType = "com.apple.product-type.application";
 		};
 		3CB2E30A1BA7B26800805D4F /* 破音万里Tests */ = {
@@ -1303,8 +1303,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = PoTunes/PoTunes.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: PengCheng Zhao (7LKFCH3GR5)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: PengCheng Zhao (7LKFCH3GR5)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1329,7 +1329,7 @@
 					"-ObjC",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = fm.poche.PoTunes;
-				PRODUCT_NAME = "破音万里";
+				PRODUCT_NAME = PoTunes;
 				PROVISIONING_PROFILE = "";
 			};
 			name = "ad hoc distribution";
@@ -1444,8 +1444,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = PoTunes/PoTunes.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer: PengCheng Zhao (2P9E2Y5942)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: PengCheng Zhao (2P9E2Y5942)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1470,7 +1470,7 @@
 					"-ObjC",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = fm.poche.PoTunes;
-				PRODUCT_NAME = "破音万里";
+				PRODUCT_NAME = PoTunes;
 				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
@@ -1481,8 +1481,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = PoTunes/PoTunes.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: PengCheng Zhao (7LKFCH3GR5)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: PengCheng Zhao (7LKFCH3GR5)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1507,7 +1507,7 @@
 					"-ObjC",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = fm.poche.PoTunes;
-				PRODUCT_NAME = "破音万里";
+				PRODUCT_NAME = PoTunes;
 				PROVISIONING_PROFILE = "";
 			};
 			name = Release;

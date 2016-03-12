@@ -37,7 +37,7 @@ static const CGFloat kDRNRealTimeBlurViewDefaultCornerRadius = 0;
 
 //the view is rendered every kDRNRealTimeBlurViewRenderPeriod seconds
 //tweak this value to have a smoother or a more perfomant rendering
-static const CGFloat kDRNRealTimeBlurViewRenderFps = 5.f;
+static const CGFloat kDRNRealTimeBlurViewRenderFps = 0;
 
 //the alpha component of the tint color
 static const CGFloat kDNRRealTimeBlurTintColorAlpha = 0.1f;

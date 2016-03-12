@@ -32,6 +32,7 @@
 #import "AFNetworking.h"
 #import "DMCPlayback.h"
 #import <MediaPlayer/MediaPlayer.h>
+#import <AVFoundation/AVFoundation.h>
 
 /** 播放模式 */
 typedef NS_ENUM(NSUInteger, PCAudioRepeatMode) {
@@ -103,6 +104,7 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 @end
 
 @implementation ViewController
+
 - (FMDatabase *)downloadedSongDB {
     
     if (_downloadedSongDB == nil) {
@@ -158,8 +160,7 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
         [self setupTabBarWithCount:4];
 
     }
-    
-    /** 添加TabBar */
+
     
     /** 注册通知 */
     [self getNotification];
@@ -177,7 +178,7 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     DMCPlayback *player = [[DMCPlayback alloc] init];
     
     self.player = player;
-    
+
 }
 #pragma mark - 获取文件主路径
 - (NSString *)dirDoc{
@@ -518,6 +519,9 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     [center addObserver:self selector:@selector(nonspeaking) name:@"nonspeaking" object:nil];
     
     [center addObserver:self selector:@selector(setupFullTabBar) name:@"finishLoading" object:nil];
+    
+    [center addObserver:self selector:@selector(audioSessionDidChangeInterruptionType:)
+                                                 name:AVAudioSessionRouteChangeNotification object:[AVAudioSession sharedInstance]];
 }
 - (void)didSelectedSong:(NSNotification *)sender {
     //滚到上层
@@ -556,6 +560,18 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 - (void)setupFullTabBar {
     [self setupTabBarWithCount:4];
 }
+- (void)audioSessionDidChangeInterruptionType:(NSNotification *)notification {
+    NSInteger interruptReason = [[notification.userInfo objectForKey:@"AVAudioSessionRouteChangeReasonKey"] integerValue];
+    if (interruptReason == 2) {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                [self.audioController pause];
+            });
+        });
+    }
+    
+}
+
 - (void)dealloc {
     
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"selected" object:nil];
@@ -565,6 +581,8 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"nonspeaking" object:nil];
     
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"finishLoading" object:nil];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:AVAudioSessionRouteChangeNotification object:nil];
 
 }
 #pragma mark - 播放相关
@@ -892,6 +910,7 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 #warning bugfix
     //当识别不出这是双击时才开启单击识别
     [singleTap requireGestureRecognizerToFail:doubleTouch];
+    [singleTap requireGestureRecognizerToFail:doubleTap];
 }
 /** 播放或者暂停 */
 - (void)playOrPause {
@@ -1069,8 +1088,6 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 }
 /** 随机 */
 - (void)playShuffle:(UISwipeGestureRecognizer *)gestureRecognizer {
-    
-    self.audioController = nil;
     
     [DMCPlayback stop];
     
@@ -1278,7 +1295,6 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
             [weakSelf playNext:weakSelf.audioRepeatMode];
         
         }
-        
     };
 }
 - (void)updatePlayBackProgress {

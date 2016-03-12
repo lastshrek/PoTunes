@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "3CB2E2F11BA7B26800805D4F"
-               BuildableName = "&#x7834;&#x97f3;&#x4e07;&#x91cc;.app"
+               BuildableName = "PoTunes.app"
                BlueprintName = "&#x7834;&#x97f3;&#x4e07;&#x91cc;"
                ReferencedContainer = "container:&#x7834;&#x97f3;&#x4e07;&#x91cc;.xcodeproj">
             </BuildableReference>
@@ -57,7 +57,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "3CB2E2F11BA7B26800805D4F"
-            BuildableName = "&#x7834;&#x97f3;&#x4e07;&#x91cc;.app"
+            BuildableName = "PoTunes.app"
             BlueprintName = "&#x7834;&#x97f3;&#x4e07;&#x91cc;"
             ReferencedContainer = "container:&#x7834;&#x97f3;&#x4e07;&#x91cc;.xcodeproj">
          </BuildableReference>
@@ -80,7 +80,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "3CB2E2F11BA7B26800805D4F"
-            BuildableName = "&#x7834;&#x97f3;&#x4e07;&#x91cc;.app"
+            BuildableName = "PoTunes.app"
             BlueprintName = "&#x7834;&#x97f3;&#x4e07;&#x91cc;"
             ReferencedContainer = "container:&#x7834;&#x97f3;&#x4e07;&#x91cc;.xcodeproj">
          </BuildableReference>
@@ -99,7 +99,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "3CB2E2F11BA7B26800805D4F"
-            BuildableName = "&#x7834;&#x97f3;&#x4e07;&#x91cc;.app"
+            BuildableName = "PoTunes.app"
             BlueprintName = "&#x7834;&#x97f3;&#x4e07;&#x91cc;"
             ReferencedContainer = "container:&#x7834;&#x97f3;&#x4e07;&#x91cc;.xcodeproj">
          </BuildableReference>

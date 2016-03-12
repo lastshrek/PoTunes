@@ -18,6 +18,7 @@
     /** 1.设置导航栏样式 */
     UINavigationBar * navBar = [UINavigationBar appearance];
     navBar.hidden = YES;
+    [[UINavigationBar appearance] setTranslucent:YES];
 }
 
 - (void)viewDidLoad {
