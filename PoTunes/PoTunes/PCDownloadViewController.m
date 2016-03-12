@@ -302,7 +302,7 @@
         
         UIView *coverView = [[UIView alloc] init];
         
-        coverView.frame = self.view.bounds;
+        coverView.frame = self.tableView.bounds;
         
         coverView.backgroundColor = [UIColor blackColor];
         
@@ -310,9 +310,12 @@
         
         self.coverView = coverView;
         
-        [self.tableView.superview addSubview:coverView];
+        [self.view addSubview:coverView];
+        
+        self.tableView.scrollEnabled = NO;
         
         //添加手势
+        
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissCoverView:)];
         
         [self.coverView addGestureRecognizer:tap];
@@ -346,8 +349,7 @@
         
         PCSong *song = self.songs[indexPath.row];
         
-        self.sharedSong = song;
-    }
+        self.sharedSong = song;    }
     
 }
 - (void)dismissCoverView:(UIGestureRecognizer *)recognizer {
@@ -355,6 +357,8 @@
     [self.coverView removeFromSuperview];
     
     [self.shareTable removeFromSuperview];
+    
+    self.tableView.scrollEnabled = YES;
     
 }
 
