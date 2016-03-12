@@ -889,9 +889,9 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     doubleTap.numberOfTapsRequired = 2;
     doubleTap.numberOfTouchesRequired = 1;
     [self.backgroundView addGestureRecognizer:doubleTap];
-    
+#warning bugfix
     //当识别不出这是双击时才开启单击识别
-    [singleTap requireGestureRecognizerToFail:doubleTap];
+    [singleTap requireGestureRecognizerToFail:doubleTouch];
 }
 /** 播放或者暂停 */
 - (void)playOrPause {
@@ -1101,8 +1101,6 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 /** 单曲循环 */
 - (void)playSingle {
     
-    self.audioController = nil;
-
     [DMCPlayback stop];
     
     if (self.audioRepeatMode == PCAudioRepeatModeSingle) {
