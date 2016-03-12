@@ -26,7 +26,7 @@
     
     UIView *footerView = [[UIView alloc] init];
     footerView.backgroundColor = [UIColor blackColor];
-    footerView.frame = CGRectMake(0, 0, 300, self.view.bounds.size.height - 88);
+    footerView.frame = CGRectMake(0, 0, 300, self.view.bounds.size.height - 176);
     self.tableView.tableFooterView = footerView;
 
     UIButton *clearCacheBtn = [[UIButton alloc] init];

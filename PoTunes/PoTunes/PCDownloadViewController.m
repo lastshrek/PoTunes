@@ -234,7 +234,8 @@
         
         NSNotification *select = [NSNotification notificationWithName:@"selected" object:nil userInfo:
                                   @{@"indexPath":[NSNumber numberWithInteger:indexPath.row],
-                                    @"songs":self.songs}];
+                                    @"songs":self.songs,
+                                    @"type":@"local"}];
         
         [[NSNotificationCenter defaultCenter] postNotification:select];
         
