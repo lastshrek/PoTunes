@@ -7,7 +7,7 @@
 //
 
 #import "PCSettingViewController.h"
-#import "PCDownLoadedCell.h"
+#import "PCSongDownloadingCell.h"
 #import "Common.h"
 #import "MBProgressHUD+MJ.h"
 #import "PCWebViewController.h"
@@ -42,6 +42,7 @@
     
     [self getNotification];
     
+    [self checkUserDefaults];
 }
 
 - (void)clearCaches {
@@ -63,12 +64,33 @@
     [MBProgressHUD showSuccess:@"缓存清理成功"];
 }
 
+- (void)checkUserDefaults {
+    
+    NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
+    
+    NSString *yes = [user objectForKey:@"wwanPlay"];
+    
+    if (yes == nil) {
+        [self storeDefaultPlayandDownloadRules];
+    }
+}
+
+- (void)storeDefaultPlayandDownloadRules {
+    
+    [self storeObject:[NSNumber numberWithInt:0] forKey:@"wwanPlay"];
+    
+    [self storeObject:[NSNumber numberWithInt:0] forKey:@"wwanDownload"];
+
+}
+
 #pragma mark - 获取通知
 - (void)getNotification {
     
     NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
     
     [center addObserver:self selector:@selector(pop) name:@"pop" object:nil];
+    
+    [center addObserver:self selector:@selector(switchOn) name:@"wwanPlay" object:nil];
     
 }
 
@@ -77,11 +99,23 @@
     [self.navigationController popToRootViewControllerAnimated:YES];
     
 }
+
+- (void)switchOn {
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        [self.tableView reloadData];
+
+    });
+
+}
 #pragma mark - 移除通知
 - (void)dealloc {
     
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"pop" object:nil];
     
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"wwanPlay" object:nil];
+
 }
 
 - (NSString *)dirDoc{
@@ -95,36 +129,104 @@
 #pragma mark - Table view data source
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 1;
+    return 3;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    PCDownLoadedCell *cell = [PCDownLoadedCell cellWithTableView:tableView];
-    cell.imageView.image = [UIImage imageNamed:@"cm2_discover_cover_norecmt"];
-
-    cell.textLabel.text = @"废人操作说明书";
-
-    UIButton *button = [[UIButton alloc] initWithFrame:cell.accessoryView.frame];
+    PCSongDownloadingCell *cell = [PCSongDownloadingCell cellWithTableView:tableView];
     
-    [button setImage:[UIImage imageNamed:@"cm2_search_icn_arr_prs"] forState:UIControlStateNormal];
+    if (indexPath.row == 0) {
+        
+        cell.textLabel.text = @"废人操作说明书";
+        
+        UIButton *button = [[UIButton alloc] initWithFrame:cell.accessoryView.frame];
+        
+        [button setImage:[UIImage imageNamed:@"cm2_search_icn_arr_prs"] forState:UIControlStateNormal];
+        
+        cell.accessoryView = button;
+    }
     
-    cell.accessoryView = button;
+    NSArray *array = @[@"使用2G/3G/4G网络播放", @"使用2G/3G/4G网络缓存", @"wwanPlay", @"wwanDownload"];
+    
+    if (indexPath.row != 0) {
+        
+        cell.textLabel.text = array[indexPath.row - 1];
+        
+        UISwitch *switchView = [[UISwitch alloc] initWithFrame:cell.accessoryView.frame];
+        
+        switchView.tintColor = PCColor(207, 22, 232, 1.0);
+        
+        switchView.onTintColor = PCColor(207, 22, 232, 1.0);
+        
+        NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
+        
+        NSString *queryKey = array[indexPath.row + 1];
+        
+        BOOL yes = [[user objectForKey:queryKey] boolValue];
+        
+        switchView.on = yes;
+        
+        switchView.tag = indexPath.row - 1;
+        
+        [switchView addTarget:self action:@selector(switchAction:) forControlEvents:UIControlEventValueChanged];
+        
+        cell.accessoryView = switchView;
+        
+    }
     
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    if (indexPath.row == 0 ) {
+        
+        [tableView deselectRowAtIndexPath:indexPath animated:YES];
+        
+        PCGuideController *guide = [[PCGuideController alloc] init];
+        
+        [self.navigationController pushViewController:guide animated:YES];
     
-//    PCWebViewController *web = [[PCWebViewController alloc] init];
-//    
-//    [self.navigationController pushViewController:web animated:YES];
-    PCGuideController *guide = [[PCGuideController alloc] init];
+    }
+}
+
+- (void)switchAction:(UISwitch *)switchView {
     
-    [self.navigationController pushViewController:guide animated:YES];
+    if (switchView.on == YES) {
+        
+        if (switchView.tag == 0) {
+            
+            [self storeObject:[NSNumber numberWithInt:1] forKey:@"wwanPlay"];
+        
+        }
+        
+        if (switchView.tag == 1) {
+           
+            [self storeObject:[NSNumber numberWithInt:1] forKey:@"wwanDownload"];
+        
+        }
+    }
     
+    if (switchView.on == NO) {
+        
+        if (switchView.tag == 0) {
+            
+            [self storeObject:[NSNumber numberWithInt:0] forKey:@"wwanPlay"];
+        
+        }
+        
+        if (switchView.tag == 1) {
+            
+            [self storeObject:[NSNumber numberWithInt:0] forKey:@"wwanDownload"];
+        
+        }
+    }
+}
+
+- (void)storeObject:(nullable id)value forKey:(NSString *)defaultName {
+    NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
+    [user setObject:value forKey:defaultName];
 }
 
 @end

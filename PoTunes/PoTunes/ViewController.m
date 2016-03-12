@@ -33,6 +33,7 @@
 #import "DMCPlayback.h"
 #import <MediaPlayer/MediaPlayer.h>
 #import <AVFoundation/AVFoundation.h>
+#import "Reachability.h"
 
 /** 播放模式 */
 typedef NS_ENUM(NSUInteger, PCAudioRepeatMode) {
@@ -51,7 +52,7 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 
 };
 
-@interface ViewController ()<UIScrollViewDelegate, UIGestureRecognizerDelegate>
+@interface ViewController ()<UIScrollViewDelegate, UIGestureRecognizerDelegate, UIAlertViewDelegate>
 @property (nonatomic, assign) CGFloat height;
 @property (nonatomic, assign) CGFloat width;
 @property (nonatomic, weak) UIScrollView *scrollView;
@@ -101,6 +102,10 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 
 /** 当前播放器 */
 @property (nonatomic, copy) NSString *currentPlayer;
+/** 检测网络状态 */
+@property (nonatomic, strong) Reachability *conn;
+/** 当前网络状态 */
+@property (nonatomic, assign) int reachable;
 @end
 
 @implementation ViewController
@@ -160,8 +165,6 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
         [self setupTabBarWithCount:4];
 
     }
-
-    
     /** 注册通知 */
     [self getNotification];
     
@@ -411,7 +414,6 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
         [self.scrollView addSubview:button];
     }
 }
-
 - (void)setupSingleViewControllerToScrollView:(UIViewController *)controller hidden:(BOOL)hidden {
     
     PCNavigationController *nav = [[PCNavigationController alloc] initWithRootViewController:controller];
@@ -522,6 +524,15 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     
     [center addObserver:self selector:@selector(audioSessionDidChangeInterruptionType:)
                                                  name:AVAudioSessionRouteChangeNotification object:[AVAudioSession sharedInstance]];
+    
+    [center addObserver:self selector:@selector(networkStateChange) name:kReachabilityChangedNotification object:nil];
+    
+    self.conn = [Reachability reachabilityForInternetConnection];
+    
+    [self.conn startNotifier];
+    
+    self.reachable = [self.conn currentReachabilityStatus];
+
 }
 - (void)didSelectedSong:(NSNotification *)sender {
     //滚到上层
@@ -537,14 +548,34 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     
     self.index = index;
     
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    //判断用户网络状态以及是否允许网络播放
+    NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
     
-        [self playFromPlaylist:songs itemIndex:index state:PCAudioPlayStatePlay];
-        
-        [self changePlayerInterfaceDuringUsing:self.songs[index] row:index];
-        
-    });
+    BOOL yes = [[user objectForKey:@"wwanPlay"] boolValue];
     
+    if (!yes && self.conn.currentReachabilityStatus != 2) {
+        
+        //初始化AlertView
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"温馨提示"
+                                                        message:@"您当前处于运营商网络中，是否继续播放"
+                                                       delegate:self
+                                              cancelButtonTitle:@"取消"
+                                              otherButtonTitles:@"确认",nil];
+        [alert show];
+        
+        return;
+    }
+    
+    
+    if (self.conn.currentReachabilityStatus == 2) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            
+            [self playFromPlaylist:songs itemIndex:index state:PCAudioPlayStatePlay];
+            
+            [self changePlayerInterfaceDuringUsing:self.songs[index] row:index];
+            
+        });
+    }
 }
 - (void)speaking {
     
@@ -561,17 +592,36 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     [self setupTabBarWithCount:4];
 }
 - (void)audioSessionDidChangeInterruptionType:(NSNotification *)notification {
+    
     NSInteger interruptReason = [[notification.userInfo objectForKey:@"AVAudioSessionRouteChangeReasonKey"] integerValue];
+    
     if (interruptReason == 2) {
+    
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        
             dispatch_sync(dispatch_get_main_queue(), ^{
+            
                 [self.audioController pause];
             });
         });
     }
     
 }
-
+- (void)networkStateChange {
+    // 1.检测wifi状态
+    Reachability *wifi = [Reachability reachabilityForLocalWiFi];
+    // 2.检测手机是否能上网络(WIFI\3G\2.5G)
+    Reachability *conn = [Reachability reachabilityForInternetConnection];
+    
+    // 3.判断网络状态
+    if ([wifi currentReachabilityStatus] != NotReachable) { // 有wifi
+        self.reachable = 2;
+    } else if ([conn currentReachabilityStatus] != NotReachable) { // 没有使用wifi, 使用手机自带网络进行上网
+        self.reachable = 1;
+    } else { // 没有网络
+        self.reachable = 0;
+    }
+}
 - (void)dealloc {
     
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"selected" object:nil];
@@ -583,9 +633,16 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"finishLoading" object:nil];
     
     [[NSNotificationCenter defaultCenter] removeObserver:self name:AVAudioSessionRouteChangeNotification object:nil];
+    
+    [self.conn stopNotifier];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 
 }
 #pragma mark - 播放相关
+- (void)play {
+    
+}
 /** 开始播放 */
 - (void)playFromPlaylist:(NSArray *)playlist itemIndex:(NSUInteger)index state:(PCAudioPlayState)state {
     
@@ -801,9 +858,7 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
             }];
             
         }
-        
-
-        
+    
         //设置锁屏信息
         NSMutableDictionary *info = [NSMutableDictionary dictionary];
         //设置专辑名称
@@ -907,7 +962,7 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     doubleTap.numberOfTapsRequired = 2;
     doubleTap.numberOfTouchesRequired = 1;
     [self.backgroundView addGestureRecognizer:doubleTap];
-#warning bugfix
+
     //当识别不出这是双击时才开启单击识别
     [singleTap requireGestureRecognizerToFail:doubleTouch];
     [singleTap requireGestureRecognizerToFail:doubleTap];
@@ -1358,7 +1413,32 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
         scrollView.scrollEnabled = NO;
     
     }
-    
 }
-
+#pragma mark - UIAlertViewDelegate
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    
+    if (buttonIndex == 1) {
+        
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            
+            [self playFromPlaylist:self.songs itemIndex:self.index state:PCAudioPlayStatePlay];
+            
+            [self changePlayerInterfaceDuringUsing:self.songs[self.index] row:self.index];
+            
+            NSUserDefaults *users = [NSUserDefaults standardUserDefaults];
+            
+            [users setObject:[NSNumber numberWithInt:1] forKey:@"wwanPlay"];
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"wwanPlay" object:nil userInfo:nil];
+            
+        });
+        return;
+    }
+    
+    if (buttonIndex == 0) {
+        
+        self.audioController = nil;
+    
+    }
+}
 @end
