@@ -186,6 +186,17 @@
     }
 }
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    NSNotification *select = [NSNotification notificationWithName:@"selected" object:nil userInfo:
+                              @{@"indexPath":[NSNumber numberWithInteger:indexPath.row],
+                                @"songs":self.songs,
+                                @"type":@"online"}];
+    
+    [[NSNotificationCenter defaultCenter] postNotification:select];
+
+}
+
 #pragma mark - 下载
 - (void)download:(UIGestureRecognizer *)recognizer {
     

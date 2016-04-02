@@ -210,13 +210,17 @@
         [message setThumbImage:[UIImage imageNamed:@"cm2_default_cover"]];
         
         WXMusicObject *ext = [WXMusicObject object];
+        
         ext.musicUrl = @"http://poche.fm";
+        
         ext.musicDataUrl = self.sharedSong.sourceURL;
         
         message.mediaObject = ext;
         
         SendMessageToWXReq *req = [[SendMessageToWXReq alloc] init];
+        
         req.bText = NO;
+        
         req.message = message;
 
         if (indexPath.row == 0) {

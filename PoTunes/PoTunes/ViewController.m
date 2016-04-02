@@ -552,11 +552,14 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     self.songs = songs;
     
     self.index = index;
+        
+    NSString *type = sender.userInfo[@"type"];
     
     //判断用户网络状态以及是否允许网络播放
     NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
     
     BOOL yes = [[user objectForKey:@"wwanPlay"] boolValue];
+    
     
     if (!yes && self.conn.currentReachabilityStatus != 2) {
         
@@ -572,7 +575,8 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     }
     
     
-    if (self.conn.currentReachabilityStatus == 2) {
+    if (self.conn.currentReachabilityStatus == 2 || [type isEqualToString:@"local"] || yes) {
+        
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             
             [self playFromPlaylist:songs itemIndex:index state:PCAudioPlayStatePlay];

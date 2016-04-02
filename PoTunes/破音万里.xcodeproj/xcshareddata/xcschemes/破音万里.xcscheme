@@ -109,7 +109,7 @@
       buildConfiguration = "Debug">
    </AnalyzeAction>
    <ArchiveAction
-      buildConfiguration = "Release"
+      buildConfiguration = "ad hoc distribution"
       customArchiveName = "&#x7834;&#x97f3;&#x4e07;&#x91cc;"
       revealArchiveInOrganizer = "YES">
    </ArchiveAction>
