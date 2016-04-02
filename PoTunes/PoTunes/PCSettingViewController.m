@@ -71,7 +71,9 @@
     NSString *yes = [user objectForKey:@"wwanPlay"];
     
     if (yes == nil) {
+        
         [self storeDefaultPlayandDownloadRules];
+        
     }
 }
 
@@ -91,6 +93,8 @@
     [center addObserver:self selector:@selector(pop) name:@"pop" object:nil];
     
     [center addObserver:self selector:@selector(switchOn) name:@"wwanPlay" object:nil];
+    
+    [center addObserver:self selector:@selector(switchOn) name:@"wwanDownload" object:nil];
     
 }
 
@@ -115,6 +119,9 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"pop" object:nil];
     
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"wwanPlay" object:nil];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"wwanDownload" object:nil];
+
 
 }
 

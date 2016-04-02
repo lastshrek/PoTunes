@@ -45,8 +45,11 @@
         [_downloadedSongDB executeUpdate:@"CREATE TABLE IF NOT EXISTS t_downloading (id integer PRIMARY KEY, author text, title text, sourceURL text,indexPath integer,thumb text,album text,downloaded bool, identifier text);"];
         
         if (![_downloadedSongDB columnExists:@"identifier" inTableWithName:@"t_downloading"]) {
+            
             NSString *sql = [NSString stringWithFormat:@"ALTER TABLE %@ ADD %@ text", @"t_downloading", @"identifier"];
+            
             [_downloadedSongDB executeUpdate:sql];
+        
         }
         
         _downloadedSongDB.shouldCacheStatements = YES;
@@ -229,7 +232,7 @@
     }
     
     
-    if (self.conn.currentReachabilityStatus == 2) {
+    if (self.conn.currentReachabilityStatus == 2 || yes) {
         
         [self startDownloading:self.indexPath];
     }

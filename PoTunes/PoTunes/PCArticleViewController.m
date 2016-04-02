@@ -19,12 +19,23 @@
 #import "FMDB.h"
 #import "DMCTrack.h"
 #import "DMCPlayback.h"
-@interface PCArticleViewController ()
+#import "Reachability.h"
+@interface PCArticleViewController ()<UIAlertViewDelegate>
 
 @property (nonatomic, strong) NSMutableArray *articles;
 
 /** 下载歌曲数据库 */
 @property (nonatomic, strong) FMDatabase *downloadedSongDB;
+
+/** 检测网络状态 */
+@property (nonatomic, strong) Reachability *conn;
+
+/** 当前网络状态 */
+@property (nonatomic, assign) int reachable;
+
+/** 手势 */
+@property (nonatomic, strong) UIGestureRecognizer *recognizer;
+
 
 @end
 
@@ -47,8 +58,11 @@
         [_downloadedSongDB executeUpdate:@"CREATE TABLE IF NOT EXISTS t_downloading (id integer PRIMARY KEY, author text, title text, sourceURL text,indexPath integer,thumb text,album text,downloaded bool, identifier text);"];
         
         if (![_downloadedSongDB columnExists:@"identifier" inTableWithName:@"t_downloading"]) {
+            
             NSString *sql = [NSString stringWithFormat:@"ALTER TABLE %@ ADD %@ text", @"t_downloading", @"identifier"];
+            
             [_downloadedSongDB executeUpdate:sql];
+        
         }
         
         _downloadedSongDB.shouldCacheStatements = YES;
@@ -109,7 +123,6 @@
 
     [self getNotification];
     
-//    NSLog(@"%f",self.view.bounds.size.width);
 }
 #pragma mark - 获取通知
 - (void)getNotification {
@@ -118,15 +131,40 @@
     
     [center addObserver:self selector:@selector(pop) name:@"pop" object:nil];
     
+    [center addObserver:self selector:@selector(networkStateChange) name:kReachabilityChangedNotification object:nil];
+    
+    self.conn = [Reachability reachabilityForInternetConnection];
+    
+    [self.conn startNotifier];
+    
+    self.reachable = [self.conn currentReachabilityStatus];
+    
 }
 - (void)pop {
     
     [self.navigationController popToRootViewControllerAnimated:YES];
     
 }
+- (void)networkStateChange {
+    // 1.检测wifi状态
+    Reachability *wifi = [Reachability reachabilityForLocalWiFi];
+    // 2.检测手机是否能上网络(WIFI\3G\2.5G)
+    Reachability *conn = [Reachability reachabilityForInternetConnection];
+    
+    // 3.判断网络状态
+    if ([wifi currentReachabilityStatus] != NotReachable) { // 有wifi
+        self.reachable = 2;
+    } else if ([conn currentReachabilityStatus] != NotReachable) { // 没有使用wifi, 使用手机自带网络进行上网
+        self.reachable = 1;
+    } else { // 没有网络
+        self.reachable = 0;
+    }
+}
 - (void)dealloc {
     
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"pop" object:nil];
+    
+    [self.conn stopNotifier];
     
 }
 #pragma mark - 获取文件主路径
@@ -309,85 +347,151 @@
     
     if (online == nil) return;
     
-    CGPoint position = [recognizer locationInView:self.tableView];
+    //获取下载状态
     
-    NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:position];
+    BOOL yes = [[user objectForKey:@"wwanDownload"] boolValue];
     
-    //获得专辑名称
-    NSString *fullName = [self.articles[indexPath.row] objectForKey:@"title"];
+    self.recognizer = recognizer;
+
     
-    //专辑ID
-    NSString *index = [self.articles[indexPath.row] objectForKey:@"id"];
-    
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    
-    NSString *urlString = [NSString stringWithFormat:@"http://121.41.121.87:3000/api/v1/list-mp3s?id=%@", index];
-    
-    [MBProgressHUD showMessage:@"开始下载" toView:self.view];
-    
-    [manager GET:urlString parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    if (!yes && self.conn.currentReachabilityStatus != 2) {
+        //初始化AlertView
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"温馨提示"
+                                                        message:@"您当前处于运营商网络中，是否继续下载"
+                                                       delegate:self
+                                              cancelButtonTitle:@"取消"
+                                              otherButtonTitles:@"确认",nil];
+        [alert show];
         
-        [MBProgressHUD hideHUDForView:self.view];
         
-        NSMutableArray *songArray = [NSMutableArray array];
+        return;
+    }
+    
+    if (self.conn.currentReachabilityStatus == 2 || yes) {
         
-        NSMutableArray *downloadArray = [NSMutableArray array];
+        [self startDownloadAlbum:recognizer];
+    
+    }
+}
+
+- (void)startDownloadAlbum:(UIGestureRecognizer *)recognizer {
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         
-        for (NSDictionary *dict in responseObject) {
-            
-            PCSong *song = [PCSong songWithDict:dict];
-            
-            NSInteger position = [dict[@"index"] integerValue];
-            
-            song.position = [NSNumber numberWithInteger:position];
-            
-            song.album = fullName;
-            
-            NSString *lrc = dict[@"sourceUrl"];
-            
-            song.lrc = [lrc stringByReplacingOccurrencesOfString:@".mp3" withString:@".lrc"];
-            
-            [songArray addObject:song];
-            
-        }
+        CGPoint position = [recognizer locationInView:self.tableView];
         
-        for (int i = 0; i < songArray.count; i++) {
+        NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:position];
+        
+        //获得专辑名称
+        NSString *fullName = [self.articles[indexPath.row] objectForKey:@"title"];
+        
+        //专辑ID
+        NSString *index = [self.articles[indexPath.row] objectForKey:@"id"];
+        
+        AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+        
+        NSString *urlString = [NSString stringWithFormat:@"http://121.41.121.87:3000/api/v1/list-mp3s?id=%@", index];
+        
+        [MBProgressHUD showMessage:@"开始下载" toView:self.view];
+        
+        [manager GET:urlString parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
             
-            PCSong *song = songArray[i];
+            [MBProgressHUD hideHUDForView:self.view];
             
-            NSString *author = [song.author stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
+            NSMutableArray *songArray = [NSMutableArray array];
             
-            NSString *title = [song.title stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
+            NSMutableArray *downloadArray = [NSMutableArray array];
             
-            NSString *query = [NSString stringWithFormat:@"SELECT * FROM t_downloading WHERE author = '%@' and title = '%@';", author, title];
-            
-            FMResultSet *s = [self.downloadedSongDB executeQuery:query];
-            
-            if (!s.next) {
+            for (NSDictionary *dict in responseObject) {
                 
-                [downloadArray addObject:song];
+                PCSong *song = [PCSong songWithDict:dict];
+                
+                NSInteger position = [dict[@"index"] integerValue];
+                
+                song.position = [NSNumber numberWithInteger:position];
+                
+                song.album = fullName;
+                
+                NSString *lrc = dict[@"sourceUrl"];
+                
+                song.lrc = [lrc stringByReplacingOccurrencesOfString:@".mp3" withString:@".lrc"];
+                
+                [songArray addObject:song];
                 
             }
-        }
-
-        if (downloadArray.count == 0) {
             
-            [MBProgressHUD showSuccess:@"专辑已下载"];
+            for (int i = 0; i < songArray.count; i++) {
+                
+                PCSong *song = songArray[i];
+                
+                NSString *author = [song.author stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
+                
+                NSString *title = [song.title stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
+                
+                NSString *query = [NSString stringWithFormat:@"SELECT * FROM t_downloading WHERE author = '%@' and title = '%@';", author, title];
+                
+                FMResultSet *s = [self.downloadedSongDB executeQuery:query];
+                
+                if (!(s.next)) {
+                    
+                    [downloadArray addObject:song];
+                    
+                }
+            }
             
-        } else {
+            if (downloadArray.count == 0) {
+                
+                [MBProgressHUD showSuccess:@"专辑已下载"];
+                
+            } else {
+                
+                NSNotification *fullAlbum = [NSNotification notificationWithName:@"fullAlbum" object:nil userInfo:
+                                             @{@"songs":downloadArray,
+                                               @"title":fullName}];
+                
+                [[NSNotificationCenter defaultCenter] postNotification:fullAlbum];
+                
+            }
             
-            NSNotification *fullAlbum = [NSNotification notificationWithName:@"fullAlbum" object:nil userInfo:
-                                         @{@"songs":downloadArray,
-                                           @"title":fullName}];
             
-            [[NSNotificationCenter defaultCenter] postNotification:fullAlbum];
-                        
-        }
-
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            
+        }];
         
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        
-    }];
+    });
+
 }
+
+#pragma mark - UIAlertViewDelegate
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    
+    if (buttonIndex == 1) {
+        
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            
+            
+            NSUserDefaults *users = [NSUserDefaults standardUserDefaults];
+            
+            [users setObject:[NSNumber numberWithInt:1] forKey:@"wwanDownload"];
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"wwanDownload" object:nil userInfo:nil];
+            
+            [self startDownloadAlbum:self.recognizer];
+            
+            
+        });
+        
+        return;
+        
+    }
+    
+    if (buttonIndex == 0) {
+        
+        [MBProgressHUD showError:@"取消下载"];
+        
+    }
+}
+
+
 
 @end

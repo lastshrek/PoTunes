@@ -561,7 +561,7 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     BOOL yes = [[user objectForKey:@"wwanPlay"] boolValue];
     
     
-    if (!yes && self.conn.currentReachabilityStatus != 2) {
+    if (!yes && self.conn.currentReachabilityStatus != 2 && ![type isEqualToString:@"local"]) {
         
         //初始化AlertView
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"温馨提示"
@@ -1459,7 +1459,7 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     
     if (buttonIndex == 0) {
         
-        self.audioController = nil;
+        [self.audioController.activeStream pause];
     
     }
 }
