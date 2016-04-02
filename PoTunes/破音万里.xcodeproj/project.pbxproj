@@ -10,7 +10,6 @@
 		3C0CCAC51BB929DD00AAA5C6 /* PCSongListTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C0CCAC41BB929DD00AAA5C6 /* PCSongListTableViewCell.m */; };
 		3C24788E1BBA620500101EC8 /* EVCircularProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C24788D1BBA620500101EC8 /* EVCircularProgressView.m */; };
 		3C26B5721C4FD2AA0037893F /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CB2E3FD1BA7D19300805D4F /* AudioToolbox.framework */; };
-		3C26B6861C50CA750037893F /* libWeChatSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C26B6851C50CA750037893F /* libWeChatSDK.a */; };
 		3C3984561BF65EED000629DE /* UIImage+BoxBlur.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3984551BF65EED000629DE /* UIImage+BoxBlur.m */; };
 		3C41AA3D1C5B0C51000B9364 /* PoTunes.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = 3C41AA3C1C5B0C51000B9364 /* PoTunes.entitlements */; };
 		3C41AA401C5B1899000B9364 /* libDMCPlayback.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C41AA3F1C5B1899000B9364 /* libDMCPlayback.a */; };
@@ -438,7 +437,6 @@
 				3CB2E4541BA7D49100805D4F /* libsqlite3.0.dylib in Frameworks */,
 				3CB2E43B1BA7D42200805D4F /* AMapNaviKit.framework in Frameworks */,
 				3CB2E43C1BA7D42200805D4F /* AMapSearchKit.framework in Frameworks */,
-				3C26B6861C50CA750037893F /* libWeChatSDK.a in Frameworks */,
 				3CB2E4041BA7D1CB00805D4F /* MediaPlayer.framework in Frameworks */,
 				3CB2E4021BA7D1BC00805D4F /* libxml2.2.dylib in Frameworks */,
 				3CB2E4001BA7D1B300805D4F /* AVFoundation.framework in Frameworks */,
@@ -1025,7 +1023,7 @@
 		3CB2E2EA1BA7B26800805D4F /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0700;
+				LastUpgradeCheck = 0730;
 				ORGANIZATIONNAME = Purchas;
 				TargetAttributes = {
 					3CB2E2F11BA7B26800805D4F = {

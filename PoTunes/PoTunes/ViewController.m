@@ -126,7 +126,9 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
         [_downloadedSongDB executeUpdate:@"CREATE TABLE IF NOT EXISTS t_downloading (id integer PRIMARY KEY, author text, title text, sourceURL text,indexPath integer,thumb text,album text,downloaded bool, identifier text);"];
         
         if (![_downloadedSongDB columnExists:@"identifier" inTableWithName:@"t_downloading"]) {
+            
             NSString *sql = [NSString stringWithFormat:@"ALTER TABLE %@ ADD %@ text", @"t_downloading", @"identifier"];
+            
             [_downloadedSongDB executeUpdate:sql];
         }
         
@@ -181,6 +183,8 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     DMCPlayback *player = [[DMCPlayback alloc] init];
     
     self.player = player;
+    
+
 
 }
 #pragma mark - 获取文件主路径
@@ -509,6 +513,7 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     [self changePlayerInterfaceDuringUsing:self.songs[self.index] row:self.index];
     
 }
+
 #pragma mark - 获取通知
 - (void)getNotification {
     
@@ -579,7 +584,6 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 }
 - (void)speaking {
     
-    
     self.audioController.volume = 0.1;
     
 }
@@ -640,9 +644,7 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 
 }
 #pragma mark - 播放相关
-- (void)play {
-    
-}
+
 /** 开始播放 */
 - (void)playFromPlaylist:(NSArray *)playlist itemIndex:(NSUInteger)index state:(PCAudioPlayState)state {
     
@@ -657,16 +659,25 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     
     PCSong *song = playlist[index];
     
-    NSString *filePath = [rootPath  stringByAppendingPathComponent:[NSString stringWithFormat:@"%@ - %@.mp3",song.author,song.title]];
+    NSString *songQuery = [NSString stringWithFormat:@"SELECT * FROM t_downloading WHERE sourceURL = '%@';", song.sourceURL];
     
-    NSString *realPath = [filePath stringByReplacingOccurrencesOfString:@" / " withString:@" "];
+    FMResultSet *songS = [self.downloadedSongDB executeQuery:songQuery];
+    
+    NSString *filePath;
+    
+    if (songS.next) {
+        
+        filePath = [rootPath  stringByAppendingPathComponent:[songS stringForColumn:@"identifier"]];
+        
+    }
+
     
     NSFileManager *fileManager = [NSFileManager defaultManager];
     
     self.currentPlayer = @"PC";
     //播放本地
     
-    if ([fileManager fileExistsAtPath:realPath]) {
+    if ([fileManager fileExistsAtPath:filePath]) {
         
         NSString *author = [song.author stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
         
@@ -682,7 +693,7 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
             
             if (downloaded) {
                 
-                [self.audioController.activeStream playFromURL:[NSURL fileURLWithPath:realPath]];
+                [self.audioController.activeStream playFromURL:[NSURL fileURLWithPath:filePath]];
                 
             } else {
                 
@@ -767,7 +778,6 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
             self.progress.color = imageColors.colors[1];
         });
         
-        //修改进度条颜色
         
         //修改歌名
         self.songLabel.text = song.title;
@@ -973,7 +983,7 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     //当前无播放列表
     if (self.songs.count == 0) {
         
-        [MBProgressHUD showError:@"大爷，先选歌撒！"];
+        [MBProgressHUD showError:@"向上滑动，更多精彩"];
         
         return;
     }
@@ -1010,7 +1020,7 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     //当前无播放列表
     if (self.songs.count == 0) {
     
-        [MBProgressHUD showError:@"大爷，先选歌撒！"];
+        [MBProgressHUD showError:@"向上滑动，更多精彩"];
         
         return;
     }
@@ -1053,7 +1063,7 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     
     if (self.songs.count == 0) {
     
-        [MBProgressHUD showError:@"大爷，先选歌撒！"];
+        [MBProgressHUD showError:@"向上滑动，更多精彩"];
         
         return;
     
@@ -1309,6 +1319,7 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 - (void)updateCurrentTime {
     //计算进度值
     if (self.audioController.activeStream.duration.minute == 0 && self.audioController.activeStream.duration.second == 0) return;
+    
     //取出当前播放时长以及总时长
     FSStreamPosition cur = self.audioController.activeStream.currentTimePlayed;
     
@@ -1330,11 +1341,15 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     NSString *leftSec = [NSString stringWithFormat:@"%d",totalLeftSecond % 60];
     
     if (cur.second < 10) {
+        
         curSecond = [NSString stringWithFormat:@"0%@",curSecond];
+    
     }
     
     if ([leftSec intValue] < 10) {
-        leftSec = [NSString stringWithFormat:@"0%@",leftSec];
+        
+         leftSec = [NSString stringWithFormat:@"0%@",leftSec];
+        
     }
     
     self.currentTime.text = [NSString stringWithFormat:@"%d:%@",cur.minute, curSecond];
@@ -1431,8 +1446,11 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
             
             [[NSNotificationCenter defaultCenter] postNotificationName:@"wwanPlay" object:nil userInfo:nil];
             
+            
         });
+        
         return;
+        
     }
     
     if (buttonIndex == 0) {

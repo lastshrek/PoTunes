@@ -148,6 +148,9 @@
     /** 注册通知 */
     [self getNotification];
     
+    //修复之前的下载文件名称
+    [self repairFormerSongName];
+    
 }
 
 
@@ -250,7 +253,9 @@
         
         NSString *album = [sender.userInfo[@"title"] stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
         
-        NSString *sql = [NSString stringWithFormat: @"INSERT INTO t_downloading(author,title,sourceURL,indexPath,thumb,album,downloaded,identifier) VALUES('%@','%@','%@','%ld','%@','%@','0', '%@');",artist,songName,song.sourceURL,[song.position integerValue],song.thumb,album,identifier];
+        NSString *sql = [NSString stringWithFormat:
+                         @"INSERT INTO t_downloading(author,title,sourceURL,indexPath,thumb,album,downloaded,identifier) VALUES('%@','%@','%@','%ld','%@','%@','0', '%@');"
+                         ,artist,songName,song.sourceURL,[song.position integerValue],song.thumb,album,identifier];
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             
@@ -420,7 +425,6 @@
     
 }
 
-
 #pragma mark - 移除通知
 - (void)dealloc {
     
@@ -429,6 +433,94 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"fullAlbum" object:nil];
 
     
+}
+
+#pragma mark - 修复之前的下载文件名称
+- (void)repairFormerSongName {
+    
+    NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
+    
+    NSString *repaired = [user objectForKey:@"repaired"];
+    
+    if (![repaired isEqualToString:@"repaired"]) {
+        
+        NSString *query = @"SELECT * FROM t_downloading";
+        
+        [self.queue inDatabase:^(FMDatabase *db) {
+            
+            [MBProgressHUD showMessage:@"数据升级中请稍候"];
+
+            
+            FMResultSet * s = [db executeQuery:query];
+            
+            NSFileManager *manager = [NSFileManager defaultManager];
+            
+            NSString *rootPath = [self dirDoc];
+            
+            while (s.next) {
+                
+                NSString *identifier = [s stringForColumn:@"identifier"];
+                
+                NSLog(@"%@", identifier);
+                
+                if (identifier == nil) {
+                    
+                    //修改数据库
+                    
+                    NSString *urlString = [s stringForColumn:@"sourceURL"];
+                    
+                    NSArray *urlComponent = [urlString componentsSeparatedByString:@"/"];
+                    
+                    NSInteger count = urlComponent.count;
+                    
+                    NSString *identifier = [NSString stringWithFormat:@"%@%@%@",urlComponent[count - 3], urlComponent[count - 2], urlComponent[count - 1]];
+                    
+                    NSString *identifierUpdate = [NSString stringWithFormat:@"UPDATE t_downloading SET identifier = '%@' WHERE sourceURL = '%@'" , identifier, urlString];
+                    
+                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                        
+                        [self.queue inDeferredTransaction:^(FMDatabase *db, BOOL *rollback) {
+                            
+                            [db executeUpdate:identifierUpdate];
+                            
+                        }];
+                    });
+                    
+                    //修改文件名
+                    
+                    NSString *author = [s stringForColumn:@"author"];
+                    
+                    NSString *title = [s stringForColumn:@"title"];
+                    
+                    NSString *filePath = [rootPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@ - %@.mp3",author,title]];
+                    
+                    NSString *realPath = [filePath stringByReplacingOccurrencesOfString:@" / " withString:@" "];
+                    
+                    if ([manager fileExistsAtPath:realPath]) {
+                        
+                        NSString *dstPath = [rootPath stringByAppendingPathComponent:identifier];
+                        
+                        BOOL yes = [manager moveItemAtPath:realPath toPath:dstPath error:nil];
+                        
+                        NSLog(@"%d", yes);
+                        
+                    }
+                    
+                }
+            }
+            
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                
+                [MBProgressHUD hideHUD];
+                
+                [MBProgressHUD showSuccess:@"数据升级完毕"];
+                
+            });
+            
+        }];
+        
+        [user setObject:@"repaired" forKey:@"repaired"];
+    }
 }
 #pragma mark - 获取文件主路径
 - (NSString *)dirDoc {
@@ -591,9 +683,13 @@
 /** 删除 */
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section == 0) {
+       
         return NO;
+        
     } else {
+   
         return YES;
+        
     }
 }
 - (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath{

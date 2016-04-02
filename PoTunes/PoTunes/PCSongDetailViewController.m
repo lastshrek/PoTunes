@@ -9,11 +9,21 @@
 #import "PCSongDetailViewController.h"
 #import "FMDB.h"
 #import "DMCPlayback.h"
+#import "Reachability.h"
 
-@interface PCSongDetailViewController ()
+@interface PCSongDetailViewController ()<UIAlertViewDelegate>
 
 /** 下载歌曲数据库 */
 @property (nonatomic, strong) FMDatabase *downloadedSongDB;
+
+/** 检测网络状态 */
+@property (nonatomic, strong) Reachability *conn;
+
+/** 当前网络状态 */
+@property (nonatomic, assign) int reachable;
+
+@property (nonatomic, assign) NSIndexPath *indexPath;
+
 
 @end
 
@@ -49,6 +59,29 @@
 - (void)viewDidLoad {
     
     [super viewDidLoad];
+    
+    [self getNotification];
+
+}
+
+- (void)getNotification {
+    
+    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+    
+    [center addObserver:self selector:@selector(networkStateChange) name:kReachabilityChangedNotification object:nil];
+    
+    self.conn = [Reachability reachabilityForInternetConnection];
+    
+    [self.conn startNotifier];
+    
+    self.reachable = [self.conn currentReachabilityStatus];
+}
+
+- (void)dealloc {
+    
+    [self.conn stopNotifier];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 
 }
 
@@ -156,6 +189,7 @@
 #pragma mark - 下载
 - (void)download:(UIGestureRecognizer *)recognizer {
     
+    //判断用户网络状态以及是否允许网络播放
     NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
     
     NSString *online = [user objectForKey:@"online"];
@@ -165,6 +199,56 @@
     CGPoint position = [recognizer locationInView:self.tableView];
     
     NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:position];
+    
+    self.indexPath = indexPath;
+    
+    BOOL yes = [[user objectForKey:@"wwanDownload"] boolValue];
+    
+    if (!yes && self.conn.currentReachabilityStatus != 2) {
+        
+        //初始化AlertView
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"温馨提示"
+                                                        message:@"您当前处于运营商网络中，是否继续下载"
+                                                       delegate:self
+                                              cancelButtonTitle:@"取消"
+                                              otherButtonTitles:@"确认",nil];
+        [alert show];
+        
+        return;
+    }
+    
+    
+    if (self.conn.currentReachabilityStatus == 2) {
+        
+        [self startDownloading:self.indexPath];
+    }
+}
+
+
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    return NO;
+    
+}
+
+- (void)networkStateChange {
+    // 1.检测wifi状态
+    Reachability *wifi = [Reachability reachabilityForLocalWiFi];
+    // 2.检测手机是否能上网络(WIFI\3G\2.5G)
+    Reachability *conn = [Reachability reachabilityForInternetConnection];
+    
+    // 3.判断网络状态
+    if ([wifi currentReachabilityStatus] != NotReachable) { // 有wifi
+        self.reachable = 2;
+    } else if ([conn currentReachabilityStatus] != NotReachable) { // 没有使用wifi, 使用手机自带网络进行上网
+        self.reachable = 1;
+    } else { // 没有网络
+        self.reachable = 0;
+    }
+}
+
+- (void)startDownloading:(NSIndexPath *)indexPath {
     
     PCSong *song = self.songs[indexPath.row];
     
@@ -193,7 +277,7 @@
             [MBProgressHUD showError:@"歌曲正在下载中"];
             
         }
-    
+        
     } else {
         
         
@@ -202,25 +286,41 @@
         NSInteger count = urlComponent.count;
         
         NSString *identifier = [NSString stringWithFormat:@"%@%@%@",urlComponent[count - 3], urlComponent[count - 2], urlComponent[count - 1]];
-                
+        
         NSNotification *download = [NSNotification notificationWithName:@"download" object:nil userInfo:
                                     @{@"indexPath":[NSNumber numberWithInteger:indexPath.row],
                                       @"songs":self.songs,
                                       @"title":self.title,
                                       @"identifier":identifier}];
-                
+        
         [[NSNotificationCenter defaultCenter] postNotification:download];
         
         [MBProgressHUD showSuccess:@"开始下载"];
     }
+
 }
 
 
-
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+#pragma mark - UIAlertViewDelegate
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     
-    return NO;
+    if (buttonIndex == 1) {
+        
+        NSUserDefaults *users = [NSUserDefaults standardUserDefaults];
+        
+        [users setObject:[NSNumber numberWithInt:1] forKey:@"wwanDownload"];
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"wwanDownload" object:nil userInfo:nil];
+        
+        [self startDownloading:self.indexPath];
+            
+        return;
+    }
     
+    if (buttonIndex == 0) {
+        
+        
+    }
 }
 
 @end
