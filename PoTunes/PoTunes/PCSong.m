@@ -11,7 +11,7 @@
 @implementation PCSong
 
 + (instancetype)songWithDict:(NSDictionary *)dict {
-    
+
     return [[self alloc] initWithDict:dict];
 
 }
@@ -35,7 +35,6 @@
     [aCoder encodeObject:self.position forKey:@"position"];
     [aCoder encodeObject:self.album forKey:@"album"];
     [aCoder encodeObject:self.lrc forKey:@"lrc"];
-
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {

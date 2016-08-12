@@ -7,6 +7,7 @@
 //
 
 #import "ViewController.h"
+#import "PoTunes-swift.h"
 #import "Common.h"
 #import "LDProgressView.h"
 #import "PCLabel.h"

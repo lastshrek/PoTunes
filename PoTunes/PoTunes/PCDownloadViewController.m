@@ -353,7 +353,8 @@
         
         PCSong *song = self.songs[indexPath.row];
         
-        self.sharedSong = song;    }
+        self.sharedSong = song;
+    }
     
 }
 - (void)dismissCoverView:(UIGestureRecognizer *)recognizer {

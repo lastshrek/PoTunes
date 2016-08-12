@@ -44,14 +44,19 @@ typedef NS_ENUM(NSInteger, TravelTypes) {
 
 
 - (void)viewDidLoad {
+    
     [super viewDidLoad];
+    
     self.view.backgroundColor = [UIColor blackColor];
     
     [MAMapServices sharedServices].apiKey = @"62443358a250ee522aba69dfa3c1d247";
+    
     [AMapNaviServices sharedServices].apiKey = @"62443358a250ee522aba69dfa3c1d247";
-    [self initNaviManager];
+    
     [self configSubViews];
-    [self configNaviViewController];
+
+    
+
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -209,6 +214,10 @@ typedef NS_ENUM(NSInteger, TravelTypes) {
 }
 
 - (void)location:(UIButton *)btn {
+    
+    [self initNaviManager];
+    
+    [self configNaviViewController];
     
     PCBaiduNavController *baidu = [[PCBaiduNavController alloc] init];
     baidu.delegate = self;
