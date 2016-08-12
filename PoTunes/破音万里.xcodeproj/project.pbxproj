@@ -141,6 +141,25 @@
 		3CFFC7FF1D5DC49000696F66 /* PCLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFFC7FE1D5DC49000696F66 /* PCLabel.swift */; };
 		3CFFC8011D5DC53900696F66 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFFC8001D5DC53900696F66 /* Player.swift */; };
 		3CFFC8031D5DC65D00696F66 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3CFFC8021D5DC65D00696F66 /* Main.storyboard */; };
+		3CFFC8051D5DE1CA00696F66 /* PlayerInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFFC8041D5DE1CA00696F66 /* PlayerInterface.swift */; };
+		3CFFC81B1D5DEC7900696F66 /* FrameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFFC8081D5DEC7900696F66 /* FrameView.swift */; };
+		3CFFC81C1D5DEC7900696F66 /* HUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFFC8091D5DEC7900696F66 /* HUD.swift */; };
+		3CFFC81D1D5DEC7900696F66 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3CFFC80A1D5DEC7900696F66 /* Images.xcassets */; };
+		3CFFC81E1D5DEC7900696F66 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3CFFC80B1D5DEC7900696F66 /* Info.plist */; };
+		3CFFC81F1D5DEC7900696F66 /* PKHUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFFC80D1D5DEC7900696F66 /* PKHUD.swift */; };
+		3CFFC8201D5DEC7900696F66 /* PKHUDAnimating.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFFC80E1D5DEC7900696F66 /* PKHUDAnimating.swift */; };
+		3CFFC8211D5DEC7900696F66 /* PKHUDAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFFC80F1D5DEC7900696F66 /* PKHUDAnimation.swift */; };
+		3CFFC8221D5DEC7900696F66 /* PKHUDAssets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFFC8101D5DEC7900696F66 /* PKHUDAssets.swift */; };
+		3CFFC8231D5DEC7900696F66 /* PKHUDErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFFC8111D5DEC7900696F66 /* PKHUDErrorView.swift */; };
+		3CFFC8241D5DEC7900696F66 /* PKHUDProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFFC8121D5DEC7900696F66 /* PKHUDProgressView.swift */; };
+		3CFFC8251D5DEC7900696F66 /* PKHUDRotatingImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFFC8131D5DEC7900696F66 /* PKHUDRotatingImageView.swift */; };
+		3CFFC8261D5DEC7900696F66 /* PKHUDSquareBaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFFC8141D5DEC7900696F66 /* PKHUDSquareBaseView.swift */; };
+		3CFFC8271D5DEC7900696F66 /* PKHUDSuccessView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFFC8151D5DEC7900696F66 /* PKHUDSuccessView.swift */; };
+		3CFFC8281D5DEC7900696F66 /* PKHUDSystemActivityIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFFC8161D5DEC7900696F66 /* PKHUDSystemActivityIndicatorView.swift */; };
+		3CFFC8291D5DEC7900696F66 /* PKHUDTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFFC8171D5DEC7900696F66 /* PKHUDTextView.swift */; };
+		3CFFC82A1D5DEC7900696F66 /* PKHUDWideBaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFFC8181D5DEC7900696F66 /* PKHUDWideBaseView.swift */; };
+		3CFFC82B1D5DEC7900696F66 /* Window.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFFC8191D5DEC7900696F66 /* Window.swift */; };
+		3CFFC82C1D5DEC7900696F66 /* WindowRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFFC81A1D5DEC7900696F66 /* WindowRootViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -424,6 +443,26 @@
 		3CFFC7FE1D5DC49000696F66 /* PCLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PCLabel.swift; sourceTree = "<group>"; };
 		3CFFC8001D5DC53900696F66 /* Player.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		3CFFC8021D5DC65D00696F66 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		3CFFC8041D5DE1CA00696F66 /* PlayerInterface.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerInterface.swift; sourceTree = "<group>"; };
+		3CFFC8081D5DEC7900696F66 /* FrameView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FrameView.swift; sourceTree = "<group>"; };
+		3CFFC8091D5DEC7900696F66 /* HUD.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HUD.swift; sourceTree = "<group>"; };
+		3CFFC80A1D5DEC7900696F66 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		3CFFC80B1D5DEC7900696F66 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3CFFC80C1D5DEC7900696F66 /* PKHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKHUD.h; sourceTree = "<group>"; };
+		3CFFC80D1D5DEC7900696F66 /* PKHUD.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PKHUD.swift; sourceTree = "<group>"; };
+		3CFFC80E1D5DEC7900696F66 /* PKHUDAnimating.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PKHUDAnimating.swift; sourceTree = "<group>"; };
+		3CFFC80F1D5DEC7900696F66 /* PKHUDAnimation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PKHUDAnimation.swift; sourceTree = "<group>"; };
+		3CFFC8101D5DEC7900696F66 /* PKHUDAssets.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PKHUDAssets.swift; sourceTree = "<group>"; };
+		3CFFC8111D5DEC7900696F66 /* PKHUDErrorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PKHUDErrorView.swift; sourceTree = "<group>"; };
+		3CFFC8121D5DEC7900696F66 /* PKHUDProgressView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PKHUDProgressView.swift; sourceTree = "<group>"; };
+		3CFFC8131D5DEC7900696F66 /* PKHUDRotatingImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PKHUDRotatingImageView.swift; sourceTree = "<group>"; };
+		3CFFC8141D5DEC7900696F66 /* PKHUDSquareBaseView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PKHUDSquareBaseView.swift; sourceTree = "<group>"; };
+		3CFFC8151D5DEC7900696F66 /* PKHUDSuccessView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PKHUDSuccessView.swift; sourceTree = "<group>"; };
+		3CFFC8161D5DEC7900696F66 /* PKHUDSystemActivityIndicatorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PKHUDSystemActivityIndicatorView.swift; sourceTree = "<group>"; };
+		3CFFC8171D5DEC7900696F66 /* PKHUDTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PKHUDTextView.swift; sourceTree = "<group>"; };
+		3CFFC8181D5DEC7900696F66 /* PKHUDWideBaseView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PKHUDWideBaseView.swift; sourceTree = "<group>"; };
+		3CFFC8191D5DEC7900696F66 /* Window.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Window.swift; sourceTree = "<group>"; };
+		3CFFC81A1D5DEC7900696F66 /* WindowRootViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WindowRootViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -502,6 +541,7 @@
 		3CB2E2F41BA7B26800805D4F /* PoTunes */ = {
 			isa = PBXGroup;
 			children = (
+				3CFFC8061D5DEC6600696F66 /* Swift-3rdParty */,
 				3CB2E4051BA7D1D200805D4F /* 框架 */,
 				3CB2E3B21BA7CF6100805D4F /* Model */,
 				3CB2E33A1BA7CD4D00805D4F /* 三方库 */,
@@ -616,6 +656,7 @@
 				3CD7353F1BEE3DF100262D69 /* PCBlurView.m */,
 				3CFFC7F91D5DC10600696F66 /* PCLrcCell.swift */,
 				3CFFC7FE1D5DC49000696F66 /* PCLabel.swift */,
+				3CFFC8041D5DE1CA00696F66 /* PlayerInterface.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -988,6 +1029,40 @@
 			name = TDImageColors;
 			sourceTree = "<group>";
 		};
+		3CFFC8061D5DEC6600696F66 /* Swift-3rdParty */ = {
+			isa = PBXGroup;
+			children = (
+				3CFFC8071D5DEC7900696F66 /* PKHUD */,
+			);
+			name = "Swift-3rdParty";
+			sourceTree = "<group>";
+		};
+		3CFFC8071D5DEC7900696F66 /* PKHUD */ = {
+			isa = PBXGroup;
+			children = (
+				3CFFC8081D5DEC7900696F66 /* FrameView.swift */,
+				3CFFC8091D5DEC7900696F66 /* HUD.swift */,
+				3CFFC80A1D5DEC7900696F66 /* Images.xcassets */,
+				3CFFC80B1D5DEC7900696F66 /* Info.plist */,
+				3CFFC80C1D5DEC7900696F66 /* PKHUD.h */,
+				3CFFC80D1D5DEC7900696F66 /* PKHUD.swift */,
+				3CFFC80E1D5DEC7900696F66 /* PKHUDAnimating.swift */,
+				3CFFC80F1D5DEC7900696F66 /* PKHUDAnimation.swift */,
+				3CFFC8101D5DEC7900696F66 /* PKHUDAssets.swift */,
+				3CFFC8111D5DEC7900696F66 /* PKHUDErrorView.swift */,
+				3CFFC8121D5DEC7900696F66 /* PKHUDProgressView.swift */,
+				3CFFC8131D5DEC7900696F66 /* PKHUDRotatingImageView.swift */,
+				3CFFC8141D5DEC7900696F66 /* PKHUDSquareBaseView.swift */,
+				3CFFC8151D5DEC7900696F66 /* PKHUDSuccessView.swift */,
+				3CFFC8161D5DEC7900696F66 /* PKHUDSystemActivityIndicatorView.swift */,
+				3CFFC8171D5DEC7900696F66 /* PKHUDTextView.swift */,
+				3CFFC8181D5DEC7900696F66 /* PKHUDWideBaseView.swift */,
+				3CFFC8191D5DEC7900696F66 /* Window.swift */,
+				3CFFC81A1D5DEC7900696F66 /* WindowRootViewController.swift */,
+			);
+			path = PKHUD;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1083,8 +1158,10 @@
 				3CB2E45D1BA7D53E00805D4F /* AMap.bundle in Resources */,
 				3CB2E45E1BA7D53E00805D4F /* AMapNavi.bundle in Resources */,
 				3CB2E3061BA7B26800805D4F /* LaunchScreen.xib in Resources */,
+				3CFFC81D1D5DEC7900696F66 /* Images.xcassets in Resources */,
 				3CFFC8031D5DC65D00696F66 /* Main.storyboard in Resources */,
 				3C41AA3D1C5B0C51000B9364 /* PoTunes.entitlements in Resources */,
+				3CFFC81E1D5DEC7900696F66 /* Info.plist in Resources */,
 				3CB2E3B11BA7CF2200805D4F /* BebasNeue.otf in Resources */,
 				3CB2E3901BA7CEEE00805D4F /* MBProgressHUD.bundle in Resources */,
 				3C5813631BE48C050012C689 /* PCWebViewController.xib in Resources */,
@@ -1130,8 +1207,12 @@
 				3CB2E3C31BA7CFF000805D4F /* PCMyMusicViewController.m in Sources */,
 				3CB2E3821BA7CE4000805D4F /* SDWebImagePrefetcher.m in Sources */,
 				3CB2E4501BA7D46C00805D4F /* FMDatabasePool.m in Sources */,
+				3CFFC8281D5DEC7900696F66 /* PKHUDSystemActivityIndicatorView.swift in Sources */,
+				3CFFC8251D5DEC7900696F66 /* PKHUDRotatingImageView.swift in Sources */,
+				3CFFC8241D5DEC7900696F66 /* PKHUDProgressView.swift in Sources */,
 				3CB2E3A71BA7CF0D00805D4F /* AFHTTPRequestOperation.m in Sources */,
 				3CB2E3351BA7CC0700805D4F /* UIView+Geometry.m in Sources */,
+				3CFFC8201D5DEC7900696F66 /* PKHUDAnimating.swift in Sources */,
 				3CB2E3861BA7CE4000805D4F /* UIImage+WebP.m in Sources */,
 				3CB2E3881BA7CE4000805D4F /* UIImageView+WebCache.m in Sources */,
 				3CB2E3801BA7CE4000805D4F /* SDWebImageDownloaderOperation.m in Sources */,
@@ -1159,10 +1240,12 @@
 				3CB2E3F51BA7D13B00805D4F /* file_output.cpp in Sources */,
 				3CB2E37B1BA7CE4000805D4F /* NSData+ImageContentType.m in Sources */,
 				3CB2E34E1BA7CD7C00805D4F /* UIView+MJExtension.m in Sources */,
+				3CFFC82C1D5DEC7900696F66 /* WindowRootViewController.swift in Sources */,
 				3C66DA4D1BB4E6B300CEA31F /* FSPlaylistItem.m in Sources */,
 				3C5813741BE634AE0012C689 /* PCShareBtn.m in Sources */,
 				3C5813771BE654770012C689 /* PCSongDetailViewController.m in Sources */,
 				3CB2E3341BA7CC0700805D4F /* UIImage+Reflection.m in Sources */,
+				3CFFC8271D5DEC7900696F66 /* PKHUDSuccessView.swift in Sources */,
 				3CFFC7FF1D5DC49000696F66 /* PCLabel.swift in Sources */,
 				3CD7353D1BEE3DD500262D69 /* FXBlurView.m in Sources */,
 				3C0CCAC51BB929DD00AAA5C6 /* PCSongListTableViewCell.m in Sources */,
@@ -1171,6 +1254,8 @@
 				3CB2E3F71BA7D13B00805D4F /* http_stream.cpp in Sources */,
 				3CFFC8011D5DC53900696F66 /* Player.swift in Sources */,
 				3CB2E3AE1BA7CF0D00805D4F /* AFURLResponseSerialization.m in Sources */,
+				3CFFC81F1D5DEC7900696F66 /* PKHUD.swift in Sources */,
+				3CFFC8231D5DEC7900696F66 /* PKHUDErrorView.swift in Sources */,
 				3CD22AD81BDE2A280064E7B0 /* PCDownloadingTableViewController.m in Sources */,
 				3CB2E44E1BA7D46C00805D4F /* FMDatabase.m in Sources */,
 				3C5813001BA7EFA00091E4FC /* PCNaviController.m in Sources */,
@@ -1189,6 +1274,7 @@
 				3CB2E3891BA7CE4000805D4F /* UIView+WebCacheOperation.m in Sources */,
 				3CD735431BF0E3C000262D69 /* lrcLine.m in Sources */,
 				3CB2E3A81BA7CF0D00805D4F /* AFHTTPRequestOperationManager.m in Sources */,
+				3CFFC82B1D5DEC7900696F66 /* Window.swift in Sources */,
 				3CB2E3FA1BA7D13B00805D4F /* stream_configuration.cpp in Sources */,
 				3CD5C5C91BB3C07B00CB6F6B /* UIImage+TDAdditions.m in Sources */,
 				3CFFC7FA1D5DC10600696F66 /* PCLrcCell.swift in Sources */,
@@ -1197,16 +1283,20 @@
 				3CB2E3BF1BA7CFBA00805D4F /* PCDownloadViewController.m in Sources */,
 				3CB2E3521BA7CD7C00805D4F /* MJRefreshFooterView.m in Sources */,
 				3CB2E3511BA7CD7C00805D4F /* MJRefreshConst.m in Sources */,
+				3CFFC8261D5DEC7900696F66 /* PKHUDSquareBaseView.swift in Sources */,
 				3CD735461BF101AD00262D69 /* LrcCell.m in Sources */,
 				3CB2E37F1BA7CE4000805D4F /* SDWebImageDownloader.m in Sources */,
 				3CD735401BEE3DF100262D69 /* PCBlurView.m in Sources */,
 				3CB2E3841BA7CE4000805D4F /* UIImage+GIF.m in Sources */,
 				3CB2E4521BA7D46C00805D4F /* FMResultSet.m in Sources */,
 				3CB2E32A1BA7CA5D00805D4F /* PCLabel.m in Sources */,
+				3CFFC82A1D5DEC7900696F66 /* PKHUDWideBaseView.swift in Sources */,
 				3CB2E3AB1BA7CF0D00805D4F /* AFSecurityPolicy.m in Sources */,
 				3CB2E3281BA7CA5D00805D4F /* PCArticleCell.m in Sources */,
 				3CB2E37A1BA7CE4000805D4F /* MKAnnotationView+WebCache.m in Sources */,
 				3CB2E34D1BA7CD7C00805D4F /* UIScrollView+MJRefresh.m in Sources */,
+				3CFFC8291D5DEC7900696F66 /* PKHUDTextView.swift in Sources */,
+				3CFFC81B1D5DEC7900696F66 /* FrameView.swift in Sources */,
 				3CB2E3F91BA7D13B00805D4F /* input_stream.cpp in Sources */,
 				3CB2E3571BA7CE1A00805D4F /* PCNavigationController.m in Sources */,
 				3CB2E3851BA7CE4000805D4F /* UIImage+MultiFormat.m in Sources */,
@@ -1216,18 +1306,22 @@
 				3CB2E3391BA7CCF900805D4F /* PCArticleViewController.m in Sources */,
 				3CB2E37D1BA7CE4000805D4F /* SDWebImageCompat.m in Sources */,
 				3CF7AFC21BAAA19500F764BD /* LineDashPolyline.m in Sources */,
+				3CFFC8221D5DEC7900696F66 /* PKHUDAssets.swift in Sources */,
 				3CB2E4321BA7D36A00805D4F /* PCBaiduNavController.m in Sources */,
 				3CD5C5C71BB3C07B00CB6F6B /* TDImageColors.m in Sources */,
 				3CB2E3911BA7CEEE00805D4F /* MBProgressHUD.m in Sources */,
+				3CFFC8051D5DE1CA00696F66 /* PlayerInterface.swift in Sources */,
 				3CB2E44F1BA7D46C00805D4F /* FMDatabaseAdditions.m in Sources */,
 				3CA296FF1BE1C1950073CF1A /* PCDownLoadedCell.m in Sources */,
 				3CB45FBC1BE7B52C0011AEA4 /* DBHelper.m in Sources */,
+				3CFFC8211D5DEC7900696F66 /* PKHUDAnimation.swift in Sources */,
 				3CB2E2FB1BA7B26800805D4F /* AppDelegate.m in Sources */,
 				3CB2E3291BA7CA5D00805D4F /* LDProgressView.m in Sources */,
 				3C66DA4A1BB4E6B300CEA31F /* FSCheckContentTypeRequest.m in Sources */,
 				3CB2E3831BA7CE4000805D4F /* UIButton+WebCache.m in Sources */,
 				3CB2E2F81BA7B26800805D4F /* main.m in Sources */,
 				3CB2E3AF1BA7CF0D00805D4F /* AFURLSessionManager.m in Sources */,
+				3CFFC81C1D5DEC7900696F66 /* HUD.swift in Sources */,
 				3CD5C5C81BB3C07B00CB6F6B /* UIColor+TDAdditions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1323,7 +1417,7 @@
 					"$(SDKROOT)/usr/include/libxml2",
 				);
 				INFOPLIST_FILE = PoTunes/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1467,7 +1561,7 @@
 					"$(SDKROOT)/usr/include/libxml2",
 				);
 				INFOPLIST_FILE = PoTunes/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1508,7 +1602,7 @@
 					"$(SDKROOT)/usr/include/libxml2",
 				);
 				INFOPLIST_FILE = PoTunes/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
