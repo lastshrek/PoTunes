@@ -8,7 +8,7 @@
 
 import UIKit
 
-class Player: UIViewController, UIScrollViewDelegate {
+class Main: UIViewController, UIScrollViewDelegate {
     
     var height: CGFloat?
     var width: CGFloat?
@@ -16,6 +16,8 @@ class Player: UIViewController, UIScrollViewDelegate {
     var scrollView: UIScrollView?
     var player: PlayerInterface?
     lazy var songs: NSArray = { [] }()
+    lazy var controllers: NSArray = { [] }()
+    
     
 
     override func viewDidLoad() {
@@ -30,6 +32,8 @@ class Player: UIViewController, UIScrollViewDelegate {
         setupPlayerInterface()
         //添加手势识别
         setupGestureRecognizer()
+        //存储用户状态
+        setupUserOnline()
         
     }
     
@@ -38,6 +42,9 @@ class Player: UIViewController, UIScrollViewDelegate {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    override func prefersStatusBarHidden() -> Bool {
+        return true
     }
     
     // MARK: - 添加ScrollView
@@ -69,23 +76,44 @@ class Player: UIViewController, UIScrollViewDelegate {
     }
     // MARK: - 添加播放器界面
     func setupPlayerInterface() {
-        let player: PlayerInterface = PlayerInterface()
+        let player: PlayerInterface = PlayerInterface(frame: self.view.bounds)
+        player.frame = self.view.bounds
         self.player = player
         self.scrollView?.addSubview(player)
     }
-    //MARK: - 添加手势识别
+    //MARK: - 添加手势识别 - TODO
     func setupGestureRecognizer() {
         //播放和暂停
-        let singleTap: UITapGestureRecognizer = UITapGestureRecognizer.init(target: self, action:#selector(Player.playOrPause))
+        let singleTap: UITapGestureRecognizer = UITapGestureRecognizer.init(target: self, action:#selector(Main.playOrPause))
         singleTap.numberOfTapsRequired = 1
         singleTap.numberOfTouchesRequired = 1
-        self.player?.addGestureRecognizer(singleTap)
+        self.player!.addGestureRecognizer(singleTap)
     }
-    
+    //MARK: - TODO
     func playOrPause() {
-        print(123)
         if self.songs.count == 0 {
-            HUD.flash(.Success, delay: 1.0)
+            HUD.flash(.Error, delay: 1.0)
+            return
         }
+        
+    }
+    //MARK: - TODO
+    func setupUserOnline() {
+        let user: NSUserDefaults = NSUserDefaults.standardUserDefaults()
+        let online:String? = user.valueForKey("online") as? String
+        if online == nil {
+            
+        }
+    }
+    //MARK: - TODO
+    func setupTabBarWithCount(count: Int) {
+        //每月文章列表页
+        let article: ArticleController = ArticleController()
+        setupSingleViewControllerToScrollView(article, hidden: false)
+        
+    }
+    //MARK: - TODO
+    func setupSingleViewControllerToScrollView(controller: UIViewController, hidden: Bool) {
+        
     }
 }

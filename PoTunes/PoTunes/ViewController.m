@@ -142,16 +142,7 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 - (void)viewDidLoad {
     
     [super viewDidLoad];
-    
-    self.height = self.view.bounds.size.height;
-    
-    self.width = self.view.bounds.size.width;
 
-    /** 添加UIScrollView */
-    [self setupScrollView];
-    
-    /** 添加PageControll */
-    [self setupPageControl];
     
     /** 添加播放器界面 */
     [self setupPlayerInterface];
@@ -194,48 +185,8 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     NSString *documentsDirectory = [paths objectAtIndex:0];
     return documentsDirectory;
 }
-#pragma mark - 隐藏statusBar
-- (BOOL)prefersStatusBarHidden {
-    return YES;
-}
-- (NSArray *)songs {
-    
-    if (_songs == nil) {
-    
-        _songs = [NSArray array];
-    
-    }
-    
-    return _songs;
-}
-#pragma mark - 添加ScrollView
-- (void)setupScrollView {
-    UIScrollView *scrollView = [[UIScrollView alloc] init];
-    scrollView.frame = self.view.bounds;
-    scrollView.delegate = self;
-    scrollView.backgroundColor = [UIColor blackColor];
-    self.scrollView = scrollView;
-    /** 设置内容滚动尺寸 */
-    scrollView.contentSize = CGSizeMake(0, self.height * 2);
-    scrollView.bounces = NO;
-    scrollView.showsVerticalScrollIndicator = NO;
-    scrollView.pagingEnabled = YES;
-    [self.view addSubview:scrollView];
-}
-#pragma mark - 添加PageControl
-- (void)setupPageControl {
-    /** 添加 */
-    UIPageControl * pageControl = [[UIPageControl alloc] init];
-    pageControl.numberOfPages = 2;
-    pageControl.hidden = YES;
-    CGFloat centerX = self.width * 0.5;
-    CGFloat centerY = self.height - 30;
-    pageControl.center = CGPointMake(centerX, centerY);
-    pageControl.bounds = CGRectMake(0, 0, 100, 30);
-    pageControl.userInteractionEnabled = YES;
-    [self.view addSubview:pageControl];
-    self.pageControl = pageControl;
-}
+
+
 #pragma mark - 添加播放器界面
 - (void)setupPlayerInterface {
     //播放器背景

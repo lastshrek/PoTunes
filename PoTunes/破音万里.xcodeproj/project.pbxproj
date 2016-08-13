@@ -39,6 +39,7 @@
 		3CA296FF1BE1C1950073CF1A /* PCDownLoadedCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CA296FE1BE1C1950073CF1A /* PCDownLoadedCell.m */; };
 		3CA297021BE1C71E0073CF1A /* PCSongDownloadingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CA297011BE1C71E0073CF1A /* PCSongDownloadingCell.m */; };
 		3CA297121BE1EBB50073CF1A /* PCSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CA297111BE1EBB50073CF1A /* PCSettingViewController.m */; };
+		3CB09B751D5EDD7F00DEAEDA /* ArticleController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CB09B741D5EDD7F00DEAEDA /* ArticleController.swift */; };
 		3CB2E2F81BA7B26800805D4F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB2E2F71BA7B26800805D4F /* main.m */; };
 		3CB2E2FB1BA7B26800805D4F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB2E2FA1BA7B26800805D4F /* AppDelegate.m */; };
 		3CB2E2FE1BA7B26800805D4F /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB2E2FD1BA7B26800805D4F /* ViewController.m */; };
@@ -139,7 +140,7 @@
 		3CF7AFC21BAAA19500F764BD /* LineDashPolyline.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CF7AFC11BAAA19500F764BD /* LineDashPolyline.m */; };
 		3CFFC7FA1D5DC10600696F66 /* PCLrcCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFFC7F91D5DC10600696F66 /* PCLrcCell.swift */; };
 		3CFFC7FF1D5DC49000696F66 /* PCLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFFC7FE1D5DC49000696F66 /* PCLabel.swift */; };
-		3CFFC8011D5DC53900696F66 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFFC8001D5DC53900696F66 /* Player.swift */; };
+		3CFFC8011D5DC53900696F66 /* Main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFFC8001D5DC53900696F66 /* Main.swift */; };
 		3CFFC8031D5DC65D00696F66 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3CFFC8021D5DC65D00696F66 /* Main.storyboard */; };
 		3CFFC8051D5DE1CA00696F66 /* PlayerInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFFC8041D5DE1CA00696F66 /* PlayerInterface.swift */; };
 		3CFFC81B1D5DEC7900696F66 /* FrameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFFC8081D5DEC7900696F66 /* FrameView.swift */; };
@@ -250,6 +251,8 @@
 		3CA297011BE1C71E0073CF1A /* PCSongDownloadingCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCSongDownloadingCell.m; sourceTree = "<group>"; };
 		3CA297101BE1EBB50073CF1A /* PCSettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCSettingViewController.h; sourceTree = "<group>"; };
 		3CA297111BE1EBB50073CF1A /* PCSettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCSettingViewController.m; sourceTree = "<group>"; };
+		3CB09B741D5EDD7F00DEAEDA /* ArticleController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArticleController.swift; sourceTree = "<group>"; };
+		3CB09B761D5F661500DEAEDA /* 破音万里-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "破音万里-Bridging-Header.h"; sourceTree = "<group>"; };
 		3CB2E2F21BA7B26800805D4F /* PoTunes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PoTunes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3CB2E2F61BA7B26800805D4F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3CB2E2F71BA7B26800805D4F /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -441,7 +444,7 @@
 		3CFFC7F61D5DBF3500696F66 /* 破音万里-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "破音万里-Bridging-Header.h"; sourceTree = "<group>"; };
 		3CFFC7F91D5DC10600696F66 /* PCLrcCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PCLrcCell.swift; sourceTree = "<group>"; };
 		3CFFC7FE1D5DC49000696F66 /* PCLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PCLabel.swift; sourceTree = "<group>"; };
-		3CFFC8001D5DC53900696F66 /* Player.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
+		3CFFC8001D5DC53900696F66 /* Main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Main.swift; sourceTree = "<group>"; };
 		3CFFC8021D5DC65D00696F66 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		3CFFC8041D5DE1CA00696F66 /* PlayerInterface.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerInterface.swift; sourceTree = "<group>"; };
 		3CFFC8081D5DEC7900696F66 /* FrameView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FrameView.swift; sourceTree = "<group>"; };
@@ -554,6 +557,7 @@
 				3C5813701BE4BFEA0012C689 /* guide.plist */,
 				3CB2E2F51BA7B26800805D4F /* Supporting Files */,
 				3CB2E4061BA7D28600805D4F /* FreeStreamerMobile-Prefix.pch */,
+				3CB09B761D5F661500DEAEDA /* 破音万里-Bridging-Header.h */,
 				3CB2E3021BA7B26800805D4F /* Images.xcassets */,
 				3CB2E3041BA7B26800805D4F /* LaunchScreen.xib */,
 			);
@@ -620,7 +624,7 @@
 			children = (
 				3CB2E2FC1BA7B26800805D4F /* ViewController.h */,
 				3CB2E2FD1BA7B26800805D4F /* ViewController.m */,
-				3CFFC8001D5DC53900696F66 /* Player.swift */,
+				3CFFC8001D5DC53900696F66 /* Main.swift */,
 			);
 			name = "首页";
 			sourceTree = "<group>";
@@ -681,6 +685,7 @@
 			children = (
 				3CB2E3371BA7CCF900805D4F /* PCArticleViewController.h */,
 				3CB2E3381BA7CCF900805D4F /* PCArticleViewController.m */,
+				3CB09B741D5EDD7F00DEAEDA /* ArticleController.swift */,
 			);
 			name = "文章列表页";
 			sourceTree = "<group>";
@@ -1252,7 +1257,7 @@
 				3CB2E37C1BA7CE4000805D4F /* SDImageCache.m in Sources */,
 				3CB2E3F41BA7D13B00805D4F /* caching_stream.cpp in Sources */,
 				3CB2E3F71BA7D13B00805D4F /* http_stream.cpp in Sources */,
-				3CFFC8011D5DC53900696F66 /* Player.swift in Sources */,
+				3CFFC8011D5DC53900696F66 /* Main.swift in Sources */,
 				3CB2E3AE1BA7CF0D00805D4F /* AFURLResponseSerialization.m in Sources */,
 				3CFFC81F1D5DEC7900696F66 /* PKHUD.swift in Sources */,
 				3CFFC8231D5DEC7900696F66 /* PKHUDErrorView.swift in Sources */,
@@ -1310,6 +1315,7 @@
 				3CB2E4321BA7D36A00805D4F /* PCBaiduNavController.m in Sources */,
 				3CD5C5C71BB3C07B00CB6F6B /* TDImageColors.m in Sources */,
 				3CB2E3911BA7CEEE00805D4F /* MBProgressHUD.m in Sources */,
+				3CB09B751D5EDD7F00DEAEDA /* ArticleController.swift in Sources */,
 				3CFFC8051D5DE1CA00696F66 /* PlayerInterface.swift in Sources */,
 				3CB2E44F1BA7D46C00805D4F /* FMDatabaseAdditions.m in Sources */,
 				3CA296FF1BE1C1950073CF1A /* PCDownLoadedCell.m in Sources */,
