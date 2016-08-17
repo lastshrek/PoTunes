@@ -22,7 +22,9 @@ class PlayerInterface: UIView {
     var currentTime: UILabel?
     var leftTime: UILabel?
     var songName: UILabel?
-    var artist: UILabel?
+    var artist: PCLabel?
+    var album: PCLabel?
+    var playModeView: UIImageView?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -63,14 +65,30 @@ class PlayerInterface: UIView {
         self.currentTime = currentTime
         self.timeView?.addSubview(currentTime)
         //剩余时间
-        let leftTime = createLabel([.FlexibleHeight, .FlexibleWidth, .FlexibleLeftMargin], shadowOffset: CGSizeMake(0, 0), textColor: .whiteColor(), text: "123", textAlignment: .Right)
+        let leftTime = createLabel([.FlexibleHeight, .FlexibleWidth, .FlexibleLeftMargin], shadowOffset: CGSizeMake(0, 0), textColor: .whiteColor(), text: nil, textAlignment: .Right)
         self.timeView?.addSubview(leftTime)
         self.leftTime = leftTime
         //歌曲名
-        let songName = createLabel([.FlexibleWidth, .FlexibleTopMargin], shadowOffset: nil, textColor: .whiteColor(), text: "尚未播放歌曲", textAlignment: .Center)
+        let songName: UILabel = createLabel([.FlexibleWidth, .FlexibleTopMargin], shadowOffset: nil, textColor: .whiteColor(), text: "尚未播放歌曲", textAlignment: .Center)
         self.backgroundView?.addSubview(songName)
         self.songName = songName
         //歌手名
+        let artist: PCLabel = PCLabel()
+        artist.autoresizingMask = [.FlexibleWidth, .FlexibleTopMargin]
+        self.backgroundView?.addSubview(artist)
+        self.artist = artist
+        //专辑名
+        let album: PCLabel = PCLabel()
+        album.autoresizingMask = [.FlexibleWidth, .FlexibleTopMargin]
+        self.backgroundView?.addSubview(album)
+        self.album = album
+        //播放模式
+        let playModeView: UIImageView = UIImageView()
+        playModeView.autoresizingMask = [.FlexibleWidth, .FlexibleTopMargin]
+        playModeView.image = UIImage(named: "repeatOnB.png")
+        playModeView.contentMode = .ScaleAspectFit
+        self.playModeView = playModeView
+        self.backgroundView?.addSubview(playModeView)
         
     }
     
@@ -86,6 +104,38 @@ class PlayerInterface: UIView {
         self.timeView?.frame = CGRectMake(0, CGRectGetMaxY(self.progress!.frame), width!, 25)
         self.currentTime?.frame = CGRectMake(2, 0, width! / 2, (self.timeView?.bounds.size.height)!)
         self.leftTime?.frame = CGRectMake(width! / 2 - 2, 0, width! / 2, (self.timeView?.bounds.size.height)!)
+        
+        switch Int(height!) {
+        case 480:
+            self.songName?.frame = CGRectMake(0, CGRectGetMaxY((self.timeView?.frame)!) + 15, width!, 40)
+            self.songName?.font = UIFont(name: "BebasNeue", size: 30)
+            self.artist?.frame = CGRectMake(0, CGRectGetMaxY((self.songName?.frame)!), width!, 20)
+            self.album?.frame = CGRectMake(0, CGRectGetMaxY((self.artist?.frame)!), width!, 20)
+            break
+        case 568:
+            self.songName?.frame = CGRectMake(0, CGRectGetMaxY((self.timeView?.frame)!) + 40, width!, 40)
+            self.songName?.font = UIFont(name: "BebasNeue", size: 30)
+            self.artist?.frame = CGRectMake(0, CGRectGetMaxY((self.songName?.frame)!) + 15, width!, 20)
+            self.album?.frame = CGRectMake(0, CGRectGetMaxY((self.artist?.frame)!) + 15, width!, 20)
+            break
+        case 667:
+            self.songName?.frame = CGRectMake(0, CGRectGetMaxY((self.timeView?.frame)!) + 40, width!, 40)
+            self.songName?.font = UIFont(name: "BebasNeue", size: 40)
+            self.artist?.frame = CGRectMake(0, CGRectGetMaxY((self.songName?.frame)!) + 20, width!, 25)
+            self.artist?.font = UIFont(name: "BebasNeue", size: 25)
+            self.album?.frame = CGRectMake(0, CGRectGetMaxY((self.artist?.frame)!) + 20, width!, 25)
+            self.album?.font = UIFont(name: "BebasNeue", size: 23)
+            break
+        default:
+            self.songName?.frame = CGRectMake(0, CGRectGetMaxY((self.timeView?.frame)!) + 60, width!, 42)
+            self.songName?.font = UIFont(name: "BebasNeue", size: 40)
+            self.artist?.frame = CGRectMake(0, CGRectGetMaxY((self.songName?.frame)!) + 20, width!, 27)
+            self.artist?.font = UIFont(name: "BebasNeue", size: 25)
+            self.album?.frame = CGRectMake(0, CGRectGetMaxY((self.artist?.frame)!) + 20, width!, 27)
+            self.album?.font = UIFont(name: "BebasNeue", size: 25)
+            break
+        }
+        self.playModeView?.frame = CGRectMake(width! / 2 - 10, height! - 20, 20, 20)
     }
     
     func createProgressView(flat: Bool, progress: CGFloat, animate: Bool, showText: Bool, showStroke: Bool, progressInset: NSNumber, showBackground: Bool, outerStrokeWidth: NSNumber, type: LDProgressType, autoresizingMask: UIViewAutoresizing, borderRadius: NSNumber, backgroundColor: UIColor) -> LDProgressView {

@@ -177,13 +177,13 @@
             // 刷新tableView
             NSArray *reloadRows = @[[NSIndexPath indexPathForRow:self.currentIndex inSection:0],
                                     [NSIndexPath indexPathForRow:idx inSection:0]];
-            
+					
             self.currentIndex = idx;
             
             [self.tableView reloadRowsAtIndexPaths:reloadRows withRowAnimation:UITableViewRowAnimationNone];
             
             
-            // 滚动到对应的行
+            // 滚动到对应的
             NSIndexPath *indexPath = [NSIndexPath indexPathForRow:idx inSection:0];
             
             [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
@@ -209,7 +209,7 @@
     
     UITableView *tableView = [[UITableView alloc] init];
     
-    tableView.dataSource = self;
+    tableView.delegate = self;
     
     tableView.dataSource = self;
     

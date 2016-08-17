@@ -16,7 +16,7 @@ class Main: UIViewController, UIScrollViewDelegate {
     var scrollView: UIScrollView?
     var player: PlayerInterface?
     lazy var songs: NSArray = { [] }()
-    lazy var controllers: NSArray = { [] }()
+    lazy var controllers: NSMutableArray = { [] }()
     
     
 
