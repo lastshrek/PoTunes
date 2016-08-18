@@ -8,34 +8,38 @@
 
 import UIKit
 
-class Main: UIViewController, UIScrollViewDelegate {
+class Main: UIViewController, UIScrollViewDelegate, UIGestureRecognizerDelegate, UIAlertViewDelegate {
     
-    var height: CGFloat?
-    var width: CGFloat?
-    var pageControl: UIPageControl?
-    var scrollView: UIScrollView?
-    var player: PlayerInterface?
-    lazy var songs: NSArray = { [] }()
-    lazy var controllers: NSMutableArray = { [] }()
-    
+	var height: CGFloat?
+	var width: CGFloat?
+	var pageControl: UIPageControl?
+	var scrollView: UIScrollView?
+	var player: PlayerInterface?
+	var selectedView: UIView?
+	var selectedBtn: BarItem?
+	lazy var songs: NSArray = { [] }()
+	lazy var controllers: NSMutableArray = { [] }()
+	
+	
     
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        self.height = self.view.bounds.size.height
-        self.width = self.view.bounds.size.width
-        //添加ScrollView
-        setupScrollView()
-        //添加PageControl
-        setupPageControl()
-        //添加播放器界面
-        setupPlayerInterface()
-        //添加手势识别
-        setupGestureRecognizer()
-        //存储用户状态
-        setupUserOnline()
-        
-    }
+	override func viewDidLoad() {
+		super.viewDidLoad()
+	
+		self.height = self.view.bounds.size.height
+		self.width = self.view.bounds.size.width
+		//添加ScrollView
+		setupScrollView()
+		//添加PageControl
+		setupPageControl()
+		//添加播放器界面
+		setupPlayerInterface()
+		//添加手势识别
+		setupGestureRecognizer()
+		//存储用户状态
+		setupUserOnline()
+
+	}
     
 
 
@@ -99,21 +103,57 @@ class Main: UIViewController, UIScrollViewDelegate {
     }
     //MARK: - TODO
     func setupUserOnline() {
-        let user: NSUserDefaults = NSUserDefaults.standardUserDefaults()
-        let online:String? = user.valueForKey("online") as? String
-        if online == nil {
-            
-        }
+			let user: NSUserDefaults = NSUserDefaults.standardUserDefaults()
+			let online: String = user.objectForKey("online") as! String
+			if online.isEmpty {
+				self.setupTabBarWithCount(3)
+			}
+			if online == "online" {
+				self.setupTabBarWithCount(4)
+			}
     }
     //MARK: - TODO
     func setupTabBarWithCount(count: Int) {
-        //每月文章列表页
-        let article: ArticleController = ArticleController()
-        setupSingleViewControllerToScrollView(article, hidden: false)
-        
+			//每月文章列表页
+			let article: ArticleController = ArticleController()
+			setupSingleViewControllerToScrollView(article, hidden: false)
+			
+			//已下载歌曲界面
+			if count == 4 {
+				
+			}
+			for i in 0..<count {
+				let button: BarItem = BarItem(frame: CGRectMake(CGFloat(i) * self.width! / CGFloat(count), self.height!, self.width! / CGFloat(count), 134))
+				if i == 0 {
+					self.buttonClick(button)
+				}
+				button.tag = i
+				button.addTarget(self, action: #selector(Main.buttonClick(_:)), forControlEvents: .TouchUpInside)
+				//MARK: - TODO
+				
+				self.scrollView?.addSubview(button)
+			}
     }
-    //MARK: - TODO
-    func setupSingleViewControllerToScrollView(controller: UIViewController, hidden: Bool) {
-        
-    }
+	//MARK: - TODO
+	func setupSingleViewControllerToScrollView(controller: UIViewController, hidden: Bool) {
+		let nav: NavigationController = NavigationController(rootViewController: controller)
+		nav.view.frame = CGRectMake(0, self.height! + 20, self.width!, self.height! - 20)
+		self.controllers.addObject(nav)
+		self.scrollView?.addSubview(nav.view)
+		nav.view.hidden = hidden
+		if hidden == false {
+			self.selectedView = nav.view
+		}
+	}
+	//MARK: - 点击tabBarButton事件
+	func buttonClick(btn: BarItem) {
+		self.selectedBtn?.selected = false
+		btn.selected = true
+		self.selectedBtn = btn
+		self.selectedView?.hidden = true
+		let controller: UIViewController = self.controllers[btn.tag] as! UIViewController
+		controller.view.hidden = false
+		self.selectedView = controller.view
+		//MARK: - TODO
+	}
 }

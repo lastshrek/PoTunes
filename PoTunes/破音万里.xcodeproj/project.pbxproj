@@ -142,6 +142,9 @@
 		3CFA57331D60946800341763 /* LrcView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFA57321D60946800341763 /* LrcView.swift */; };
 		3CFA57351D62C87500341763 /* LrcLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFA57341D62C87500341763 /* LrcLine.swift */; };
 		3CFA57371D6337B100341763 /* LrcCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFA57361D6337B100341763 /* LrcCell.swift */; };
+		3CFA57391D64207F00341763 /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFA57381D64207F00341763 /* NavigationController.swift */; };
+		3CFA573B1D644F1E00341763 /* NSString+DirDoc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFA573A1D644F1E00341763 /* NSString+DirDoc.swift */; };
+		3CFA573D1D645B1D00341763 /* BarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFA573C1D645B1D00341763 /* BarItem.swift */; };
 		3CFFC7FF1D5DC49000696F66 /* PCLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFFC7FE1D5DC49000696F66 /* PCLabel.swift */; };
 		3CFFC8011D5DC53900696F66 /* Main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFFC8001D5DC53900696F66 /* Main.swift */; };
 		3CFFC8031D5DC65D00696F66 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3CFFC8021D5DC65D00696F66 /* Main.storyboard */; };
@@ -448,6 +451,9 @@
 		3CFA57321D60946800341763 /* LrcView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LrcView.swift; sourceTree = "<group>"; };
 		3CFA57341D62C87500341763 /* LrcLine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LrcLine.swift; sourceTree = "<group>"; };
 		3CFA57361D6337B100341763 /* LrcCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LrcCell.swift; sourceTree = "<group>"; };
+		3CFA57381D64207F00341763 /* NavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
+		3CFA573A1D644F1E00341763 /* NSString+DirDoc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSString+DirDoc.swift"; sourceTree = "<group>"; };
+		3CFA573C1D645B1D00341763 /* BarItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BarItem.swift; sourceTree = "<group>"; };
 		3CFFC7F61D5DBF3500696F66 /* 破音万里-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "破音万里-Bridging-Header.h"; sourceTree = "<group>"; };
 		3CFFC7FE1D5DC49000696F66 /* PCLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PCLabel.swift; sourceTree = "<group>"; };
 		3CFFC8001D5DC53900696F66 /* Main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Main.swift; sourceTree = "<group>"; };
@@ -669,6 +675,7 @@
 				3CFA57301D60332F00341763 /* SongLabel.swift */,
 				3CFA57321D60946800341763 /* LrcView.swift */,
 				3CFA57361D6337B100341763 /* LrcCell.swift */,
+				3CFA573C1D645B1D00341763 /* BarItem.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -684,6 +691,7 @@
 				3C3984551BF65EED000629DE /* UIImage+BoxBlur.m */,
 				3CB2E32D1BA7CB7A00805D4F /* UIColor+RGBValues.h */,
 				3CB2E32E1BA7CB7A00805D4F /* UIColor+RGBValues.m */,
+				3CFA573A1D644F1E00341763 /* NSString+DirDoc.swift */,
 			);
 			name = Category;
 			sourceTree = "<group>";
@@ -753,6 +761,7 @@
 			children = (
 				3CB2E3551BA7CE1A00805D4F /* PCNavigationController.h */,
 				3CB2E3561BA7CE1A00805D4F /* PCNavigationController.m */,
+				3CFA57381D64207F00341763 /* NavigationController.swift */,
 			);
 			name = "导航控制器";
 			sourceTree = "<group>";
@@ -1221,6 +1230,7 @@
 				3CB2E3C31BA7CFF000805D4F /* PCMyMusicViewController.m in Sources */,
 				3CB2E3821BA7CE4000805D4F /* SDWebImagePrefetcher.m in Sources */,
 				3CB2E4501BA7D46C00805D4F /* FMDatabasePool.m in Sources */,
+				3CFA573B1D644F1E00341763 /* NSString+DirDoc.swift in Sources */,
 				3CFFC8281D5DEC7900696F66 /* PKHUDSystemActivityIndicatorView.swift in Sources */,
 				3CFFC8251D5DEC7900696F66 /* PKHUDRotatingImageView.swift in Sources */,
 				3CFFC8241D5DEC7900696F66 /* PKHUDProgressView.swift in Sources */,
@@ -1253,6 +1263,7 @@
 				3CF7AFBC1BAA997D00F764BD /* GeocodeAnnotation.m in Sources */,
 				3CB2E3F51BA7D13B00805D4F /* file_output.cpp in Sources */,
 				3CB2E37B1BA7CE4000805D4F /* NSData+ImageContentType.m in Sources */,
+				3CFA573D1D645B1D00341763 /* BarItem.swift in Sources */,
 				3CB2E34E1BA7CD7C00805D4F /* UIView+MJExtension.m in Sources */,
 				3CFFC82C1D5DEC7900696F66 /* WindowRootViewController.swift in Sources */,
 				3C66DA4D1BB4E6B300CEA31F /* FSPlaylistItem.m in Sources */,
@@ -1319,6 +1330,7 @@
 				3CB2E3F21BA7D13B00805D4F /* audio_queue.cpp in Sources */,
 				3C66DA491BB4E6B300CEA31F /* FSAudioStream.mm in Sources */,
 				3CB2E3AA1BA7CF0D00805D4F /* AFNetworkReachabilityManager.m in Sources */,
+				3CFA57391D64207F00341763 /* NavigationController.swift in Sources */,
 				3CB2E3391BA7CCF900805D4F /* PCArticleViewController.m in Sources */,
 				3CB2E37D1BA7CE4000805D4F /* SDWebImageCompat.m in Sources */,
 				3CF7AFC21BAAA19500F764BD /* LineDashPolyline.m in Sources */,
