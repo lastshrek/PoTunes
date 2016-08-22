@@ -104,12 +104,17 @@ class Main: UIViewController, UIScrollViewDelegate, UIGestureRecognizerDelegate,
     //MARK: - TODO
     func setupUserOnline() {
 			let user: NSUserDefaults = NSUserDefaults.standardUserDefaults()
-			let online: String = user.objectForKey("online") as! String
-			if online.isEmpty {
-				self.setupTabBarWithCount(3)
-			}
-			if online == "online" {
-				self.setupTabBarWithCount(4)
+			let online = user.objectForKey("online")
+//			if online == nil {
+//				self.setupTabBarWithCount(3)
+//			}
+//			if online == "online" {
+//				self.setupTabBarWithCount(4)
+//			}
+			if (online != nil) {
+				setupTabBarWithCount(4)
+			} else {
+				setupTabBarWithCount(3)
 			}
     }
     //MARK: - TODO
@@ -123,7 +128,8 @@ class Main: UIViewController, UIScrollViewDelegate, UIGestureRecognizerDelegate,
 				
 			}
 			for i in 0..<count {
-				let button: BarItem = BarItem(frame: CGRectMake(CGFloat(i) * self.width! / CGFloat(count), self.height!, self.width! / CGFloat(count), 134))
+				let button: BarItem = BarItem(frame: CGRectMake(CGFloat(i) * self.width! / CGFloat(count), self.height!, self.width! / CGFloat(count), 64))
+				button.normalImage?.image = UIImage(named: String(i + 1))
 				if i == 0 {
 					self.buttonClick(button)
 				}

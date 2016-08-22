@@ -11,7 +11,6 @@
 #import "BPush.h"
 #import "WXApi.h"
 #import "MBProgressHUD+MJ.h"
-#import "DMCAccountTool.h"
 @interface AppDelegate ()<WXApiDelegate>
 
 @end
@@ -34,19 +33,11 @@
 
     //注册通知·
     // iOS8 下需要使用新的 API
-    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0) {
-        UIUserNotificationType myTypes = UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert;
-        
-        UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:myTypes categories:nil];
-        [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
-        
-   
-    }else {
-    
-        UIRemoteNotificationType myTypes = UIRemoteNotificationTypeBadge|UIRemoteNotificationTypeAlert|UIRemoteNotificationTypeSound;
-        
-        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:myTypes];
-    }
+		UIUserNotificationType myTypes = UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert;
+		
+		UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:myTypes categories:nil];
+		[[UIApplication sharedApplication] registerUserNotificationSettings:settings];
+	
     
     // 在 App 启动时注册百度云推送服务，需要提供 Apikey
     [BPush registerChannel:launchOptions apiKey:@"TS45ZOdrWavQSWGldFx72QZr" pushMode:BPushModeProduction withFirstAction:nil withSecondAction:nil withCategory:nil isDebug:YES];
@@ -62,9 +53,7 @@
     //向微信注册
     [WXApi registerApp:@"wx0fc8d0673ec86694"];
     
-    //注册DMCkey
-    [DMCAccountTool registerApp:@"86ba1b987f19656168531f17a74516d9" clientID:@"topdmc"];
-    
+        
     return YES;
 }
 

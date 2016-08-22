@@ -8,7 +8,6 @@
 
 #import "PCSongDetailViewController.h"
 #import "FMDB.h"
-#import "DMCPlayback.h"
 #import "Reachability.h"
 #import "WXApiObject.h"
 #import "WXApi.h"
@@ -102,38 +101,7 @@
 
         if (song.title.length == 0) {
 
-            [DMCPlayback getTrackInfoWithTrackID:song.author success:^(DMCTrack *track) {
-
-                song.album = track.album.name;
-
-                song.sourceURL = [NSString stringWithFormat:@"%@", song.author];
-
-                NSMutableArray *artistsArray = [NSMutableArray array];
-
-                for (DMCArtist *artist in track.artists) {
-
-                    [artistsArray addObject:artist.name];
-
-                }
-
-                song.author = [artistsArray componentsJoinedByString:@" / "];
-
-
-                song.title = track.name;
-
-                song.thumb = track.album.photo;
-
-                song.position = [NSNumber numberWithInteger:indexPath.row];
-
-                [self.songs replaceObjectAtIndex:indexPath.row withObject:song];
-
-                [tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath, nil] withRowAnimation:UITableViewRowAnimationFade];
-
-
-            } failure:^(NSString *error) {
-
-            }];
-        }
+				}
 
         cell.textLabel.text = song.title;
 

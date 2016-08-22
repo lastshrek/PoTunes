@@ -17,8 +17,6 @@
 #import "FMDB.h"
 #import "PCSongDetailViewController.h"
 #import "FMDB.h"
-#import "DMCTrack.h"
-#import "DMCPlayback.h"
 #import "Reachability.h"
 @interface PCArticleViewController ()<UIAlertViewDelegate>
 

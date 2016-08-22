@@ -30,7 +30,6 @@
 #import "FMDB.h"
 #import "PCBlurView.h"
 #import "AFNetworking.h"
-#import "DMCPlayback.h"
 #import <MediaPlayer/MediaPlayer.h>
 #import <AVFoundation/AVFoundation.h>
 #import "Reachability.h"
@@ -97,8 +96,6 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 /** 存储专辑封面 */
 @property (nonatomic, weak) UIImage *originalImage;
 
-/** CWPlayerback */
-@property (nonatomic, strong) DMCPlayback *player;
 
 /** 当前播放器 */
 @property (nonatomic, copy) NSString *currentPlayer;
@@ -170,10 +167,6 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     NSLog(@"%@",[self dirDoc]);
     
     self.paused = YES;
-    
-    DMCPlayback *player = [[DMCPlayback alloc] init];
-    
-    self.player = player;
     
 
 
@@ -665,26 +658,7 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
             
             self.currentPlayer = @"topdmc";
             
-            [DMCPlayback playWithTrackID:song.sourceURL];
-            
-            [DMCPlayback listenFeedbackUpdatesWithBlock:^(DMCTrack *track) {
-                
-                if (track.timePlayed == track.duration) {
-                    
-                    [self playNext:self.audioRepeatMode];
-                    
-                }
-                
-                self.currentTime.text = [NSString stringWithFormat:@"%d:%d", (int)track.timePlayed / 60, (int)(track.timePlayed) % 60];
-                
-                self.leftTime.text = [NSString stringWithFormat:@"%d:%d", (int)(track.duration) / 60, (int)(track.duration) % 60];
-                
-                self.progress.progress = (float)track.timePlayed / (float)track.duration;
-                
-            } andFinishedBlock:^{
-                
-            }];
-            
+					
         } else {
             
             [self.audioController.activeStream playFromURL:[NSURL URLWithString:song.sourceURL]];
@@ -945,13 +919,11 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     
     if (self.paused == YES) {
 
-        [DMCPlayback pause];
-        
+			
         [MBProgressHUD showPlayState:@"playB" toView:self.backgroundView];
         
     } else {
         
-        [DMCPlayback pause];
         
         [MBProgressHUD showPlayState:@"pauseB" toView:self.backgroundView];
 
@@ -1002,8 +974,7 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
         }
     }
     
-    [DMCPlayback stop];
-    
+	
     [self playFromPlaylist:self.songs itemIndex:self.index state:PCAudioPlayStateNext];
     
     PCSong *song = self.songs[self.index];
@@ -1052,8 +1023,7 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
         }
     }
     
-    [DMCPlayback stop];
-    
+	
     [self playFromPlaylist:self.songs itemIndex:self.index state:PCAudioPlayStatePrevious];
     
     PCSong *song = self.songs[self.index];
@@ -1109,8 +1079,7 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 /** 随机 */
 - (void)playShuffle:(UISwipeGestureRecognizer *)gestureRecognizer {
     
-    [DMCPlayback stop];
-    
+	
     if (gestureRecognizer.direction == UISwipeGestureRecognizerDirectionLeft) {
     
         [MBProgressHUD showPlayState:@"shuffleOnB" toView:self.backgroundView];
@@ -1138,8 +1107,7 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 /** 单曲循环 */
 - (void)playSingle {
     
-    [DMCPlayback stop];
-    
+	
     if (self.audioRepeatMode == PCAudioRepeatModeSingle) {
       
         [MBProgressHUD showPlayState:@"repeatOnB" toView:self.backgroundView];

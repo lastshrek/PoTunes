@@ -10,14 +10,20 @@ import UIKit
 
 class BarItem: UIButton {
 	var normalImage: UIImageView?
-
+	
 	override init(frame: CGRect) {
 		super.init(frame: frame)
 		self.titleLabel?.font = UIFont(name: "BebasNeue", size: 12)
 		self.imageView?.contentMode = .ScaleToFill
 		let patternImage: UIImage = (UIImage(named: "barBg")?.resizableImageWithCapInsets(UIEdgeInsetsMake(0.5, 0, 0, 0), resizingMode: .Stretch))!
 		self.setImage(patternImage, forState: .Selected)
-		
+		self.backgroundColor = .blackColor()
+		//添加背景图片
+		let bgImage = UIImageView()
+		bgImage.image = self.imageView?.image
+		bgImage.contentMode = .ScaleToFill
+		self.normalImage = bgImage
+		self.addSubview(bgImage)
 	}
 	
 	override func imageRectForContentRect(contentRect: CGRect) -> CGRect {
