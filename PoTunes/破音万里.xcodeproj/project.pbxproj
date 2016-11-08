@@ -81,7 +81,6 @@
 		3CFA57391D64207F00341763 /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFA57381D64207F00341763 /* NavigationController.swift */; };
 		3CFA573B1D644F1E00341763 /* NSString+DirDoc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFA573A1D644F1E00341763 /* NSString+DirDoc.swift */; };
 		3CFA573D1D645B1D00341763 /* BarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFA573C1D645B1D00341763 /* BarItem.swift */; };
-		3CFA573F1D67000500341763 /* FoldingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFA573E1D67000500341763 /* FoldingCell.swift */; };
 		3CFA57471D67032500341763 /* ArticleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFA57461D67032500341763 /* ArticleCell.swift */; };
 		3CFA58A91D6706D700341763 /* AFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CFA58121D6706D700341763 /* AFHTTPRequestOperation.m */; };
 		3CFA58AA1D6706D700341763 /* AFHTTPRequestOperationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CFA58141D6706D700341763 /* AFHTTPRequestOperationManager.m */; };
@@ -150,24 +149,6 @@
 		3CFFC8011D5DC53900696F66 /* Main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFFC8001D5DC53900696F66 /* Main.swift */; };
 		3CFFC8031D5DC65D00696F66 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3CFFC8021D5DC65D00696F66 /* Main.storyboard */; };
 		3CFFC8051D5DE1CA00696F66 /* PlayerInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFFC8041D5DE1CA00696F66 /* PlayerInterface.swift */; };
-		3CFFC81B1D5DEC7900696F66 /* FrameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFFC8081D5DEC7900696F66 /* FrameView.swift */; };
-		3CFFC81C1D5DEC7900696F66 /* HUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFFC8091D5DEC7900696F66 /* HUD.swift */; };
-		3CFFC81D1D5DEC7900696F66 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3CFFC80A1D5DEC7900696F66 /* Images.xcassets */; };
-		3CFFC81E1D5DEC7900696F66 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3CFFC80B1D5DEC7900696F66 /* Info.plist */; };
-		3CFFC81F1D5DEC7900696F66 /* PKHUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFFC80D1D5DEC7900696F66 /* PKHUD.swift */; };
-		3CFFC8201D5DEC7900696F66 /* PKHUDAnimating.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFFC80E1D5DEC7900696F66 /* PKHUDAnimating.swift */; };
-		3CFFC8211D5DEC7900696F66 /* PKHUDAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFFC80F1D5DEC7900696F66 /* PKHUDAnimation.swift */; };
-		3CFFC8221D5DEC7900696F66 /* PKHUDAssets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFFC8101D5DEC7900696F66 /* PKHUDAssets.swift */; };
-		3CFFC8231D5DEC7900696F66 /* PKHUDErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFFC8111D5DEC7900696F66 /* PKHUDErrorView.swift */; };
-		3CFFC8241D5DEC7900696F66 /* PKHUDProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFFC8121D5DEC7900696F66 /* PKHUDProgressView.swift */; };
-		3CFFC8251D5DEC7900696F66 /* PKHUDRotatingImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFFC8131D5DEC7900696F66 /* PKHUDRotatingImageView.swift */; };
-		3CFFC8261D5DEC7900696F66 /* PKHUDSquareBaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFFC8141D5DEC7900696F66 /* PKHUDSquareBaseView.swift */; };
-		3CFFC8271D5DEC7900696F66 /* PKHUDSuccessView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFFC8151D5DEC7900696F66 /* PKHUDSuccessView.swift */; };
-		3CFFC8281D5DEC7900696F66 /* PKHUDSystemActivityIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFFC8161D5DEC7900696F66 /* PKHUDSystemActivityIndicatorView.swift */; };
-		3CFFC8291D5DEC7900696F66 /* PKHUDTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFFC8171D5DEC7900696F66 /* PKHUDTextView.swift */; };
-		3CFFC82A1D5DEC7900696F66 /* PKHUDWideBaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFFC8181D5DEC7900696F66 /* PKHUDWideBaseView.swift */; };
-		3CFFC82B1D5DEC7900696F66 /* Window.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFFC8191D5DEC7900696F66 /* Window.swift */; };
-		3CFFC82C1D5DEC7900696F66 /* WindowRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFFC81A1D5DEC7900696F66 /* WindowRootViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -322,7 +303,6 @@
 		3CFA57381D64207F00341763 /* NavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
 		3CFA573A1D644F1E00341763 /* NSString+DirDoc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSString+DirDoc.swift"; sourceTree = "<group>"; };
 		3CFA573C1D645B1D00341763 /* BarItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BarItem.swift; sourceTree = "<group>"; };
-		3CFA573E1D67000500341763 /* FoldingCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FoldingCell.swift; sourceTree = "<group>"; };
 		3CFA57461D67032500341763 /* ArticleCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArticleCell.swift; sourceTree = "<group>"; };
 		3CFA58111D6706D700341763 /* AFHTTPRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperation.h; sourceTree = "<group>"; };
 		3CFA58121D6706D700341763 /* AFHTTPRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFHTTPRequestOperation.m; sourceTree = "<group>"; };
@@ -456,25 +436,6 @@
 		3CFFC8001D5DC53900696F66 /* Main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Main.swift; sourceTree = "<group>"; };
 		3CFFC8021D5DC65D00696F66 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		3CFFC8041D5DE1CA00696F66 /* PlayerInterface.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerInterface.swift; sourceTree = "<group>"; };
-		3CFFC8081D5DEC7900696F66 /* FrameView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FrameView.swift; sourceTree = "<group>"; };
-		3CFFC8091D5DEC7900696F66 /* HUD.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HUD.swift; sourceTree = "<group>"; };
-		3CFFC80A1D5DEC7900696F66 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		3CFFC80B1D5DEC7900696F66 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		3CFFC80C1D5DEC7900696F66 /* PKHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKHUD.h; sourceTree = "<group>"; };
-		3CFFC80D1D5DEC7900696F66 /* PKHUD.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PKHUD.swift; sourceTree = "<group>"; };
-		3CFFC80E1D5DEC7900696F66 /* PKHUDAnimating.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PKHUDAnimating.swift; sourceTree = "<group>"; };
-		3CFFC80F1D5DEC7900696F66 /* PKHUDAnimation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PKHUDAnimation.swift; sourceTree = "<group>"; };
-		3CFFC8101D5DEC7900696F66 /* PKHUDAssets.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PKHUDAssets.swift; sourceTree = "<group>"; };
-		3CFFC8111D5DEC7900696F66 /* PKHUDErrorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PKHUDErrorView.swift; sourceTree = "<group>"; };
-		3CFFC8121D5DEC7900696F66 /* PKHUDProgressView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PKHUDProgressView.swift; sourceTree = "<group>"; };
-		3CFFC8131D5DEC7900696F66 /* PKHUDRotatingImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PKHUDRotatingImageView.swift; sourceTree = "<group>"; };
-		3CFFC8141D5DEC7900696F66 /* PKHUDSquareBaseView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PKHUDSquareBaseView.swift; sourceTree = "<group>"; };
-		3CFFC8151D5DEC7900696F66 /* PKHUDSuccessView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PKHUDSuccessView.swift; sourceTree = "<group>"; };
-		3CFFC8161D5DEC7900696F66 /* PKHUDSystemActivityIndicatorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PKHUDSystemActivityIndicatorView.swift; sourceTree = "<group>"; };
-		3CFFC8171D5DEC7900696F66 /* PKHUDTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PKHUDTextView.swift; sourceTree = "<group>"; };
-		3CFFC8181D5DEC7900696F66 /* PKHUDWideBaseView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PKHUDWideBaseView.swift; sourceTree = "<group>"; };
-		3CFFC8191D5DEC7900696F66 /* Window.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Window.swift; sourceTree = "<group>"; };
-		3CFFC81A1D5DEC7900696F66 /* WindowRootViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WindowRootViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -733,7 +694,6 @@
 				3CFA57321D60946800341763 /* LrcView.swift */,
 				3CFA57361D6337B100341763 /* LrcCell.swift */,
 				3CFA573C1D645B1D00341763 /* BarItem.swift */,
-				3CFA573E1D67000500341763 /* FoldingCell.swift */,
 				3C96420D1D6AAF4C00386ABB /* ArticleCell.xib */,
 			);
 			name = Views;
@@ -1111,35 +1071,8 @@
 		3CFFC8061D5DEC6600696F66 /* 3rdParty-Swift */ = {
 			isa = PBXGroup;
 			children = (
-				3CFFC8071D5DEC7900696F66 /* PKHUD */,
 			);
 			name = "3rdParty-Swift";
-			sourceTree = "<group>";
-		};
-		3CFFC8071D5DEC7900696F66 /* PKHUD */ = {
-			isa = PBXGroup;
-			children = (
-				3CFFC8081D5DEC7900696F66 /* FrameView.swift */,
-				3CFFC8091D5DEC7900696F66 /* HUD.swift */,
-				3CFFC80A1D5DEC7900696F66 /* Images.xcassets */,
-				3CFFC80B1D5DEC7900696F66 /* Info.plist */,
-				3CFFC80C1D5DEC7900696F66 /* PKHUD.h */,
-				3CFFC80D1D5DEC7900696F66 /* PKHUD.swift */,
-				3CFFC80E1D5DEC7900696F66 /* PKHUDAnimating.swift */,
-				3CFFC80F1D5DEC7900696F66 /* PKHUDAnimation.swift */,
-				3CFFC8101D5DEC7900696F66 /* PKHUDAssets.swift */,
-				3CFFC8111D5DEC7900696F66 /* PKHUDErrorView.swift */,
-				3CFFC8121D5DEC7900696F66 /* PKHUDProgressView.swift */,
-				3CFFC8131D5DEC7900696F66 /* PKHUDRotatingImageView.swift */,
-				3CFFC8141D5DEC7900696F66 /* PKHUDSquareBaseView.swift */,
-				3CFFC8151D5DEC7900696F66 /* PKHUDSuccessView.swift */,
-				3CFFC8161D5DEC7900696F66 /* PKHUDSystemActivityIndicatorView.swift */,
-				3CFFC8171D5DEC7900696F66 /* PKHUDTextView.swift */,
-				3CFFC8181D5DEC7900696F66 /* PKHUDWideBaseView.swift */,
-				3CFFC8191D5DEC7900696F66 /* Window.swift */,
-				3CFFC81A1D5DEC7900696F66 /* WindowRootViewController.swift */,
-			);
-			path = PKHUD;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1188,12 +1121,13 @@
 		3CB2E2EA1BA7B26800805D4F /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0730;
+				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = Purchas;
 				TargetAttributes = {
 					3CB2E2F11BA7B26800805D4F = {
 						CreatedOnToolsVersion = 6.4;
 						DevelopmentTeam = 7LKFCH3GR5;
+						LastSwiftMigration = 0800;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
 								enabled = 1;
@@ -1236,11 +1170,9 @@
 			files = (
 				3CFA58DB1D6706D700341763 /* PoTunes.entitlements in Resources */,
 				3CB2E3061BA7B26800805D4F /* LaunchScreen.xib in Resources */,
-				3CFFC81D1D5DEC7900696F66 /* Images.xcassets in Resources */,
 				3CFFC8031D5DC65D00696F66 /* Main.storyboard in Resources */,
 				3CFA58D11D6706D700341763 /* MBProgressHUD.bundle in Resources */,
 				3C96420E1D6AAF4C00386ABB /* ArticleCell.xib in Resources */,
-				3CFFC81E1D5DEC7900696F66 /* Info.plist in Resources */,
 				3CFA58D31D6706D700341763 /* MJRefresh.bundle in Resources */,
 				3C7140A91D6AB9FF00CDECAF /* ArticleController.xib in Resources */,
 				3CB2E3B11BA7CF2200805D4F /* BebasNeue.otf in Resources */,
@@ -1286,18 +1218,14 @@
 				3CFA58E11D6706D700341763 /* SDWebImageDownloader.m in Sources */,
 				3CFA573B1D644F1E00341763 /* NSString+DirDoc.swift in Sources */,
 				3CFA58EB1D6706D700341763 /* UIView+WebCacheOperation.m in Sources */,
-				3CFFC8281D5DEC7900696F66 /* PKHUDSystemActivityIndicatorView.swift in Sources */,
 				3CFA58BA1D6706D700341763 /* FMDatabasePool.m in Sources */,
 				3CFA58AE1D6706D700341763 /* AFURLConnectionOperation.m in Sources */,
 				3CFA58E51D6706D700341763 /* UIButton+WebCache.m in Sources */,
 				3C9642061D67184F00386ABB /* EVCircularProgressView.m in Sources */,
-				3CFFC8251D5DEC7900696F66 /* PKHUDRotatingImageView.swift in Sources */,
-				3CFFC8241D5DEC7900696F66 /* PKHUDProgressView.swift in Sources */,
 				3CFA57471D67032500341763 /* ArticleCell.swift in Sources */,
 				3CB2E3351BA7CC0700805D4F /* UIView+Geometry.m in Sources */,
 				3CFA58AD1D6706D700341763 /* AFSecurityPolicy.m in Sources */,
 				3CFA58D71D6706D700341763 /* MJRefreshHeaderView.m in Sources */,
-				3CFFC8201D5DEC7900696F66 /* PKHUDAnimating.swift in Sources */,
 				3CA297021BE1C71E0073CF1A /* PCSongDownloadingCell.m in Sources */,
 				3CFA58E41D6706D700341763 /* SDWebImagePrefetcher.m in Sources */,
 				3CFA58DA1D6706D700341763 /* UIView+MJExtension.m in Sources */,
@@ -1323,27 +1251,22 @@
 				3CFA58D41D6706D700341763 /* MJRefreshBaseView.m in Sources */,
 				3CFA58E91D6706D700341763 /* UIImageView+HighlightedWebCache.m in Sources */,
 				3CFA573D1D645B1D00341763 /* BarItem.swift in Sources */,
-				3CFFC82C1D5DEC7900696F66 /* WindowRootViewController.swift in Sources */,
-				3CFA573F1D67000500341763 /* FoldingCell.swift in Sources */,
 				3C96420A1D67187D00386ABB /* LDProgressView.m in Sources */,
 				3C5813741BE634AE0012C689 /* PCShareBtn.m in Sources */,
 				3C5813771BE654770012C689 /* PCSongDetailViewController.m in Sources */,
 				3CFA58B01D6706D700341763 /* AFURLResponseSerialization.m in Sources */,
 				3CB2E3341BA7CC0700805D4F /* UIImage+Reflection.m in Sources */,
 				3CFA58CE1D6706D700341763 /* FXBlurView.m in Sources */,
-				3CFFC8271D5DEC7900696F66 /* PKHUDSuccessView.swift in Sources */,
 				3CFFC7FF1D5DC49000696F66 /* PCLabel.swift in Sources */,
 				3C0CCAC51BB929DD00AAA5C6 /* PCSongListTableViewCell.m in Sources */,
 				3CFA57371D6337B100341763 /* LrcCell.swift in Sources */,
 				3CFA58E81D6706D700341763 /* UIImage+WebP.m in Sources */,
 				3CFA58AF1D6706D700341763 /* AFURLRequestSerialization.m in Sources */,
 				3CFFC8011D5DC53900696F66 /* Main.swift in Sources */,
-				3CFFC81F1D5DEC7900696F66 /* PKHUD.swift in Sources */,
 				3CFA58B81D6706D700341763 /* FMDatabase.m in Sources */,
 				3CFA58D61D6706D700341763 /* MJRefreshFooterView.m in Sources */,
 				3CFA58C31D6706D700341763 /* id3_parser.cpp in Sources */,
 				3CFA58BB1D6706D700341763 /* FMDatabaseQueue.m in Sources */,
-				3CFFC8231D5DEC7900696F66 /* PKHUDErrorView.swift in Sources */,
 				3CD22AD81BDE2A280064E7B0 /* PCDownloadingTableViewController.m in Sources */,
 				3C5813001BA7EFA00091E4FC /* PCNaviController.m in Sources */,
 				3CF7AFBF1BAAA14000F764BD /* CommonUtility.m in Sources */,
@@ -1357,7 +1280,6 @@
 				3CFA58AB1D6706D700341763 /* AFHTTPSessionManager.m in Sources */,
 				3CD735431BF0E3C000262D69 /* lrcLine.m in Sources */,
 				3CFA58C81D6706D700341763 /* FSCheckContentTypeRequest.m in Sources */,
-				3CFFC82B1D5DEC7900696F66 /* Window.swift in Sources */,
 				3CCA14F01BA8080700D45C52 /* SharedMapView.m in Sources */,
 				3C9641FA1D670FB800386ABB /* GeocodeAnnotation.m in Sources */,
 				3CFA58AA1D6706D700341763 /* AFHTTPRequestOperationManager.m in Sources */,
@@ -1366,7 +1288,6 @@
 				3CFA58E71D6706D700341763 /* UIImage+MultiFormat.m in Sources */,
 				3CB2E32B1BA7CA5D00805D4F /* PCButton.m in Sources */,
 				3CB2E3BF1BA7CFBA00805D4F /* PCDownloadViewController.m in Sources */,
-				3CFFC8261D5DEC7900696F66 /* PKHUDSquareBaseView.swift in Sources */,
 				3CD735461BF101AD00262D69 /* LrcCell.m in Sources */,
 				3CFA58EC1D6706D700341763 /* TDImageColors.m in Sources */,
 				3CFA58C51D6706D700341763 /* stream_configuration.cpp in Sources */,
@@ -1375,11 +1296,8 @@
 				3CD735401BEE3DF100262D69 /* PCBlurView.m in Sources */,
 				3CFA58C41D6706D700341763 /* input_stream.cpp in Sources */,
 				3CB2E32A1BA7CA5D00805D4F /* PCLabel.m in Sources */,
-				3CFFC82A1D5DEC7900696F66 /* PKHUDWideBaseView.swift in Sources */,
 				3CFA58BC1D6706D700341763 /* FMResultSet.m in Sources */,
 				3CB2E3281BA7CA5D00805D4F /* PCArticleCell.m in Sources */,
-				3CFFC8291D5DEC7900696F66 /* PKHUDTextView.swift in Sources */,
-				3CFFC81B1D5DEC7900696F66 /* FrameView.swift in Sources */,
 				3CFA58D81D6706D700341763 /* UIScrollView+MJExtension.m in Sources */,
 				3CB2E3571BA7CE1A00805D4F /* PCNavigationController.m in Sources */,
 				3CFA57351D62C87500341763 /* LrcLine.swift in Sources */,
@@ -1392,7 +1310,6 @@
 				3CFA58DE1D6706D700341763 /* SDImageCache.m in Sources */,
 				3CF7AFC21BAAA19500F764BD /* LineDashPolyline.m in Sources */,
 				3CFA58C71D6706D700341763 /* FSAudioStream.mm in Sources */,
-				3CFFC8221D5DEC7900696F66 /* PKHUDAssets.swift in Sources */,
 				3CB2E4321BA7D36A00805D4F /* PCBaiduNavController.m in Sources */,
 				3C9642021D67180800386ABB /* DRNRealTimeBlurView.m in Sources */,
 				3CFA57311D60332F00341763 /* SongLabel.swift in Sources */,
@@ -1404,13 +1321,11 @@
 				3CFA58B91D6706D700341763 /* FMDatabaseAdditions.m in Sources */,
 				3CFA58C21D6706D700341763 /* http_stream.cpp in Sources */,
 				3CB45FBC1BE7B52C0011AEA4 /* DBHelper.m in Sources */,
-				3CFFC8211D5DEC7900696F66 /* PKHUDAnimation.swift in Sources */,
 				3CFA58D51D6706D700341763 /* MJRefreshConst.m in Sources */,
 				3CB2E2FB1BA7B26800805D4F /* AppDelegate.m in Sources */,
 				3CFA58CD1D6706D700341763 /* Reachability.m in Sources */,
 				3CFA58D21D6706D700341763 /* MBProgressHUD.m in Sources */,
 				3CB2E2F81BA7B26800805D4F /* main.m in Sources */,
-				3CFFC81C1D5DEC7900696F66 /* HUD.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1457,8 +1372,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: PengCheng Zhao (7LKFCH3GR5)";
@@ -1524,6 +1441,7 @@
 				PRODUCT_NAME = PoTunes;
 				PROVISIONING_PROFILE = "d254e3bb-9686-42de-ad63-c6810e9ad156";
 				SWIFT_OBJC_BRIDGING_HEADER = "PoTunes/破音万里-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 			};
 			name = "ad hoc distribution";
 		};
@@ -1556,8 +1474,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer: PengCheng Zhao (2P9E2Y5942)";
@@ -1602,8 +1522,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "";
@@ -1624,6 +1546,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -1670,6 +1593,7 @@
 				PROVISIONING_PROFILE = "d254e3bb-9686-42de-ad63-c6810e9ad156";
 				SWIFT_OBJC_BRIDGING_HEADER = "PoTunes/破音万里-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -1714,6 +1638,7 @@
 				PRODUCT_NAME = PoTunes;
 				PROVISIONING_PROFILE = "d254e3bb-9686-42de-ad63-c6810e9ad156";
 				SWIFT_OBJC_BRIDGING_HEADER = "PoTunes/破音万里-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};

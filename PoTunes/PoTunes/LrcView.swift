@@ -8,7 +8,24 @@
 
 import UIKit
 
-class LrcView: DRNRealTimeBlurView, UITableViewDelegate, UITableViewDataSource{
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+//MARK: - 代理
+class LrcView: DRNRealTimeBlurView {
+	@available(iOS 2.0, *)
+	public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+		return 10
+	}
+
   var _lrcName: String?
 	var lrcName: String? {
 		didSet {
@@ -28,20 +45,13 @@ class LrcView: DRNRealTimeBlurView, UITableViewDelegate, UITableViewDataSource{
 				if lrcTime?.length == 0 {
 					continue
 				}
-				lrcTime = lrcTime?.substringToIndex(5)
-				for j in 0..<self.chLrcArray.count {
-					let chLrc = self.chLrcArray[j] as! LrcLine
-					let chLrcTime = chLrc.time?.substringToIndex(5)
-					if  chLrcTime == lrcTime {
-						lrc.lyrics = String(format: "%@\r%@", lrc.lyrics!, chLrc.lyrics!)
-					}
-					continue
-				}
+				lrcTime = lrcTime?.substring(to: 5) as NSString?
+
 			}
 			self.tableView?.reloadData()
 		}
 	}
-	var currentTime: NSTimeInterval? {
+	var currentTime: TimeInterval? {
 		didSet {
 			guard let `currentTime` = currentTime else { return }
 			if currentTime < oldValue {
@@ -70,14 +80,14 @@ class LrcView: DRNRealTimeBlurView, UITableViewDelegate, UITableViewDataSource{
 				}
 				
 				// 判断是否为正在播放的歌词
-				if currentTimeStr.compare(currentLineTime) != .OrderedAscending && currentTimeStr.compare(nextLineTime!) == .OrderedAscending && self.currentindex != idx {
+				if currentTimeStr.compare(currentLineTime) != .orderedAscending && currentTimeStr.compare(nextLineTime!) == .orderedAscending && self.currentindex != idx {
 					//刷新tableVies
-					let reloadRows: Array = [NSIndexPath(forRow: self.currentindex!, inSection: 0), NSIndexPath(forRow: idx	, inSection: 0)]
+					let reloadRows: Array = [IndexPath(row: self.currentindex!, section: 0), IndexPath(row: idx	, section: 0)]
 					self.currentindex = idx
-					tableView?.reloadRowsAtIndexPaths(reloadRows, withRowAnimation: .None)
+					tableView?.reloadRows(at: reloadRows, with: .none)
 					//滚动到对应的
-					let indexPath = NSIndexPath(forRow: idx, inSection: 0)
-					tableView?.scrollToRowAtIndexPath(indexPath, atScrollPosition: .Top, animated: true)
+					let indexPath = IndexPath(row: idx, section: 0)
+					tableView?.scrollToRow(at: indexPath, at: .top, animated: true)
 				}
 			}
 		}
@@ -85,9 +95,9 @@ class LrcView: DRNRealTimeBlurView, UITableViewDelegate, UITableViewDataSource{
 	var noLrcLabel: UILabel?
 	lazy var chLrcArray: NSMutableArray = {[]}()
 
-	private var tableView: UITableView?
-	private var currentindex: Int?
-	private lazy var lyricsLines: NSMutableArray = { [] }()
+	fileprivate var tableView: UITableView?
+	fileprivate var currentindex: Int?
+	fileprivate lazy var lyricsLines: NSMutableArray = { [] }()
 
 	override init(frame: CGRect) {
 		super.init(frame: frame)
@@ -100,19 +110,17 @@ class LrcView: DRNRealTimeBlurView, UITableViewDelegate, UITableViewDataSource{
 	
 	func setup() {
 		let noLrcLabel: UILabel = UILabel()
-		noLrcLabel.backgroundColor = .clearColor()
-		noLrcLabel.textAlignment = .Center
+		noLrcLabel.backgroundColor = UIColor.clear
+		noLrcLabel.textAlignment = .center
 		noLrcLabel.text = "暂无歌词"
-		noLrcLabel.textColor = .grayColor()
+		noLrcLabel.textColor = UIColor.gray
 		self.noLrcLabel = noLrcLabel
 		self.addSubview(noLrcLabel)
-
+//MARK: - dataSource & delegate - TODO
 		let tableView: UITableView = UITableView()
-		tableView.dataSource = self
-		tableView.delegate = self
-		tableView.separatorStyle = .None
+		tableView.separatorStyle = .none
 		tableView.showsVerticalScrollIndicator = false
-		tableView.backgroundColor = .clearColor()
+		tableView.backgroundColor = UIColor.clear
 		self.tableView = tableView
 		self.addSubview(tableView)
 		self.renderStatic = true
@@ -124,41 +132,26 @@ class LrcView: DRNRealTimeBlurView, UITableViewDelegate, UITableViewDataSource{
 		self.noLrcLabel?.frame = self.bounds
 	}
     
-	func dirDoc(lrcName: String, array: NSMutableArray) {
-		let paths: NSArray = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)
-		let documentsDirectory: String = paths.objectAtIndex(0) as! String
-		let path = (documentsDirectory as NSString).stringByAppendingPathComponent(lrcName)
+	func dirDoc(_ lrcName: String, array: NSMutableArray) {
+		let paths: NSArray = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true) as NSArray
+		let documentsDirectory: String = paths.object(at: 0) as! String
+		_ = (documentsDirectory as NSString).appendingPathComponent(lrcName)
 		do {
-			let lrcStr: NSString = try NSString(contentsOfFile: path, encoding: NSUTF8StringEncoding)
-			let lrcComponents: NSArray = lrcStr.componentsSeparatedByString(" [")
-			//输出每一行歌词
-			for line in lrcComponents {
-					let lrc: LrcLine = LrcLine()
-					//如果是歌名的头部信息
-					let tempArray: NSArray = line.componentsSeparatedByString("]")
-					lrc.time = tempArray.firstObject?.stringByReplacingOccurrencesOfString("[", withString: "")
-					lrc.lyrics = tempArray.lastObject as! String
-					array.addObject(lrc)
+
 			}
 		}
-		catch let error as NSError {
-			print(error.localizedDescription)
-		}
 	}
-	func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		return self.lyricsLines.count
+	func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+		return 1
+	}
+	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+		return 10
 	}
 	
-	func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-		let cell = tableView.dequeueReusableCellWithIdentifier("lrc", forIndexPath: indexPath) as! LrcCell
-		cell.lrcLine = (self.lyricsLines[indexPath.row] as! LrcLine)
-		if self.currentindex == indexPath.row {
-			cell.textLabel?.textColor = .whiteColor()
-		} else {
-			cell.textLabel?.textColor = .grayColor()
-		}
+	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+		let cell = tableView.dequeueReusableCell(withIdentifier: "lrc", for: indexPath) as! LrcCell
 		
 		return cell
 	}
 
-}
+

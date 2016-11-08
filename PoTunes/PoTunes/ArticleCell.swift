@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ArticleCell: FoldingCell {
+class ArticleCell: UITableViewCell {
 
     /*
     // Only override drawRect: if you perform custom drawing.

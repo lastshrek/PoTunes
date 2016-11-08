@@ -14,18 +14,18 @@ class NavigationController: UINavigationController {
 
 	override class func initialize() {
 		
-		UIApplication.sharedApplication().statusBarStyle = .LightContent
+		UIApplication.shared.statusBarStyle = .lightContent
 		//设置导航栏样式
 		let navBar: UINavigationBar = UINavigationBar.appearance()
-		navBar.hidden = true
-		UINavigationBar.appearance().translucent = true
+		navBar.isHidden = true
+		UINavigationBar.appearance().isTranslucent = true
 	}
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
 
 		// Do any additional setup after loading the view.
-		self.hidden = self.view.hidden
+		self.hidden = self.view.isHidden
 	}
 
 	override func didReceiveMemoryWarning() {
@@ -33,7 +33,7 @@ class NavigationController: UINavigationController {
 			// Dispose of any resources that can be recreated.
 	}
     
-	override func pushViewController(viewController: UIViewController, animated: Bool) {
+	override func pushViewController(_ viewController: UIViewController, animated: Bool) {
 		if self.viewControllers.count > 0 {
 			viewController.hidesBottomBarWhenPushed = true
 		}

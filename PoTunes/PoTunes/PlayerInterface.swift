@@ -31,62 +31,62 @@ class PlayerInterface: UIView {
         
         //播放器背景
         let backgroundView = UIView()
-        backgroundView.backgroundColor = .blackColor()
+        backgroundView.backgroundColor = UIColor.black
         self.backgroundView = backgroundView
         self.addSubview(backgroundView)
         //专辑封面
         let cover: UIImageView = UIImageView()
-        cover.autoresizingMask = [.FlexibleHeight, .FlexibleWidth]
+        cover.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         cover.image = UIImage(named: "noArtwork.jpg")
         self.cover = cover
         self.backgroundView?.addSubview(cover)
         //倒影封面
         let reflection: UIImageView = UIImageView()
-        reflection.autoresizingMask = [.FlexibleHeight, .FlexibleWidth]
-        reflection.image = cover.image!.reflectionWithAlpha(0.4)
+        reflection.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+        reflection.image = cover.image!.reflection(withAlpha: 0.4)
         self.backgroundView?.addSubview(reflection)
-        self.backgroundView?.sendSubviewToBack(reflection)
+        self.backgroundView?.sendSubview(toBack: reflection)
         self.reflection = reflection
         //缓冲条
-        let bufferingIndicator: LDProgressView = createProgressView(false, progress: 0, animate: false, showText: false, showStroke: false, progressInset: 0, showBackground: false, outerStrokeWidth: 0, type: LDProgressSolid, autoresizingMask: [.FlexibleWidth, .FlexibleTopMargin], borderRadius: 0, backgroundColor: .lightTextColor())
+        let bufferingIndicator: LDProgressView = createProgressView(false, progress: 0, animate: false, showText: false, showStroke: false, progressInset: 0, showBackground: false, outerStrokeWidth: 0, type: LDProgressSolid, autoresizingMask: [.flexibleWidth, .flexibleTopMargin], borderRadius: 0, backgroundColor: UIColor.lightText)
         self.bufferingIndicator = bufferingIndicator
         self.backgroundView?.addSubview(bufferingIndicator)
         //进度条
-        let progress: LDProgressView = createProgressView(false, progress: 0, animate: false, showText: false, showStroke: false, progressInset: 0, showBackground: false, outerStrokeWidth: 0, type: LDProgressSolid, autoresizingMask: [.FlexibleWidth, .FlexibleTopMargin], borderRadius: 0, backgroundColor: .clearColor())
+        let progress: LDProgressView = createProgressView(false, progress: 0, animate: false, showText: false, showStroke: false, progressInset: 0, showBackground: false, outerStrokeWidth: 0, type: LDProgressSolid, autoresizingMask: [.flexibleWidth, .flexibleTopMargin], borderRadius: 0, backgroundColor: UIColor.clear)
         self.progress = progress
         self.backgroundView?.addSubview(progress)
         //开始时间和剩余时间
         let timeView: UIView = UIView()
-        timeView.autoresizingMask = [.FlexibleWidth, .FlexibleTopMargin]
+        timeView.autoresizingMask = [.flexibleWidth, .flexibleTopMargin]
         self.backgroundView?.addSubview(timeView)
         self.timeView = timeView
         //当前播放时间
-        let currentTime = createLabel([.FlexibleHeight, .FlexibleWidth], shadowOffset: CGSizeMake(0, 0), textColor: .whiteColor(), text: nil, textAlignment: .Left)
+        let currentTime = createLabel([.flexibleHeight, .flexibleWidth], shadowOffset: CGSize(width: 0, height: 0), textColor: UIColor.white, text: nil, textAlignment: .left)
         self.currentTime = currentTime
         self.timeView?.addSubview(currentTime)
         //剩余时间
-        let leftTime = createLabel([.FlexibleHeight, .FlexibleWidth, .FlexibleLeftMargin], shadowOffset: CGSizeMake(0, 0), textColor: .whiteColor(), text: nil, textAlignment: .Right)
+        let leftTime = createLabel([.flexibleHeight, .flexibleWidth, .flexibleLeftMargin], shadowOffset: CGSize(width: 0, height: 0), textColor: UIColor.white, text: nil, textAlignment: .right)
         self.timeView?.addSubview(leftTime)
         self.leftTime = leftTime
         //歌曲名
-        let songName: UILabel = createLabel([.FlexibleWidth, .FlexibleTopMargin], shadowOffset: nil, textColor: .whiteColor(), text: "尚未播放歌曲", textAlignment: .Center)
+        let songName: UILabel = createLabel([.flexibleWidth, .flexibleTopMargin], shadowOffset: nil, textColor: UIColor.white, text: "尚未播放歌曲", textAlignment: .center)
         self.backgroundView?.addSubview(songName)
         self.songName = songName
         //歌手名
         let artist: PCLabel = PCLabel()
-        artist.autoresizingMask = [.FlexibleWidth, .FlexibleTopMargin]
+        artist.autoresizingMask = [.flexibleWidth, .flexibleTopMargin]
         self.backgroundView?.addSubview(artist)
         self.artist = artist
         //专辑名
         let album: PCLabel = PCLabel()
-        album.autoresizingMask = [.FlexibleWidth, .FlexibleTopMargin]
+        album.autoresizingMask = [.flexibleWidth, .flexibleTopMargin]
         self.backgroundView?.addSubview(album)
         self.album = album
         //播放模式
         let playModeView: UIImageView = UIImageView()
-        playModeView.autoresizingMask = [.FlexibleWidth, .FlexibleTopMargin]
+        playModeView.autoresizingMask = [.flexibleWidth, .flexibleTopMargin]
         playModeView.image = UIImage(named: "repeatOnB.png")
-        playModeView.contentMode = .ScaleAspectFit
+        playModeView.contentMode = .scaleAspectFit
         self.playModeView = playModeView
         self.backgroundView?.addSubview(playModeView)
         
@@ -97,56 +97,56 @@ class PlayerInterface: UIView {
         width = self.bounds.size.width
         height = self.bounds.size.height
         self.backgroundView?.frame = self.bounds
-        self.cover?.frame = CGRectMake(0, 0, width!, width!)
-        self.reflection?.frame = CGRectMake(0, height! - width!, width!, width!)
-        self.bufferingIndicator?.frame = CGRectMake(0, CGRectGetMaxY(self.cover!.frame), width!, 12)
-        self.progress?.frame = CGRectMake(0, CGRectGetMaxY(self.cover!.frame), width!, 12)
-        self.timeView?.frame = CGRectMake(0, CGRectGetMaxY(self.progress!.frame), width!, 25)
-        self.currentTime?.frame = CGRectMake(2, 0, width! / 2, (self.timeView?.bounds.size.height)!)
-        self.leftTime?.frame = CGRectMake(width! / 2 - 2, 0, width! / 2, (self.timeView?.bounds.size.height)!)
+        self.cover?.frame = CGRect(x: 0, y: 0, width: width!, height: width!)
+        self.reflection?.frame = CGRect(x: 0, y: height! - width!, width: width!, height: width!)
+        self.bufferingIndicator?.frame = CGRect(x: 0, y: self.cover!.frame.maxY, width: width!, height: 12)
+        self.progress?.frame = CGRect(x: 0, y: self.cover!.frame.maxY, width: width!, height: 12)
+        self.timeView?.frame = CGRect(x: 0, y: self.progress!.frame.maxY, width: width!, height: 25)
+        self.currentTime?.frame = CGRect(x: 2, y: 0, width: width! / 2, height: (self.timeView?.bounds.size.height)!)
+        self.leftTime?.frame = CGRect(x: width! / 2 - 2, y: 0, width: width! / 2, height: (self.timeView?.bounds.size.height)!)
         
         switch Int(height!) {
         case 480:
-            self.songName?.frame = CGRectMake(0, CGRectGetMaxY((self.timeView?.frame)!) + 15, width!, 40)
+            self.songName?.frame = CGRect(x: 0, y: (self.timeView?.frame)!.maxY + 15, width: width!, height: 40)
             self.songName?.font = UIFont(name: "BebasNeue", size: 30)
-            self.artist?.frame = CGRectMake(0, CGRectGetMaxY((self.songName?.frame)!), width!, 20)
-            self.album?.frame = CGRectMake(0, CGRectGetMaxY((self.artist?.frame)!), width!, 20)
+            self.artist?.frame = CGRect(x: 0, y: (self.songName?.frame)!.maxY, width: width!, height: 20)
+            self.album?.frame = CGRect(x: 0, y: (self.artist?.frame)!.maxY, width: width!, height: 20)
             break
         case 568:
-            self.songName?.frame = CGRectMake(0, CGRectGetMaxY((self.timeView?.frame)!) + 40, width!, 40)
+            self.songName?.frame = CGRect(x: 0, y: (self.timeView?.frame)!.maxY + 40, width: width!, height: 40)
             self.songName?.font = UIFont(name: "BebasNeue", size: 30)
-            self.artist?.frame = CGRectMake(0, CGRectGetMaxY((self.songName?.frame)!) + 15, width!, 20)
-            self.album?.frame = CGRectMake(0, CGRectGetMaxY((self.artist?.frame)!) + 15, width!, 20)
+            self.artist?.frame = CGRect(x: 0, y: (self.songName?.frame)!.maxY + 15, width: width!, height: 20)
+            self.album?.frame = CGRect(x: 0, y: (self.artist?.frame)!.maxY + 15, width: width!, height: 20)
             break
         case 667:
-            self.songName?.frame = CGRectMake(0, CGRectGetMaxY((self.timeView?.frame)!) + 40, width!, 40)
+            self.songName?.frame = CGRect(x: 0, y: (self.timeView?.frame)!.maxY + 40, width: width!, height: 40)
             self.songName?.font = UIFont(name: "BebasNeue", size: 40)
-            self.artist?.frame = CGRectMake(0, CGRectGetMaxY((self.songName?.frame)!) + 20, width!, 25)
+            self.artist?.frame = CGRect(x: 0, y: (self.songName?.frame)!.maxY + 20, width: width!, height: 25)
             self.artist?.font = UIFont(name: "BebasNeue", size: 25)
-            self.album?.frame = CGRectMake(0, CGRectGetMaxY((self.artist?.frame)!) + 20, width!, 25)
+            self.album?.frame = CGRect(x: 0, y: (self.artist?.frame)!.maxY + 20, width: width!, height: 25)
             self.album?.font = UIFont(name: "BebasNeue", size: 23)
             break
         default:
-            self.songName?.frame = CGRectMake(0, CGRectGetMaxY((self.timeView?.frame)!) + 60, width!, 42)
+            self.songName?.frame = CGRect(x: 0, y: (self.timeView?.frame)!.maxY + 60, width: width!, height: 42)
             self.songName?.font = UIFont(name: "BebasNeue", size: 40)
-            self.artist?.frame = CGRectMake(0, CGRectGetMaxY((self.songName?.frame)!) + 20, width!, 27)
+            self.artist?.frame = CGRect(x: 0, y: (self.songName?.frame)!.maxY + 20, width: width!, height: 27)
             self.artist?.font = UIFont(name: "BebasNeue", size: 25)
-            self.album?.frame = CGRectMake(0, CGRectGetMaxY((self.artist?.frame)!) + 20, width!, 27)
+            self.album?.frame = CGRect(x: 0, y: (self.artist?.frame)!.maxY + 20, width: width!, height: 27)
             self.album?.font = UIFont(name: "BebasNeue", size: 25)
             break
         }
-        self.playModeView?.frame = CGRectMake(width! / 2 - 10, height! - 20, 20, 20)
+        self.playModeView?.frame = CGRect(x: width! / 2 - 10, y: height! - 20, width: 20, height: 20)
     }
     
-    func createProgressView(flat: Bool, progress: CGFloat, animate: Bool, showText: Bool, showStroke: Bool, progressInset: NSNumber, showBackground: Bool, outerStrokeWidth: NSNumber, type: LDProgressType, autoresizingMask: UIViewAutoresizing, borderRadius: NSNumber, backgroundColor: UIColor) -> LDProgressView {
+    func createProgressView(_ flat: Bool, progress: CGFloat, animate: Bool, showText: Bool, showStroke: Bool, progressInset: NSNumber, showBackground: Bool, outerStrokeWidth: NSNumber, type: LDProgressType, autoresizingMask: UIViewAutoresizing, borderRadius: NSNumber, backgroundColor: UIColor) -> LDProgressView {
         let buffer: LDProgressView = LDProgressView()
-        buffer.flat = flat
+        buffer.flat = flat as NSNumber!
         buffer.progress = progress
-        buffer.animate = animate
-        buffer.showText = showText
-        buffer.showStroke = showStroke
+        buffer.animate = animate as NSNumber!
+        buffer.showText = showText as NSNumber!
+        buffer.showStroke = showStroke as NSNumber!
         buffer.progressInset = progressInset
-        buffer.showBackground = showBackground
+        buffer.showBackground = showBackground as NSNumber!
         buffer.outerStrokeWidth = outerStrokeWidth
         buffer.type = type
         buffer.borderRadius = borderRadius
@@ -155,7 +155,7 @@ class PlayerInterface: UIView {
         return buffer
     }
     
-    func createLabel(autoresizingMask: UIViewAutoresizing, shadowOffset: CGSize?, textColor: UIColor, text: String?, textAlignment: NSTextAlignment) -> UILabel {
+    func createLabel(_ autoresizingMask: UIViewAutoresizing, shadowOffset: CGSize?, textColor: UIColor, text: String?, textAlignment: NSTextAlignment) -> UILabel {
         let label: UILabel = UILabel()
         label.autoresizingMask = autoresizingMask
         label.textColor = textColor

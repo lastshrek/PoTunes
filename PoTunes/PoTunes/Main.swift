@@ -38,7 +38,10 @@ class Main: UIViewController, UIScrollViewDelegate, UIGestureRecognizerDelegate,
 		setupGestureRecognizer()
 		//存储用户状态
 		setupUserOnline()
-
+		let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString")
+		print("--------")
+		print(version)
+		//NSString *version = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
 	}
     
 
@@ -47,7 +50,7 @@ class Main: UIViewController, UIScrollViewDelegate, UIGestureRecognizerDelegate,
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    override func prefersStatusBarHidden() -> Bool {
+    override var prefersStatusBarHidden : Bool {
         return true
     }
     
@@ -56,12 +59,12 @@ class Main: UIViewController, UIScrollViewDelegate, UIGestureRecognizerDelegate,
         let scrollView: UIScrollView = UIScrollView()
         scrollView.frame = self.view.bounds
         scrollView.delegate = self
-        scrollView.backgroundColor = UIColor.blackColor()
+        scrollView.backgroundColor = UIColor.black
         //设置内容滚动尺寸
-        scrollView.contentSize = CGSizeMake(0, self.view.bounds.height * 2)
+        scrollView.contentSize = CGSize(width: 0, height: self.view.bounds.height * 2)
         scrollView.bounces = false
         scrollView.showsVerticalScrollIndicator = false
-        scrollView.pagingEnabled = true
+        scrollView.isPagingEnabled = true
         self.view.addSubview(scrollView)
         self.scrollView = scrollView
     }
@@ -69,12 +72,12 @@ class Main: UIViewController, UIScrollViewDelegate, UIGestureRecognizerDelegate,
     func setupPageControl() {
         let pageControl: UIPageControl = UIPageControl()
         pageControl.numberOfPages = 2
-        pageControl.hidden = true
+        pageControl.isHidden = true
         let centerX = self.width! * 0.5
         let centerY = self.height! - 30
-        pageControl.center = CGPointMake(centerX, centerY)
-        pageControl.bounds = CGRectMake(0, 0, 100, 30)
-        pageControl.userInteractionEnabled = true
+        pageControl.center = CGPoint(x: centerX, y: centerY)
+        pageControl.bounds = CGRect(x: 0, y: 0, width: 100, height: 30)
+        pageControl.isUserInteractionEnabled = true
         self.view.addSubview(pageControl)
         self.pageControl = pageControl
     }
@@ -96,15 +99,15 @@ class Main: UIViewController, UIScrollViewDelegate, UIGestureRecognizerDelegate,
     //MARK: - TODO
     func playOrPause() {
         if self.songs.count == 0 {
-            HUD.flash(.Error, delay: 1.0)
+					//MARK: - HUD - TODO
             return
         }
         
     }
     //MARK: - TODO
     func setupUserOnline() {
-			let user: NSUserDefaults = NSUserDefaults.standardUserDefaults()
-			let online = user.objectForKey("online")
+			let user: UserDefaults = UserDefaults.standard
+			let online = user.object(forKey: "online")
 //			if online == nil {
 //				self.setupTabBarWithCount(3)
 //			}
@@ -118,7 +121,7 @@ class Main: UIViewController, UIScrollViewDelegate, UIGestureRecognizerDelegate,
 			}
     }
     //MARK: - TODO
-    func setupTabBarWithCount(count: Int) {
+    func setupTabBarWithCount(_ count: Int) {
 			//每月文章列表页
 			let article: ArticleController = ArticleController()
 			setupSingleViewControllerToScrollView(article, hidden: false)
@@ -128,37 +131,37 @@ class Main: UIViewController, UIScrollViewDelegate, UIGestureRecognizerDelegate,
 				
 			}
 			for i in 0..<count {
-				let button: BarItem = BarItem(frame: CGRectMake(CGFloat(i) * self.width! / CGFloat(count), self.height!, self.width! / CGFloat(count), 64))
+				let button: BarItem = BarItem(frame: CGRect(x: CGFloat(i) * self.width! / CGFloat(count), y: self.height!, width: self.width! / CGFloat(count), height: 64))
 				button.normalImage?.image = UIImage(named: String(i + 1))
 				if i == 0 {
 					self.buttonClick(button)
 				}
 				button.tag = i
-				button.addTarget(self, action: #selector(Main.buttonClick(_:)), forControlEvents: .TouchUpInside)
+				button.addTarget(self, action: #selector(Main.buttonClick(_:)), for: .touchUpInside)
 				//MARK: - TODO
 				
 				self.scrollView?.addSubview(button)
 			}
     }
 	//MARK: - TODO
-	func setupSingleViewControllerToScrollView(controller: UIViewController, hidden: Bool) {
+	func setupSingleViewControllerToScrollView(_ controller: UIViewController, hidden: Bool) {
 		let nav: NavigationController = NavigationController(rootViewController: controller)
-		nav.view.frame = CGRectMake(0, self.height! + 20, self.width!, self.height! - 20)
-		self.controllers.addObject(nav)
+		nav.view.frame = CGRect(x: 0, y: self.height! + 20, width: self.width!, height: self.height! - 20)
+		self.controllers.add(nav)
 		self.scrollView?.addSubview(nav.view)
-		nav.view.hidden = hidden
+		nav.view.isHidden = hidden
 		if hidden == false {
 			self.selectedView = nav.view
 		}
 	}
 	//MARK: - 点击tabBarButton事件
-	func buttonClick(btn: BarItem) {
-		self.selectedBtn?.selected = false
-		btn.selected = true
+	func buttonClick(_ btn: BarItem) {
+		self.selectedBtn?.isSelected = false
+		btn.isSelected = true
 		self.selectedBtn = btn
-		self.selectedView?.hidden = true
+		self.selectedView?.isHidden = true
 		let controller: UIViewController = self.controllers[btn.tag] as! UIViewController
-		controller.view.hidden = false
+		controller.view.isHidden = false
 		self.selectedView = controller.view
 		//MARK: - TODO
 	}

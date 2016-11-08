@@ -13,8 +13,8 @@ extension NSObject {
 	func dirDoc() -> NSString {
 		
 		let paths: NSArray = NSSearchPathForDirectoriesInDomains(
-			.DocumentDirectory, .UserDomainMask, true)
-		let documentsDirectory = paths.objectAtIndex(0) as! NSString
+			.documentDirectory, .userDomainMask, true) as NSArray
+		let documentsDirectory = paths.object(at: 0) as! NSString
 		
 		return documentsDirectory
 	}

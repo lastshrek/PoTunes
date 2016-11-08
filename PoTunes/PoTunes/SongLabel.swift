@@ -20,30 +20,30 @@ class SongLabel: UILabel {
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.font = UIFont(name: "BebasNeue", size: 14)
-        self.textColor = .whiteColor()
-        self.textAlignment = .Center
+        self.textColor = UIColor.white
+        self.textAlignment = .center
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func drawTextInRect(rect: CGRect) {
+    override func drawText(in rect: CGRect) {
         let shadowOffset: CGSize = self.shadowOffset
         let textColor = self.textColor
         
-        let c: CGContextRef = UIGraphicsGetCurrentContext()!
-        CGContextSetLineWidth(c, 1)
-        CGContextSetLineJoin(c, .Round)
+        let c: CGContext = UIGraphicsGetCurrentContext()!
+        c.setLineWidth(1)
+        c.setLineJoin(.round)
         
-        CGContextSetTextDrawingMode(c, .Stroke)
-        self.textColor = .whiteColor()
-        super.drawTextInRect(rect)
+        c.setTextDrawingMode(.stroke)
+        self.textColor = UIColor.white
+        super.drawText(in: rect)
         
-        CGContextSetTextDrawingMode(c, .Fill)
+        c.setTextDrawingMode(.fill)
         self.textColor = textColor
-        self.shadowOffset = CGSizeMake(0, 0)
-        super.drawTextInRect(rect)
+        self.shadowOffset = CGSize(width: 0, height: 0)
+        super.drawText(in: rect)
         
         self.shadowOffset = shadowOffset
     }

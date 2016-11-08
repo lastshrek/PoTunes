@@ -14,30 +14,30 @@ class BarItem: UIButton {
 	override init(frame: CGRect) {
 		super.init(frame: frame)
 		self.titleLabel?.font = UIFont(name: "BebasNeue", size: 12)
-		self.imageView?.contentMode = .ScaleToFill
-		let patternImage: UIImage = (UIImage(named: "barBg")?.resizableImageWithCapInsets(UIEdgeInsetsMake(0.5, 0, 0, 0), resizingMode: .Stretch))!
-		self.setImage(patternImage, forState: .Selected)
-		self.backgroundColor = .blackColor()
+		self.imageView?.contentMode = .scaleToFill
+		let patternImage: UIImage = (UIImage(named: "barBg")?.resizableImage(withCapInsets: UIEdgeInsetsMake(0.5, 0, 0, 0), resizingMode: .stretch))!
+		self.setImage(patternImage, for: .selected)
+		self.backgroundColor = UIColor.black
 		//添加背景图片
 		let bgImage = UIImageView()
 		bgImage.image = self.imageView?.image
-		bgImage.contentMode = .ScaleToFill
+		bgImage.contentMode = .scaleToFill
 		self.normalImage = bgImage
 		self.addSubview(bgImage)
 	}
 	
-	override func imageRectForContentRect(contentRect: CGRect) -> CGRect {
+	override func imageRect(forContentRect contentRect: CGRect) -> CGRect {
 		let imageW = contentRect.size.width
 		let imageH = contentRect.size.height * 0.1
-		return CGRectMake(0, 0, imageW, imageH)
+		return CGRect(x: 0, y: 0, width: imageW, height: imageH)
 	}
 	
 	override func layoutSubviews() {
 		super.layoutSubviews()
-		self.normalImage?.frame = CGRectMake((self.bounds.size.width - 25) / 2, 20, 30, 30)
+		self.normalImage?.frame = CGRect(x: (self.bounds.size.width - 25) / 2, y: 20, width: 30, height: 30)
 	}
 	
-	override var highlighted: Bool {
+	override var isHighlighted: Bool {
 		didSet {
 			
 		}

@@ -18,17 +18,17 @@ class ArticleController: UITableViewController {
 		let width = self.view.bounds.size.width
 		
 		self.tableView.rowHeight = width * 300 / 640
-		self.tableView.separatorStyle = .None
-		self.tableView.backgroundColor = .whiteColor()
+		self.tableView.separatorStyle = .none
+		self.tableView.backgroundColor = UIColor.white
 		if self.articles == nil {
 			let rootPath = self.dirDoc()
-			let filePath: NSString = rootPath.stringByAppendingPathComponent("article.plist")
+			let filePath: NSString = rootPath.appendingPathComponent("article.plist") as NSString
 			var dicArray: NSArray?
 			dicArray = NSArray(contentsOfFile: filePath as String)
 			if let tempArray: NSArray = dicArray {
 				let contentArray: NSMutableArray = NSMutableArray()
 				for dict in tempArray {
-					contentArray.addObject(dict)
+					contentArray.add(dict)
 				}
 				self.articles = contentArray
 			} else {
@@ -45,12 +45,12 @@ class ArticleController: UITableViewController {
 	
 	// MARK: - Table view data source
 	
-	override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+	override func numberOfSections(in tableView: UITableView) -> Int {
 		// #warning Incomplete implementation, return the number of sections
 		return 0
 	}
 	
-	override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+	override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 		// #warning Incomplete implementation, return the number of rows
 		return 0
 	}
