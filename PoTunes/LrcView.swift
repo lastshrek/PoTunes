@@ -20,37 +20,8 @@ fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
 }
 
 //MARK: - 代理
-class LrcView: DRNRealTimeBlurView {
-	@available(iOS 2.0, *)
-	public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		return 10
-	}
+class LrcView: DRNRealTimeBlurView, UITableViewDataSource, UITableViewDelegate {
 
-  var _lrcName: String?
-	var lrcName: String? {
-		didSet {
-			guard let `lrcName` = lrcName else { return }
-			self.lyricsLines.removeAllObjects()
-			dirDoc(lrcName, array: self.lyricsLines)
-			self.tableView?.reloadData()
-		}
-	}
-	var chLrcName: String? {
-		didSet {
-			guard let `chLrcName` = chLrcName else { return }
-			dirDoc(chLrcName, array: self.chLrcArray)
-			for i in 0..<self.lyricsLines.count {
-				let lrc = self.lyricsLines[i] as! LrcLine
-				var lrcTime = lrc.time
-				if lrcTime?.length == 0 {
-					continue
-				}
-				lrcTime = lrcTime?.substring(to: 5) as NSString?
-
-			}
-			self.tableView?.reloadData()
-		}
-	}
 	var currentTime: TimeInterval? {
 		didSet {
 			guard let `currentTime` = currentTime else { return }
@@ -116,8 +87,9 @@ class LrcView: DRNRealTimeBlurView {
 		noLrcLabel.textColor = UIColor.gray
 		self.noLrcLabel = noLrcLabel
 		self.addSubview(noLrcLabel)
-//MARK: - dataSource & delegate - TODO
 		let tableView: UITableView = UITableView()
+		tableView.delegate = self
+		tableView.dataSource = self
 		tableView.separatorStyle = .none
 		tableView.showsVerticalScrollIndicator = false
 		tableView.backgroundColor = UIColor.clear
@@ -131,17 +103,8 @@ class LrcView: DRNRealTimeBlurView {
 		self.tableView?.contentInset = UIEdgeInsetsMake(self.bounds.size.height * 0.5, 0, self.bounds.size.height * 0.5, 0)
 		self.noLrcLabel?.frame = self.bounds
 	}
-    
-	func dirDoc(_ lrcName: String, array: NSMutableArray) {
-		let paths: NSArray = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true) as NSArray
-		let documentsDirectory: String = paths.object(at: 0) as! String
-		_ = (documentsDirectory as NSString).appendingPathComponent(lrcName)
-		do {
-
-			}
-		}
-	}
-	func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+	
+	private func numberOfSectionsInTableView(tableView: UITableView) -> Int {
 		return 1
 	}
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -154,4 +117,4 @@ class LrcView: DRNRealTimeBlurView {
 		return cell
 	}
 
-
+}

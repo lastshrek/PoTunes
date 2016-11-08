@@ -282,7 +282,7 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     self.albumLabel = albumLabel;
     albumLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleTopMargin;
     [self.backgroundView addSubview:albumLabel];
-    
+	
     
     switch ((int)self.height) {
         case 480:
@@ -314,6 +314,7 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
             albumLabel.font = [UIFont fontWithName:@"BebasNeue" size:25];
             break;
     }
+		// 播放模式
     UIImageView *playModeImageView = [[UIImageView alloc] init];
     playModeImageView.frame = CGRectMake(self.width / 2 - 10, self.height - 20, 20, 20);
     playModeImageView.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleTopMargin;
