@@ -80,6 +80,7 @@ class LrcView: DRNRealTimeBlurView, UITableViewDataSource, UITableViewDelegate {
 	}
 	
 	func setup() {
+		// 暂无歌词页面
 		let noLrcLabel: UILabel = UILabel()
 		noLrcLabel.backgroundColor = UIColor.clear
 		noLrcLabel.textAlignment = .center
@@ -87,6 +88,7 @@ class LrcView: DRNRealTimeBlurView, UITableViewDataSource, UITableViewDelegate {
 		noLrcLabel.textColor = UIColor.gray
 		self.noLrcLabel = noLrcLabel
 		self.addSubview(noLrcLabel)
+		// 歌词
 		let tableView: UITableView = UITableView()
 		tableView.delegate = self
 		tableView.dataSource = self
