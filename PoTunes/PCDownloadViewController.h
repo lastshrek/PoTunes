@@ -8,10 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import "PCSong.h"
-#import "UIImageView+WebCache.h"
 #import "PCSongListTableViewCell.h"
 #import "AFNetworking.h"
-#import "MBProgressHUD+MJ.h"
 
 @class PCDownloadViewController,PCSong;
 

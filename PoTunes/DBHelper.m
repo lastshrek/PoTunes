@@ -7,8 +7,8 @@
 //
 
 #import "DBHelper.h"
-#import "FMDatabaseQueue.h"
-#import "FMDatabase.h"
+//#import "FMDatabaseQueue.h"
+//#import "FMDatabase.h"
 @implementation DBHelper
 
 
@@ -24,7 +24,7 @@
         
         NSString *path = [documentsDirectory stringByAppendingPathComponent:@"downloadingSong.db"];
         
-        self.queue = [FMDatabaseQueue databaseQueueWithPath:path];
+//        self.queue = [FMDatabaseQueue databaseQueueWithPath:path];
     }
     
     return self;
@@ -48,11 +48,11 @@
 
 - (void)inDatabase:(void(^)(FMDatabase *db))block {
     
-    [self.queue inDatabase:^(FMDatabase *db){
-            
-        block(db);
-    
-    }];
+//    [self.queue inDatabase:^(FMDatabase *db){
+//            
+//        block(db);
+//    
+//    }];
 }
 
 @end

@@ -7,7 +7,6 @@
 //
 
 #import "PCSongDetailViewController.h"
-#import "FMDB.h"
 #import "Reachability.h"
 #import "WXApiObject.h"
 #import "WXApi.h"
@@ -15,7 +14,7 @@
 @interface PCSongDetailViewController ()<UIAlertViewDelegate>
 
 /** 下载歌曲数据库 */
-@property (nonatomic, strong) FMDatabase *downloadedSongDB;
+//@property (nonatomic, strong) FMDatabase *downloadedSongDB;
 
 /** 检测网络状态 */
 @property (nonatomic, strong) Reachability *conn;
@@ -30,35 +29,35 @@
 
 @implementation PCSongDetailViewController
 
-- (FMDatabase *)downloadedSongDB {
-
-    if (_downloadedSongDB == nil) {
-
-        //打开数据库
-        NSString *path = [[self dirDoc] stringByAppendingPathComponent:@"downloadingSong.db"];
-
-        _downloadedSongDB = [FMDatabase databaseWithPath:path];
-
-        [_downloadedSongDB open];
-
-        //创表
-
-        [_downloadedSongDB executeUpdate:@"CREATE TABLE IF NOT EXISTS t_downloading (id integer PRIMARY KEY, author text, title text, sourceURL text,indexPath integer,thumb text,album text,downloaded bool, identifier text);"];
-
-        if (![_downloadedSongDB columnExists:@"identifier" inTableWithName:@"t_downloading"]) {
-
-            NSString *sql = [NSString stringWithFormat:@"ALTER TABLE %@ ADD %@ text", @"t_downloading", @"identifier"];
-
-            [_downloadedSongDB executeUpdate:sql];
-
-        }
-
-        _downloadedSongDB.shouldCacheStatements = YES;
-
-    }
-
-    return _downloadedSongDB;
-}
+//- (FMDatabase *)downloadedSongDB {
+//
+//    if (_downloadedSongDB == nil) {
+//
+//        //打开数据库
+//        NSString *path = [[self dirDoc] stringByAppendingPathComponent:@"downloadingSong.db"];
+//
+//        _downloadedSongDB = [FMDatabase databaseWithPath:path];
+//
+//        [_downloadedSongDB open];
+//
+//        //创表
+//
+//        [_downloadedSongDB executeUpdate:@"CREATE TABLE IF NOT EXISTS t_downloading (id integer PRIMARY KEY, author text, title text, sourceURL text,indexPath integer,thumb text,album text,downloaded bool, identifier text);"];
+//
+//        if (![_downloadedSongDB columnExists:@"identifier" inTableWithName:@"t_downloading"]) {
+//
+//            NSString *sql = [NSString stringWithFormat:@"ALTER TABLE %@ ADD %@ text", @"t_downloading", @"identifier"];
+//
+//            [_downloadedSongDB executeUpdate:sql];
+//
+//        }
+//
+//        _downloadedSongDB.shouldCacheStatements = YES;
+//
+//    }
+//
+//    return _downloadedSongDB;
+//}
 
 - (void)viewDidLoad {
 
@@ -109,7 +108,7 @@
 
         NSURL *imageURL = [NSURL URLWithString:song.thumb];
 
-        [cell.imageView sd_setImageWithURL:imageURL placeholderImage:[UIImage imageNamed:@"defaultCover"]];
+//        [cell.imageView sd_setImageWithURL:imageURL placeholderImage:[UIImage imageNamed:@"defaultCover"]];
 
         cell.progressView.hidden = YES;
 
@@ -285,43 +284,43 @@
 
     NSString *query = [NSString stringWithFormat:@"SELECT * FROM t_downloading WHERE author = '%@' and title = '%@';", author, title];
 
-    FMResultSet *s = [self.downloadedSongDB executeQuery:query];
+//    FMResultSet *s = [self.downloadedSongDB executeQuery:query];
 
-    if (s.next) {
+//    if (s.next) {
+//
+//        BOOL downloaded = (BOOL)[s stringForColumn:@"downloaded"];
+//
+//        if (downloaded) {
+//
+//            [MBProgressHUD showError:@"歌曲已下载"];
+//
+//            return;
+//
+//        } else {
+//
+//            [MBProgressHUD showError:@"歌曲正在下载中"];
+//
+//        }
 
-        BOOL downloaded = (BOOL)[s stringForColumn:@"downloaded"];
-
-        if (downloaded) {
-
-            [MBProgressHUD showError:@"歌曲已下载"];
-
-            return;
-
-        } else {
-
-            [MBProgressHUD showError:@"歌曲正在下载中"];
-
-        }
-
-    } else {
-
-
-        NSArray *urlComponent = [song.sourceURL componentsSeparatedByString:@"/"];
-
-        NSInteger count = urlComponent.count;
-
-        NSString *identifier = [NSString stringWithFormat:@"%@%@%@",urlComponent[count - 3], urlComponent[count - 2], urlComponent[count - 1]];
-
-        NSNotification *download = [NSNotification notificationWithName:@"download" object:nil userInfo:
-                                    @{@"indexPath":[NSNumber numberWithInteger:indexPath.row],
-                                      @"songs":self.songs,
-                                      @"title":self.title,
-                                      @"identifier":identifier}];
-
-        [[NSNotificationCenter defaultCenter] postNotification:download];
-
-        [MBProgressHUD showSuccess:@"开始下载"];
-    }
+//    } else {
+//
+//
+//        NSArray *urlComponent = [song.sourceURL componentsSeparatedByString:@"/"];
+//
+//        NSInteger count = urlComponent.count;
+//
+//        NSString *identifier = [NSString stringWithFormat:@"%@%@%@",urlComponent[count - 3], urlComponent[count - 2], urlComponent[count - 1]];
+//
+//        NSNotification *download = [NSNotification notificationWithName:@"download" object:nil userInfo:
+//                                    @{@"indexPath":[NSNumber numberWithInteger:indexPath.row],
+//                                      @"songs":self.songs,
+//                                      @"title":self.title,
+//                                      @"identifier":identifier}];
+//
+//        [[NSNotificationCenter defaultCenter] postNotification:download];
+//
+//        [MBProgressHUD showSuccess:@"开始下载"];
+//    }
 
 }
 

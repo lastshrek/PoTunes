@@ -9,7 +9,6 @@
 #import "PCSettingViewController.h"
 #import "PCSongDownloadingCell.h"
 #import "Common.h"
-#import "MBProgressHUD+MJ.h"
 #import "PCWebViewController.h"
 #import "PCGuideController.h"
 @interface PCSettingViewController ()
@@ -61,7 +60,7 @@
         }
     }
     
-    [MBProgressHUD showSuccess:@"缓存清理成功"];
+//    [MBProgressHUD showSuccess:@"缓存清理成功"];
 }
 
 - (void)checkUserDefaults {

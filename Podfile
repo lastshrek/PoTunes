@@ -1,14 +1,10 @@
-# Uncomment this line to define a global platform for your project
-platform :ios, '8.0'
-pod 'PKHUD', '~> 4.0'
+platform :ios, '9.0'
 target '破音万里' do
-  # Comment this line if you're not using Swift and don't want to use dynamic frameworks
-  use_frameworks!
-  # Pods for 破音万里
-
-  target '破音万里Tests' do
-    inherit! :search_paths
-    # Pods for testing
-  end
-
+	use_frameworks!
+	pod 'AFNetworking', '2.6.3'
+	pod 'PKHUD', '~> 4.0'
+	pod 'LDProgressView', '>= 1.1'
+	pod 'DGElasticPullToRefresh'
+	pod 'SDWebImage'
+	pod 'Alamofire', '~> 4.0'
 end

@@ -95,9 +95,9 @@ class LrcView: DRNRealTimeBlurView, UITableViewDataSource, UITableViewDelegate {
 		tableView.separatorStyle = .none
 		tableView.showsVerticalScrollIndicator = false
 		tableView.backgroundColor = UIColor.clear
+		tableView.register(LrcCell.self, forCellReuseIdentifier: "lrc")
 		self.tableView = tableView
 		self.addSubview(tableView)
-		self.renderStatic = true
 	}
 	override func layoutSubviews() {
 		super.layoutSubviews()
@@ -115,7 +115,7 @@ class LrcView: DRNRealTimeBlurView, UITableViewDataSource, UITableViewDelegate {
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		let cell = tableView.dequeueReusableCell(withIdentifier: "lrc", for: indexPath) as! LrcCell
-		
+		cell.textLabel?.text = "123"
 		return cell
 	}
 

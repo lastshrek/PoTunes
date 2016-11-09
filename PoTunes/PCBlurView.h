@@ -21,5 +21,4 @@
 @property (nonatomic, weak) UILabel *noLrcLabel;
 
 
-
 @end

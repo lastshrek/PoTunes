@@ -8,6 +8,7 @@
 //
 
 import UIKit
+import LDProgressView
 
 class PlayerInterface: UIView {
     
@@ -142,7 +143,7 @@ class PlayerInterface: UIView {
             break
         }
         self.playModeView?.frame = CGRect(x: width! / 2 - 10, y: height! - 20, width: 20, height: 20)
-				self.lrcView?.frame = self.bounds
+				self.lrcView?.frame = CGRect(x: 0, y: 0, width: width!, height: width!)
     }
     
     func createProgressView(_ flat: Bool, progress: CGFloat, animate: Bool, showText: Bool, showStroke: Bool, progressInset: NSNumber, showBackground: Bool, outerStrokeWidth: NSNumber, type: LDProgressType, autoresizingMask: UIViewAutoresizing, borderRadius: NSNumber, backgroundColor: UIColor) -> LDProgressView {

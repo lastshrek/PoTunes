@@ -12,7 +12,7 @@
 #import "SharedMapView.h"
 #import <AVFoundation/AVFoundation.h>
 #import "Common.h"
-#import "MBProgressHUD+MJ.h"
+//#import "MBProgressHUD+MJ.h"
 typedef NS_ENUM(NSInteger, TravelTypes) {
     TravelTypeCar = 0,      // 驾车方式
     TravelTypeWalk,         // 步行方式
@@ -231,7 +231,7 @@ typedef NS_ENUM(NSInteger, TravelTypes) {
     // 算路
     if ([self.endBtn.titleLabel.text isEqualToString:@"目的地"]) {
         
-        [MBProgressHUD showError:@"请选择目的地位置"];
+//        [MBProgressHUD showError:@"请选择目的地位置"];
         
     } else {
         

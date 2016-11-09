@@ -10,7 +10,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import "BPush.h"
 #import "WXApi.h"
-#import "MBProgressHUD+MJ.h"
+//#import "MBProgressHUD+MJ.h"
 @interface AppDelegate ()<WXApiDelegate>
 
 @end
@@ -131,11 +131,11 @@
     
         if (resp.errCode == 0) {
         
-            [MBProgressHUD showSuccess:@"分享成功"];
-        
+//            [MBProgressHUD showSuccess:@"分享成功"];
+					
         } else {
         
-            [MBProgressHUD showError:@"分享失败"];
+//            [MBProgressHUD showError:@"分享失败"];
         }
     }
 }

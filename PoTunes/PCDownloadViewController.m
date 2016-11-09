@@ -99,7 +99,7 @@
         
         NSURL *imageURL = [NSURL URLWithString:song.thumb];
         
-        [cell.imageView sd_setImageWithURL:imageURL placeholderImage:[UIImage imageNamed:@"defaultCover"]];
+//        [cell.imageView sd_setImageWithURL:imageURL placeholderImage:[UIImage imageNamed:@"defaultCover"]];
         
         cell.progressView.hidden = YES;
         

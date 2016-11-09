@@ -10,8 +10,6 @@
 #import "PCSongDownloadingCell.h"
 #import "Common.h"
 #import "PCButton.h"
-#import "MBProgressHUD+MJ.h"
-#import "FMDB.h"
 #import "PCMyMusicViewController.h"
 #import "DBHelper.h"
 #import "AFNetworking.h"
@@ -96,8 +94,8 @@
     
     if (self.downloadingArray.count == 0) {
         
-        [MBProgressHUD showError:@"当前并无下载歌曲"];
-        
+//        [MBProgressHUD showError:@"当前并无下载歌曲"];
+			
         return;
     }
     
@@ -121,7 +119,7 @@
     
     if (self.downloadingArray.count == 0) {
         
-        [MBProgressHUD showError:@"当前并无下载歌曲"];
+//        [MBProgressHUD showError:@"当前并无下载歌曲"];
         
         return;
     }
