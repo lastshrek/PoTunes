@@ -1,0 +1,52 @@
+PODS:
+  - AFNetworking (2.6.3):
+    - AFNetworking/NSURLConnection (= 2.6.3)
+    - AFNetworking/NSURLSession (= 2.6.3)
+    - AFNetworking/Reachability (= 2.6.3)
+    - AFNetworking/Security (= 2.6.3)
+    - AFNetworking/Serialization (= 2.6.3)
+    - AFNetworking/UIKit (= 2.6.3)
+  - AFNetworking/NSURLConnection (2.6.3):
+    - AFNetworking/Reachability
+    - AFNetworking/Security
+    - AFNetworking/Serialization
+  - AFNetworking/NSURLSession (2.6.3):
+    - AFNetworking/Reachability
+    - AFNetworking/Security
+    - AFNetworking/Serialization
+  - AFNetworking/Reachability (2.6.3)
+  - AFNetworking/Security (2.6.3)
+  - AFNetworking/Serialization (2.6.3)
+  - AFNetworking/UIKit (2.6.3):
+    - AFNetworking/NSURLConnection
+    - AFNetworking/NSURLSession
+  - Alamofire (4.0.1)
+  - DGElasticPullToRefresh (1.1)
+  - FontAwesome.swift (1.0.0)
+  - LDProgressView (1.2.1)
+  - PKHUD (4.0.0)
+  - SDWebImage (3.8.2):
+    - SDWebImage/Core (= 3.8.2)
+  - SDWebImage/Core (3.8.2)
+
+DEPENDENCIES:
+  - AFNetworking (= 2.6.3)
+  - Alamofire (~> 4.0)
+  - DGElasticPullToRefresh
+  - FontAwesome.swift
+  - LDProgressView (>= 1.1)
+  - PKHUD (~> 4.0)
+  - SDWebImage
+
+SPEC CHECKSUMS:
+  AFNetworking: cb8d14a848e831097108418f5d49217339d4eb60
+  Alamofire: 7682d43245de14874acd142ec137b144aa1dd335
+  DGElasticPullToRefresh: 28f11a6026302a90f8ffebbc6e24748e584dddd3
+  FontAwesome.swift: 2d32a3d62195343c2004b7c9043294ed2948553a
+  LDProgressView: f6afc7c30d2a9edf33001515f3189338567a32d2
+  PKHUD: 2bb45c936bb8afa39f3cd33ec14e8cc89f624255
+  SDWebImage: 098e97e6176540799c27e804c96653ee0833d13c
+
+PODFILE CHECKSUM: eea457f24e7c4a8b1aedde251007358f4e1545aa
+
+COCOAPODS: 1.1.1

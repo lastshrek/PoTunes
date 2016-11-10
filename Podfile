@@ -8,5 +8,4 @@ target '破音万里' do
 	pod 'SDWebImage'
 	pod 'Alamofire', '~> 4.0'
 	pod 'FontAwesome.swift'
-	pod 'PullToMakeSoup', '~> 2.0'
 end

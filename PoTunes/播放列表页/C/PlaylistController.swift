@@ -10,11 +10,10 @@ import UIKit
 import Alamofire
 import DGElasticPullToRefresh
 import PKHUD
-import PullToMakeSoup
 
 
 let P_URL = "http://127.0.0.1:3000/api/app/playlists"
-let THEATERS_URL = "https://api.douban.com/v2/movie/in_theaters"
+let T_URL = "http://127.0.0.1:3000/api/app/playlists/"
 
 
 
@@ -32,64 +31,116 @@ class PlaylistController: UITableViewController {
 		tableView.backgroundColor = UIColor.black
 		tableView.register(PlaylistCell.self, forCellReuseIdentifier: "playlist")
 		// Refresh
-		
-			HUD.show(.label("shit"))
-			Alamofire.request(P_URL).response(completionHandler: { (response) in
-				let playlists: Array = Reflect<Playlist>.mapObjects(data: response.data)
-				self.playlists = playlists
-				self.tableView.reloadData()
-				HUD.hide()
-			})
+		self.addPullToRefresh()
+		// MARK: -  检查本地缓存播放列表
+		self.checkLocalPlaylists()
 
-		self.tableView.dg_setPullToRefreshFillColor(UIColor(red: 57/255.0, green: 67/255.0, blue: 89/255.0, alpha: 1.0))
-		self.tableView.dg_setPullToRefreshBackgroundColor(UIColor(red: 78/255.0, green: 221/255.0, blue: 200/255.0, alpha: 1.0))
+	}
+	
+	func checkLocalPlaylists() {
 		// MARK: - 获取数据 - 未测试
 		if self.playlists.count == 0 {
 			let rootPath: String = self.dirDoc() as String
 			let filePath: String = rootPath + "/article.plist"
 			if let dictArr: NSArray  = NSArray(contentsOfFile: filePath) {
-				if dictArr.count == 0 {
-					// 下拉刷新
-//					self.tableView.dg_startLoading()
-				} else {
-					var contentArray = Array<Any>()
-					for dict in dictArr {
-						contentArray.append(dict)
-					}
-					self.playlists = contentArray
+				// MARK: - 本地存有article.plist时需测试
+				var contentArray = Array<Any>()
+				for dict in dictArr {
+					contentArray.append(dict)
 				}
+				self.playlists = contentArray
+				
+			} else {
+				
+				self.loadNewPlaylist()
+			
 			}
-//			let  = NSArray(contentOfFile:filePath)
 		}
 	}
 	
+	func addPullToRefresh() {
+		// Initialize tableView
+		let loadingView = DGElasticPullToRefreshLoadingViewCircle()
+		loadingView.tintColor = UIColor(red: 78/255.0, green: 221/255.0, blue: 200/255.0, alpha: 1.0)
+		tableView.dg_addPullToRefreshWithActionHandler({ [weak self] () -> Void in
+			self?.loadNewPlaylist()
+			}, loadingView: loadingView)
+		tableView.dg_setPullToRefreshFillColor(UIColor(red: 57/255.0, green: 67/255.0, blue: 89/255.0, alpha: 1.0))
+		tableView.dg_setPullToRefreshBackgroundColor(tableView.backgroundColor!)
+	}
+	
+	func loadNewPlaylist() {
+		// 请求接口
+		Alamofire.request(P_URL).response(completionHandler: { (response) in
+			let playlists: Array = Reflect<Playlist>.mapObjects(data: response.data)
+			if playlists.count == 0 {
+				HUD.flash(.error, delay: 1.0)
+				self.tableView.dg_stopLoading()
+				return
+			}
+			HUD.flash(.label("加载成功"), delay: 1.0)
+			self.playlists = playlists
+			self.tableView.dg_stopLoading()
+			self.tableView.reloadData()
+		})
+	}
 	
 	// MARK: - Table view data source
 	override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+		
 		return self.playlists.count
+	
 	}
+	
 	override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+		
 		let cell = tableView.dequeueReusableCell(withIdentifier: "playlist", for: indexPath) as! PlaylistCell
-		// MARK: - 设置标题 - TODO
+		
 		let playlist: Playlist = (self.playlists[indexPath.row] as AnyObject) as! Playlist
-
-		cell.textLabel?.text = playlist.title
-		let url: URL = URL(string: playlist.cover)!
-		cell.imageView?.sd_setImage(with: url, placeholderImage: UIImage(named:"defaultArtCover"))
-		// MARK: - 设置count==3和4时分别显示的封面 - TODO
+		
+		cell.textLabel?.text = "『" + playlist.title + "』"
+		
+		// MARK: - 设置count==3和4时分别显示的封面
+		if self.playlists.count == 3 {
+			cell.imageView?.image = UIImage(named:"defaultArtCover")
+		} else {
+			let url: URL = URL(string: playlist.cover)!
+			cell.imageView?.sd_setImage(with: url, placeholderImage: UIImage(named:"defaultArtCover"))
+		}
 		
 		// MARK: - 添加下载手势 - TODO
 		let downloadSwipe: UISwipeGestureRecognizer = UISwipeGestureRecognizer.init(target: self, action: #selector(PlaylistController.download))
 		downloadSwipe.direction = .right
 		downloadSwipe.numberOfTouchesRequired = 1
 		cell.addGestureRecognizer(downloadSwipe)
+		
 		return cell
 	}
 	
 	override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-	
+		// 取消点击效果
+		tableView.deselectRow(at: indexPath, animated: false)
+		
+		HUD.show(.label("加载歌曲"))
+		
+		let playlist: Playlist = self.playlists[indexPath.row] as! Playlist
+
+		let url = URL(string: T_URL + "\(playlist.ID)")
+		// MARK: - 上线屏蔽 - TODO
+		Alamofire.request(url!).response(completionHandler: { (response) in
+			let tracks: Array = Reflect<Track>.mapObjects(data: response.data)
+			if tracks.count == 0 {
+				HUD.flash(.label("加载失败，请检查网络"), delay: 1.0)
+				return
+			}
+			HUD.hide()
+			// MARK: - Push Controller - TODO
+		})
+		
+		
+		
 	}
-	// MARK: - 下载整个播放列表 - TODO
+	// MARK: - 下载每月歌曲 - TODO
 	func download() {
 		debugPrint("123")
 	}

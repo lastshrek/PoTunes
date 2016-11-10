@@ -12,4 +12,10 @@ class Playlist: NSObject {
 	var ID: Int = 0
 	var title: String = ""
 	var cover: String = ""
+	
+	func setupMappingReplaceProperty() -> [String : String] {
+		return ["ID": "id"]
+	}
 }
+
+
