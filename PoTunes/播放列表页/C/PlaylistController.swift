@@ -20,6 +20,7 @@ let T_URL = "http://127.0.0.1:3000/api/app/playlists/"
 class PlaylistController: UITableViewController {
 	
 	var playlists: Array<Any> = []
+
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -34,7 +35,7 @@ class PlaylistController: UITableViewController {
 		self.addPullToRefresh()
 		// MARK: -  检查本地缓存播放列表
 		self.checkLocalPlaylists()
-
+		// add delegate
 	}
 	
 	func checkLocalPlaylists() {
@@ -135,6 +136,7 @@ class PlaylistController: UITableViewController {
 			}
 			HUD.hide()
 			// MARK: - Push Controller - TODO
+			self.navigationController?.pushViewController(NaviController(), animated: true)
 		})
 		
 		
@@ -144,5 +146,7 @@ class PlaylistController: UITableViewController {
 	func download() {
 		debugPrint("123")
 	}
+	
 }
+
 

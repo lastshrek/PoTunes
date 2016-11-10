@@ -28,10 +28,6 @@ class NavigationController: UINavigationController {
 		self.hidden = self.view.isHidden
 	}
 
-	override func didReceiveMemoryWarning() {
-			super.didReceiveMemoryWarning()
-			// Dispose of any resources that can be recreated.
-	}
     
 	override func pushViewController(_ viewController: UIViewController, animated: Bool) {
 		if self.viewControllers.count > 0 {

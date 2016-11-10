@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol MainDelegate: NSObjectProtocol {
+	func pop()
+}
+
 class Main: UIViewController, UIScrollViewDelegate, UIGestureRecognizerDelegate, UIAlertViewDelegate {
     
 	var height: CGFloat?
@@ -19,7 +23,7 @@ class Main: UIViewController, UIScrollViewDelegate, UIGestureRecognizerDelegate,
 	var selectedBtn: BarItem?
 	lazy var songs: NSArray = { [] }()
 	lazy var controllers: NSMutableArray = { [] }()
-	
+	weak var delegate: MainDelegate?
 	
     
 
@@ -164,6 +168,7 @@ class Main: UIViewController, UIScrollViewDelegate, UIGestureRecognizerDelegate,
 		controller.view.isHidden = false
 		self.selectedView = controller.view
 		//MARK: - TODO
+		print(controller.navigationController)
 	}
 	// MARK: - 下拉Button
 	func panTheButton(btn: BarItem) {
