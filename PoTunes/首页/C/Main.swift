@@ -38,17 +38,12 @@ class Main: UIViewController, UIScrollViewDelegate, UIGestureRecognizerDelegate,
 		setupGestureRecognizer()
 		//存储用户状态
 		setupUserOnline()
-		_ = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString")
-		print("--------")
-		//NSString *version = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
+		//_ = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString")
+		//print("--------")
 	}
     
 
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
     override var prefersStatusBarHidden : Bool {
         return true
     }
@@ -105,30 +100,29 @@ class Main: UIViewController, UIScrollViewDelegate, UIGestureRecognizerDelegate,
     }
     //MARK: - TODO
     func setupUserOnline() {
-			let user: UserDefaults = UserDefaults.standard
-			let online = user.object(forKey: "online")
-//			if online == nil {
-//				self.setupTabBarWithCount(3)
-//			}
-//			if online == "online" {
-//				self.setupTabBarWithCount(4)
-//			}
-			if (online != nil) {
-				setupTabBarWithCount(4)
-			} else {
-				setupTabBarWithCount(3)
-			}
+			//let user: UserDefaults = UserDefaults.standard
+			//let online = user.object(forKey: "online")
+
+			//if (online != nil) {
+				//setupTabBarWithCount(4)
+			//} else {
+				//setupTabBarWithCount(3)
+			//}
+			// MARK: - 完成后删除
+			setupTabBarWithCount(4)
     }
-    //MARK: - TODO
+    //MARK: - 添加TabBar界面
     func setupTabBarWithCount(_ count: Int) {
 			//每月文章列表页
 			let playlist: PlaylistController = PlaylistController()
 			setupSingleViewControllerToScrollView(playlist, hidden: false)
 			
-			//已下载歌曲界面
+			//已下载专辑页面
 			if count == 4 {
-				
+				let albumDownload: AlbumDownloadViewController = AlbumDownloadViewController()
+				setupSingleViewControllerToScrollView(albumDownload, hidden: true)
 			}
+			//导航页面
 			// 添加BarItem
 			for i in 0..<count {
 				let button: BarItem = BarItem(frame: CGRect(x: CGFloat(i) * self.width! / CGFloat(count), y: self.height!, width: self.width! / CGFloat(count), height: 64))

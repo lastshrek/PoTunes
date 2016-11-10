@@ -23,12 +23,12 @@ class PlaylistController: UITableViewController {
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		let width = self.view.bounds.size.width
 		
+		let width = self.view.bounds.size.width
 		// Initialize tableView
 		tableView.rowHeight = width * 300 / 640
 		tableView.separatorStyle = .none
-		tableView.backgroundColor = UIColor.white
+		tableView.backgroundColor = UIColor.black
 		tableView.register(PlaylistCell.self, forCellReuseIdentifier: "playlist")
 		// Refresh
 		let loadingView = DGElasticPullToRefreshLoadingViewCircle()
@@ -40,7 +40,7 @@ class PlaylistController: UITableViewController {
 				self?.playlists = playlists
 				self?.tableView.dg_stopLoading()
 				self?.tableView.reloadData()
-//				HUD.hide()
+				HUD.hide()
 			})
 			}, loadingView: loadingView)
 		self.tableView.dg_setPullToRefreshFillColor(UIColor(red: 57/255.0, green: 67/255.0, blue: 89/255.0, alpha: 1.0))
@@ -50,11 +50,8 @@ class PlaylistController: UITableViewController {
 	
 	// MARK: - Table view data source
 	override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		// #warning Incomplete implementation, return the number of rows
 		return self.playlists.count
 	}
-
-	
 	override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		let cell = tableView.dequeueReusableCell(withIdentifier: "playlist", for: indexPath) as! PlaylistCell
 		// MARK: - 设置标题 - TODO

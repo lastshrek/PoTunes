@@ -140,7 +140,6 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 
     
     /** 添加播放器界面 */
-    [self setupPlayerInterface];
     
     NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
     
@@ -163,8 +162,7 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
     //获取上次播放曲目
     [self getLastPlaySongAndPlayState];
     
-    NSLog(@"%@",[self dirDoc]);
-    
+	
     self.paused = YES;
     
 
@@ -178,158 +176,6 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 }
 
 
-#pragma mark - 添加播放器界面
-- (void)setupPlayerInterface {
-    //播放器背景
-    UIView *backgroundView = [[UIView alloc] initWithFrame:self.view.bounds];
-    backgroundView.backgroundColor = [UIColor blackColor];
-    self.backgroundView = backgroundView;
-    [self.scrollView addSubview:backgroundView];
-    //添加播放器手势操作
-    [self setupGestureRecognizer];
-    //专辑封面
-    UIImageView *cover = [[UIImageView alloc] init];
-    cover.autoresizingMask = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth;
-    cover.image = [UIImage imageNamed:@"noArtwork.jpg"];
-    cover.frame = CGRectMake(0, 0, self.width, self.width);
-    self.cover = cover;
-    [self.backgroundView addSubview:cover];
-    //倒影封面
-    UIImageView *reflection = [[UIImageView alloc] initWithFrame:CGRectMake(0, self.height - self.width, self.width, self.width)];
-    reflection.autoresizingMask = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth;
-    reflection.image = [self.cover.image reflectionWithAlpha:0.4];
-    [self.backgroundView addSubview:reflection];
-    [self.backgroundView sendSubviewToBack:reflection];
-    self.reflectionCover = reflection;
-    
-    
-    //缓冲条
-    LDProgressView *bufferingIndicator = [[LDProgressView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.cover.frame), self.width, 12)];
-    bufferingIndicator.flat = @NO;
-    bufferingIndicator.progress = 0;
-    bufferingIndicator.animate = @NO;
-    bufferingIndicator.showText = @NO;
-    bufferingIndicator.showStroke = @NO;
-    bufferingIndicator.progressInset = 0;
-    bufferingIndicator.showBackground = @NO;
-    bufferingIndicator.outerStrokeWidth = @0;
-    bufferingIndicator.type = LDProgressSolid;
-    bufferingIndicator.borderRadius = @0;
-    bufferingIndicator.backgroundColor = [UIColor lightTextColor];
-    bufferingIndicator.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleTopMargin;
-    self.bufferingIndicator = bufferingIndicator;
-    [self.backgroundView addSubview:bufferingIndicator];
-    //进度条
-    LDProgressView *progress = [[LDProgressView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.cover.frame), self.width, 12)];
-    progress.flat = @NO;
-    progress.progress = 0;
-    progress.animate = @NO;
-    progress.showText = @NO;
-    progress.showStroke = @NO;
-    progress.progressInset = @0;
-    progress.showBackground = @NO;
-    progress.outerStrokeWidth = @0;
-    progress.type = LDProgressSolid;
-    progress.borderRadius = @0;
-    progress.backgroundColor = [UIColor clearColor];
-    progress.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleTopMargin;
-    self.progress = progress;
-    [self.backgroundView addSubview:progress];
-    
-    
-    //开始时间以及剩余时间
-    UIView *timeView = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(progress.frame), self.width, 25)];
-    timeView.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleTopMargin;
-    self.timeView = timeView;
-    [self.backgroundView addSubview:timeView];
-    
-    UILabel *currentLabel = [[UILabel alloc] init];
-    currentLabel.frame = CGRectMake(2, 0, self.width / 2, timeView.bounds.size.height);
-    currentLabel.autoresizingMask = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth;
-    currentLabel.shadowOffset = CGSizeMake(0, 0);
-    currentLabel.textColor = [UIColor whiteColor];
-    self.currentTime = currentLabel;
-    currentLabel.text = @"";
-    currentLabel.textAlignment = NSTextAlignmentLeft;
-    [timeView addSubview:currentLabel];
-    
-    UILabel *leftLabel = [[UILabel alloc] init];
-    leftLabel.autoresizingMask = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleLeftMargin;
-    leftLabel.shadowOffset = CGSizeMake(0, 0);
-    leftLabel.frame = CGRectMake(self.width / 2 - 2, 0, self.width / 2, timeView.bounds.size.height);
-    self.leftTime = leftLabel;
-    leftLabel.text = @"";
-    leftLabel.textColor = [UIColor whiteColor];
-    leftLabel.textAlignment = NSTextAlignmentRight;
-    [timeView addSubview:leftLabel];
-    
-    //歌曲名
-    UILabel *songLabel = [[UILabel alloc] init];
-    songLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleTopMargin;
-    songLabel.text = @"尚未播放歌曲";
-    songLabel.textColor = [UIColor whiteColor];
-    songLabel.textAlignment = NSTextAlignmentCenter;
-    self.songLabel = songLabel;
-    [self.backgroundView addSubview:songLabel];
-    //歌手名
-    PCLabel *artistLabel = [[PCLabel alloc] init];
-    artistLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleTopMargin;
-    self.artistLabel = artistLabel;
-    [self.backgroundView addSubview:artistLabel];
-    //专辑名
-    PCLabel *albumLabel = [[PCLabel alloc] init];
-    self.albumLabel = albumLabel;
-    albumLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleTopMargin;
-    [self.backgroundView addSubview:albumLabel];
-	
-    
-    switch ((int)self.height) {
-        case 480:
-            songLabel.frame = CGRectMake(0, CGRectGetMaxY(timeView.frame) + 15, self.width, 40);
-            songLabel.font = [UIFont fontWithName:@"BebasNeue" size:30];
-            artistLabel.frame = CGRectMake(0, CGRectGetMaxY(songLabel.frame), self.width, 20);
-            albumLabel.frame = CGRectMake(0, CGRectGetMaxY(artistLabel.frame), self.width, 20);
-            break;
-        case 568:
-            songLabel.frame = CGRectMake(0, CGRectGetMaxY(timeView.frame) + 40, self.width, 40);
-            songLabel.font = [UIFont fontWithName:@"BebasNeue" size:30];
-            artistLabel.frame = CGRectMake(0, CGRectGetMaxY(songLabel.frame) + 15, self.width, 20);
-            albumLabel.frame = CGRectMake(0, CGRectGetMaxY(artistLabel.frame) + 15, self.width, 20);
-            break;
-        case 667:
-            songLabel.frame = CGRectMake(0, CGRectGetMaxY(timeView.frame) + 40, self.width, 40);
-            songLabel.font = [UIFont fontWithName:@"BebasNeue" size:40];
-            artistLabel.frame = CGRectMake(0, CGRectGetMaxY(songLabel.frame) + 20, self.width, 25);
-            artistLabel.font = [UIFont fontWithName:@"BebasNeue" size:25];
-            albumLabel.frame = CGRectMake(0, CGRectGetMaxY(artistLabel.frame) + 20, self.width, 25);
-            albumLabel.font = [UIFont fontWithName:@"BebasNeue" size:23];
-            break;
-        default:
-            songLabel.frame = CGRectMake(0, CGRectGetMaxY(timeView.frame) + 60, self.width, 42);
-            songLabel.font = [UIFont fontWithName:@"BebasNeue" size:40];
-            artistLabel.frame = CGRectMake(0, CGRectGetMaxY(songLabel.frame) + 20, self.width, 27);
-            artistLabel.font = [UIFont fontWithName:@"BebasNeue" size:25];
-            albumLabel.frame = CGRectMake(0, CGRectGetMaxY(artistLabel.frame) + 20, self.width, 27);
-            albumLabel.font = [UIFont fontWithName:@"BebasNeue" size:25];
-            break;
-    }
-		// 播放模式
-    UIImageView *playModeImageView = [[UIImageView alloc] init];
-    playModeImageView.frame = CGRectMake(self.width / 2 - 10, self.height - 20, 20, 20);
-    playModeImageView.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleTopMargin;
-    playModeImageView.contentMode = UIViewContentModeScaleAspectFit;
-    self.playModeImageView = playModeImageView;
-    [self.backgroundView addSubview:playModeImageView];
-    
-    //添加歌词
-    PCBlurView *lrcView = [[PCBlurView alloc] initWithFrame:CGRectMake(0, 0, self.width, self.width)];
-    lrcView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
-    lrcView.hidden = YES;
-    self.lrcView = lrcView;
-    [self.backgroundView addSubview:lrcView];
-    
-    
-}
 #pragma mark - 添加TabBar界面
 - (void)setupTabBarWithCount:(int)count {
     self.controllers = [NSMutableArray array];

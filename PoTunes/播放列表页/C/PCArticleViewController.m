@@ -44,12 +44,10 @@
     
     [self.tableView addHeaderWithTarget:self action:@selector(loadNewArticle)];
     
-    
+	
 
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    
-    self.tableView.backgroundColor = [UIColor blackColor];
-    
+	
+	
     if (self.articles == nil) {
         
         NSString *rootPath = [self dirDoc];
@@ -191,18 +189,9 @@
     }];
 }
 
-#pragma mark - TableView Datasource
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    
-    return 1;
 
-}
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-  
-    return self.articles.count;
 
-}
 #pragma mark - TableViewDelegate
 //- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 

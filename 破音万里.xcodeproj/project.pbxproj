@@ -9,14 +9,18 @@
 /* Begin PBXBuildFile section */
 		17E37971ECD9FCACBAFB3599 /* Pods_____.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AEEF67891B1F3F39F233DA7F /* Pods_____.framework */; };
 		3C0CCAC51BB929DD00AAA5C6 /* PCSongListTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C0CCAC41BB929DD00AAA5C6 /* PCSongListTableViewCell.m */; };
+		3C155EAD1DD4284000375469 /* PCArticleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C155EA71DD4284000375469 /* PCArticleViewController.m */; };
+		3C155EAE1DD4284000375469 /* PlaylistController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C155EA81DD4284000375469 /* PlaylistController.swift */; };
+		3C155EAF1DD4284000375469 /* Playlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C155EAA1DD4284000375469 /* Playlist.swift */; };
+		3C155EB21DD428A100375469 /* PlaylistCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C155EB11DD428A100375469 /* PlaylistCell.swift */; };
+		3C155EB51DD4292E00375469 /* DBHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C155EB41DD4292E00375469 /* DBHelper.m */; };
+		3C155EB81DD4298F00375469 /* PCMyMusicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C155EB71DD4298F00375469 /* PCMyMusicViewController.m */; };
+		3C155EBB1DD429B700375469 /* PCDownloadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C155EBA1DD429B700375469 /* PCDownloadManager.m */; };
+		3C155EBD1DD42A1C00375469 /* AlbumDownloadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C155EBC1DD42A1C00375469 /* AlbumDownloadViewController.swift */; };
 		3C24CEDB1DD30D2F007C862C /* Main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C24CED81DD30D2F007C862C /* Main.swift */; };
 		3C24CEDC1DD30D2F007C862C /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C24CEDA1DD30D2F007C862C /* ViewController.m */; };
-		3C24CEDF1DD30DB1007C862C /* PlaylistCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C24CEDE1DD30DB1007C862C /* PlaylistCell.swift */; };
-		3C24CEE41DD30E4C007C862C /* PlaylistController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C24CEE11DD30E4C007C862C /* PlaylistController.swift */; };
-		3C24CEE51DD30E4C007C862C /* PCArticleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C24CEE31DD30E4C007C862C /* PCArticleViewController.m */; };
 		3C24CEEB1DD32038007C862C /* Reflect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C24CEEA1DD32038007C862C /* Reflect.swift */; };
 		3C26B5721C4FD2AA0037893F /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CB2E3FD1BA7D19300805D4F /* AudioToolbox.framework */; };
-		3C3984561BF65EED000629DE /* UIImage+BoxBlur.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3984551BF65EED000629DE /* UIImage+BoxBlur.m */; };
 		3C5813001BA7EFA00091E4FC /* PCNaviController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C5812FF1BA7EFA00091E4FC /* PCNaviController.m */; };
 		3C5813621BE48C050012C689 /* PCWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C5813601BE48C050012C689 /* PCWebViewController.m */; };
 		3C5813631BE48C050012C689 /* PCWebViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3C5813611BE48C050012C689 /* PCWebViewController.xib */; };
@@ -25,7 +29,6 @@
 		3C5813711BE4BFEA0012C689 /* guide.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3C5813701BE4BFEA0012C689 /* guide.plist */; };
 		3C5813741BE634AE0012C689 /* PCShareBtn.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C5813731BE634AE0012C689 /* PCShareBtn.m */; };
 		3C5813771BE654770012C689 /* PCSongDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C5813761BE654770012C689 /* PCSongDetailViewController.m */; };
-		3C61CE391C8D7FCF002848A3 /* PCDownloadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C61CE381C8D7FCF002848A3 /* PCDownloadManager.m */; };
 		3C77D24D1BE3D0F00029AB70 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C77D2421BE3BD8C0029AB70 /* CoreTelephony.framework */; };
 		3C77D24E1BE3D1110029AB70 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C77D2441BE3BD940029AB70 /* SystemConfiguration.framework */; };
 		3C9641E41D670DCE00386ABB /* DarwinNotificationHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C9641E31D670DCE00386ABB /* DarwinNotificationHelper.m */; };
@@ -48,16 +51,12 @@
 		3CB2E3121BA7B26800805D4F /* PoTunesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB2E3111BA7B26800805D4F /* PoTunesTests.m */; };
 		3CB2E32A1BA7CA5D00805D4F /* PCLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB2E3251BA7CA5D00805D4F /* PCLabel.m */; };
 		3CB2E32B1BA7CA5D00805D4F /* PCButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB2E3271BA7CA5D00805D4F /* PCButton.m */; };
-		3CB2E32F1BA7CB7A00805D4F /* UIColor+RGBValues.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB2E32E1BA7CB7A00805D4F /* UIColor+RGBValues.m */; };
-		3CB2E3341BA7CC0700805D4F /* UIImage+Reflection.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB2E3311BA7CC0700805D4F /* UIImage+Reflection.m */; };
-		3CB2E3351BA7CC0700805D4F /* UIView+Geometry.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB2E3331BA7CC0700805D4F /* UIView+Geometry.m */; };
 		3CB2E3571BA7CE1A00805D4F /* PCNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB2E3561BA7CE1A00805D4F /* PCNavigationController.m */; };
 		3CB2E3B11BA7CF2200805D4F /* BebasNeue.otf in Resources */ = {isa = PBXBuildFile; fileRef = 3CB2E3B01BA7CF2200805D4F /* BebasNeue.otf */; };
 		3CB2E3B91BA7CF7000805D4F /* PCSong.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB2E3B41BA7CF7000805D4F /* PCSong.m */; };
 		3CB2E3BA1BA7CF7000805D4F /* PCPlaylist.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB2E3B61BA7CF7000805D4F /* PCPlaylist.m */; };
 		3CB2E3BB1BA7CF7000805D4F /* PCArticle.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB2E3B81BA7CF7000805D4F /* PCArticle.m */; };
 		3CB2E3BF1BA7CFBA00805D4F /* PCDownloadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB2E3BE1BA7CFBA00805D4F /* PCDownloadViewController.m */; };
-		3CB2E3C31BA7CFF000805D4F /* PCMyMusicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB2E3C21BA7CFF000805D4F /* PCMyMusicViewController.m */; };
 		3CB2E3FC1BA7D18900805D4F /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CB2E3FB1BA7D18900805D4F /* CFNetwork.framework */; };
 		3CB2E4001BA7D1B300805D4F /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CB2E3FF1BA7D1B300805D4F /* AVFoundation.framework */; };
 		3CB2E4021BA7D1BC00805D4F /* libxml2.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CB2E4011BA7D1BC00805D4F /* libxml2.2.dylib */; };
@@ -67,21 +66,24 @@
 		3CB2E4561BA7D4E600805D4F /* libz.1.2.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CB2E4551BA7D4E600805D4F /* libz.1.2.5.dylib */; };
 		3CB2E4581BA7D4F200805D4F /* libstdc++.6.0.9.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CB2E4571BA7D4F200805D4F /* libstdc++.6.0.9.dylib */; };
 		3CB2E45A1BA7D4FA00805D4F /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CB2E4591BA7D4FA00805D4F /* AddressBook.framework */; };
-		3CB45FBC1BE7B52C0011AEA4 /* DBHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB45FBB1BE7B52C0011AEA4 /* DBHelper.m */; };
 		3CCA14F01BA8080700D45C52 /* SharedMapView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CCA14EF1BA8080700D45C52 /* SharedMapView.m */; };
-		3CCFBF2B1DD3664800514873 /* Playlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CCFBF2A1DD3664800514873 /* Playlist.swift */; };
+		3CCFBF2F1DD41DAD00514873 /* PlayerInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CCFBF2E1DD41DAD00514873 /* PlayerInterface.swift */; };
+		3CCFBF381DD41E0300514873 /* LrcCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CCFBF321DD41E0300514873 /* LrcCell.swift */; };
+		3CCFBF3B1DD41E0300514873 /* LrcView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CCFBF361DD41E0300514873 /* LrcView.swift */; };
+		3CCFBF401DD41E6800514873 /* lrcLine.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CCFBF3E1DD41E6800514873 /* lrcLine.m */; };
+		3CCFBF411DD41E6800514873 /* LrcLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CCFBF3F1DD41E6800514873 /* LrcLine.swift */; };
+		3CCFBF4D1DD41F1C00514873 /* NSString+DirDoc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CCFBF441DD41F1C00514873 /* NSString+DirDoc.swift */; };
+		3CCFBF4E1DD41F1C00514873 /* UIColor+RGBValues.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CCFBF461DD41F1C00514873 /* UIColor+RGBValues.m */; };
+		3CCFBF4F1DD41F1C00514873 /* UIImage+BoxBlur.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CCFBF481DD41F1C00514873 /* UIImage+BoxBlur.m */; };
+		3CCFBF501DD41F1C00514873 /* UIImage+Reflection.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CCFBF4A1DD41F1C00514873 /* UIImage+Reflection.m */; };
+		3CCFBF511DD41F1C00514873 /* UIView+Geometry.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CCFBF4C1DD41F1C00514873 /* UIView+Geometry.m */; };
+		3CCFBF541DD4201B00514873 /* LrcCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CCFBF531DD4201B00514873 /* LrcCell.m */; };
 		3CD22AD81BDE2A280064E7B0 /* PCDownloadingTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CD22AD71BDE2A280064E7B0 /* PCDownloadingTableViewController.m */; };
 		3CD735401BEE3DF100262D69 /* PCBlurView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CD7353F1BEE3DF100262D69 /* PCBlurView.m */; };
-		3CD735431BF0E3C000262D69 /* lrcLine.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CD735421BF0E3C000262D69 /* lrcLine.m */; };
-		3CD735461BF101AD00262D69 /* LrcCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CD735451BF101AD00262D69 /* LrcCell.m */; };
 		3CF7AFBF1BAAA14000F764BD /* CommonUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CF7AFBE1BAAA14000F764BD /* CommonUtility.m */; };
 		3CF7AFC21BAAA19500F764BD /* LineDashPolyline.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CF7AFC11BAAA19500F764BD /* LineDashPolyline.m */; };
 		3CFA57311D60332F00341763 /* SongLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFA57301D60332F00341763 /* SongLabel.swift */; };
-		3CFA57331D60946800341763 /* LrcView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFA57321D60946800341763 /* LrcView.swift */; };
-		3CFA57351D62C87500341763 /* LrcLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFA57341D62C87500341763 /* LrcLine.swift */; };
-		3CFA57371D6337B100341763 /* LrcCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFA57361D6337B100341763 /* LrcCell.swift */; };
 		3CFA57391D64207F00341763 /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFA57381D64207F00341763 /* NavigationController.swift */; };
-		3CFA573B1D644F1E00341763 /* NSString+DirDoc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFA573A1D644F1E00341763 /* NSString+DirDoc.swift */; };
 		3CFA573D1D645B1D00341763 /* BarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFA573C1D645B1D00341763 /* BarItem.swift */; };
 		3CFA58BD1D6706D700341763 /* audio_queue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3CFA58401D6706D700341763 /* audio_queue.cpp */; };
 		3CFA58BE1D6706D700341763 /* audio_stream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3CFA58421D6706D700341763 /* audio_stream.cpp */; };
@@ -111,7 +113,6 @@
 		3CFA58DB1D6706D700341763 /* PoTunes.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = 3CFA587F1D6706D700341763 /* PoTunes.entitlements */; };
 		3CFFC7FF1D5DC49000696F66 /* PCLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFFC7FE1D5DC49000696F66 /* PCLabel.swift */; };
 		3CFFC8031D5DC65D00696F66 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3CFFC8021D5DC65D00696F66 /* Main.storyboard */; };
-		3CFFC8051D5DE1CA00696F66 /* PlayerInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFFC8041D5DE1CA00696F66 /* PlayerInterface.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -142,16 +143,22 @@
 		28F6DD77EB623BF8E85E58B2 /* Pods-破音万里.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-破音万里.debug.xcconfig"; path = "Pods/Target Support Files/Pods-破音万里/Pods-破音万里.debug.xcconfig"; sourceTree = "<group>"; };
 		3C0CCAC31BB929DD00AAA5C6 /* PCSongListTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCSongListTableViewCell.h; sourceTree = "<group>"; };
 		3C0CCAC41BB929DD00AAA5C6 /* PCSongListTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCSongListTableViewCell.m; sourceTree = "<group>"; };
+		3C155EA61DD4284000375469 /* PCArticleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCArticleViewController.h; sourceTree = "<group>"; };
+		3C155EA71DD4284000375469 /* PCArticleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCArticleViewController.m; sourceTree = "<group>"; };
+		3C155EA81DD4284000375469 /* PlaylistController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaylistController.swift; sourceTree = "<group>"; };
+		3C155EAA1DD4284000375469 /* Playlist.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Playlist.swift; sourceTree = "<group>"; };
+		3C155EB11DD428A100375469 /* PlaylistCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaylistCell.swift; sourceTree = "<group>"; };
+		3C155EB31DD4292E00375469 /* DBHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBHelper.h; sourceTree = "<group>"; };
+		3C155EB41DD4292E00375469 /* DBHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DBHelper.m; sourceTree = "<group>"; };
+		3C155EB61DD4298F00375469 /* PCMyMusicViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCMyMusicViewController.h; sourceTree = "<group>"; };
+		3C155EB71DD4298F00375469 /* PCMyMusicViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCMyMusicViewController.m; sourceTree = "<group>"; };
+		3C155EB91DD429B700375469 /* PCDownloadManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCDownloadManager.h; sourceTree = "<group>"; };
+		3C155EBA1DD429B700375469 /* PCDownloadManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCDownloadManager.m; sourceTree = "<group>"; };
+		3C155EBC1DD42A1C00375469 /* AlbumDownloadViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlbumDownloadViewController.swift; sourceTree = "<group>"; };
 		3C24CED81DD30D2F007C862C /* Main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Main.swift; sourceTree = "<group>"; };
 		3C24CED91DD30D2F007C862C /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		3C24CEDA1DD30D2F007C862C /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
-		3C24CEDE1DD30DB1007C862C /* PlaylistCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaylistCell.swift; sourceTree = "<group>"; };
-		3C24CEE11DD30E4C007C862C /* PlaylistController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaylistController.swift; sourceTree = "<group>"; };
-		3C24CEE21DD30E4C007C862C /* PCArticleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCArticleViewController.h; sourceTree = "<group>"; };
-		3C24CEE31DD30E4C007C862C /* PCArticleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCArticleViewController.m; sourceTree = "<group>"; };
 		3C24CEEA1DD32038007C862C /* Reflect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reflect.swift; sourceTree = "<group>"; };
-		3C3984541BF65EED000629DE /* UIImage+BoxBlur.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+BoxBlur.h"; sourceTree = "<group>"; };
-		3C3984551BF65EED000629DE /* UIImage+BoxBlur.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+BoxBlur.m"; sourceTree = "<group>"; };
 		3C5812FE1BA7EFA00091E4FC /* PCNaviController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCNaviController.h; sourceTree = "<group>"; };
 		3C5812FF1BA7EFA00091E4FC /* PCNaviController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCNaviController.m; sourceTree = "<group>"; };
 		3C58135F1BE48C050012C689 /* PCWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCWebViewController.h; sourceTree = "<group>"; };
@@ -165,8 +172,6 @@
 		3C5813731BE634AE0012C689 /* PCShareBtn.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCShareBtn.m; sourceTree = "<group>"; };
 		3C5813751BE654770012C689 /* PCSongDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCSongDetailViewController.h; sourceTree = "<group>"; };
 		3C5813761BE654770012C689 /* PCSongDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCSongDetailViewController.m; sourceTree = "<group>"; };
-		3C61CE371C8D7FCF002848A3 /* PCDownloadManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCDownloadManager.h; sourceTree = "<group>"; };
-		3C61CE381C8D7FCF002848A3 /* PCDownloadManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCDownloadManager.m; sourceTree = "<group>"; };
 		3C77D2421BE3BD8C0029AB70 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		3C77D2441BE3BD940029AB70 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		3C77D2461BE3BDAF0029AB70 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
@@ -205,17 +210,10 @@
 		3CB2E30B1BA7B26800805D4F /* 破音万里.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "破音万里.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3CB2E3101BA7B26800805D4F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3CB2E3111BA7B26800805D4F /* PoTunesTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PoTunesTests.m; sourceTree = "<group>"; };
-		3CB2E31C1BA7C93900805D4F /* Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Common.h; sourceTree = "<group>"; };
 		3CB2E3241BA7CA5D00805D4F /* PCLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCLabel.h; sourceTree = "<group>"; };
 		3CB2E3251BA7CA5D00805D4F /* PCLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCLabel.m; sourceTree = "<group>"; };
 		3CB2E3261BA7CA5D00805D4F /* PCButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCButton.h; sourceTree = "<group>"; };
 		3CB2E3271BA7CA5D00805D4F /* PCButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCButton.m; sourceTree = "<group>"; };
-		3CB2E32D1BA7CB7A00805D4F /* UIColor+RGBValues.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+RGBValues.h"; sourceTree = "<group>"; };
-		3CB2E32E1BA7CB7A00805D4F /* UIColor+RGBValues.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+RGBValues.m"; sourceTree = "<group>"; };
-		3CB2E3301BA7CC0700805D4F /* UIImage+Reflection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Reflection.h"; sourceTree = "<group>"; };
-		3CB2E3311BA7CC0700805D4F /* UIImage+Reflection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Reflection.m"; sourceTree = "<group>"; };
-		3CB2E3321BA7CC0700805D4F /* UIView+Geometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Geometry.h"; sourceTree = "<group>"; };
-		3CB2E3331BA7CC0700805D4F /* UIView+Geometry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Geometry.m"; sourceTree = "<group>"; };
 		3CB2E3551BA7CE1A00805D4F /* PCNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCNavigationController.h; sourceTree = "<group>"; };
 		3CB2E3561BA7CE1A00805D4F /* PCNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCNavigationController.m; sourceTree = "<group>"; };
 		3CB2E3B01BA7CF2200805D4F /* BebasNeue.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = BebasNeue.otf; sourceTree = "<group>"; };
@@ -227,8 +225,6 @@
 		3CB2E3B81BA7CF7000805D4F /* PCArticle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCArticle.m; sourceTree = "<group>"; };
 		3CB2E3BD1BA7CFBA00805D4F /* PCDownloadViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCDownloadViewController.h; sourceTree = "<group>"; };
 		3CB2E3BE1BA7CFBA00805D4F /* PCDownloadViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCDownloadViewController.m; sourceTree = "<group>"; };
-		3CB2E3C11BA7CFF000805D4F /* PCMyMusicViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCMyMusicViewController.h; sourceTree = "<group>"; };
-		3CB2E3C21BA7CFF000805D4F /* PCMyMusicViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCMyMusicViewController.m; sourceTree = "<group>"; };
 		3CB2E3FB1BA7D18900805D4F /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		3CB2E3FD1BA7D19300805D4F /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		3CB2E3FF1BA7D1B300805D4F /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
@@ -241,19 +237,32 @@
 		3CB2E4551BA7D4E600805D4F /* libz.1.2.5.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.2.5.dylib; path = usr/lib/libz.1.2.5.dylib; sourceTree = SDKROOT; };
 		3CB2E4571BA7D4F200805D4F /* libstdc++.6.0.9.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libstdc++.6.0.9.dylib"; path = "usr/lib/libstdc++.6.0.9.dylib"; sourceTree = SDKROOT; };
 		3CB2E4591BA7D4FA00805D4F /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
-		3CB45FBA1BE7B52C0011AEA4 /* DBHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBHelper.h; sourceTree = "<group>"; };
-		3CB45FBB1BE7B52C0011AEA4 /* DBHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DBHelper.m; sourceTree = "<group>"; };
 		3CCA14EE1BA8080700D45C52 /* SharedMapView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SharedMapView.h; sourceTree = "<group>"; };
 		3CCA14EF1BA8080700D45C52 /* SharedMapView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SharedMapView.m; sourceTree = "<group>"; };
-		3CCFBF2A1DD3664800514873 /* Playlist.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Playlist.swift; sourceTree = "<group>"; };
+		3CCFBF2E1DD41DAD00514873 /* PlayerInterface.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerInterface.swift; sourceTree = "<group>"; };
+		3CCFBF321DD41E0300514873 /* LrcCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LrcCell.swift; sourceTree = "<group>"; };
+		3CCFBF361DD41E0300514873 /* LrcView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LrcView.swift; sourceTree = "<group>"; };
+		3CCFBF3D1DD41E6800514873 /* lrcLine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lrcLine.h; sourceTree = "<group>"; };
+		3CCFBF3E1DD41E6800514873 /* lrcLine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = lrcLine.m; sourceTree = "<group>"; };
+		3CCFBF3F1DD41E6800514873 /* LrcLine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LrcLine.swift; sourceTree = "<group>"; };
+		3CCFBF431DD41F1C00514873 /* Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Common.h; sourceTree = "<group>"; };
+		3CCFBF441DD41F1C00514873 /* NSString+DirDoc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSString+DirDoc.swift"; sourceTree = "<group>"; };
+		3CCFBF451DD41F1C00514873 /* UIColor+RGBValues.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+RGBValues.h"; sourceTree = "<group>"; };
+		3CCFBF461DD41F1C00514873 /* UIColor+RGBValues.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+RGBValues.m"; sourceTree = "<group>"; };
+		3CCFBF471DD41F1C00514873 /* UIImage+BoxBlur.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+BoxBlur.h"; sourceTree = "<group>"; };
+		3CCFBF481DD41F1C00514873 /* UIImage+BoxBlur.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+BoxBlur.m"; sourceTree = "<group>"; };
+		3CCFBF491DD41F1C00514873 /* UIImage+Reflection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Reflection.h"; sourceTree = "<group>"; };
+		3CCFBF4A1DD41F1C00514873 /* UIImage+Reflection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Reflection.m"; sourceTree = "<group>"; };
+		3CCFBF4B1DD41F1C00514873 /* UIView+Geometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Geometry.h"; sourceTree = "<group>"; };
+		3CCFBF4C1DD41F1C00514873 /* UIView+Geometry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Geometry.m"; sourceTree = "<group>"; };
+		3CCFBF521DD4201B00514873 /* LrcCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LrcCell.h; sourceTree = "<group>"; };
+		3CCFBF531DD4201B00514873 /* LrcCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LrcCell.m; sourceTree = "<group>"; };
 		3CD22AD61BDE2A280064E7B0 /* PCDownloadingTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCDownloadingTableViewController.h; sourceTree = "<group>"; };
 		3CD22AD71BDE2A280064E7B0 /* PCDownloadingTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCDownloadingTableViewController.m; sourceTree = "<group>"; };
 		3CD7353E1BEE3DF100262D69 /* PCBlurView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCBlurView.h; sourceTree = "<group>"; };
 		3CD7353F1BEE3DF100262D69 /* PCBlurView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCBlurView.m; sourceTree = "<group>"; };
 		3CD735411BF0E3C000262D69 /* lrcLine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lrcLine.h; sourceTree = "<group>"; };
 		3CD735421BF0E3C000262D69 /* lrcLine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = lrcLine.m; sourceTree = "<group>"; };
-		3CD735441BF101AD00262D69 /* LrcCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LrcCell.h; sourceTree = "<group>"; };
-		3CD735451BF101AD00262D69 /* LrcCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LrcCell.m; sourceTree = "<group>"; };
 		3CF7AFBA1BAA997D00F764BD /* GeocodeAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeocodeAnnotation.h; sourceTree = "<group>"; };
 		3CF7AFBB1BAA997D00F764BD /* GeocodeAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeocodeAnnotation.m; sourceTree = "<group>"; };
 		3CF7AFBD1BAAA14000F764BD /* CommonUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonUtility.h; sourceTree = "<group>"; };
@@ -261,11 +270,8 @@
 		3CF7AFC01BAAA19500F764BD /* LineDashPolyline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LineDashPolyline.h; sourceTree = "<group>"; };
 		3CF7AFC11BAAA19500F764BD /* LineDashPolyline.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LineDashPolyline.m; sourceTree = "<group>"; };
 		3CFA57301D60332F00341763 /* SongLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SongLabel.swift; sourceTree = "<group>"; };
-		3CFA57321D60946800341763 /* LrcView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LrcView.swift; sourceTree = "<group>"; };
 		3CFA57341D62C87500341763 /* LrcLine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LrcLine.swift; sourceTree = "<group>"; };
-		3CFA57361D6337B100341763 /* LrcCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LrcCell.swift; sourceTree = "<group>"; };
 		3CFA57381D64207F00341763 /* NavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
-		3CFA573A1D644F1E00341763 /* NSString+DirDoc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSString+DirDoc.swift"; sourceTree = "<group>"; };
 		3CFA573C1D645B1D00341763 /* BarItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BarItem.swift; sourceTree = "<group>"; };
 		3CFA58401D6706D700341763 /* audio_queue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = audio_queue.cpp; sourceTree = "<group>"; };
 		3CFA58411D6706D700341763 /* audio_queue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = audio_queue.h; sourceTree = "<group>"; };
@@ -321,7 +327,6 @@
 		3CFFC7F61D5DBF3500696F66 /* 破音万里-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "破音万里-Bridging-Header.h"; sourceTree = "<group>"; };
 		3CFFC7FE1D5DC49000696F66 /* PCLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PCLabel.swift; sourceTree = "<group>"; };
 		3CFFC8021D5DC65D00696F66 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
-		3CFFC8041D5DE1CA00696F66 /* PlayerInterface.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerInterface.swift; sourceTree = "<group>"; };
 		5ACE65060298DC83FD3A5186 /* Pods-破音万里.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-破音万里.release.xcconfig"; path = "Pods/Target Support Files/Pods-破音万里/Pods-破音万里.release.xcconfig"; sourceTree = "<group>"; };
 		AEEF67891B1F3F39F233DA7F /* Pods_____.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = "Pods_____.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -371,6 +376,60 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		3C155EA21DD427E800375469 /* 已下载专辑页 */ = {
+			isa = PBXGroup;
+			children = (
+				3C155EA31DD427E800375469 /* C */,
+			);
+			path = "已下载专辑页";
+			sourceTree = "<group>";
+		};
+		3C155EA31DD427E800375469 /* C */ = {
+			isa = PBXGroup;
+			children = (
+				3C155EB61DD4298F00375469 /* PCMyMusicViewController.h */,
+				3C155EB71DD4298F00375469 /* PCMyMusicViewController.m */,
+				3C155EBC1DD42A1C00375469 /* AlbumDownloadViewController.swift */,
+			);
+			path = C;
+			sourceTree = "<group>";
+		};
+		3C155EA41DD4284000375469 /* 播放列表页 */ = {
+			isa = PBXGroup;
+			children = (
+				3C155EA51DD4284000375469 /* C */,
+				3C155EA91DD4284000375469 /* M */,
+				3C155EAB1DD4284000375469 /* V */,
+			);
+			path = "播放列表页";
+			sourceTree = "<group>";
+		};
+		3C155EA51DD4284000375469 /* C */ = {
+			isa = PBXGroup;
+			children = (
+				3C155EA61DD4284000375469 /* PCArticleViewController.h */,
+				3C155EA71DD4284000375469 /* PCArticleViewController.m */,
+				3C155EA81DD4284000375469 /* PlaylistController.swift */,
+			);
+			path = C;
+			sourceTree = "<group>";
+		};
+		3C155EA91DD4284000375469 /* M */ = {
+			isa = PBXGroup;
+			children = (
+				3C155EAA1DD4284000375469 /* Playlist.swift */,
+			);
+			path = M;
+			sourceTree = "<group>";
+		};
+		3C155EAB1DD4284000375469 /* V */ = {
+			isa = PBXGroup;
+			children = (
+				3C155EB11DD428A100375469 /* PlaylistCell.swift */,
+			);
+			path = V;
+			sourceTree = "<group>";
+		};
 		3C24CED61DD30D2F007C862C /* 首页 */ = {
 			isa = PBXGroup;
 			children = (
@@ -387,26 +446,6 @@
 				3C24CEDA1DD30D2F007C862C /* ViewController.m */,
 			);
 			path = C;
-			sourceTree = "<group>";
-		};
-		3C24CEDD1DD30D66007C862C /* V */ = {
-			isa = PBXGroup;
-			children = (
-				3C24CEDE1DD30DB1007C862C /* PlaylistCell.swift */,
-			);
-			name = V;
-			path = "首页/V";
-			sourceTree = "<group>";
-		};
-		3C24CEE01DD30E4C007C862C /* C */ = {
-			isa = PBXGroup;
-			children = (
-				3C24CEE11DD30E4C007C862C /* PlaylistController.swift */,
-				3C24CEE21DD30E4C007C862C /* PCArticleViewController.h */,
-				3C24CEE31DD30E4C007C862C /* PCArticleViewController.m */,
-			);
-			name = C;
-			path = "播放列表页/C";
 			sourceTree = "<group>";
 		};
 		3C24CEE91DD31FE3007C862C /* 3rdParty-Swift */ = {
@@ -517,8 +556,10 @@
 		3CB2E2F41BA7B26800805D4F /* PoTunes */ = {
 			isa = PBXGroup;
 			children = (
+				3C155EA41DD4284000375469 /* 播放列表页 */,
+				3C155EA21DD427E800375469 /* 已下载专辑页 */,
+				3CCFBF2C1DD41D5A00514873 /* 播放器页 */,
 				3C24CEE91DD31FE3007C862C /* 3rdParty-Swift */,
-				3CB2E3361BA7CCE300805D4F /* 播放列表页 */,
 				3C24CED61DD30D2F007C862C /* 首页 */,
 				3CFA580F1D6706D700341763 /* 3rdParty */,
 				3CB2E4051BA7D1D200805D4F /* 框架 */,
@@ -569,9 +610,8 @@
 		3CB2E31B1BA7C92300805D4F /* Others */ = {
 			isa = PBXGroup;
 			children = (
+				3CCFBF421DD41F1C00514873 /* Category */,
 				3CB2E3B01BA7CF2200805D4F /* BebasNeue.otf */,
-				3CB2E32C1BA7CB5D00805D4F /* Category */,
-				3CB2E31C1BA7C93900805D4F /* Common.h */,
 			);
 			name = Others;
 			sourceTree = "<group>";
@@ -595,8 +635,6 @@
 		3CB2E31F1BA7CA4500805D4F /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				3CD735441BF101AD00262D69 /* LrcCell.h */,
-				3CD735451BF101AD00262D69 /* LrcCell.m */,
 				3C5813721BE634AE0012C689 /* PCShareBtn.h */,
 				3C5813731BE634AE0012C689 /* PCShareBtn.m */,
 				3CCA14EE1BA8080700D45C52 /* SharedMapView.h */,
@@ -614,40 +652,11 @@
 				3CD7353E1BEE3DF100262D69 /* PCBlurView.h */,
 				3CD7353F1BEE3DF100262D69 /* PCBlurView.m */,
 				3CFFC7FE1D5DC49000696F66 /* PCLabel.swift */,
-				3CFFC8041D5DE1CA00696F66 /* PlayerInterface.swift */,
 				3CFA57301D60332F00341763 /* SongLabel.swift */,
-				3CFA57321D60946800341763 /* LrcView.swift */,
-				3CFA57361D6337B100341763 /* LrcCell.swift */,
 				3CFA573C1D645B1D00341763 /* BarItem.swift */,
 				3C96420D1D6AAF4C00386ABB /* ArticleCell.xib */,
 			);
 			name = Views;
-			sourceTree = "<group>";
-		};
-		3CB2E32C1BA7CB5D00805D4F /* Category */ = {
-			isa = PBXGroup;
-			children = (
-				3CB2E3301BA7CC0700805D4F /* UIImage+Reflection.h */,
-				3CB2E3311BA7CC0700805D4F /* UIImage+Reflection.m */,
-				3CB2E3321BA7CC0700805D4F /* UIView+Geometry.h */,
-				3CB2E3331BA7CC0700805D4F /* UIView+Geometry.m */,
-				3C3984541BF65EED000629DE /* UIImage+BoxBlur.h */,
-				3C3984551BF65EED000629DE /* UIImage+BoxBlur.m */,
-				3CB2E32D1BA7CB7A00805D4F /* UIColor+RGBValues.h */,
-				3CB2E32E1BA7CB7A00805D4F /* UIColor+RGBValues.m */,
-				3CFA573A1D644F1E00341763 /* NSString+DirDoc.swift */,
-			);
-			name = Category;
-			sourceTree = "<group>";
-		};
-		3CB2E3361BA7CCE300805D4F /* 播放列表页 */ = {
-			isa = PBXGroup;
-			children = (
-				3CCFBF291DD3662A00514873 /* M */,
-				3C24CEE01DD30E4C007C862C /* C */,
-				3C24CEDD1DD30D66007C862C /* V */,
-			);
-			name = "播放列表页";
 			sourceTree = "<group>";
 		};
 		3CB2E3541BA7CE0B00805D4F /* 导航控制器 */ = {
@@ -694,12 +703,6 @@
 		3CB2E3C01BA7CFE500805D4F /* 已下载专辑页 */ = {
 			isa = PBXGroup;
 			children = (
-				3CB2E3C11BA7CFF000805D4F /* PCMyMusicViewController.h */,
-				3CB2E3C21BA7CFF000805D4F /* PCMyMusicViewController.m */,
-				3C61CE371C8D7FCF002848A3 /* PCDownloadManager.h */,
-				3C61CE381C8D7FCF002848A3 /* PCDownloadManager.m */,
-				3CB45FBA1BE7B52C0011AEA4 /* DBHelper.h */,
-				3CB45FBB1BE7B52C0011AEA4 /* DBHelper.m */,
 			);
 			name = "已下载专辑页";
 			sourceTree = "<group>";
@@ -754,13 +757,56 @@
 			name = "歌曲列表页";
 			sourceTree = "<group>";
 		};
-		3CCFBF291DD3662A00514873 /* M */ = {
+		3CCFBF2C1DD41D5A00514873 /* 播放器页 */ = {
 			isa = PBXGroup;
 			children = (
-				3CCFBF2A1DD3664800514873 /* Playlist.swift */,
+				3CCFBF3C1DD41E6800514873 /* M */,
+				3CCFBF2D1DD41D6B00514873 /* V */,
 			);
-			name = M;
-			path = "播放列表页/M";
+			path = "播放器页";
+			sourceTree = "<group>";
+		};
+		3CCFBF2D1DD41D6B00514873 /* V */ = {
+			isa = PBXGroup;
+			children = (
+				3CCFBF521DD4201B00514873 /* LrcCell.h */,
+				3CCFBF531DD4201B00514873 /* LrcCell.m */,
+				3CCFBF321DD41E0300514873 /* LrcCell.swift */,
+				3CCFBF361DD41E0300514873 /* LrcView.swift */,
+				3CCFBF2E1DD41DAD00514873 /* PlayerInterface.swift */,
+			);
+			path = V;
+			sourceTree = "<group>";
+		};
+		3CCFBF3C1DD41E6800514873 /* M */ = {
+			isa = PBXGroup;
+			children = (
+				3CCFBF3D1DD41E6800514873 /* lrcLine.h */,
+				3CCFBF3E1DD41E6800514873 /* lrcLine.m */,
+				3CCFBF3F1DD41E6800514873 /* LrcLine.swift */,
+			);
+			path = M;
+			sourceTree = "<group>";
+		};
+		3CCFBF421DD41F1C00514873 /* Category */ = {
+			isa = PBXGroup;
+			children = (
+				3C155EB91DD429B700375469 /* PCDownloadManager.h */,
+				3C155EBA1DD429B700375469 /* PCDownloadManager.m */,
+				3C155EB31DD4292E00375469 /* DBHelper.h */,
+				3C155EB41DD4292E00375469 /* DBHelper.m */,
+				3CCFBF431DD41F1C00514873 /* Common.h */,
+				3CCFBF441DD41F1C00514873 /* NSString+DirDoc.swift */,
+				3CCFBF451DD41F1C00514873 /* UIColor+RGBValues.h */,
+				3CCFBF461DD41F1C00514873 /* UIColor+RGBValues.m */,
+				3CCFBF471DD41F1C00514873 /* UIImage+BoxBlur.h */,
+				3CCFBF481DD41F1C00514873 /* UIImage+BoxBlur.m */,
+				3CCFBF491DD41F1C00514873 /* UIImage+Reflection.h */,
+				3CCFBF4A1DD41F1C00514873 /* UIImage+Reflection.m */,
+				3CCFBF4B1DD41F1C00514873 /* UIView+Geometry.h */,
+				3CCFBF4C1DD41F1C00514873 /* UIView+Geometry.m */,
+			);
+			path = Category;
 			sourceTree = "<group>";
 		};
 		3CD22AD41BDE29F90064E7B0 /* 正在下载歌曲页 */ = {
@@ -1070,34 +1116,36 @@
 			buildActionMask = 2147483647;
 			files = (
 				3C5813621BE48C050012C689 /* PCWebViewController.m in Sources */,
-				3CB2E3C31BA7CFF000805D4F /* PCMyMusicViewController.m in Sources */,
-				3CFA573B1D644F1E00341763 /* NSString+DirDoc.swift in Sources */,
+				3CCFBF411DD41E6800514873 /* LrcLine.swift in Sources */,
+				3CCFBF401DD41E6800514873 /* lrcLine.m in Sources */,
+				3CCFBF3B1DD41E0300514873 /* LrcView.swift in Sources */,
+				3CCFBF4D1DD41F1C00514873 /* NSString+DirDoc.swift in Sources */,
 				3C9642061D67184F00386ABB /* EVCircularProgressView.m in Sources */,
-				3CB2E3351BA7CC0700805D4F /* UIView+Geometry.m in Sources */,
 				3CFA58D71D6706D700341763 /* MJRefreshHeaderView.m in Sources */,
+				3C155EB81DD4298F00375469 /* PCMyMusicViewController.m in Sources */,
 				3CA297021BE1C71E0073CF1A /* PCSongDownloadingCell.m in Sources */,
 				3CFA58DA1D6706D700341763 /* UIView+MJExtension.m in Sources */,
 				3CFA58C11D6706D700341763 /* file_stream.cpp in Sources */,
+				3C155EB21DD428A100375469 /* PlaylistCell.swift in Sources */,
 				3CFA58D91D6706D700341763 /* UIScrollView+MJRefresh.m in Sources */,
+				3CCFBF2F1DD41DAD00514873 /* PlayerInterface.swift in Sources */,
 				3CFA58CC1D6706D700341763 /* FSXMLHttpRequest.m in Sources */,
 				3CFA58C91D6706D700341763 /* FSParsePlaylistRequest.m in Sources */,
 				3CFA58C61D6706D700341763 /* FSAudioController.m in Sources */,
 				3CA297121BE1EBB50073CF1A /* PCSettingViewController.m in Sources */,
+				3C155EBD1DD42A1C00375469 /* AlbumDownloadViewController.swift in Sources */,
 				3CFA58C01D6706D700341763 /* file_output.cpp in Sources */,
-				3C3984561BF65EED000629DE /* UIImage+BoxBlur.m in Sources */,
 				3CB2E3BB1BA7CF7000805D4F /* PCArticle.m in Sources */,
 				3C58136E1BE4B0000012C689 /* PCGuideController.m in Sources */,
-				3C61CE391C8D7FCF002848A3 /* PCDownloadManager.m in Sources */,
+				3C155EAD1DD4284000375469 /* PCArticleViewController.m in Sources */,
 				3CB2E3BA1BA7CF7000805D4F /* PCPlaylist.m in Sources */,
+				3C155EAF1DD4284000375469 /* Playlist.swift in Sources */,
 				3CFA58D41D6706D700341763 /* MJRefreshBaseView.m in Sources */,
-				3C24CEE41DD30E4C007C862C /* PlaylistController.swift in Sources */,
 				3CFA573D1D645B1D00341763 /* BarItem.swift in Sources */,
 				3C5813741BE634AE0012C689 /* PCShareBtn.m in Sources */,
 				3C5813771BE654770012C689 /* PCSongDetailViewController.m in Sources */,
-				3CB2E3341BA7CC0700805D4F /* UIImage+Reflection.m in Sources */,
 				3CFFC7FF1D5DC49000696F66 /* PCLabel.swift in Sources */,
 				3C0CCAC51BB929DD00AAA5C6 /* PCSongListTableViewCell.m in Sources */,
-				3CFA57371D6337B100341763 /* LrcCell.swift in Sources */,
 				3CFA58D61D6706D700341763 /* MJRefreshFooterView.m in Sources */,
 				3CFA58C31D6706D700341763 /* id3_parser.cpp in Sources */,
 				3CD22AD81BDE2A280064E7B0 /* PCDownloadingTableViewController.m in Sources */,
@@ -1106,10 +1154,9 @@
 				3CB2E3B91BA7CF7000805D4F /* PCSong.m in Sources */,
 				3CFA58CA1D6706D700341763 /* FSParseRssPodcastFeedRequest.m in Sources */,
 				3C9641E41D670DCE00386ABB /* DarwinNotificationHelper.m in Sources */,
-				3CB2E32F1BA7CB7A00805D4F /* UIColor+RGBValues.m in Sources */,
-				3CFA57331D60946800341763 /* LrcView.swift in Sources */,
+				3CCFBF381DD41E0300514873 /* LrcCell.swift in Sources */,
 				3CFA58BD1D6706D700341763 /* audio_queue.cpp in Sources */,
-				3CD735431BF0E3C000262D69 /* lrcLine.m in Sources */,
+				3CCFBF511DD41F1C00514873 /* UIView+Geometry.m in Sources */,
 				3CFA58C81D6706D700341763 /* FSCheckContentTypeRequest.m in Sources */,
 				3CCA14F01BA8080700D45C52 /* SharedMapView.m in Sources */,
 				3C9641FA1D670FB800386ABB /* GeocodeAnnotation.m in Sources */,
@@ -1117,34 +1164,34 @@
 				3C24CEDC1DD30D2F007C862C /* ViewController.m in Sources */,
 				3CB2E32B1BA7CA5D00805D4F /* PCButton.m in Sources */,
 				3CB2E3BF1BA7CFBA00805D4F /* PCDownloadViewController.m in Sources */,
-				3CD735461BF101AD00262D69 /* LrcCell.m in Sources */,
+				3C155EAE1DD4284000375469 /* PlaylistController.swift in Sources */,
 				3CFA58C51D6706D700341763 /* stream_configuration.cpp in Sources */,
 				3CFA58CB1D6706D700341763 /* FSPlaylistItem.m in Sources */,
+				3CCFBF4E1DD41F1C00514873 /* UIColor+RGBValues.m in Sources */,
 				3CD735401BEE3DF100262D69 /* PCBlurView.m in Sources */,
-				3CCFBF2B1DD3664800514873 /* Playlist.swift in Sources */,
 				3CFA58C41D6706D700341763 /* input_stream.cpp in Sources */,
 				3CB2E32A1BA7CA5D00805D4F /* PCLabel.m in Sources */,
 				3CFA58D81D6706D700341763 /* UIScrollView+MJExtension.m in Sources */,
+				3CCFBF541DD4201B00514873 /* LrcCell.m in Sources */,
 				3CB2E3571BA7CE1A00805D4F /* PCNavigationController.m in Sources */,
-				3CFA57351D62C87500341763 /* LrcLine.swift in Sources */,
 				3CFA57391D64207F00341763 /* NavigationController.swift in Sources */,
 				3CFA58BF1D6706D700341763 /* caching_stream.cpp in Sources */,
 				3CF7AFC21BAAA19500F764BD /* LineDashPolyline.m in Sources */,
-				3C24CEE51DD30E4C007C862C /* PCArticleViewController.m in Sources */,
 				3C24CEEB1DD32038007C862C /* Reflect.swift in Sources */,
 				3CFA58C71D6706D700341763 /* FSAudioStream.mm in Sources */,
+				3CCFBF501DD41F1C00514873 /* UIImage+Reflection.m in Sources */,
 				3CB2E4321BA7D36A00805D4F /* PCBaiduNavController.m in Sources */,
 				3C9642021D67180800386ABB /* DRNRealTimeBlurView.m in Sources */,
 				3CFA57311D60332F00341763 /* SongLabel.swift in Sources */,
 				3CFA58BE1D6706D700341763 /* audio_stream.cpp in Sources */,
-				3CFFC8051D5DE1CA00696F66 /* PlayerInterface.swift in Sources */,
+				3C155EBB1DD429B700375469 /* PCDownloadManager.m in Sources */,
 				3CA296FF1BE1C1950073CF1A /* PCDownLoadedCell.m in Sources */,
 				3CFA58C21D6706D700341763 /* http_stream.cpp in Sources */,
-				3C24CEDF1DD30DB1007C862C /* PlaylistCell.swift in Sources */,
-				3CB45FBC1BE7B52C0011AEA4 /* DBHelper.m in Sources */,
 				3CFA58D51D6706D700341763 /* MJRefreshConst.m in Sources */,
 				3CB2E2FB1BA7B26800805D4F /* AppDelegate.m in Sources */,
 				3CFA58CD1D6706D700341763 /* Reachability.m in Sources */,
+				3CCFBF4F1DD41F1C00514873 /* UIImage+BoxBlur.m in Sources */,
+				3C155EB51DD4292E00375469 /* DBHelper.m in Sources */,
 				3CB2E2F81BA7B26800805D4F /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1212,7 +1259,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_LDFLAGS = "$(inherited)";
 				PROVISIONING_PROFILE = "";
@@ -1327,7 +1374,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "$(inherited)";
@@ -1369,7 +1416,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_LDFLAGS = "$(inherited)";
 				PROVISIONING_PROFILE = "";
