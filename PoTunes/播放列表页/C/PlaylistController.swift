@@ -10,6 +10,7 @@ import UIKit
 import Alamofire
 import DGElasticPullToRefresh
 import PKHUD
+import PullToMakeSoup
 
 
 let P_URL = "http://127.0.0.1:3000/api/app/playlists"
@@ -31,20 +32,35 @@ class PlaylistController: UITableViewController {
 		tableView.backgroundColor = UIColor.black
 		tableView.register(PlaylistCell.self, forCellReuseIdentifier: "playlist")
 		// Refresh
-		let loadingView = DGElasticPullToRefreshLoadingViewCircle()
-		loadingView.tintColor = UIColor(red: 78/255.0, green: 221/255.0, blue: 200/255.0, alpha: 1.0)
-		self.tableView.dg_addPullToRefreshWithActionHandler({ [weak self] () -> Void in
+		
 			HUD.show(.label("shit"))
 			Alamofire.request(P_URL).response(completionHandler: { (response) in
 				let playlists: Array = Reflect<Playlist>.mapObjects(data: response.data)
-				self?.playlists = playlists
-				self?.tableView.dg_stopLoading()
-				self?.tableView.reloadData()
+				self.playlists = playlists
+				self.tableView.reloadData()
 				HUD.hide()
 			})
-			}, loadingView: loadingView)
+
 		self.tableView.dg_setPullToRefreshFillColor(UIColor(red: 57/255.0, green: 67/255.0, blue: 89/255.0, alpha: 1.0))
 		self.tableView.dg_setPullToRefreshBackgroundColor(UIColor(red: 78/255.0, green: 221/255.0, blue: 200/255.0, alpha: 1.0))
+		// MARK: - 获取数据 - 未测试
+		if self.playlists.count == 0 {
+			let rootPath: String = self.dirDoc() as String
+			let filePath: String = rootPath + "/article.plist"
+			if let dictArr: NSArray  = NSArray(contentsOfFile: filePath) {
+				if dictArr.count == 0 {
+					// 下拉刷新
+//					self.tableView.dg_startLoading()
+				} else {
+					var contentArray = Array<Any>()
+					for dict in dictArr {
+						contentArray.append(dict)
+					}
+					self.playlists = contentArray
+				}
+			}
+//			let  = NSArray(contentOfFile:filePath)
+		}
 	}
 	
 	

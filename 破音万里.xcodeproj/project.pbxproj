@@ -17,13 +17,18 @@
 		3C155EB81DD4298F00375469 /* PCMyMusicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C155EB71DD4298F00375469 /* PCMyMusicViewController.m */; };
 		3C155EBB1DD429B700375469 /* PCDownloadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C155EBA1DD429B700375469 /* PCDownloadManager.m */; };
 		3C155EBD1DD42A1C00375469 /* AlbumDownloadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C155EBC1DD42A1C00375469 /* AlbumDownloadViewController.swift */; };
+		3C155EC11DD439F700375469 /* PCDownLoadedCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C155EC01DD439F700375469 /* PCDownLoadedCell.m */; };
+		3C155EC31DD43A7A00375469 /* DownloadedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C155EC21DD43A7A00375469 /* DownloadedCell.swift */; };
+		3C155ED11DD4437C00375469 /* PCBaiduNavController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C155ECB1DD4437C00375469 /* PCBaiduNavController.m */; };
+		3C155ED21DD4437C00375469 /* PCNaviController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C155ECD1DD4437C00375469 /* PCNaviController.m */; };
+		3C155ED31DD4437C00375469 /* PCNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C155ECF1DD4437C00375469 /* PCNavigationController.m */; };
+		3C155ED51DD448F000375469 /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C155ED41DD448F000375469 /* NavigationController.swift */; };
+		3C155ED71DD449AD00375469 /* NaviController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C155ED61DD449AD00375469 /* NaviController.swift */; };
+		3C155EDC1DD44A4700375469 /* PCSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C155EDB1DD44A4700375469 /* PCSettingViewController.m */; };
+		3C155EDE1DD44A6400375469 /* SettingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C155EDD1DD44A6400375469 /* SettingController.swift */; };
 		3C24CEDB1DD30D2F007C862C /* Main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C24CED81DD30D2F007C862C /* Main.swift */; };
-		3C24CEDC1DD30D2F007C862C /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C24CEDA1DD30D2F007C862C /* ViewController.m */; };
 		3C24CEEB1DD32038007C862C /* Reflect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C24CEEA1DD32038007C862C /* Reflect.swift */; };
 		3C26B5721C4FD2AA0037893F /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CB2E3FD1BA7D19300805D4F /* AudioToolbox.framework */; };
-		3C5813001BA7EFA00091E4FC /* PCNaviController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C5812FF1BA7EFA00091E4FC /* PCNaviController.m */; };
-		3C5813621BE48C050012C689 /* PCWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C5813601BE48C050012C689 /* PCWebViewController.m */; };
-		3C5813631BE48C050012C689 /* PCWebViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3C5813611BE48C050012C689 /* PCWebViewController.xib */; };
 		3C58136E1BE4B0000012C689 /* PCGuideController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C58136C1BE4B0000012C689 /* PCGuideController.m */; };
 		3C58136F1BE4B0000012C689 /* PCGuideController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3C58136D1BE4B0000012C689 /* PCGuideController.xib */; };
 		3C5813711BE4BFEA0012C689 /* guide.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3C5813701BE4BFEA0012C689 /* guide.plist */; };
@@ -39,11 +44,8 @@
 		3C9641FE1D6712C500386ABB /* libBPush.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C9641FD1D6712C500386ABB /* libBPush.a */; };
 		3C9642021D67180800386ABB /* DRNRealTimeBlurView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C9642011D67180800386ABB /* DRNRealTimeBlurView.m */; };
 		3C9642061D67184F00386ABB /* EVCircularProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C9642051D67184F00386ABB /* EVCircularProgressView.m */; };
-		3C96420E1D6AAF4C00386ABB /* ArticleCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3C96420D1D6AAF4C00386ABB /* ArticleCell.xib */; };
 		3CA224FE1BAFDCDC0028387F /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CA224FD1BAFDCDC0028387F /* CoreMedia.framework */; };
-		3CA296FF1BE1C1950073CF1A /* PCDownLoadedCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CA296FE1BE1C1950073CF1A /* PCDownLoadedCell.m */; };
 		3CA297021BE1C71E0073CF1A /* PCSongDownloadingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CA297011BE1C71E0073CF1A /* PCSongDownloadingCell.m */; };
-		3CA297121BE1EBB50073CF1A /* PCSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CA297111BE1EBB50073CF1A /* PCSettingViewController.m */; };
 		3CB2E2F81BA7B26800805D4F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB2E2F71BA7B26800805D4F /* main.m */; };
 		3CB2E2FB1BA7B26800805D4F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB2E2FA1BA7B26800805D4F /* AppDelegate.m */; };
 		3CB2E3031BA7B26800805D4F /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3CB2E3021BA7B26800805D4F /* Images.xcassets */; };
@@ -51,7 +53,6 @@
 		3CB2E3121BA7B26800805D4F /* PoTunesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB2E3111BA7B26800805D4F /* PoTunesTests.m */; };
 		3CB2E32A1BA7CA5D00805D4F /* PCLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB2E3251BA7CA5D00805D4F /* PCLabel.m */; };
 		3CB2E32B1BA7CA5D00805D4F /* PCButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB2E3271BA7CA5D00805D4F /* PCButton.m */; };
-		3CB2E3571BA7CE1A00805D4F /* PCNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB2E3561BA7CE1A00805D4F /* PCNavigationController.m */; };
 		3CB2E3B11BA7CF2200805D4F /* BebasNeue.otf in Resources */ = {isa = PBXBuildFile; fileRef = 3CB2E3B01BA7CF2200805D4F /* BebasNeue.otf */; };
 		3CB2E3B91BA7CF7000805D4F /* PCSong.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB2E3B41BA7CF7000805D4F /* PCSong.m */; };
 		3CB2E3BA1BA7CF7000805D4F /* PCPlaylist.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB2E3B61BA7CF7000805D4F /* PCPlaylist.m */; };
@@ -61,7 +62,6 @@
 		3CB2E4001BA7D1B300805D4F /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CB2E3FF1BA7D1B300805D4F /* AVFoundation.framework */; };
 		3CB2E4021BA7D1BC00805D4F /* libxml2.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CB2E4011BA7D1BC00805D4F /* libxml2.2.dylib */; };
 		3CB2E4041BA7D1CB00805D4F /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CB2E4031BA7D1CB00805D4F /* MediaPlayer.framework */; };
-		3CB2E4321BA7D36A00805D4F /* PCBaiduNavController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB2E4251BA7D36A00805D4F /* PCBaiduNavController.m */; };
 		3CB2E4541BA7D49100805D4F /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CB2E4531BA7D49100805D4F /* libsqlite3.0.dylib */; };
 		3CB2E4561BA7D4E600805D4F /* libz.1.2.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CB2E4551BA7D4E600805D4F /* libz.1.2.5.dylib */; };
 		3CB2E4581BA7D4F200805D4F /* libstdc++.6.0.9.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CB2E4571BA7D4F200805D4F /* libstdc++.6.0.9.dylib */; };
@@ -83,7 +83,6 @@
 		3CF7AFBF1BAAA14000F764BD /* CommonUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CF7AFBE1BAAA14000F764BD /* CommonUtility.m */; };
 		3CF7AFC21BAAA19500F764BD /* LineDashPolyline.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CF7AFC11BAAA19500F764BD /* LineDashPolyline.m */; };
 		3CFA57311D60332F00341763 /* SongLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFA57301D60332F00341763 /* SongLabel.swift */; };
-		3CFA57391D64207F00341763 /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFA57381D64207F00341763 /* NavigationController.swift */; };
 		3CFA573D1D645B1D00341763 /* BarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFA573C1D645B1D00341763 /* BarItem.swift */; };
 		3CFA58BD1D6706D700341763 /* audio_queue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3CFA58401D6706D700341763 /* audio_queue.cpp */; };
 		3CFA58BE1D6706D700341763 /* audio_stream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3CFA58421D6706D700341763 /* audio_stream.cpp */; };
@@ -155,15 +154,22 @@
 		3C155EB91DD429B700375469 /* PCDownloadManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCDownloadManager.h; sourceTree = "<group>"; };
 		3C155EBA1DD429B700375469 /* PCDownloadManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCDownloadManager.m; sourceTree = "<group>"; };
 		3C155EBC1DD42A1C00375469 /* AlbumDownloadViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlbumDownloadViewController.swift; sourceTree = "<group>"; };
+		3C155EBF1DD439F700375469 /* PCDownLoadedCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCDownLoadedCell.h; sourceTree = "<group>"; };
+		3C155EC01DD439F700375469 /* PCDownLoadedCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCDownLoadedCell.m; sourceTree = "<group>"; };
+		3C155EC21DD43A7A00375469 /* DownloadedCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadedCell.swift; sourceTree = "<group>"; };
+		3C155ECA1DD4437C00375469 /* PCBaiduNavController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCBaiduNavController.h; sourceTree = "<group>"; };
+		3C155ECB1DD4437C00375469 /* PCBaiduNavController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCBaiduNavController.m; sourceTree = "<group>"; };
+		3C155ECC1DD4437C00375469 /* PCNaviController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCNaviController.h; sourceTree = "<group>"; };
+		3C155ECD1DD4437C00375469 /* PCNaviController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCNaviController.m; sourceTree = "<group>"; };
+		3C155ECE1DD4437C00375469 /* PCNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCNavigationController.h; sourceTree = "<group>"; };
+		3C155ECF1DD4437C00375469 /* PCNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCNavigationController.m; sourceTree = "<group>"; };
+		3C155ED41DD448F000375469 /* NavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
+		3C155ED61DD449AD00375469 /* NaviController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NaviController.swift; sourceTree = "<group>"; };
+		3C155EDA1DD44A4700375469 /* PCSettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCSettingViewController.h; sourceTree = "<group>"; };
+		3C155EDB1DD44A4700375469 /* PCSettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCSettingViewController.m; sourceTree = "<group>"; };
+		3C155EDD1DD44A6400375469 /* SettingController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingController.swift; sourceTree = "<group>"; };
 		3C24CED81DD30D2F007C862C /* Main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Main.swift; sourceTree = "<group>"; };
-		3C24CED91DD30D2F007C862C /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		3C24CEDA1DD30D2F007C862C /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		3C24CEEA1DD32038007C862C /* Reflect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reflect.swift; sourceTree = "<group>"; };
-		3C5812FE1BA7EFA00091E4FC /* PCNaviController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCNaviController.h; sourceTree = "<group>"; };
-		3C5812FF1BA7EFA00091E4FC /* PCNaviController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCNaviController.m; sourceTree = "<group>"; };
-		3C58135F1BE48C050012C689 /* PCWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCWebViewController.h; sourceTree = "<group>"; };
-		3C5813601BE48C050012C689 /* PCWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCWebViewController.m; sourceTree = "<group>"; };
-		3C5813611BE48C050012C689 /* PCWebViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PCWebViewController.xib; sourceTree = "<group>"; };
 		3C58136B1BE4B0000012C689 /* PCGuideController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCGuideController.h; sourceTree = "<group>"; };
 		3C58136C1BE4B0000012C689 /* PCGuideController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCGuideController.m; sourceTree = "<group>"; };
 		3C58136D1BE4B0000012C689 /* PCGuideController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PCGuideController.xib; sourceTree = "<group>"; };
@@ -193,12 +199,8 @@
 		3C9642051D67184F00386ABB /* EVCircularProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EVCircularProgressView.m; sourceTree = "<group>"; };
 		3C96420D1D6AAF4C00386ABB /* ArticleCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ArticleCell.xib; sourceTree = "<group>"; };
 		3CA224FD1BAFDCDC0028387F /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
-		3CA296FD1BE1C1950073CF1A /* PCDownLoadedCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCDownLoadedCell.h; sourceTree = "<group>"; };
-		3CA296FE1BE1C1950073CF1A /* PCDownLoadedCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCDownLoadedCell.m; sourceTree = "<group>"; };
 		3CA297001BE1C71E0073CF1A /* PCSongDownloadingCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCSongDownloadingCell.h; sourceTree = "<group>"; };
 		3CA297011BE1C71E0073CF1A /* PCSongDownloadingCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCSongDownloadingCell.m; sourceTree = "<group>"; };
-		3CA297101BE1EBB50073CF1A /* PCSettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCSettingViewController.h; sourceTree = "<group>"; };
-		3CA297111BE1EBB50073CF1A /* PCSettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCSettingViewController.m; sourceTree = "<group>"; };
 		3CB09B761D5F661500DEAEDA /* 破音万里-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "破音万里-Bridging-Header.h"; sourceTree = "<group>"; };
 		3CB2E2F21BA7B26800805D4F /* PoTunes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PoTunes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3CB2E2F61BA7B26800805D4F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -214,8 +216,6 @@
 		3CB2E3251BA7CA5D00805D4F /* PCLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCLabel.m; sourceTree = "<group>"; };
 		3CB2E3261BA7CA5D00805D4F /* PCButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCButton.h; sourceTree = "<group>"; };
 		3CB2E3271BA7CA5D00805D4F /* PCButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCButton.m; sourceTree = "<group>"; };
-		3CB2E3551BA7CE1A00805D4F /* PCNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCNavigationController.h; sourceTree = "<group>"; };
-		3CB2E3561BA7CE1A00805D4F /* PCNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCNavigationController.m; sourceTree = "<group>"; };
 		3CB2E3B01BA7CF2200805D4F /* BebasNeue.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = BebasNeue.otf; sourceTree = "<group>"; };
 		3CB2E3B31BA7CF7000805D4F /* PCSong.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCSong.h; sourceTree = "<group>"; };
 		3CB2E3B41BA7CF7000805D4F /* PCSong.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCSong.m; sourceTree = "<group>"; };
@@ -231,8 +231,6 @@
 		3CB2E4011BA7D1BC00805D4F /* libxml2.2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.2.dylib; path = usr/lib/libxml2.2.dylib; sourceTree = SDKROOT; };
 		3CB2E4031BA7D1CB00805D4F /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		3CB2E4061BA7D28600805D4F /* FreeStreamerMobile-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "FreeStreamerMobile-Prefix.pch"; sourceTree = "<group>"; };
-		3CB2E4241BA7D36A00805D4F /* PCBaiduNavController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCBaiduNavController.h; sourceTree = "<group>"; };
-		3CB2E4251BA7D36A00805D4F /* PCBaiduNavController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCBaiduNavController.m; sourceTree = "<group>"; };
 		3CB2E4531BA7D49100805D4F /* libsqlite3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.0.dylib; path = usr/lib/libsqlite3.0.dylib; sourceTree = SDKROOT; };
 		3CB2E4551BA7D4E600805D4F /* libz.1.2.5.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.2.5.dylib; path = usr/lib/libz.1.2.5.dylib; sourceTree = SDKROOT; };
 		3CB2E4571BA7D4F200805D4F /* libstdc++.6.0.9.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libstdc++.6.0.9.dylib"; path = "usr/lib/libstdc++.6.0.9.dylib"; sourceTree = SDKROOT; };
@@ -271,7 +269,6 @@
 		3CF7AFC11BAAA19500F764BD /* LineDashPolyline.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LineDashPolyline.m; sourceTree = "<group>"; };
 		3CFA57301D60332F00341763 /* SongLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SongLabel.swift; sourceTree = "<group>"; };
 		3CFA57341D62C87500341763 /* LrcLine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LrcLine.swift; sourceTree = "<group>"; };
-		3CFA57381D64207F00341763 /* NavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
 		3CFA573C1D645B1D00341763 /* BarItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BarItem.swift; sourceTree = "<group>"; };
 		3CFA58401D6706D700341763 /* audio_queue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = audio_queue.cpp; sourceTree = "<group>"; };
 		3CFA58411D6706D700341763 /* audio_queue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = audio_queue.h; sourceTree = "<group>"; };
@@ -379,6 +376,7 @@
 		3C155EA21DD427E800375469 /* 已下载专辑页 */ = {
 			isa = PBXGroup;
 			children = (
+				3C155EBE1DD439F700375469 /* V */,
 				3C155EA31DD427E800375469 /* C */,
 			);
 			path = "已下载专辑页";
@@ -430,9 +428,67 @@
 			path = V;
 			sourceTree = "<group>";
 		};
+		3C155EBE1DD439F700375469 /* V */ = {
+			isa = PBXGroup;
+			children = (
+				3C155EBF1DD439F700375469 /* PCDownLoadedCell.h */,
+				3C155EC01DD439F700375469 /* PCDownLoadedCell.m */,
+				3C155EC21DD43A7A00375469 /* DownloadedCell.swift */,
+			);
+			path = V;
+			sourceTree = "<group>";
+		};
+		3C155EC41DD441A400375469 /* V */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = V;
+			sourceTree = "<group>";
+		};
+		3C155EC71DD4437C00375469 /* 导航页 */ = {
+			isa = PBXGroup;
+			children = (
+				3C155EC81DD4437C00375469 /* C */,
+			);
+			path = "导航页";
+			sourceTree = "<group>";
+		};
+		3C155EC81DD4437C00375469 /* C */ = {
+			isa = PBXGroup;
+			children = (
+				3C155ECA1DD4437C00375469 /* PCBaiduNavController.h */,
+				3C155ECB1DD4437C00375469 /* PCBaiduNavController.m */,
+				3C155ECC1DD4437C00375469 /* PCNaviController.h */,
+				3C155ECD1DD4437C00375469 /* PCNaviController.m */,
+				3C155ECE1DD4437C00375469 /* PCNavigationController.h */,
+				3C155ECF1DD4437C00375469 /* PCNavigationController.m */,
+				3C155ED61DD449AD00375469 /* NaviController.swift */,
+			);
+			path = C;
+			sourceTree = "<group>";
+		};
+		3C155ED81DD44A4700375469 /* 设置页 */ = {
+			isa = PBXGroup;
+			children = (
+				3C155ED91DD44A4700375469 /* C */,
+			);
+			path = "设置页";
+			sourceTree = "<group>";
+		};
+		3C155ED91DD44A4700375469 /* C */ = {
+			isa = PBXGroup;
+			children = (
+				3C155EDA1DD44A4700375469 /* PCSettingViewController.h */,
+				3C155EDB1DD44A4700375469 /* PCSettingViewController.m */,
+				3C155EDD1DD44A6400375469 /* SettingController.swift */,
+			);
+			path = C;
+			sourceTree = "<group>";
+		};
 		3C24CED61DD30D2F007C862C /* 首页 */ = {
 			isa = PBXGroup;
 			children = (
+				3C155EC41DD441A400375469 /* V */,
 				3C24CED71DD30D2F007C862C /* C */,
 			);
 			path = "首页";
@@ -441,9 +497,8 @@
 		3C24CED71DD30D2F007C862C /* C */ = {
 			isa = PBXGroup;
 			children = (
+				3C155ED41DD448F000375469 /* NavigationController.swift */,
 				3C24CED81DD30D2F007C862C /* Main.swift */,
-				3C24CED91DD30D2F007C862C /* ViewController.h */,
-				3C24CEDA1DD30D2F007C862C /* ViewController.m */,
 			);
 			path = C;
 			sourceTree = "<group>";
@@ -454,16 +509,6 @@
 				3C24CEEA1DD32038007C862C /* Reflect.swift */,
 			);
 			path = "3rdParty-Swift";
-			sourceTree = "<group>";
-		};
-		3C58135E1BE48BD80012C689 /* 网页 */ = {
-			isa = PBXGroup;
-			children = (
-				3C58135F1BE48C050012C689 /* PCWebViewController.h */,
-				3C5813601BE48C050012C689 /* PCWebViewController.m */,
-				3C5813611BE48C050012C689 /* PCWebViewController.xib */,
-			);
-			name = "网页";
 			sourceTree = "<group>";
 		};
 		3C58136A1BE4AFDD0012C689 /* 新手教程 */ = {
@@ -556,6 +601,8 @@
 		3CB2E2F41BA7B26800805D4F /* PoTunes */ = {
 			isa = PBXGroup;
 			children = (
+				3C155ED81DD44A4700375469 /* 设置页 */,
+				3C155EC71DD4437C00375469 /* 导航页 */,
 				3C155EA41DD4284000375469 /* 播放列表页 */,
 				3C155EA21DD427E800375469 /* 已下载专辑页 */,
 				3CCFBF2C1DD41D5A00514873 /* 播放器页 */,
@@ -620,11 +667,8 @@
 			isa = PBXGroup;
 			children = (
 				3C58136A1BE4AFDD0012C689 /* 新手教程 */,
-				3C58135E1BE48BD80012C689 /* 网页 */,
 				3CD22AD41BDE29F90064E7B0 /* 正在下载歌曲页 */,
 				3CB2E43E1BA7D44100805D4F /* 歌曲列表页 */,
-				3CB2E4341BA7D38400805D4F /* 设置页 */,
-				3CB2E40F1BA7D35B00805D4F /* 高德导航页 */,
 				3CB2E3C01BA7CFE500805D4F /* 已下载专辑页 */,
 				3CB2E3BC1BA7CFAA00805D4F /* 已下载歌曲页 */,
 				3CB2E3541BA7CE0B00805D4F /* 导航控制器 */,
@@ -645,8 +689,6 @@
 				3CB2E3271BA7CA5D00805D4F /* PCButton.m */,
 				3C0CCAC31BB929DD00AAA5C6 /* PCSongListTableViewCell.h */,
 				3C0CCAC41BB929DD00AAA5C6 /* PCSongListTableViewCell.m */,
-				3CA296FD1BE1C1950073CF1A /* PCDownLoadedCell.h */,
-				3CA296FE1BE1C1950073CF1A /* PCDownLoadedCell.m */,
 				3CA297001BE1C71E0073CF1A /* PCSongDownloadingCell.h */,
 				3CA297011BE1C71E0073CF1A /* PCSongDownloadingCell.m */,
 				3CD7353E1BEE3DF100262D69 /* PCBlurView.h */,
@@ -662,9 +704,6 @@
 		3CB2E3541BA7CE0B00805D4F /* 导航控制器 */ = {
 			isa = PBXGroup;
 			children = (
-				3CB2E3551BA7CE1A00805D4F /* PCNavigationController.h */,
-				3CB2E3561BA7CE1A00805D4F /* PCNavigationController.m */,
-				3CFA57381D64207F00341763 /* NavigationController.swift */,
 			);
 			name = "导航控制器";
 			sourceTree = "<group>";
@@ -726,26 +765,6 @@
 				3CB2E3FB1BA7D18900805D4F /* CFNetwork.framework */,
 			);
 			name = "框架";
-			sourceTree = "<group>";
-		};
-		3CB2E40F1BA7D35B00805D4F /* 高德导航页 */ = {
-			isa = PBXGroup;
-			children = (
-				3C5812FE1BA7EFA00091E4FC /* PCNaviController.h */,
-				3C5812FF1BA7EFA00091E4FC /* PCNaviController.m */,
-				3CB2E4241BA7D36A00805D4F /* PCBaiduNavController.h */,
-				3CB2E4251BA7D36A00805D4F /* PCBaiduNavController.m */,
-			);
-			name = "高德导航页";
-			sourceTree = "<group>";
-		};
-		3CB2E4341BA7D38400805D4F /* 设置页 */ = {
-			isa = PBXGroup;
-			children = (
-				3CA297101BE1EBB50073CF1A /* PCSettingViewController.h */,
-				3CA297111BE1EBB50073CF1A /* PCSettingViewController.m */,
-			);
-			name = "设置页";
 			sourceTree = "<group>";
 		};
 		3CB2E43E1BA7D44100805D4F /* 歌曲列表页 */ = {
@@ -1030,10 +1049,8 @@
 				3CFA58DB1D6706D700341763 /* PoTunes.entitlements in Resources */,
 				3CB2E3061BA7B26800805D4F /* LaunchScreen.xib in Resources */,
 				3CFFC8031D5DC65D00696F66 /* Main.storyboard in Resources */,
-				3C96420E1D6AAF4C00386ABB /* ArticleCell.xib in Resources */,
 				3CFA58D31D6706D700341763 /* MJRefresh.bundle in Resources */,
 				3CB2E3B11BA7CF2200805D4F /* BebasNeue.otf in Resources */,
-				3C5813631BE48C050012C689 /* PCWebViewController.xib in Resources */,
 				3C5813711BE4BFEA0012C689 /* guide.plist in Resources */,
 				3CB2E3031BA7B26800805D4F /* Images.xcassets in Resources */,
 				3C58136F1BE4B0000012C689 /* PCGuideController.xib in Resources */,
@@ -1115,7 +1132,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3C5813621BE48C050012C689 /* PCWebViewController.m in Sources */,
+				3C155EDE1DD44A6400375469 /* SettingController.swift in Sources */,
 				3CCFBF411DD41E6800514873 /* LrcLine.swift in Sources */,
 				3CCFBF401DD41E6800514873 /* lrcLine.m in Sources */,
 				3CCFBF3B1DD41E0300514873 /* LrcView.swift in Sources */,
@@ -1132,24 +1149,28 @@
 				3CFA58CC1D6706D700341763 /* FSXMLHttpRequest.m in Sources */,
 				3CFA58C91D6706D700341763 /* FSParsePlaylistRequest.m in Sources */,
 				3CFA58C61D6706D700341763 /* FSAudioController.m in Sources */,
-				3CA297121BE1EBB50073CF1A /* PCSettingViewController.m in Sources */,
 				3C155EBD1DD42A1C00375469 /* AlbumDownloadViewController.swift in Sources */,
 				3CFA58C01D6706D700341763 /* file_output.cpp in Sources */,
 				3CB2E3BB1BA7CF7000805D4F /* PCArticle.m in Sources */,
 				3C58136E1BE4B0000012C689 /* PCGuideController.m in Sources */,
 				3C155EAD1DD4284000375469 /* PCArticleViewController.m in Sources */,
+				3C155ED11DD4437C00375469 /* PCBaiduNavController.m in Sources */,
+				3C155EC11DD439F700375469 /* PCDownLoadedCell.m in Sources */,
 				3CB2E3BA1BA7CF7000805D4F /* PCPlaylist.m in Sources */,
 				3C155EAF1DD4284000375469 /* Playlist.swift in Sources */,
 				3CFA58D41D6706D700341763 /* MJRefreshBaseView.m in Sources */,
 				3CFA573D1D645B1D00341763 /* BarItem.swift in Sources */,
 				3C5813741BE634AE0012C689 /* PCShareBtn.m in Sources */,
 				3C5813771BE654770012C689 /* PCSongDetailViewController.m in Sources */,
+				3C155ED51DD448F000375469 /* NavigationController.swift in Sources */,
+				3C155EC31DD43A7A00375469 /* DownloadedCell.swift in Sources */,
+				3C155ED21DD4437C00375469 /* PCNaviController.m in Sources */,
 				3CFFC7FF1D5DC49000696F66 /* PCLabel.swift in Sources */,
+				3C155ED31DD4437C00375469 /* PCNavigationController.m in Sources */,
 				3C0CCAC51BB929DD00AAA5C6 /* PCSongListTableViewCell.m in Sources */,
 				3CFA58D61D6706D700341763 /* MJRefreshFooterView.m in Sources */,
 				3CFA58C31D6706D700341763 /* id3_parser.cpp in Sources */,
 				3CD22AD81BDE2A280064E7B0 /* PCDownloadingTableViewController.m in Sources */,
-				3C5813001BA7EFA00091E4FC /* PCNaviController.m in Sources */,
 				3CF7AFBF1BAAA14000F764BD /* CommonUtility.m in Sources */,
 				3CB2E3B91BA7CF7000805D4F /* PCSong.m in Sources */,
 				3CFA58CA1D6706D700341763 /* FSParseRssPodcastFeedRequest.m in Sources */,
@@ -1159,9 +1180,9 @@
 				3CCFBF511DD41F1C00514873 /* UIView+Geometry.m in Sources */,
 				3CFA58C81D6706D700341763 /* FSCheckContentTypeRequest.m in Sources */,
 				3CCA14F01BA8080700D45C52 /* SharedMapView.m in Sources */,
+				3C155ED71DD449AD00375469 /* NaviController.swift in Sources */,
 				3C9641FA1D670FB800386ABB /* GeocodeAnnotation.m in Sources */,
 				3C24CEDB1DD30D2F007C862C /* Main.swift in Sources */,
-				3C24CEDC1DD30D2F007C862C /* ViewController.m in Sources */,
 				3CB2E32B1BA7CA5D00805D4F /* PCButton.m in Sources */,
 				3CB2E3BF1BA7CFBA00805D4F /* PCDownloadViewController.m in Sources */,
 				3C155EAE1DD4284000375469 /* PlaylistController.swift in Sources */,
@@ -1173,19 +1194,16 @@
 				3CB2E32A1BA7CA5D00805D4F /* PCLabel.m in Sources */,
 				3CFA58D81D6706D700341763 /* UIScrollView+MJExtension.m in Sources */,
 				3CCFBF541DD4201B00514873 /* LrcCell.m in Sources */,
-				3CB2E3571BA7CE1A00805D4F /* PCNavigationController.m in Sources */,
-				3CFA57391D64207F00341763 /* NavigationController.swift in Sources */,
 				3CFA58BF1D6706D700341763 /* caching_stream.cpp in Sources */,
 				3CF7AFC21BAAA19500F764BD /* LineDashPolyline.m in Sources */,
 				3C24CEEB1DD32038007C862C /* Reflect.swift in Sources */,
 				3CFA58C71D6706D700341763 /* FSAudioStream.mm in Sources */,
 				3CCFBF501DD41F1C00514873 /* UIImage+Reflection.m in Sources */,
-				3CB2E4321BA7D36A00805D4F /* PCBaiduNavController.m in Sources */,
+				3C155EDC1DD44A4700375469 /* PCSettingViewController.m in Sources */,
 				3C9642021D67180800386ABB /* DRNRealTimeBlurView.m in Sources */,
 				3CFA57311D60332F00341763 /* SongLabel.swift in Sources */,
 				3CFA58BE1D6706D700341763 /* audio_stream.cpp in Sources */,
 				3C155EBB1DD429B700375469 /* PCDownloadManager.m in Sources */,
-				3CA296FF1BE1C1950073CF1A /* PCDownLoadedCell.m in Sources */,
 				3CFA58C21D6706D700341763 /* http_stream.cpp in Sources */,
 				3CFA58D51D6706D700341763 /* MJRefreshConst.m in Sources */,
 				3CB2E2FB1BA7B26800805D4F /* AppDelegate.m in Sources */,

@@ -27,6 +27,22 @@ class PlayerInterface: UIView {
 	var album: PCLabel?
 	var playModeView: UIImageView?
 	var lrcView: LrcView?
+	//var repeatMode: AudioRepeatMode
+	/** 播放模式 */
+	enum AudioRepeatMode {
+		case single
+		case playlistOnce
+		case playlist
+		case towards
+		case shuffle
+	}
+	/** 播放操作 */
+	enum AudioPlayState {
+		case play
+		case pause
+		case next
+		case previous
+	}
     
 	override init(frame: CGRect) {
 		super.init(frame: frame)
@@ -157,7 +173,7 @@ class PlayerInterface: UIView {
         buffer.showBackground = showBackground as NSNumber!
         buffer.outerStrokeWidth = outerStrokeWidth
         buffer.type = type
-        buffer.borderRadius = borderRadius
+        buffer.borderRadius = borderRadius	
         buffer.backgroundColor = backgroundColor
         buffer.autoresizingMask = autoresizingMask
         return buffer

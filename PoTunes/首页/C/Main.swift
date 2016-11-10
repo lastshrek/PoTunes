@@ -28,16 +28,17 @@ class Main: UIViewController, UIScrollViewDelegate, UIGestureRecognizerDelegate,
 	
 		self.height = self.view.bounds.size.height
 		self.width = self.view.bounds.size.width
-		//添加ScrollView
+		// 添加ScrollView
 		setupScrollView()
-		//添加PageControl
+		// 添加PageControl
 		setupPageControl()
-		//添加播放器界面
+		// 添加播放器界面
 		setupPlayerInterface()
-		//添加手势识别
+		// 添加手势识别
 		setupGestureRecognizer()
-		//存储用户状态
+		// 存储用户状态
 		setupUserOnline()
+		// 获取上次播放曲目
 		//_ = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString")
 		//print("--------")
 	}
@@ -100,16 +101,14 @@ class Main: UIViewController, UIScrollViewDelegate, UIGestureRecognizerDelegate,
     }
     //MARK: - TODO
     func setupUserOnline() {
-			//let user: UserDefaults = UserDefaults.standard
-			//let online = user.object(forKey: "online")
+			let user: UserDefaults = UserDefaults.standard
+			let online = user.object(forKey: "online")
 
-			//if (online != nil) {
-				//setupTabBarWithCount(4)
-			//} else {
-				//setupTabBarWithCount(3)
-			//}
-			// MARK: - 完成后删除
-			setupTabBarWithCount(4)
+			if (online != nil) {
+				setupTabBarWithCount(4)
+			} else {
+				setupTabBarWithCount(3)
+			}
     }
     //MARK: - 添加TabBar界面
     func setupTabBarWithCount(_ count: Int) {
@@ -123,6 +122,11 @@ class Main: UIViewController, UIScrollViewDelegate, UIGestureRecognizerDelegate,
 				setupSingleViewControllerToScrollView(albumDownload, hidden: true)
 			}
 			//导航页面
+			let navi: NaviController = NaviController()
+			setupSingleViewControllerToScrollView(navi, hidden: true)
+			//设置页面
+			let setting: SettingController = SettingController()
+			setupSingleViewControllerToScrollView(setting, hidden: true)
 			// 添加BarItem
 			for i in 0..<count {
 				let button: BarItem = BarItem(frame: CGRect(x: CGFloat(i) * self.width! / CGFloat(count), y: self.height!, width: self.width! / CGFloat(count), height: 64))

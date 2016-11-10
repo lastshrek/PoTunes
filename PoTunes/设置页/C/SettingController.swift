@@ -1,5 +1,5 @@
 //
-//  AlbumDownloadViewController.swift
+//  SettingController.swift
 //  破音万里
 //
 //  Created by Purchas on 2016/11/10.
@@ -7,43 +7,45 @@
 //
 
 import UIKit
-import Alamofire
 
-class AlbumDownloadViewController: UITableViewController {
-	//var downloadAlbums: Array
-	
-	override func viewDidLoad() {
-		super.viewDidLoad()
-		tableView.separatorStyle = .none
-		tableView.register(DownloadedCell.self, forCellReuseIdentifier: "downloaded")
-		
-	}
+class SettingController: UITableViewController {
 
-	// MARK: - Table view data source
+    override func viewDidLoad() {
+        super.viewDidLoad()
 
-	override func numberOfSections(in tableView: UITableView) -> Int {
-			// #warning Incomplete implementation, return the number of sections
-			return 2
-	}
+        // Uncomment the following line to preserve selection between presentations
+        // self.clearsSelectionOnViewWillAppear = false
 
-	override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-			// #warning Incomplete implementation, return the number of rows
-		if section == 0 {
-			return 1
-		} else {
-			return 10
-		}
-	}
+        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
+        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+    }
 
-	
-	override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-		let cell = tableView.dequeueReusableCell(withIdentifier: "downloaded", for: indexPath) as! DownloadedCell
-		cell.textLabel?.text = "123"
-		// Configure the cell...
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
 
-		return cell
-	}
-	
+    // MARK: - Table view data source
+
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        // #warning Incomplete implementation, return the number of sections
+        return 0
+    }
+
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        // #warning Incomplete implementation, return the number of rows
+        return 0
+    }
+
+    /*
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
+
+        // Configure the cell...
+
+        return cell
+    }
+    */
 
     /*
     // Override to support conditional editing of the table view.
