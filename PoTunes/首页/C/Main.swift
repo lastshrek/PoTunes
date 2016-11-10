@@ -164,11 +164,11 @@ class Main: UIViewController, UIScrollViewDelegate, UIGestureRecognizerDelegate,
 		btn.isSelected = true
 		self.selectedBtn = btn
 		self.selectedView?.isHidden = true
-		let controller: UIViewController = self.controllers[btn.tag] as! UIViewController
+		let controller: UINavigationController = self.controllers[btn.tag] as! UINavigationController
 		controller.view.isHidden = false
 		self.selectedView = controller.view
 		//MARK: - TODO
-		print(controller.navigationController)
+        controller.popToRootViewController(animated: true)
 	}
 	// MARK: - 下拉Button
 	func panTheButton(btn: BarItem) {
