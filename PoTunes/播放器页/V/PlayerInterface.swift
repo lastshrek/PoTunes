@@ -108,11 +108,11 @@ class PlayerInterface: UIView {
 		self.playModeView = playModeView
 		self.backgroundView?.addSubview(playModeView)
 			// 歌词
-		let lrcView: LrcView = LrcView()
-		lrcView.autoresizingMask = [.flexibleWidth, .flexibleTopMargin]
-		lrcView.isHidden = true
-		self.lrcView = lrcView
-		self.backgroundView?.addSubview(lrcView)
+//		let lrcView: LrcView = LrcView()
+//		lrcView.autoresizingMask = [.flexibleWidth, .flexibleTopMargin]
+//		lrcView.isHidden = true
+//		self.lrcView = lrcView
+//		self.backgroundView?.addSubview(lrcView)
 	}
     
     override func layoutSubviews() {
@@ -127,7 +127,7 @@ class PlayerInterface: UIView {
         self.timeView?.frame = CGRect(x: 0, y: self.progress!.frame.maxY, width: width!, height: 25)
         self.currentTime?.frame = CGRect(x: 2, y: 0, width: width! / 2, height: (self.timeView?.bounds.size.height)!)
         self.leftTime?.frame = CGRect(x: width! / 2 - 2, y: 0, width: width! / 2, height: (self.timeView?.bounds.size.height)!)
-        
+
         switch Int(height!) {
         case 480:
             self.songName?.frame = CGRect(x: 0, y: (self.timeView?.frame)!.maxY + 15, width: width!, height: 40)

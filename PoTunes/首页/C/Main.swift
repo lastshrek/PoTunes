@@ -8,9 +8,7 @@
 
 import UIKit
 
-protocol MainDelegate: NSObjectProtocol {
-	func pop()
-}
+
 
 class Main: UIViewController, UIScrollViewDelegate, UIGestureRecognizerDelegate, UIAlertViewDelegate {
     
@@ -23,7 +21,6 @@ class Main: UIViewController, UIScrollViewDelegate, UIGestureRecognizerDelegate,
 	var selectedBtn: BarItem?
 	lazy var songs: NSArray = { [] }()
 	lazy var controllers: NSMutableArray = { [] }()
-	weak var delegate: MainDelegate?
 	
     
 
@@ -93,7 +90,7 @@ class Main: UIViewController, UIScrollViewDelegate, UIGestureRecognizerDelegate,
         let singleTap: UITapGestureRecognizer = UITapGestureRecognizer.init(target: self, action:#selector(Main.playOrPause))
         singleTap.numberOfTapsRequired = 1
         singleTap.numberOfTouchesRequired = 1
-        self.player!.addGestureRecognizer(singleTap)
+        //self.player!.addGestureRecognizer(singleTap)
     }
     //MARK: - TODO
     func playOrPause() {
@@ -118,7 +115,7 @@ class Main: UIViewController, UIScrollViewDelegate, UIGestureRecognizerDelegate,
     func setupTabBarWithCount(_ count: Int) {
 			//每月文章列表页
 			let playlist: PlaylistController = PlaylistController()
-			playlist.delegate  = self
+			playlist.delegate = self
 			setupSingleViewControllerToScrollView(playlist, hidden: false)
 			
 			//已下载专辑页面
@@ -169,7 +166,7 @@ class Main: UIViewController, UIScrollViewDelegate, UIGestureRecognizerDelegate,
 		controller.view.isHidden = false
 		self.selectedView = controller.view
 		//MARK: - TODO
-        controller.popToRootViewController(animated: true)
+		controller.popToRootViewController(animated: true)
 	}
 	// MARK: - 下拉Button
 	func panTheButton(btn: BarItem) {
@@ -194,3 +191,4 @@ extension Main: PlaylistDelegate {
 		self.setupTabBarWithCount(4)
 	}
 }
+
