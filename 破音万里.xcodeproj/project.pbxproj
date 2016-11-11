@@ -669,7 +669,6 @@
 				3CB2E43E1BA7D44100805D4F /* 歌曲列表页 */,
 				3CB2E3C01BA7CFE500805D4F /* 已下载专辑页 */,
 				3CB2E3BC1BA7CFAA00805D4F /* 已下载歌曲页 */,
-				3CB2E3541BA7CE0B00805D4F /* 导航控制器 */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -697,13 +696,6 @@
 				3C96420D1D6AAF4C00386ABB /* ArticleCell.xib */,
 			);
 			name = Views;
-			sourceTree = "<group>";
-		};
-		3CB2E3541BA7CE0B00805D4F /* 导航控制器 */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = "导航控制器";
 			sourceTree = "<group>";
 		};
 		3CB2E3B21BA7CF6100805D4F /* Model */ = {

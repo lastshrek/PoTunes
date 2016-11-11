@@ -89,8 +89,9 @@ class PlaylistController: UITableViewController {
 			self.tableView.dg_stopLoading()
 			self.tableView.reloadData()
 			if playlists.count > 3 {
-				//self.delegate?.tabBarCount(count: 3)
-				print("123")
+				self.delegate?.tabBarCount(count: 4)
+			} else {
+				self.delegate?.tabBarCount(count: 3)
 			}
 		})
 	}
