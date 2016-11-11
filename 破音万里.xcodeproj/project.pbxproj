@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		17E37971ECD9FCACBAFB3599 /* Pods_____.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AEEF67891B1F3F39F233DA7F /* Pods_____.framework */; };
+		3C0A1A961DD5B35400E90306 /* MainScrollview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C0A1A951DD5B35400E90306 /* MainScrollview.swift */; };
+		3C0A1A981DD5B5B000E90306 /* MainPageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C0A1A971DD5B5B000E90306 /* MainPageControl.swift */; };
+		3C0A1A9A1DD5B72000E90306 /* MainControllers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C0A1A991DD5B72000E90306 /* MainControllers.swift */; };
 		3C0CCAC51BB929DD00AAA5C6 /* PCSongListTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C0CCAC41BB929DD00AAA5C6 /* PCSongListTableViewCell.m */; };
 		3C155EAE1DD4284000375469 /* PlaylistController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C155EA81DD4284000375469 /* PlaylistController.swift */; };
 		3C155EAF1DD4284000375469 /* Playlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C155EAA1DD4284000375469 /* Playlist.swift */; };
@@ -140,6 +143,9 @@
 /* Begin PBXFileReference section */
 		0D348453E5A357FD09B587CE /* Pods-破音万里.ad hoc distribution.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-破音万里.ad hoc distribution.xcconfig"; path = "Pods/Target Support Files/Pods-破音万里/Pods-破音万里.ad hoc distribution.xcconfig"; sourceTree = "<group>"; };
 		28F6DD77EB623BF8E85E58B2 /* Pods-破音万里.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-破音万里.debug.xcconfig"; path = "Pods/Target Support Files/Pods-破音万里/Pods-破音万里.debug.xcconfig"; sourceTree = "<group>"; };
+		3C0A1A951DD5B35400E90306 /* MainScrollview.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainScrollview.swift; sourceTree = "<group>"; };
+		3C0A1A971DD5B5B000E90306 /* MainPageControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainPageControl.swift; sourceTree = "<group>"; };
+		3C0A1A991DD5B72000E90306 /* MainControllers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainControllers.swift; sourceTree = "<group>"; };
 		3C0CCAC31BB929DD00AAA5C6 /* PCSongListTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCSongListTableViewCell.h; sourceTree = "<group>"; };
 		3C0CCAC41BB929DD00AAA5C6 /* PCSongListTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCSongListTableViewCell.m; sourceTree = "<group>"; };
 		3C155EA81DD4284000375469 /* PlaylistController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaylistController.swift; sourceTree = "<group>"; };
@@ -439,6 +445,9 @@
 		3C155EC41DD441A400375469 /* V */ = {
 			isa = PBXGroup;
 			children = (
+				3C0A1A951DD5B35400E90306 /* MainScrollview.swift */,
+				3C0A1A971DD5B5B000E90306 /* MainPageControl.swift */,
+				3C0A1A991DD5B72000E90306 /* MainControllers.swift */,
 			);
 			path = V;
 			sourceTree = "<group>";
@@ -1133,6 +1142,7 @@
 				3CA297021BE1C71E0073CF1A /* PCSongDownloadingCell.m in Sources */,
 				3CFA58DA1D6706D700341763 /* UIView+MJExtension.m in Sources */,
 				3CFA58C11D6706D700341763 /* file_stream.cpp in Sources */,
+				3C0A1A981DD5B5B000E90306 /* MainPageControl.swift in Sources */,
 				3C155EB21DD428A100375469 /* PlaylistCell.swift in Sources */,
 				3CFA58D91D6706D700341763 /* UIScrollView+MJRefresh.m in Sources */,
 				3CCFBF2F1DD41DAD00514873 /* PlayerInterface.swift in Sources */,
@@ -1183,6 +1193,7 @@
 				3CB2E32A1BA7CA5D00805D4F /* PCLabel.m in Sources */,
 				3CFA58D81D6706D700341763 /* UIScrollView+MJExtension.m in Sources */,
 				3CCFBF541DD4201B00514873 /* LrcCell.m in Sources */,
+				3C0A1A9A1DD5B72000E90306 /* MainControllers.swift in Sources */,
 				3CFA58BF1D6706D700341763 /* caching_stream.cpp in Sources */,
 				3CF7AFC21BAAA19500F764BD /* LineDashPolyline.m in Sources */,
 				3C24CEEB1DD32038007C862C /* Reflect.swift in Sources */,
@@ -1200,6 +1211,7 @@
 				3CFA58CD1D6706D700341763 /* Reachability.m in Sources */,
 				3CCFBF4F1DD41F1C00514873 /* UIImage+BoxBlur.m in Sources */,
 				3C155EB51DD4292E00375469 /* DBHelper.m in Sources */,
+				3C0A1A961DD5B35400E90306 /* MainScrollview.swift in Sources */,
 				3CB2E2F81BA7B26800805D4F /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

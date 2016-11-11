@@ -1,0 +1,109 @@
+//
+//  MainControllers.swift
+//  破音万里
+//
+//  Created by Purchas on 2016/11/11.
+//  Copyright © 2016年 Purchas. All rights reserved.
+//
+
+import UIKit
+
+protocol MainPageControllersDelegate: class {
+	func pan()
+}
+
+class MainControllers: UIView {
+	lazy var controllers: NSMutableArray = { [] }()
+	var selectedView: UIView?
+	var selectedBtn: BarItem?
+	var size: CGRect?
+	weak var delegate: MainPageControllersDelegate?
+
+	override init(frame: CGRect) {
+		super.init(frame: frame)
+		setupControllers(frame: frame)
+		self.backgroundColor = UIColor.white
+		self.size = frame
+	}
+	
+	required init(coder aDecoder: NSCoder) {
+		super.init(coder: NSCoder())!
+	}
+	
+	override func layoutSubviews() {
+		super.layoutSubviews()
+	}
+	
+	func setupControllers(frame: CGRect) {
+		//每月文章列表页
+		let playlist: PlaylistController = PlaylistController()
+		playlist.delegate = self
+		setupSingleViewControllerToScrollView(playlist, hidden: false, frame: frame)
+		
+		//已下载专辑页面
+		let albumDownload: AlbumDownloadViewController = AlbumDownloadViewController()
+		setupSingleViewControllerToScrollView(albumDownload, hidden: true, frame: frame)
+		//导航页面
+		let navi: NaviController = NaviController()
+		setupSingleViewControllerToScrollView(navi, hidden: true, frame: frame)
+		//设置页面
+		let setting: SettingController = SettingController()
+		setupSingleViewControllerToScrollView(setting, hidden: true, frame: frame)
+	}
+	
+	//MARK: - TODO
+	func setupSingleViewControllerToScrollView(_ controller: UIViewController, hidden: Bool, frame: CGRect) {
+		let nav: NavigationController = NavigationController(rootViewController: controller)
+		nav.view.frame = CGRect(x: 0, y: 0, width: self.bounds.size.width, height: self.bounds.size.height)
+		self.controllers.add(nav)
+		self.addSubview(nav.view)
+		nav.view.isHidden = hidden
+		if hidden == false {
+			self.selectedView = nav.view
+		}
+	}
+	
+	//MARK: - 点击tabBarButton事件
+	func buttonClick(_ btn: BarItem) {
+		self.selectedBtn?.isSelected = false
+		btn.isSelected = true
+		self.selectedBtn = btn
+		self.selectedView?.isHidden = true
+		let controller: UINavigationController = self.controllers[btn.tag] as! UINavigationController
+		controller.view.isHidden = false
+		self.selectedView = controller.view
+		//MARK: - TODO
+		controller.popToRootViewController(animated: true)
+	}
+	
+	func setupTabBarItem(_ count: Int, frame: CGRect) {
+		for i in 0..<count {
+			let button: BarItem = BarItem(frame: CGRect(x: CGFloat(i) * self.bounds.size.width / CGFloat(count), y: 0, width: self.bounds.size.width / CGFloat(count), height: 64))
+			button.normalImage?.image = UIImage(named: String(i + 1))
+			if i == 0 {
+				self.buttonClick(button)
+			}
+			button.tag = i
+			button.addTarget(self, action: #selector(MainControllers.buttonClick(_:)), for: .touchUpInside)
+			// 添加下滑事件
+			let swipeFromTop: UISwipeGestureRecognizer = UISwipeGestureRecognizer.init(target: self, action: #selector(MainControllers.panTheButton(btn:)))
+			swipeFromTop.direction = .down
+			swipeFromTop.numberOfTouchesRequired = 1
+			button.addGestureRecognizer(swipeFromTop)
+			self.addSubview(button)
+		}
+		
+	}
+	
+	// MARK: - 下拉Button
+	func panTheButton(btn: BarItem) {
+		self.delegate?.pan()
+	}
+
+}
+
+extension MainControllers: PlaylistDelegate {
+	func tabBarCount(count: Int) {
+		self.setupTabBarItem(count, frame: self.size!)
+	}
+}

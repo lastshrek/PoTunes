@@ -10,21 +10,18 @@ import UIKit
 
 
 
-class Main: UIViewController, UIScrollViewDelegate, UIGestureRecognizerDelegate, UIAlertViewDelegate {
+class Main: UIViewController, UIGestureRecognizerDelegate, UIAlertViewDelegate {
     
 	var height: CGFloat?
 	var width: CGFloat?
 	var pageControl: UIPageControl?
 	var scrollView: UIScrollView?
 	var player: PlayerInterface?
-	var selectedView: UIView?
-	var selectedBtn: BarItem?
+	var mainControllers: MainControllers?
 	lazy var songs: NSArray = { [] }()
-	lazy var controllers: NSMutableArray = { [] }()
-	
-    
 
 	override func viewDidLoad() {
+		
 		super.viewDidLoad()
 	
 		self.height = self.view.bounds.size.height
@@ -35,8 +32,6 @@ class Main: UIViewController, UIScrollViewDelegate, UIGestureRecognizerDelegate,
 		setupPageControl()
 		// 添加播放器界面
 		setupPlayerInterface()
-		// 存储用户状态
-		setupUserOnline()
 		// 添加下方页面
 		setupControllers()
 		// 获取上次播放曲目
@@ -52,125 +47,50 @@ class Main: UIViewController, UIScrollViewDelegate, UIGestureRecognizerDelegate,
     
 	// MARK: - 添加ScrollView
 	func setupScrollView() {
-		let scrollView: UIScrollView = UIScrollView()
+		let scrollView: UIScrollView = MainScrollview()
 		scrollView.frame = self.view.bounds
 		scrollView.delegate = self
-		scrollView.backgroundColor = UIColor.black
-		//设置内容滚动尺寸
-		scrollView.contentSize = CGSize(width: 0, height: self.view.bounds.height * 2)
-		scrollView.bounces = false
-		scrollView.showsVerticalScrollIndicator = false
-		scrollView.isPagingEnabled = true
 		self.view.addSubview(scrollView)
 		self.scrollView = scrollView
 	}
 	// MARK: - 添加PageControll
 	func setupPageControl() {
-        let pageControl: UIPageControl = UIPageControl()
-        pageControl.numberOfPages = 2
-        pageControl.isHidden = true
-        let centerX = self.width! * 0.5
-        let centerY = self.height! - 30
-        pageControl.center = CGPoint(x: centerX, y: centerY)
-        pageControl.bounds = CGRect(x: 0, y: 0, width: 100, height: 30)
-        pageControl.isUserInteractionEnabled = true
-        self.view.addSubview(pageControl)
-        self.pageControl = pageControl
-    }
-    // MARK: - 添加播放器界面
+		let pageControl: UIPageControl = MainPageControl()
+		self.view.addSubview(pageControl)
+		self.pageControl = pageControl
+	}
+	// MARK: - 添加播放器界面
 	func setupPlayerInterface() {
-        let player: PlayerInterface = PlayerInterface(frame: self.view.bounds)
-        player.frame = self.view.bounds
-        self.player = player
-        self.scrollView?.addSubview(player)
-    }
-    //MARK: - TODO
-	func setupUserOnline() {
-		let user: UserDefaults = UserDefaults.standard
-		let online = user.object(forKey: "online")
-
+		let player: PlayerInterface = PlayerInterface(frame: self.view.bounds)
+		player.frame = self.view.bounds
+		self.player = player
+		scrollView?.addSubview(player)
 	}
-	//MARK: - 添加TabBar界面
+	// MARK: - 添加Controllers
 	func setupControllers() {
-		//每月文章列表页
-		let playlist: PlaylistController = PlaylistController()
-		playlist.delegate = self
-		setupSingleViewControllerToScrollView(playlist, hidden: false)
-		
-		//已下载专辑页面
-		let albumDownload: AlbumDownloadViewController = AlbumDownloadViewController()
-		setupSingleViewControllerToScrollView(albumDownload, hidden: true)
-		//导航页面
-		let navi: NaviController = NaviController()
-		setupSingleViewControllerToScrollView(navi, hidden: true)
-		//设置页面
-		let setting: SettingController = SettingController()
-		setupSingleViewControllerToScrollView(setting, hidden: true)
-		// 添加BarItem
+		let mainControllers: MainControllers = MainControllers()
+		mainControllers.frame  = CGRect(x: 0, y: self.height!, width: self.width!, height: self.height!)
+		mainControllers.delegate = self
+		self.mainControllers = mainControllers
+		scrollView?.addSubview(mainControllers)
 	}
-	
-	func setupTabBarItem(_ count: Int) {
-		for i in 0..<count {
-			let button: BarItem = BarItem(frame: CGRect(x: CGFloat(i) * self.width! / CGFloat(count), y: self.height!, width: self.width! / CGFloat(count), height: 64))
-			button.normalImage?.image = UIImage(named: String(i + 1))
-			if i == 0 {
-				self.buttonClick(button)
-			}
-			button.tag = i
-			button.addTarget(self, action: #selector(Main.buttonClick(_:)), for: .touchUpInside)
-			let swipeFromTop: UISwipeGestureRecognizer = UISwipeGestureRecognizer.init(target: self, action: #selector(Main.panTheButton(btn:)))
-			swipeFromTop.direction = .down
-			swipeFromTop.numberOfTouchesRequired = 1
-			button.addGestureRecognizer(swipeFromTop)
-			self.scrollView?.addSubview(button)
-		}
-
+}
+// MARK: - 向下滑动BarItem
+extension Main: MainPageControllersDelegate {
+	func pan() {
+		scrollView?.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
+		scrollView?.isScrollEnabled = true
 	}
-	
-	//MARK: - TODO
-	func setupSingleViewControllerToScrollView(_ controller: UIViewController, hidden: Bool) {
-		let nav: NavigationController = NavigationController(rootViewController: controller)
-		nav.view.frame = CGRect(x: 0, y: self.height! + 20, width: self.width!, height: self.height! - 20)
-		self.controllers.add(nav)
-		self.scrollView?.addSubview(nav.view)
-		nav.view.isHidden = hidden
-		if hidden == false {
-			self.selectedView = nav.view
-		}
-	}
-	//MARK: - 点击tabBarButton事件
-	func buttonClick(_ btn: BarItem) {
-		self.selectedBtn?.isSelected = false
-		btn.isSelected = true
-		self.selectedBtn = btn
-		self.selectedView?.isHidden = true
-		let controller: UINavigationController = self.controllers[btn.tag] as! UINavigationController
-		controller.view.isHidden = false
-		self.selectedView = controller.view
-		//MARK: - TODO
-		controller.popToRootViewController(animated: true)
-	}
-	// MARK: - 下拉Button
-	func panTheButton(btn: BarItem) {
-		self.scrollView?.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
-		self.scrollView?.isScrollEnabled = true
-	}
-	//MARK: - scrollView代理方法 - 防止在底部页面含有TableView时滑动
+}
+// MARK: - scrollView代理方法 - 防止在底部页面含有TableView时滑动
+extension Main: UIScrollViewDelegate {
 	func scrollViewDidScroll(_ scrollView: UIScrollView) {
 		/** 1.取出水平方向上的滚动距离 */
 		let offsetY = scrollView.contentOffset.y
-
+		
 		if offsetY == self.height {
 			scrollView.isScrollEnabled = false
 		}
 	}
 }
-
-extension Main: PlaylistDelegate {
-	func tabBarCount(count: Int) {
-		print("代理成功")
-		self.setupTabBarItem(count)
-	}
-}
-
 
