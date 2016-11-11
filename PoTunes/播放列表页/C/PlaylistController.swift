@@ -15,11 +15,14 @@ import PKHUD
 let P_URL = "http://127.0.0.1:3000/api/app/playlists"
 let T_URL = "http://127.0.0.1:3000/api/app/playlists/"
 
-
+protocol PlaylistDelegate: class {
+	func tabBarCount(count: Int)
+}
 
 class PlaylistController: UITableViewController {
 	
 	var playlists: Array<Any> = []
+	weak var delegate: PlaylistDelegate?
 
 	
 	override func viewDidLoad() {
@@ -36,6 +39,9 @@ class PlaylistController: UITableViewController {
 		// MARK: -  检查本地缓存播放列表
 		self.checkLocalPlaylists()
 		// add delegate
+	}
+	deinit {
+		print("销毁")
 	}
 	
 	func checkLocalPlaylists() {
@@ -83,6 +89,11 @@ class PlaylistController: UITableViewController {
 			self.playlists = playlists
 			self.tableView.dg_stopLoading()
 			self.tableView.reloadData()
+			//重设tabBar个数
+
+			if playlists.count > 3 {
+				self.delegate?.tabBarCount(count: 3)
+			}
 		})
 	}
 	

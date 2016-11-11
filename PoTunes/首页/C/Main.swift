@@ -118,6 +118,7 @@ class Main: UIViewController, UIScrollViewDelegate, UIGestureRecognizerDelegate,
     func setupTabBarWithCount(_ count: Int) {
 			//每月文章列表页
 			let playlist: PlaylistController = PlaylistController()
+			playlist.delegate  = self
 			setupSingleViewControllerToScrollView(playlist, hidden: false)
 			
 			//已下载专辑页面
@@ -185,4 +186,11 @@ class Main: UIViewController, UIScrollViewDelegate, UIGestureRecognizerDelegate,
 		}
 	}
 
+}
+
+extension Main: PlaylistDelegate {
+	func tabBarCount(count: Int) {
+		print("代理成功")
+		self.setupTabBarWithCount(4)
+	}
 }
