@@ -149,9 +149,6 @@ class PlaylistController: UITableViewController {
 			// MARK: - Push Controller - TODO
 			self.navigationController?.pushViewController(NaviController(), animated: true)
 		})
-		
-		
-		
 	}
 	// MARK: - 下载每月歌曲 - TODO
 	func download() {

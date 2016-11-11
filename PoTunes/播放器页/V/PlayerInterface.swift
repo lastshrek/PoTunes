@@ -115,86 +115,86 @@ class PlayerInterface: UIView {
 		self.backgroundView?.addSubview(lrcView)
 	}
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        width = self.bounds.size.width
-        height = self.bounds.size.height
-        self.backgroundView?.frame = self.bounds
-        self.cover?.frame = CGRect(x: 0, y: 0, width: width!, height: width!)
-        self.reflection?.frame = CGRect(x: 0, y: height! - width!, width: width!, height: width!)
-        self.bufferingIndicator?.frame = CGRect(x: 0, y: self.cover!.frame.maxY, width: width!, height: 12)
-        self.progress?.frame = CGRect(x: 0, y: self.cover!.frame.maxY, width: width!, height: 12)
-        self.timeView?.frame = CGRect(x: 0, y: self.progress!.frame.maxY, width: width!, height: 25)
-        self.currentTime?.frame = CGRect(x: 2, y: 0, width: width! / 2, height: (self.timeView?.bounds.size.height)!)
-        self.leftTime?.frame = CGRect(x: width! / 2 - 2, y: 0, width: width! / 2, height: (self.timeView?.bounds.size.height)!)
+	override func layoutSubviews() {
+		super.layoutSubviews()
+		width = self.bounds.size.width
+		height = self.bounds.size.height
+		self.backgroundView?.frame = self.bounds
+		self.cover?.frame = CGRect(x: 0, y: 0, width: width!, height: width!)
+		self.reflection?.frame = CGRect(x: 0, y: height! - width!, width: width!, height: width!)
+		self.bufferingIndicator?.frame = CGRect(x: 0, y: self.cover!.frame.maxY, width: width!, height: 12)
+		self.progress?.frame = CGRect(x: 0, y: self.cover!.frame.maxY, width: width!, height: 12)
+		self.timeView?.frame = CGRect(x: 0, y: self.progress!.frame.maxY, width: width!, height: 25)
+		self.currentTime?.frame = CGRect(x: 2, y: 0, width: width! / 2, height: (self.timeView?.bounds.size.height)!)
+		self.leftTime?.frame = CGRect(x: width! / 2 - 2, y: 0, width: width! / 2, height: (self.timeView?.bounds.size.height)!)
 
-        switch Int(height!) {
-        case 480:
-            self.songName?.frame = CGRect(x: 0, y: (self.timeView?.frame)!.maxY + 15, width: width!, height: 40)
-            self.songName?.font = UIFont(name: "BebasNeue", size: 30)
-            self.artist?.frame = CGRect(x: 0, y: (self.songName?.frame)!.maxY, width: width!, height: 20)
-            self.album?.frame = CGRect(x: 0, y: (self.artist?.frame)!.maxY, width: width!, height: 20)
-            break
-        case 568:
-            self.songName?.frame = CGRect(x: 0, y: (self.timeView?.frame)!.maxY + 40, width: width!, height: 40)
-            self.songName?.font = UIFont(name: "BebasNeue", size: 30)
-            self.artist?.frame = CGRect(x: 0, y: (self.songName?.frame)!.maxY + 15, width: width!, height: 20)
-            self.album?.frame = CGRect(x: 0, y: (self.artist?.frame)!.maxY + 15, width: width!, height: 20)
-            break
-        case 667:
-            self.songName?.frame = CGRect(x: 0, y: (self.timeView?.frame)!.maxY + 40, width: width!, height: 40)
-            self.songName?.font = UIFont(name: "BebasNeue", size: 40)
-            self.artist?.frame = CGRect(x: 0, y: (self.songName?.frame)!.maxY + 20, width: width!, height: 25)
-            self.artist?.font = UIFont(name: "BebasNeue", size: 25)
-            self.album?.frame = CGRect(x: 0, y: (self.artist?.frame)!.maxY + 20, width: width!, height: 25)
-            self.album?.font = UIFont(name: "BebasNeue", size: 23)
-            break
-        default:
-            self.songName?.frame = CGRect(x: 0, y: (self.timeView?.frame)!.maxY + 60, width: width!, height: 42)
-            self.songName?.font = UIFont(name: "BebasNeue", size: 40)
-            self.artist?.frame = CGRect(x: 0, y: (self.songName?.frame)!.maxY + 20, width: width!, height: 27)
-            self.artist?.font = UIFont(name: "BebasNeue", size: 25)
-            self.album?.frame = CGRect(x: 0, y: (self.artist?.frame)!.maxY + 20, width: width!, height: 27)
-            self.album?.font = UIFont(name: "BebasNeue", size: 25)
-            break
-        }
-        self.playModeView?.frame = CGRect(x: width! / 2 - 10, y: height! - 20, width: 20, height: 20)
-				self.lrcView?.frame = CGRect(x: 0, y: 0, width: width!, height: width!)
-    }
-    
-    func createProgressView(_ flat: Bool, progress: CGFloat, animate: Bool, showText: Bool, showStroke: Bool, progressInset: NSNumber, showBackground: Bool, outerStrokeWidth: NSNumber, type: LDProgressType, autoresizingMask: UIViewAutoresizing, borderRadius: NSNumber, backgroundColor: UIColor) -> LDProgressView {
-        let buffer: LDProgressView = LDProgressView()
-        buffer.flat = flat as NSNumber!
-        buffer.progress = progress
-        buffer.animate = animate as NSNumber!
-        buffer.showText = showText as NSNumber!
-        buffer.showStroke = showStroke as NSNumber!
-        buffer.progressInset = progressInset
-        buffer.showBackground = showBackground as NSNumber!
-        buffer.outerStrokeWidth = outerStrokeWidth
-        buffer.type = type
-        buffer.borderRadius = borderRadius	
-        buffer.backgroundColor = backgroundColor
-        buffer.autoresizingMask = autoresizingMask
-        return buffer
-    }
-    
-    func createLabel(_ autoresizingMask: UIViewAutoresizing, shadowOffset: CGSize?, textColor: UIColor, text: String?, textAlignment: NSTextAlignment) -> UILabel {
-        let label: UILabel = UILabel()
-        label.autoresizingMask = autoresizingMask
-        label.textColor = textColor
-        label.textAlignment = textAlignment
-        if let unwrappedOffset = shadowOffset {
-            label.shadowOffset = unwrappedOffset
-        }
-        if let unwrappedText = text {
-            label.text = unwrappedText
-        }
-        return label
-    }
+		switch Int(height!) {
+		case 480:
+				self.songName?.frame = CGRect(x: 0, y: (self.timeView?.frame)!.maxY + 15, width: width!, height: 40)
+				self.songName?.font = UIFont(name: "BebasNeue", size: 30)
+				self.artist?.frame = CGRect(x: 0, y: (self.songName?.frame)!.maxY, width: width!, height: 20)
+				self.album?.frame = CGRect(x: 0, y: (self.artist?.frame)!.maxY, width: width!, height: 20)
+				break
+		case 568:
+				self.songName?.frame = CGRect(x: 0, y: (self.timeView?.frame)!.maxY + 40, width: width!, height: 40)
+				self.songName?.font = UIFont(name: "BebasNeue", size: 30)
+				self.artist?.frame = CGRect(x: 0, y: (self.songName?.frame)!.maxY + 15, width: width!, height: 20)
+				self.album?.frame = CGRect(x: 0, y: (self.artist?.frame)!.maxY + 15, width: width!, height: 20)
+				break
+		case 667:
+				self.songName?.frame = CGRect(x: 0, y: (self.timeView?.frame)!.maxY + 40, width: width!, height: 40)
+				self.songName?.font = UIFont(name: "BebasNeue", size: 40)
+				self.artist?.frame = CGRect(x: 0, y: (self.songName?.frame)!.maxY + 20, width: width!, height: 25)
+				self.artist?.font = UIFont(name: "BebasNeue", size: 25)
+				self.album?.frame = CGRect(x: 0, y: (self.artist?.frame)!.maxY + 20, width: width!, height: 25)
+				self.album?.font = UIFont(name: "BebasNeue", size: 23)
+				break
+		default:
+				self.songName?.frame = CGRect(x: 0, y: (self.timeView?.frame)!.maxY + 60, width: width!, height: 42)
+				self.songName?.font = UIFont(name: "BebasNeue", size: 40)
+				self.artist?.frame = CGRect(x: 0, y: (self.songName?.frame)!.maxY + 20, width: width!, height: 27)
+				self.artist?.font = UIFont(name: "BebasNeue", size: 25)
+				self.album?.frame = CGRect(x: 0, y: (self.artist?.frame)!.maxY + 20, width: width!, height: 27)
+				self.album?.font = UIFont(name: "BebasNeue", size: 25)
+				break
+		}
+		self.playModeView?.frame = CGRect(x: width! / 2 - 10, y: height! - 20, width: 20, height: 20)
+		self.lrcView?.frame = CGRect(x: 0, y: 0, width: width!, height: width!)
+	}
+	
+	func createProgressView(_ flat: Bool, progress: CGFloat, animate: Bool, showText: Bool, showStroke: Bool, progressInset: NSNumber, showBackground: Bool, outerStrokeWidth: NSNumber, type: LDProgressType, autoresizingMask: UIViewAutoresizing, borderRadius: NSNumber, backgroundColor: UIColor) -> LDProgressView {
+		let buffer: LDProgressView = LDProgressView()
+		buffer.flat = flat as NSNumber!
+		buffer.progress = progress
+		buffer.animate = animate as NSNumber!
+		buffer.showText = showText as NSNumber!
+		buffer.showStroke = showStroke as NSNumber!
+		buffer.progressInset = progressInset
+		buffer.showBackground = showBackground as NSNumber!
+		buffer.outerStrokeWidth = outerStrokeWidth
+		buffer.type = type
+		buffer.borderRadius = borderRadius	
+		buffer.backgroundColor = backgroundColor
+		buffer.autoresizingMask = autoresizingMask
+		return buffer
+	}
+	
+	func createLabel(_ autoresizingMask: UIViewAutoresizing, shadowOffset: CGSize?, textColor: UIColor, text: String?, textAlignment: NSTextAlignment) -> UILabel {
+		let label: UILabel = UILabel()
+		label.autoresizingMask = autoresizingMask
+		label.textColor = textColor
+		label.textAlignment = textAlignment
+		if let unwrappedOffset = shadowOffset {
+				label.shadowOffset = unwrappedOffset
+		}
+		if let unwrappedText = text {
+				label.text = unwrappedText
+		}
+		return label
+	}
 
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+	
+	required init?(coder aDecoder: NSCoder) {
+		fatalError("init(coder:) has not been implemented")
+	}
 }
