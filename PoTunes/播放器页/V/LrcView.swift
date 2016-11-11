@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import DynamicBlurView
 
 fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
   switch (lhs, rhs) {
@@ -20,7 +21,7 @@ fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
 }
 
 //MARK: - 代理
-class LrcView: DRNRealTimeBlurView, UITableViewDataSource, UITableViewDelegate {
+class LrcView: DynamicBlurView, UITableViewDataSource, UITableViewDelegate {
 
 	var currentTime: TimeInterval? {
 		didSet {
@@ -68,7 +69,7 @@ class LrcView: DRNRealTimeBlurView, UITableViewDataSource, UITableViewDelegate {
 
 	fileprivate var tableView: UITableView?
 	fileprivate var currentindex: Int?
-	fileprivate lazy var lyricsLines: NSMutableArray = { [] }()
+	fileprivate lazy var lyricsLines: NSMutableArray = {[]}()
 
 	override init(frame: CGRect) {
 		super.init(frame: frame)
@@ -80,6 +81,7 @@ class LrcView: DRNRealTimeBlurView, UITableViewDataSource, UITableViewDelegate {
 	}
 	
 	func setup() {
+		self.blurRadius = 30
 		// 暂无歌词页面
 		let noLrcLabel: UILabel = UILabel()
 		noLrcLabel.backgroundColor = UIColor.clear

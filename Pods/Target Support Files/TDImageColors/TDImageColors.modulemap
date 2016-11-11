@@ -1,0 +1,6 @@
+framework module TDImageColors {
+  umbrella header "TDImageColors-umbrella.h"
+
+  export *
+  module * { export * }
+}

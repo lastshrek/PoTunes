@@ -81,6 +81,7 @@ class PlaylistController: UITableViewController {
 			if playlists.count == 0 {
 				HUD.flash(.error, delay: 1.0)
 				self.tableView.dg_stopLoading()
+				self.delegate?.tabBarCount(count: 3)
 				return
 			}
 			HUD.flash(.label("加载成功"), delay: 1.0)

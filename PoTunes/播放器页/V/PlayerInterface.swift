@@ -108,11 +108,11 @@ class PlayerInterface: UIView {
 		self.playModeView = playModeView
 		self.backgroundView?.addSubview(playModeView)
 			// 歌词
-//		let lrcView: LrcView = LrcView()
-//		lrcView.autoresizingMask = [.flexibleWidth, .flexibleTopMargin]
-//		lrcView.isHidden = true
-//		self.lrcView = lrcView
-//		self.backgroundView?.addSubview(lrcView)
+		let lrcView: LrcView = LrcView()
+		lrcView.autoresizingMask = [.flexibleWidth, .flexibleTopMargin]
+		//lrcView.isHidden = true
+		self.lrcView = lrcView
+		self.backgroundView?.addSubview(lrcView)
 	}
     
     override func layoutSubviews() {
