@@ -6,3 +6,5 @@
 #import "Common.h"
 #import <SDWebImage/UIImageView+WebCache.h>
 #import "PCSongListTableViewCell.h"
+#import "WXApiObject.h"
+#import "WXApi.h"

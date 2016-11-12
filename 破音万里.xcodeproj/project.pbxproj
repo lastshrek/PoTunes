@@ -69,6 +69,7 @@
 		3CCFBF501DD41F1C00514873 /* UIImage+Reflection.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CCFBF4A1DD41F1C00514873 /* UIImage+Reflection.m */; };
 		3CCFBF511DD41F1C00514873 /* UIView+Geometry.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CCFBF4C1DD41F1C00514873 /* UIView+Geometry.m */; };
 		3CCFBF541DD4201B00514873 /* LrcCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CCFBF531DD4201B00514873 /* LrcCell.m */; };
+		3CDFB3931DD76E5D006C0975 /* SongListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CDFB3911DD76E5D006C0975 /* SongListController.swift */; };
 		3CF7AFBF1BAAA14000F764BD /* CommonUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CF7AFBE1BAAA14000F764BD /* CommonUtility.m */; };
 		3CF7AFC21BAAA19500F764BD /* LineDashPolyline.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CF7AFC11BAAA19500F764BD /* LineDashPolyline.m */; };
 		3CFA57311D60332F00341763 /* SongLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFA57301D60332F00341763 /* SongLabel.swift */; };
@@ -223,6 +224,7 @@
 		3CCFBF4C1DD41F1C00514873 /* UIView+Geometry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Geometry.m"; sourceTree = "<group>"; };
 		3CCFBF521DD4201B00514873 /* LrcCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LrcCell.h; sourceTree = "<group>"; };
 		3CCFBF531DD4201B00514873 /* LrcCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LrcCell.m; sourceTree = "<group>"; };
+		3CDFB3911DD76E5D006C0975 /* SongListController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SongListController.swift; sourceTree = "<group>"; };
 		3CF7AFBA1BAA997D00F764BD /* GeocodeAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeocodeAnnotation.h; sourceTree = "<group>"; };
 		3CF7AFBB1BAA997D00F764BD /* GeocodeAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeocodeAnnotation.m; sourceTree = "<group>"; };
 		3CF7AFBD1BAAA14000F764BD /* CommonUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonUtility.h; sourceTree = "<group>"; };
@@ -541,6 +543,7 @@
 		3CB2E2F41BA7B26800805D4F /* PoTunes */ = {
 			isa = PBXGroup;
 			children = (
+				3CDFB38D1DD76C95006C0975 /* 歌曲列表页 */,
 				3C155ED81DD44A4700375469 /* 设置页 */,
 				3C155EC71DD4437C00375469 /* 导航页 */,
 				3C155EA41DD4284000375469 /* 播放列表页 */,
@@ -721,6 +724,30 @@
 				3CCFBF4C1DD41F1C00514873 /* UIView+Geometry.m */,
 			);
 			path = Category;
+			sourceTree = "<group>";
+		};
+		3CDFB38D1DD76C95006C0975 /* 歌曲列表页 */ = {
+			isa = PBXGroup;
+			children = (
+				3CDFB3901DD76E5D006C0975 /* C */,
+				3CDFB3921DD76E5D006C0975 /* M */,
+			);
+			path = "歌曲列表页";
+			sourceTree = "<group>";
+		};
+		3CDFB3901DD76E5D006C0975 /* C */ = {
+			isa = PBXGroup;
+			children = (
+				3CDFB3911DD76E5D006C0975 /* SongListController.swift */,
+			);
+			path = C;
+			sourceTree = "<group>";
+		};
+		3CDFB3921DD76E5D006C0975 /* M */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = M;
 			sourceTree = "<group>";
 		};
 		3CFA580F1D6706D700341763 /* 3rdParty */ = {
@@ -1064,6 +1091,7 @@
 				3CFA58CB1D6706D700341763 /* FSPlaylistItem.m in Sources */,
 				3CCFBF4E1DD41F1C00514873 /* UIColor+RGBValues.m in Sources */,
 				3CFA58C41D6706D700341763 /* input_stream.cpp in Sources */,
+				3CDFB3931DD76E5D006C0975 /* SongListController.swift in Sources */,
 				3CB2E32A1BA7CA5D00805D4F /* PCLabel.m in Sources */,
 				3CFA58D81D6706D700341763 /* UIScrollView+MJExtension.m in Sources */,
 				3CCFBF541DD4201B00514873 /* LrcCell.m in Sources */,

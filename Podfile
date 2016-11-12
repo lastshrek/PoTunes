@@ -11,4 +11,5 @@ target '破音万里' do
 	pod 'DynamicBlurView'
 	pod 'TDImageColors', '~> 0.2'
 	pod 'FMDB'
+	pod 'Masonry'
 end

@@ -54,7 +54,7 @@ class MainControllers: UIView {
 	//MARK: - TODO
 	func setupSingleViewControllerToScrollView(_ controller: UIViewController, hidden: Bool, frame: CGRect) {
 		let nav: NavigationController = NavigationController(rootViewController: controller)
-		nav.view.frame = CGRect(x: 0, y: 0, width: self.bounds.size.width, height: self.bounds.size.height)
+		nav.view.frame = CGRect(x: 0, y: 20, width: self.bounds.size.width, height: self.bounds.size.height)
 		self.controllers.add(nav)
 		self.addSubview(nav.view)
 		nav.view.isHidden = hidden

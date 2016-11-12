@@ -147,7 +147,9 @@ class PlaylistController: UITableViewController {
 			}
 			HUD.hide()
 			// MARK: - Push Controller - TODO
-			self.navigationController?.pushViewController(NaviController(), animated: true)
+			let songList: SongListController = SongListController()
+			songList.tracks = tracks
+			self.navigationController?.pushViewController(songList, animated: true)
 		})
 	}
 	// MARK: - 下载每月歌曲 - TODO

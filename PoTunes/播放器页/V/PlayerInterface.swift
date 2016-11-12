@@ -110,7 +110,7 @@ class PlayerInterface: UIView {
 			// 歌词
 		let lrcView: LrcView = LrcView()
 		lrcView.autoresizingMask = [.flexibleWidth, .flexibleTopMargin]
-		//lrcView.isHidden = true
+		lrcView.isHidden = true
 		self.lrcView = lrcView
 		self.backgroundView?.addSubview(lrcView)
 	}

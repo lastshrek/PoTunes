@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+import Masonry
 
 
 class Main: UIViewController, UIGestureRecognizerDelegate, UIAlertViewDelegate {
@@ -69,7 +69,7 @@ class Main: UIViewController, UIGestureRecognizerDelegate, UIAlertViewDelegate {
 	// MARK: - 添加Controllers
 	func setupControllers() {
 		let mainControllers: MainControllers = MainControllers()
-		mainControllers.frame  = CGRect(x: 0, y: self.height!, width: self.width!, height: self.height!)
+		mainControllers.frame  = CGRect(x: 0, y: self.height!, width: self.width!, height: self.height! - 20)
 		mainControllers.delegate = self
 		self.mainControllers = mainControllers
 		scrollView?.addSubview(mainControllers)
