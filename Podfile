@@ -12,4 +12,5 @@ target '破音万里' do
 	pod 'TDImageColors', '~> 0.2'
 	pod 'FMDB'
 	pod 'Masonry'
+	pod 'LTInfiniteScrollViewSwift'
 end

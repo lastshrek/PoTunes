@@ -28,7 +28,7 @@ class TrackCell: UITableViewCell {
 		self.addSubview(divider)
 		// 播放按钮
 		playBtn.titleLabel?.font = UIFont.fontAwesome(ofSize: 30)
-		playBtn.setTitleColor(UIColor.lightGray, for: .normal)
+		playBtn.setTitleColor(UIColor.colorByRGB(red: 17, green: 133, blue: 117, alpha: 0.8), for: .normal)
 		playBtn.setTitle(String.fontAwesomeIcon(name: .playCircleO), for: .normal)
 		self.addSubview(playBtn)
 	}

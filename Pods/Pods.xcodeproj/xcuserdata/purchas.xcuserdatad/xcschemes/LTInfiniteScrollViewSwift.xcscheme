@@ -14,10 +14,10 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = 'primary'
-               BlueprintIdentifier = 'CE9E452EA97E5D5B80369577540847FA'
-               BlueprintName = 'TDImageColors'
+               BlueprintIdentifier = '58401E0D4AB0800B3C92AC788C02278A'
+               BlueprintName = 'LTInfiniteScrollViewSwift'
                ReferencedContainer = 'container:Pods.xcodeproj'
-               BuildableName = 'TDImageColors.framework'>
+               BuildableName = 'LTInfiniteScrollViewSwift.framework'>
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>

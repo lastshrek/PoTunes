@@ -56,7 +56,9 @@ class PlaylistController: UITableViewController {
 				var contentArray = Array<Any>()
 			
 				for dict in dictArr {
+				
 					contentArray.append(dict)
+				
 				}
 				self.playlists = contentArray
 				
@@ -71,33 +73,51 @@ class PlaylistController: UITableViewController {
 	func addPullToRefresh() {
 		// Initialize tableView
 		let loadingView = DGElasticPullToRefreshLoadingViewCircle()
+		
 		loadingView.tintColor = UIColor(red: 78/255.0, green: 221/255.0, blue: 200/255.0, alpha: 1.0)
+		
 		tableView.dg_addPullToRefreshWithActionHandler({ [weak self] () -> Void in
 			self?.loadNewPlaylist()
 			}, loadingView: loadingView)
+		
 		tableView.dg_setPullToRefreshFillColor(UIColor(red: 57/255.0, green: 67/255.0, blue: 89/255.0, alpha: 1.0))
+		
 		tableView.dg_setPullToRefreshBackgroundColor(tableView.backgroundColor!)
 	}
 	
 	func loadNewPlaylist() {
 		// 请求接口
 		Alamofire.request(P_URL).response(completionHandler: { (response) in
+		
 			let playlists: Array = Reflect<Playlist>.mapObjects(data: response.data)
+			
 			if playlists.count == 0 {
+			
 				HUD.flash(.error, delay: 1.0)
+				
 				self.tableView.dg_stopLoading()
+				
 				self.delegate?.tabBarCount(count: 3)
+				
 				return
 			}
+			
 			HUD.flash(.label("加载成功"), delay: 1.0)
+			
 			self.playlists = playlists//重设tabBar个数
 			
 			self.tableView.dg_stopLoading()
+			
 			self.tableView.reloadData()
+			
 			if playlists.count > 3 {
+			
 				self.delegate?.tabBarCount(count: 4)
+			
 			} else {
+			
 				self.delegate?.tabBarCount(count: 3)
+			
 			}
 		})
 	}
@@ -119,16 +139,24 @@ class PlaylistController: UITableViewController {
 		
 		// MARK: - 设置count==3和4时分别显示的封面
 		if self.playlists.count == 3 {
+			
 			cell.imageView?.image = UIImage(named:"defaultArtCover")
+	
 		} else {
+		
 			let url: URL = URL(string: playlist.cover)!
+			
 			cell.imageView?.sd_setImage(with: url, placeholderImage: UIImage(named:"defaultArtCover"))
+		
 		}
 		
 		// MARK: - 添加下载手势 - TODO
 		let downloadSwipe: UISwipeGestureRecognizer = UISwipeGestureRecognizer.init(target: self, action: #selector(PlaylistController.download))
+		
 		downloadSwipe.direction = .right
+		
 		downloadSwipe.numberOfTouchesRequired = 1
+		
 		cell.addGestureRecognizer(downloadSwipe)
 		
 		return cell
@@ -145,15 +173,23 @@ class PlaylistController: UITableViewController {
 		let url = URL(string: T_URL + "\(playlist.ID)")
 		// MARK: - 上线屏蔽 - TODO
 		Alamofire.request(url!).response(completionHandler: { (response) in
+			
 			let tracks: Array = Reflect<Track>.mapObjects(data: response.data)
+			
 			if tracks.count == 0 {
+			
 				HUD.flash(.label("加载失败，请检查网络"), delay: 1.0)
+				
 				return
 			}
+			
 			HUD.hide()
+			
 			// MARK: - Push Controller - TODO
 			let songList: SongListController = SongListController()
+			
 			songList.tracks = tracks
+			
 			self.navigationController?.pushViewController(songList, animated: true)
 		})
 	}

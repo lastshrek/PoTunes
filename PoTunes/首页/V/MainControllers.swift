@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import FontAwesome_swift
 
 protocol MainPageControllersDelegate: class {
 	func pan()
@@ -77,9 +78,10 @@ class MainControllers: UIView {
 	}
 	
 	func setupTabBarItem(_ count: Int, frame: CGRect) {
+		let iconArr: Array = [FontAwesome.home, FontAwesome.music, FontAwesome.road, FontAwesome.wrench]
 		for i in 0..<count {
 			let button: BarItem = BarItem(frame: CGRect(x: CGFloat(i) * self.bounds.size.width / CGFloat(count), y: 0, width: self.bounds.size.width / CGFloat(count), height: 64))
-			button.normalImage?.image = UIImage(named: String(i + 1))
+			button.setTitle(String.fontAwesomeIcon(name: iconArr[i]), for: .normal)
 			if i == 0 {
 				self.buttonClick(button)
 			}
