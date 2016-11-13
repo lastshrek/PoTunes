@@ -7,7 +7,6 @@
 //
 
 #import "PCDownLoadedCell.h"
-#import "Common.h"
 
 @interface PCDownLoadedCell()
 

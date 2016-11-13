@@ -24,32 +24,37 @@ class PlaylistController: UITableViewController {
 	weak var delegate: PlaylistDelegate?
 	
 	override func viewDidLoad() {
+		
 		super.viewDidLoad()
 		
 		let width = self.view.bounds.size.width
 		// Initialize tableView
 		tableView.rowHeight = width * 300 / 640
+		
 		tableView.separatorStyle = .none
+		
 		tableView.backgroundColor = UIColor.black
+		
 		tableView.register(PlaylistCell.self, forCellReuseIdentifier: "playlist")
 		// Refresh
-		self.addPullToRefresh()
+		addPullToRefresh()
 		// MARK: -  检查本地缓存播放列表
-		self.checkLocalPlaylists()
+		checkLocalPlaylists()
 		// add delegate
-	}
-	deinit {
-		print("销毁")
 	}
 	
 	func checkLocalPlaylists() {
 		// MARK: - 获取数据 - 未测试
 		if self.playlists.count == 0 {
+			
 			let rootPath: String = self.dirDoc() as String
+			
 			let filePath: String = rootPath + "/article.plist"
+			
 			if let dictArr: NSArray  = NSArray(contentsOfFile: filePath) {
 				// MARK: - 本地存有article.plist时需测试
 				var contentArray = Array<Any>()
+			
 				for dict in dictArr {
 					contentArray.append(dict)
 				}

@@ -7,7 +7,6 @@
 //
 
 #import "PCSongListTableViewCell.h"
-#import "Common.h"
 #import "AFNetworking.h"
 
 @interface PCSongListTableViewCell()
@@ -35,13 +34,13 @@
         cell.detailTextLabel.font = [UIFont fontWithName:@"BebasNeue" size:12];
         //添加divider
         UIView *divider = [[UIView alloc] init];
-        divider.backgroundColor = PCColor(207, 22, 232, 1.0);
+//        divider.backgroundColor = PCColor(207, 22, 232, 1.0);
         cell.divider = divider;
         [cell.contentView addSubview:divider];
         //button
         EVCircularProgressView *progressView = [[EVCircularProgressView alloc] init];
         cell.accessoryView = progressView;
-        progressView.tintColor = PCColor(207, 22, 232, 1.0);
+//        progressView.tintColor = PCColor(207, 22, 232, 1.0);
         cell.progressView = progressView;
         
         cell.selectionStyle = UITableViewCellSelectionStyleNone;

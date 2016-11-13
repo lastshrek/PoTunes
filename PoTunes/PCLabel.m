@@ -7,7 +7,6 @@
 //
 
 #import "PCLabel.h"
-#import "Common.h"
 @implementation PCLabel
 
 - (instancetype)init {

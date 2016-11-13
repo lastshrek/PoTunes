@@ -36,7 +36,7 @@ class BarItem: UIButton {
 		super.layoutSubviews()
 		self.normalImage?.frame = CGRect(x: (self.bounds.size.width - 25) / 2, y: 20, width: 30, height: 30)
 	}
-	
+	// MARK: - 点击
 	override var isHighlighted: Bool {
 		didSet {
 			

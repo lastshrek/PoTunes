@@ -7,7 +7,6 @@
 //
 #define PCButtonImageRatio 0.3
 #import "PCButton.h"
-#import "Common.h"
 @implementation PCButton
 
 - (instancetype)initWithFrame:(CGRect)frame image:(NSString *)image{
