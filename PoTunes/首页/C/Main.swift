@@ -44,7 +44,7 @@ class Main: UIViewController, UIGestureRecognizerDelegate, UIAlertViewDelegate {
 	override var prefersStatusBarHidden : Bool {
 		return true
 	}
-    
+	
 	// MARK: - 添加ScrollView
 	func setupScrollView() {
 		let scrollView: UIScrollView = MainScrollview()
