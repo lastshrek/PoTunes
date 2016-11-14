@@ -11,24 +11,33 @@ import UIKit
 import LDProgressView
 import LTInfiniteScrollViewSwift
 
+
 class PlayerInterface: UIView {
-	
+	// MARK: - basic components
 	let width = UIScreen.main.bounds.size.width
 	let height = UIScreen.main.bounds.size.height
 	var coverScroll: LTInfiniteScrollView?
-	var cover: UIImageView?
 	var bufferingIndicator: LDProgressView?
 	var progress: LDProgressView?
 	var timeView: UIView?
 	var currentTime: UILabel?
 	var leftTime: UILabel?
-	var songName: UILabel?
-	var artist: PCLabel?
-	var album: PCLabel?
+	var name: TrackLabel?
+	var artist: TrackLabel?
+	var album: TrackLabel?
 	var playModeView: UIImageView?
 	var lrcView: LrcView?
-	var repeatMode: AudioRepeatMode
-	/** 播放模式 */
+	var tracks: Array<Any> = []
+	var index: Int?
+	
+	
+	// MARK: - streamer
+	var streamer: FSAudioController?
+	var repeatMode: AudioRepeatMode?
+	var paused: Bool = true
+	
+
+	// MARK: - 播放模式
 	enum AudioRepeatMode {
 		case single
 		case playlistOnce
@@ -36,24 +45,66 @@ class PlayerInterface: UIView {
 		case towards
 		case shuffle
 	}
-	/** 播放操作 */
+	// MARK: - 播放操作
 	enum AudioPlayState {
 		case play
 		case pause
 		case next
 		case previous
 	}
-    
+	
 	override init(frame: CGRect) {
-		super.init(frame: frame)
-		self.backgroundColor = UIColor.black
-		//专辑封面
-		let cover: UIImageView = UIImageView()
-		cover.autoresizingMask = [.flexibleHeight, .flexibleWidth]
-		cover.image = UIImage(named: "noArtwork.jpg")
-		self.cover = cover
-		self.addSubview(cover)
 		
+		super.init(frame: frame)
+		
+		self.backgroundColor = UIColor.black
+		
+		initialSubviews()
+		
+		addGestureRecognizer()
+	}
+    
+	override func layoutSubviews() {
+		super.layoutSubviews()
+		self.coverScroll?.frame = CGRect(x: 0, y: 0, width: width, height: width)
+		self.lrcView?.frame = CGRect(x: 0, y: 0, width: width, height: width)
+		
+		self.bufferingIndicator?.frame = CGRect(x: 0, y: height - 30, width: width, height: 30)
+		self.progress?.frame = (self.bufferingIndicator?.frame)!
+
+		self.playModeView?.frame = CGRect(x: width / 2 - 10, y: height - 50, width: 20, height: 20)
+		
+		// MARK: - 除3
+		self.name?.frame = CGRect(x: 0, y: width, width: width, height: 40)
+		self.artist?.frame = CGRect(x: 0, y: width + 40, width: width, height: 40)
+	
+		self.timeView?.frame = CGRect(x: 0, y: self.progress!.frame.maxY, width: width, height: 20)
+		self.currentTime?.frame = CGRect(x: 2, y: 0, width: width / 2, height: 20)
+		self.leftTime?.frame = CGRect(x: width / 2 - 2, y: 0, width: width / 2, height: (self.timeView?.bounds.size.height)!)
+	}
+	
+	override func remoteControlReceived(with event: UIEvent?) {
+		let remoteControl = event!.subtype
+		switch remoteControl {
+		case .remoteControlTogglePlayPause, .remoteControlPlay, .remoteControlPause:
+			self.playOrPause()
+			break
+		case .remoteControlNextTrack:
+			self.playNext()
+		case .remoteControlPreviousTrack:
+			self.playPrevious()
+		default: break
+		}
+	}
+	
+	
+	required init?(coder aDecoder: NSCoder) {
+		fatalError("init(coder:) has not been implemented")
+	}
+}
+// MARK: - initial subviews
+extension PlayerInterface {
+	func initialSubviews() {
 		let coverScroll: LTInfiniteScrollView = LTInfiniteScrollView()
 		coverScroll.dataSource = self
 		coverScroll.delegate = self
@@ -84,17 +135,19 @@ class PlayerInterface: UIView {
 		self.timeView?.addSubview(leftTime)
 		self.leftTime = leftTime
 		//歌曲名
-		let songName: UILabel = createLabel([.flexibleWidth, .flexibleTopMargin], shadowOffset: nil, textColor: UIColor.white, text: "尚未播放歌曲", textAlignment: .center)
-		self.addSubview(songName)
-		self.songName = songName
+		let name: TrackLabel = TrackLabel()
+		name.autoresizingMask = [.flexibleWidth, .flexibleTopMargin]
+		self.addSubview(name)
+		self.name = name
 		//歌手名
-		let artist: PCLabel = PCLabel()
+		let artist: TrackLabel = TrackLabel()
 		artist.autoresizingMask = [.flexibleWidth, .flexibleTopMargin]
 		self.addSubview(artist)
 		self.artist = artist
 		//专辑名
-		let album: PCLabel = PCLabel()
+		let album: TrackLabel = TrackLabel()
 		album.autoresizingMask = [.flexibleWidth, .flexibleTopMargin]
+		album.text = "尚未播放歌曲"
 		self.addSubview(album)
 		self.album = album
 		//播放模式
@@ -104,29 +157,17 @@ class PlayerInterface: UIView {
 		playModeView.contentMode = .scaleAspectFit
 		self.playModeView = playModeView
 		self.addSubview(playModeView)
-			// 歌词
+		// 歌词
 		let lrcView: LrcView = LrcView()
 		lrcView.autoresizingMask = [.flexibleWidth, .flexibleTopMargin]
 		lrcView.isHidden = true
 		self.lrcView = lrcView
 		self.addSubview(lrcView)
 	}
-    
-	override func layoutSubviews() {
-		super.layoutSubviews()
-		
-		self.coverScroll?.frame = CGRect(x: 0, y: 0, width: width, height: width)
-		
-		self.bufferingIndicator?.frame = CGRect(x: 0, y: height - 30, width: width, height: 30)
-		self.progress?.frame = (self.bufferingIndicator?.frame)!
-		self.timeView?.frame = CGRect(x: 0, y: self.progress!.frame.maxY, width: width, height: 20)
-		self.currentTime?.frame = CGRect(x: 2, y: 0, width: width / 2, height: 20)
-		self.leftTime?.frame = CGRect(x: width / 2 - 2, y: 0, width: width / 2, height: (self.timeView?.bounds.size.height)!)
+}
 
-		self.playModeView?.frame = CGRect(x: width / 2 - 10, y: height - 20, width: 20, height: 20)
-		self.lrcView?.frame = CGRect(x: 0, y: 0, width: width, height: width)
-	}
-	
+// MARK: - functional creation
+extension PlayerInterface {
 	func createProgressView(_ flat: Bool, progress: CGFloat, animate: Bool, showText: Bool, showStroke: Bool, progressInset: NSNumber, showBackground: Bool, outerStrokeWidth: NSNumber, type: LDProgressType, autoresizingMask: UIViewAutoresizing, borderRadius: NSNumber, backgroundColor: UIColor) -> LDProgressView {
 		let buffer: LDProgressView = LDProgressView()
 		buffer.flat = flat as NSNumber!
@@ -138,7 +179,7 @@ class PlayerInterface: UIView {
 		buffer.showBackground = showBackground as NSNumber!
 		buffer.outerStrokeWidth = outerStrokeWidth
 		buffer.type = type
-		buffer.borderRadius = borderRadius	
+		buffer.borderRadius = borderRadius
 		buffer.backgroundColor = backgroundColor
 		buffer.autoresizingMask = autoresizingMask
 		return buffer
@@ -150,47 +191,16 @@ class PlayerInterface: UIView {
 		label.textColor = textColor
 		label.textAlignment = textAlignment
 		if let unwrappedOffset = shadowOffset {
-				label.shadowOffset = unwrappedOffset
+			label.shadowOffset = unwrappedOffset
 		}
 		if let unwrappedText = text {
-				label.text = unwrappedText
+			label.text = unwrappedText
 		}
 		return label
 	}
-
-	
-	required init?(coder aDecoder: NSCoder) {
-		fatalError("init(coder:) has not been implemented")
-	}
 }
 
-extension PlayerInterface: LTInfiniteScrollViewDataSource {
-	func numberOfViews() -> Int {
-		return 10
-	}
-	
-	func numberOfVisibleViews() -> Int {
-		return 1
-	}
-	
-	func viewAtIndex(_ index: Int, reusingView view: UIView?) -> UIView {
-		let size = self.bounds.size.width / CGFloat(numberOfVisibleViews())
-		let cover: UIImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: size, height: size))
-		cover.image = UIImage(named: "noArtwork.jpg")
-		return cover
-	}
-}
-
-extension PlayerInterface: LTInfiniteScrollViewDelegate {
-	func updateView(_ view: UIView, withProgress progress: CGFloat, scrollDirection direction: LTInfiniteScrollView.ScrollDirection) {
-		
-	}
-	
-	func scrollViewDidScrollToIndex(_ scrollView: LTInfiniteScrollView, index: Int) {
-		print(index)
-	}
-}
-// MARK : - 添加手势识别
+// MARK : - addGestureRecognizers
 extension PlayerInterface {
 	func addGestureRecognizer() {
 		//播放和暂停
@@ -199,58 +209,137 @@ extension PlayerInterface {
 		singleTap.numberOfTouchesRequired = 1;
 		self.addGestureRecognizer(singleTap)
 		//上一首
-		let swipeFromLeft: UISwipeGestureRecognizer = UISwipeGestureRecognizer.init(target: self, action: #selector(playPrevious(_:)))
+		let swipeFromLeft: UISwipeGestureRecognizer = UISwipeGestureRecognizer.init(target: self, action: #selector(playPrevious))
 		swipeFromLeft.direction = .right
 		swipeFromLeft.numberOfTouchesRequired = 1;
 		self.addGestureRecognizer(swipeFromLeft)
-//		//下一首
-//		let swipeFromRight: UISwipeGestureRecognizer = UISwipeGestureRecognizer.init(target: self, action: <#T##Selector?#>)
-//		swipeFromRight.numberOfTouchesRequired = 1;
-//		[swipeFromRight setDirection:UISwipeGestureRecognizerDirectionLeft];
-//		[self.backgroundView addGestureRecognizer:swipeFromRight];
-//		//快进
-//		UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(doSeeking:)];
-//		longPress.numberOfTouchesRequired = 1;
-//		longPress.minimumPressDuration = 0.5;
-//		[self.backgroundView addGestureRecognizer:longPress];
-//		//随机
-//		UISwipeGestureRecognizer *doubleswipeFromRight = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(playShuffle:)];
-//		[doubleswipeFromRight setDirection:UISwipeGestureRecognizerDirectionRight];
-//		doubleswipeFromRight.numberOfTouchesRequired = 2;
-//		[self.backgroundView addGestureRecognizer:doubleswipeFromRight];
-//		
-//		//随机
-//		UISwipeGestureRecognizer *doubleswipeFromLeft = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(playShuffle:)];
-//		[doubleswipeFromLeft setDirection:UISwipeGestureRecognizerDirectionLeft];
-//		doubleswipeFromLeft.numberOfTouchesRequired = 2;
-//		[self.backgroundView addGestureRecognizer:doubleswipeFromLeft];
-//		
-//		//单曲循环
-//		UITapGestureRecognizer *doubleTouch = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(playSingle)];
-//		doubleTouch.numberOfTouchesRequired = 2;
-//		doubleTouch.numberOfTapsRequired = 1;
-//		[self.backgroundView addGestureRecognizer:doubleTouch];
-//		
-//		//展示歌词
-//		UITapGestureRecognizer *doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showLyrics)];
-//		doubleTap.numberOfTapsRequired = 2;
-//		doubleTap.numberOfTouchesRequired = 1;
-//		[self.backgroundView addGestureRecognizer:doubleTap];
-//		
-//		//当识别不出这是双击时才开启单击识别
-//		[singleTap requireGestureRecognizerToFail:doubleTouch];
-//		[singleTap requireGestureRecognizerToFail:doubleTap];
+		//下一首
+		let swipeFromRight: UISwipeGestureRecognizer = UISwipeGestureRecognizer.init(target: self, action: #selector(playNext))
+		swipeFromRight.numberOfTouchesRequired = 1
+		swipeFromRight.direction = .left
+		self.addGestureRecognizer(swipeFromRight)
+		//快进
+		let longPress: UILongPressGestureRecognizer = UILongPressGestureRecognizer.init(target: self, action: #selector(doSeeking))
+		longPress.numberOfTouchesRequired = 1
+		longPress.minimumPressDuration = 0.5
+		self.addGestureRecognizer(longPress)
+		//随机
+		let doubleswipeFromRight: UISwipeGestureRecognizer = UISwipeGestureRecognizer.init(target: self, action: #selector(playShuffle))
+		doubleswipeFromRight.direction = .right
+		doubleswipeFromRight.numberOfTouchesRequired = 2;
+		self.addGestureRecognizer(doubleswipeFromRight)
+		//单曲循环
+		let doubleTouch: UITapGestureRecognizer = UITapGestureRecognizer.init(target: self, action: #selector(singleRewind))
+		doubleTouch.numberOfTouchesRequired = 2
+		doubleTouch.numberOfTapsRequired = 1
+		self.addGestureRecognizer(doubleTouch)
 		
+		//展示歌词
+		let doubleTap: UITapGestureRecognizer = UITapGestureRecognizer.init(target: self, action: #selector(showLyrics))
+		doubleTap.numberOfTapsRequired = 2
+		doubleTap.numberOfTouchesRequired = 1
+		self.addGestureRecognizer(doubleTap)
+		
+		//当识别不出这是双击时才开启单击识别
+		singleTap.require(toFail: doubleTouch)
+		singleTap.require(toFail: doubleTap)
 	}
-
 }
-
+// MARK: - 播放方法
 extension PlayerInterface {
 	func playOrPause() {
 		
 	}
 	
-	@objc func playPrevious(_ repeatMode: AudioRepeatMode) {
+	func playPrevious() {
+		
+	}
+	
+	func playNext() {
+		
+	}
+	
+	func doSeeking() {
+		
+	}
+	
+	func playShuffle() {
+		
+	}
+	
+	func singleRewind() {
+		
+	}
+	
+	func showLyrics() {
+		
+	}
+	
+}
+
+
+// MARK: - LTInfiniteScrollViewDataSource
+extension PlayerInterface: LTInfiniteScrollViewDataSource {
+	func numberOfViews() -> Int {
+		
+		if self.tracks.count > 0 {
+		
+			return self.tracks.count
+		
+		}
+		
+		return 1
+	}
+	
+	func numberOfVisibleViews() -> Int {
+		return 1
+	}
+	
+	func viewAtIndex(_ index: Int, reusingView view: UIView?) -> UIView {
+		
+		let size = self.bounds.size.width / CGFloat(numberOfVisibleViews())
+		
+		let cover: UIImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: size, height: size))
+		
+		if self.tracks.count > 0 {
+			
+			let track: Track = (self.tracks[index] as? Track)!
+			
+			let urlStr: String = track.cover + "!/fw/600"
+			
+			let url: URL = URL(string: urlStr)!
+			
+			cover.sd_setImage(with: url, placeholderImage: UIImage(named: "noArtwork"))
+			
+		
+		} else {
+			
+			cover.image = UIImage(named: "noArtwork")
+		
+		}
+		return cover
+	}
+}
+
+// MARK: - LTInfiniteScrollViewDelegate
+extension PlayerInterface: LTInfiniteScrollViewDelegate {
+	func updateView(_ view: UIView, withProgress progress: CGFloat, scrollDirection direction: LTInfiniteScrollView.ScrollDirection) {
+		
+	}
+	
+	func scrollViewDidScrollToIndex(_ scrollView: LTInfiniteScrollView, index: Int) {
+		
+		if self.tracks.count == 0 {
+		
+			return
+		
+		}
+		
+		let track: Track = (self.tracks[index] as? Track)!
+		
+		self.name?.text = track.name
+		
+		self.artist?.text = track.artist
 		
 	}
 }

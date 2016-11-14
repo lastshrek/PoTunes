@@ -29,6 +29,8 @@
 		3C24CEDB1DD30D2F007C862C /* Main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C24CED81DD30D2F007C862C /* Main.swift */; };
 		3C24CEEB1DD32038007C862C /* Reflect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C24CEEA1DD32038007C862C /* Reflect.swift */; };
 		3C26B5721C4FD2AA0037893F /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CB2E3FD1BA7D19300805D4F /* AudioToolbox.framework */; };
+		3C4A41B91DD9A508008CE37F /* PlayerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C4A41B81DD9A508008CE37F /* PlayerController.swift */; };
+		3C4A41BB1DD9D350008CE37F /* TrackLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C4A41BA1DD9D350008CE37F /* TrackLabel.swift */; };
 		3C5813711BE4BFEA0012C689 /* guide.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3C5813701BE4BFEA0012C689 /* guide.plist */; };
 		3C77D24D1BE3D0F00029AB70 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C77D2421BE3BD8C0029AB70 /* CoreTelephony.framework */; };
 		3C77D24E1BE3D1110029AB70 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C77D2441BE3BD940029AB70 /* SystemConfiguration.framework */; };
@@ -75,7 +77,6 @@
 		3CDFB39C1DD83F48006C0975 /* BarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CDFB39B1DD83F48006C0975 /* BarItem.swift */; };
 		3CF7AFBF1BAAA14000F764BD /* CommonUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CF7AFBE1BAAA14000F764BD /* CommonUtility.m */; };
 		3CF7AFC21BAAA19500F764BD /* LineDashPolyline.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CF7AFC11BAAA19500F764BD /* LineDashPolyline.m */; };
-		3CFA57311D60332F00341763 /* SongLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFA57301D60332F00341763 /* SongLabel.swift */; };
 		3CFA58BD1D6706D700341763 /* audio_queue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3CFA58401D6706D700341763 /* audio_queue.cpp */; };
 		3CFA58BE1D6706D700341763 /* audio_stream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3CFA58421D6706D700341763 /* audio_stream.cpp */; };
 		3CFA58BF1D6706D700341763 /* caching_stream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3CFA58441D6706D700341763 /* caching_stream.cpp */; };
@@ -159,6 +160,8 @@
 		3C155EDD1DD44A6400375469 /* SettingController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingController.swift; sourceTree = "<group>"; };
 		3C24CED81DD30D2F007C862C /* Main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Main.swift; sourceTree = "<group>"; };
 		3C24CEEA1DD32038007C862C /* Reflect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reflect.swift; sourceTree = "<group>"; };
+		3C4A41B81DD9A508008CE37F /* PlayerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerController.swift; sourceTree = "<group>"; };
+		3C4A41BA1DD9D350008CE37F /* TrackLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackLabel.swift; sourceTree = "<group>"; };
 		3C5813701BE4BFEA0012C689 /* guide.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = guide.plist; sourceTree = "<group>"; };
 		3C77D2421BE3BD8C0029AB70 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		3C77D2441BE3BD940029AB70 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
@@ -235,7 +238,6 @@
 		3CF7AFBE1BAAA14000F764BD /* CommonUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonUtility.m; sourceTree = "<group>"; };
 		3CF7AFC01BAAA19500F764BD /* LineDashPolyline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LineDashPolyline.h; sourceTree = "<group>"; };
 		3CF7AFC11BAAA19500F764BD /* LineDashPolyline.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LineDashPolyline.m; sourceTree = "<group>"; };
-		3CFA57301D60332F00341763 /* SongLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SongLabel.swift; sourceTree = "<group>"; };
 		3CFA58401D6706D700341763 /* audio_queue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = audio_queue.cpp; sourceTree = "<group>"; };
 		3CFA58411D6706D700341763 /* audio_queue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = audio_queue.h; sourceTree = "<group>"; };
 		3CFA58421D6706D700341763 /* audio_stream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = audio_stream.cpp; sourceTree = "<group>"; };
@@ -476,6 +478,14 @@
 			path = "3rdParty-Swift";
 			sourceTree = "<group>";
 		};
+		3C4A41B71DD9A4EA008CE37F /* C */ = {
+			isa = PBXGroup;
+			children = (
+				3C4A41B81DD9A508008CE37F /* PlayerController.swift */,
+			);
+			path = C;
+			sourceTree = "<group>";
+		};
 		3C9641E11D670DCE00386ABB /* DarwinNotificationHelper */ = {
 			isa = PBXGroup;
 			children = (
@@ -628,7 +638,6 @@
 				3CB2E3261BA7CA5D00805D4F /* PCButton.h */,
 				3CB2E3271BA7CA5D00805D4F /* PCButton.m */,
 				3CFFC7FE1D5DC49000696F66 /* PCLabel.swift */,
-				3CFA57301D60332F00341763 /* SongLabel.swift */,
 				3C96420D1D6AAF4C00386ABB /* ArticleCell.xib */,
 			);
 			name = Views;
@@ -678,6 +687,7 @@
 		3CCFBF2C1DD41D5A00514873 /* 播放器页 */ = {
 			isa = PBXGroup;
 			children = (
+				3C4A41B71DD9A4EA008CE37F /* C */,
 				3CCFBF3C1DD41E6800514873 /* M */,
 				3CCFBF2D1DD41D6B00514873 /* V */,
 			);
@@ -687,6 +697,7 @@
 		3CCFBF2D1DD41D6B00514873 /* V */ = {
 			isa = PBXGroup;
 			children = (
+				3C4A41BA1DD9D350008CE37F /* TrackLabel.swift */,
 				3C0CE1CB1DD5D9D000E76BDA /* PCSongListTableViewCell.h */,
 				3C0CE1CC1DD5D9D000E76BDA /* PCSongListTableViewCell.m */,
 				3CCFBF521DD4201B00514873 /* LrcCell.h */,
@@ -1059,7 +1070,9 @@
 				3CCFBF411DD41E6800514873 /* LrcLine.swift in Sources */,
 				3CCFBF401DD41E6800514873 /* lrcLine.m in Sources */,
 				3CCFBF3B1DD41E0300514873 /* LrcView.swift in Sources */,
+				3C4A41B91DD9A508008CE37F /* PlayerController.swift in Sources */,
 				3CCFBF4D1DD41F1C00514873 /* NSString+DirDoc.swift in Sources */,
+				3C4A41BB1DD9D350008CE37F /* TrackLabel.swift in Sources */,
 				3C9642061D67184F00386ABB /* EVCircularProgressView.m in Sources */,
 				3CFA58D71D6706D700341763 /* MJRefreshHeaderView.m in Sources */,
 				3CFA58DA1D6706D700341763 /* UIView+MJExtension.m in Sources */,
@@ -1116,7 +1129,6 @@
 				3CFA58C71D6706D700341763 /* FSAudioStream.mm in Sources */,
 				3CCFBF501DD41F1C00514873 /* UIImage+Reflection.m in Sources */,
 				3C84DCCB1DD4909E0029D2E6 /* Track.swift in Sources */,
-				3CFA57311D60332F00341763 /* SongLabel.swift in Sources */,
 				3CFA58BE1D6706D700341763 /* audio_stream.cpp in Sources */,
 				3C155EBB1DD429B700375469 /* PCDownloadManager.m in Sources */,
 				3CFA58C21D6706D700341763 /* http_stream.cpp in Sources */,

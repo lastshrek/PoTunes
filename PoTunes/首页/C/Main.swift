@@ -16,8 +16,8 @@ class Main: UIViewController, UIGestureRecognizerDelegate, UIAlertViewDelegate {
 	var width: CGFloat?
 	var pageControl: UIPageControl?
 	var scrollView: UIScrollView?
-	var player: PlayerInterface?
 	var mainControllers: MainControllers?
+	var player: PlayerController?
 	lazy var songs: NSArray = { [] }()
 
 	override func viewDidLoad() {
@@ -34,6 +34,8 @@ class Main: UIViewController, UIGestureRecognizerDelegate, UIAlertViewDelegate {
 		setupPlayerInterface()
 		// 添加下方页面
 		setupControllers()
+		// 注册通知
+		getNotification()
 		// 获取上次播放曲目
 		//_ = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString")
 		//print("--------")
@@ -61,10 +63,10 @@ class Main: UIViewController, UIGestureRecognizerDelegate, UIAlertViewDelegate {
 	}
 	// MARK: - 添加播放器界面
 	func setupPlayerInterface() {
-		let player: PlayerInterface = PlayerInterface(frame: self.view.bounds)
-		player.frame = self.view.bounds
+		let player: PlayerController = PlayerController()
+		player.view.frame = self.view.bounds
 		self.player = player
-		scrollView?.addSubview(player)
+		scrollView?.addSubview(player.view)
 	}
 	// MARK: - 添加Controllers
 	func setupControllers() {
@@ -74,6 +76,10 @@ class Main: UIViewController, UIGestureRecognizerDelegate, UIAlertViewDelegate {
 		self.mainControllers = mainControllers
 		scrollView?.addSubview(mainControllers)
 	}
+	
+	
+	
+
 }
 // MARK: - 向下滑动BarItem
 extension Main: MainPageControllersDelegate {
@@ -91,6 +97,60 @@ extension Main: UIScrollViewDelegate {
 		if offsetY == self.height {
 			scrollView.isScrollEnabled = false
 		}
+	}
+}
+
+// MARK: - 添加通知
+extension Main {
+	
+	func getNotification() {
+		
+		let center: NotificationCenter = NotificationCenter.default
+		
+		center.addObserver(self, selector: #selector(didSelectTrack(_:)), name: Notification.Name("selected"), object: nil)
+	}
+	
+	func didSelectTrack(_ notification: Notification) {
+		
+		//滚到上层
+		self.scrollView?.isScrollEnabled = true
+		
+		self.scrollView?.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
+		
+		
+		
+//		//判断用户网络状态以及是否允许网络播放
+//		NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
+//		
+//		BOOL yes = [[user objectForKey:@"wwanPlay"] boolValue];
+//		
+//		
+//		if (!yes && self.conn.currentReachabilityStatus != 2 && ![type isEqualToString:@"local"]) {
+//			
+//			//初始化AlertView
+//			UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"温馨提示"
+//			message:@"您当前处于运营商网络中，是否继续播放"
+//			delegate:self
+//			cancelButtonTitle:@"取消"
+//			otherButtonTitles:@"确认",nil];
+//			[alert show];
+//			
+//			return;
+//		}
+//		
+//		
+//		if (self.conn.currentReachabilityStatus == 2 || [type isEqualToString:@"local"] || yes) {
+//			
+//			dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//				
+//				[self playFromPlaylist:songs itemIndex:index state:PCAudioPlayStatePlay];
+//				
+//				[self changePlayerInterfaceDuringUsing:self.songs[index] row:index];
+//				
+//				});
+//		}
+
+		
 	}
 }
 

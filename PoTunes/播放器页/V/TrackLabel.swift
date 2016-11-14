@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SongLabel: UILabel {
+class TrackLabel: UILabel {
 
     /*
     // Only override drawRect: if you perform custom drawing.
@@ -19,7 +19,7 @@ class SongLabel: UILabel {
     */
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.font = UIFont(name: "BebasNeue", size: 14)
+        self.font = UIFont(name: "BebasNeue", size: 16)
         self.textColor = UIColor.white
         self.textAlignment = .center
     }

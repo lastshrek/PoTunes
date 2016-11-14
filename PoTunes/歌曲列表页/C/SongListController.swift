@@ -8,12 +8,17 @@
 
 import UIKit
 
+protocol SongListDelegate: class {
+	func songListControllerDidSelectRowAtIndexPath(indexPath: IndexPath)
+}
+
 class SongListController: UITableViewController {
 	
 	var tracks: Array<Any> = []
 	var shareToWechat: UITableView?
 	var hover: UIView?
 	var sharedTrack: Track?
+	weak var delegate: SongListDelegate?
 	
 	override func viewDidLoad() {
 		
@@ -68,7 +73,26 @@ extension SongListController {
 	
 	override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		tableView.deselectRow(at: indexPath, animated: true)
+				
+		let main  = Notification.Name("selected")
 		
+		let player  = Notification.Name("player")
+		
+		let userInfo = [
+										"indexPath": indexPath.row,
+										"tracks": self.tracks,
+										"type": "online"
+									] as [String : Any]
+		
+		
+		let mainNotify: Notification = Notification.init(name: main, object: nil, userInfo: nil)
+		
+		let playerNotify: Notification = Notification.init(name: player, object: nil, userInfo: userInfo)
+
+		
+		NotificationCenter.default.post(mainNotify)
+		
+		NotificationCenter.default.post(playerNotify)
 	}
 	// Override to support conditional editing of the table view.
 	override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
@@ -130,7 +154,6 @@ extension SongListController {
 				card.layer.opacity = 1
 			
 			})
-
 		}
 	}
 	

@@ -7,3 +7,9 @@
 #import "PCSongListTableViewCell.h"
 #import "WXApiObject.h"
 #import "WXApi.h"
+#import "UIImage+Reflection.h"
+#import "FSAudioController.h"
+#import <MediaPlayer/MediaPlayer.h>
+#import "AppDelegate.h"
+#import <AVFoundation/AVFoundation.h>
+#import "Reachability.h"

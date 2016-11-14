@@ -21,6 +21,7 @@ let T_URL = "http://127.0.0.1:3000/api/app/playlists/"
 class PlaylistController: UITableViewController {
 	
 	var playlists: Array<Any> = []
+	
 	weak var delegate: PlaylistDelegate?
 	
 	override func viewDidLoad() {
