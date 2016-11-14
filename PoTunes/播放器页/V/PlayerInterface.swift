@@ -323,10 +323,10 @@ extension PlayerInterface: LTInfiniteScrollViewDataSource {
 				self.reflection?.image = cover.image
 			
 			
-			cover.sd_setImage(with: url, placeholderImage: UIImage(named: "noArtwork"), completed: { (image, _, _, _) in
+			
+			cover.sd_setHighlightedImage(with: url, options: nil, completed: { (image, _, _, _) in
 				
 			})
-			
 			
 		
 		} else {
