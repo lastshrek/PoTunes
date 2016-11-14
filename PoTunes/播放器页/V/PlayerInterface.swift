@@ -17,6 +17,7 @@ class PlayerInterface: UIView {
 	let width = UIScreen.main.bounds.size.width
 	let height = UIScreen.main.bounds.size.height
 	var coverScroll: LTInfiniteScrollView?
+	var reflection: UIImageView?
 	var bufferingIndicator: LDProgressView?
 	var progress: LDProgressView?
 	var timeView: UIView?
@@ -67,6 +68,8 @@ class PlayerInterface: UIView {
 	override func layoutSubviews() {
 		super.layoutSubviews()
 		self.coverScroll?.frame = CGRect(x: 0, y: 0, width: width, height: width)
+		self.reflection?.frame =  CGRect(x: 0, y: height - width, width: width, height: height)
+
 		self.lrcView?.frame = CGRect(x: 0, y: 0, width: width, height: width)
 		
 		self.bufferingIndicator?.frame = CGRect(x: 0, y: height - 30, width: width, height: 30)
@@ -112,6 +115,13 @@ extension PlayerInterface {
 		coverScroll.reloadData(initialIndex: 0)
 		self.coverScroll = coverScroll
 		self.addSubview(coverScroll)
+		
+		// 倒影封面
+		let reflection: UIImageView = UIImageView()
+		reflection.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+		reflection.image = UIImage(named: "noArtwork")?.reflection(withAlpha: 0.4)
+		self.addSubview(reflection)
+		self.reflection = reflection
 		
 		//缓冲条
 		let bufferingIndicator: LDProgressView = createProgressView(false, progress: 0, animate: false, showText: false, showStroke: false, progressInset: 0, showBackground: false, outerStrokeWidth: 0, type: LDProgressSolid, autoresizingMask: [.flexibleWidth, .flexibleTopMargin], borderRadius: 0, backgroundColor: UIColor.clear)
@@ -309,7 +319,14 @@ extension PlayerInterface: LTInfiniteScrollViewDataSource {
 			
 			let url: URL = URL(string: urlStr)!
 			
-			cover.sd_setImage(with: url, placeholderImage: UIImage(named: "noArtwork"))
+			
+				self.reflection?.image = cover.image
+			
+			
+			cover.sd_setImage(with: url, placeholderImage: UIImage(named: "noArtwork"), completed: { (image, _, _, _) in
+				
+			})
+			
 			
 		
 		} else {
