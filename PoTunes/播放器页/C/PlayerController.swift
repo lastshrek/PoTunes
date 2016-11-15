@@ -55,7 +55,7 @@ extension PlayerController {
 		
 		self.player?.index = index
 		
-		self.player?.coverScroll?.reloadData()
+		self.player?.coverScroll?.reloadData(initialIndex: index!)
 		
 		self.player?.coverScroll?.scrollToIndex(index!, animated: true)
 		
