@@ -36,6 +36,8 @@ class PlayerInterface: UIView {
 	var streamer: FSAudioController?
 	var repeatMode: AudioRepeatMode?
 	var paused: Bool = true
+	var currentTimeTimer: Timer?
+	var playbackTimer: Timer?
 	
 
 	// MARK: - 播放模式
@@ -106,7 +108,6 @@ class PlayerInterface: UIView {
 			default: break
 		}
 	}
-	
 	
 	required init?(coder aDecoder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
@@ -218,6 +219,110 @@ extension PlayerInterface {
 		return label
 	}
 }
+// MARK: - play from tracks
+extension PlayerInterface {
+	// play tracks
+	func playTracks(tracks: Array<Any>, index: Int) {
+		
+		self.paused = false
+		
+		self.streamer = nil
+		
+		self.streamer = FSAudioController()
+		
+		let track: Track = tracks[index] as! Track
+		
+		self.streamer?.activeStream.play(from: URL(string: track.url))
+		
+		addCurrentTimeTimer()
+	
+	}
+
+	func addCurrentTimeTimer() {
+		
+		if self.paused == true { return }
+		
+		removeCurrentTimeTimer()
+		// ensure the timer is up-to-now
+		updateCurrentTime()
+		updatePlayBackProgress()
+		
+		self.currentTimeTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateCurrentTime), userInfo: nil, repeats: true)
+		self.playbackTimer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(updatePlayBackProgress), userInfo: nil, repeats: true)
+		
+		RunLoop.main.add(self.currentTimeTimer!, forMode: .commonModes)
+		RunLoop.main.add(self.playbackTimer!, forMode: .commonModes)
+		
+	}
+	// remove timers
+	func removeCurrentTimeTimer() {
+		self.currentTimeTimer?.invalidate()
+		self.playbackTimer?.invalidate()
+		self.currentTimeTimer = nil
+		self.playbackTimer = nil
+	}
+	
+	func updateCurrentTime() {
+		if self.streamer?.activeStream.duration.minute == 0 && self.streamer?.activeStream.duration.second == 0 { return }
+		// get currentTime and duration
+		let cur: FSStreamPosition = (self.streamer?.activeStream.currentTimePlayed)!
+		let total: FSStreamPosition = (self.streamer?.activeStream.duration)!
+		// set play progress
+		let progress: Double = (Double)(cur.minute * 60 + cur.second) / (Double)(total.minute * 60 + total.second)
+		
+		self.progress?.progress = CGFloat(progress)
+		
+		// set current time and time remaining
+		var currSecond: String = String(cur.second)
+		let totalLeftSecond = (total.minute * 60) + (total.second) - (cur.minute * 60) - (cur.second)
+		let leftMin: String = String(totalLeftSecond / 60)
+		var leftSec: String = String(totalLeftSecond % 60)
+		
+		if cur.second < 10 {
+			currSecond = "0" + currSecond
+		}
+		
+		if Int(leftSec)! < 10 {
+			leftSec = "0" + leftSec
+		}
+		
+		self.currentTime?.text = NSString(format: "%d:%@", cur.minute, currSecond) as String
+		self.leftTime?.text = NSString(format: "%@:%@", leftMin, leftSec) as String
+		
+		// when play at the end of file
+		weak var weakself: PlayerInterface? = self
+//		self.streamer?.onStateChange = { (streamState) -> Void in
+//			print("播放下一首")
+//		}
+		self.streamer?.activeStream.onCompletion = { () ->Void in
+			
+			weakself?.playNext()
+			
+		}
+	}
+	
+	func updatePlayBackProgress() {
+		
+		if (self.streamer?.activeStream.contentLength)! > 0 {
+		
+			if (self.bufferingIndicator?.progress)! >= CGFloat(1)  {
+			
+				self.playbackTimer?.invalidate()
+			
+			}
+			
+			let currentOffset = self.streamer?.activeStream.currentSeekByteOffset
+			
+			let totalBufferedData = Int((currentOffset?.start)!) + (self.streamer?.activeStream.prebufferedByteCount)!
+			
+			let bufferedDataFromTotal = Float(totalBufferedData) / Float((self.streamer?.activeStream.contentLength)!)
+			
+			self.bufferingIndicator?.progress = CGFloat(bufferedDataFromTotal)
+		
+		}
+		
+	}
+}
 
 // MARK : - addGestureRecognizers
 extension PlayerInterface {
@@ -265,7 +370,7 @@ extension PlayerInterface {
 		singleTap.require(toFail: doubleTap)
 	}
 }
-// MARK: - 播放方法
+// MARK: - Play Control
 extension PlayerInterface {
 	func playOrPause() {
 		
@@ -296,8 +401,6 @@ extension PlayerInterface {
 	}
 	
 }
-
-
 // MARK: - LTInfiniteScrollViewDataSource
 extension PlayerInterface: LTInfiniteScrollViewDataSource {
 	
@@ -351,6 +454,7 @@ extension PlayerInterface: LTInfiniteScrollViewDataSource {
 
 // MARK: - LTInfiniteScrollViewDelegate
 extension PlayerInterface: LTInfiniteScrollViewDelegate {
+	
 	func updateView(_ view: UIView, withProgress progress: CGFloat, scrollDirection direction: LTInfiniteScrollView.ScrollDirection) {
 		
 	}
@@ -377,3 +481,4 @@ extension PlayerInterface: LTInfiniteScrollViewDelegate {
 		
 	}
 }
+

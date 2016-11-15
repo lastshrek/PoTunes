@@ -44,8 +44,6 @@ extension PlayerController {
 	}
 	
 	func didSelectTrack(_ notification: Notification) {
-		
-		print(notification)
 				
 		let userInfo: Dictionary = notification.userInfo!
 		
@@ -67,6 +65,7 @@ extension PlayerController {
 		
 		self.player?.artist?.text = track.artist
 		
+		self.player?.playTracks(tracks: tracks, index: index!)
 	
 //		let type: String = userInfo["type"] as! String
 	}
