@@ -10,6 +10,7 @@
 import UIKit
 import LDProgressView
 import LTInfiniteScrollViewSwift
+import PKHUD
 
 
 class PlayerInterface: UIView {
@@ -43,7 +44,7 @@ class PlayerInterface: UIView {
 	// MARK: - 播放模式
 	enum AudioRepeatMode {
 		case single
-		case playlistOnce
+//		case playlistOnce
 		case playlist
 		case towards
 		case shuffle
@@ -177,11 +178,11 @@ extension PlayerInterface {
 		self.playModeView = playModeView
 		self.addSubview(playModeView)
 		// 歌词
-		let lrcView: LrcView = LrcView()
-		lrcView.autoresizingMask = [.flexibleWidth, .flexibleTopMargin]
-		lrcView.isHidden = true
-		self.lrcView = lrcView
-		self.addSubview(lrcView)
+//		let lrcView: LrcView = LrcView()
+//		lrcView.autoresizingMask = [.flexibleWidth, .flexibleTopMargin]
+//		lrcView.isHidden = true
+//		self.lrcView = lrcView
+//		self.addSubview(lrcView)
 	}
 }
 
@@ -235,7 +236,7 @@ extension PlayerInterface {
 		self.streamer?.activeStream.play(from: URL(string: track.url))
 		
 		addCurrentTimeTimer()
-	
+		
 	}
 
 	func addCurrentTimeTimer() {
@@ -260,6 +261,8 @@ extension PlayerInterface {
 		self.playbackTimer?.invalidate()
 		self.currentTimeTimer = nil
 		self.playbackTimer = nil
+		self.bufferingIndicator?.progress = 0
+		self.progress?.progress = 0
 	}
 	
 	func updateCurrentTime() {
@@ -296,19 +299,33 @@ extension PlayerInterface {
 //		}
 		self.streamer?.activeStream.onCompletion = { () ->Void in
 			
-			weakself?.playNext()
+//			self.progress?.progress = 0
+//			
+//			self.lrcView.lrcName = nil;
+////
+//			self.lrcView.chLrcName = nil;
+//			
+//			self.lrcView?.noLrcLabel?.text = "暂无歌词"
 			
+			weakself?.playNext()
+						
 		}
 	}
 	
 	func updatePlayBackProgress() {
 		
 		if (self.streamer?.activeStream.contentLength)! > 0 {
+			
+			print((self.bufferingIndicator?.progress)!)
 		
 			if (self.bufferingIndicator?.progress)! >= CGFloat(1)  {
-			
+
 				self.playbackTimer?.invalidate()
 			
+				self.playbackTimer = nil
+				
+				self.bufferingIndicator?.progress = CGFloat(1)
+				
 			}
 			
 			let currentOffset = self.streamer?.activeStream.currentSeekByteOffset
@@ -349,10 +366,16 @@ extension PlayerInterface {
 		longPress.minimumPressDuration = 0.5
 		self.addGestureRecognizer(longPress)
 		//随机
-		let doubleswipeFromRight: UISwipeGestureRecognizer = UISwipeGestureRecognizer.init(target: self, action: #selector(playShuffle))
+		let doubleswipeFromRight: UISwipeGestureRecognizer = UISwipeGestureRecognizer.init(target: self, action: #selector(playShuffle(_:)))
 		doubleswipeFromRight.direction = .right
 		doubleswipeFromRight.numberOfTouchesRequired = 2;
 		self.addGestureRecognizer(doubleswipeFromRight)
+
+		//顺序播放
+		let doubleswipeFromLeft: UISwipeGestureRecognizer = UISwipeGestureRecognizer.init(target: self, action: #selector(playShuffle(_:)))
+		doubleswipeFromLeft.direction = .left
+		doubleswipeFromLeft.numberOfTouchesRequired = 2;
+		self.addGestureRecognizer(doubleswipeFromLeft)
 		//单曲循环
 		let doubleTouch: UITapGestureRecognizer = UITapGestureRecognizer.init(target: self, action: #selector(singleRewind))
 		doubleTouch.numberOfTouchesRequired = 2
@@ -388,11 +411,50 @@ extension PlayerInterface {
 		
 	}
 	
-	func playShuffle() {
+	func playShuffle(_ recognizer: UISwipeGestureRecognizer) {
 		
+		if recognizer.direction == .left {
+			
+			self.repeatMode = AudioRepeatMode.shuffle
+			
+			self.playModeView?.image = UIImage(named: "shuffleOnB")
+			
+			HUD.flash(.image(UIImage(named: "shuffleOnB")))
+		
+		} else {
+		
+			self.repeatMode = AudioRepeatMode.towards
+			
+			self.playModeView?.image = UIImage(named: "repeatOnB")
+			
+			HUD.flash(.image(UIImage(named: "repeatOnB")))
+	
+		}
+		
+		UserDefaults.standard.set(self.repeatMode, forKey: "repeatMode")
 	}
 	
 	func singleRewind() {
+		
+		if self.repeatMode == AudioRepeatMode.single {
+			
+			HUD.flash(.image(UIImage(named: "repeatOnB")))
+			
+			self.repeatMode = AudioRepeatMode.towards
+			
+			self.playModeView?.image = UIImage(named: "repeatOnB")
+			
+		} else {
+			
+			HUD.flash(.image(UIImage(named: "repeatOneB")))
+			
+			self.repeatMode = AudioRepeatMode.single
+			
+			self.playModeView?.image = UIImage(named: "repeatOneB")
+			
+		}
+		
+		UserDefaults.standard.set(self.repeatMode, forKey: "repeatMode")
 		
 	}
 	
@@ -451,7 +513,6 @@ extension PlayerInterface: LTInfiniteScrollViewDataSource {
 		return cover
 	}
 }
-
 // MARK: - LTInfiniteScrollViewDelegate
 extension PlayerInterface: LTInfiniteScrollViewDelegate {
 	

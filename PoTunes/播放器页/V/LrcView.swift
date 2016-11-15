@@ -22,7 +22,6 @@ fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
 
 //MARK: - 代理
 class LrcView: DynamicBlurView, UITableViewDataSource, UITableViewDelegate {
-
 	var currentTime: TimeInterval? {
 		didSet {
 			guard let `currentTime` = currentTime else { return }
@@ -81,7 +80,11 @@ class LrcView: DynamicBlurView, UITableViewDataSource, UITableViewDelegate {
 	}
 	
 	func setup() {
-		self.blurRadius = 30
+
+		self.blurRadius = 20
+		self.fullScreenCapture = true
+		self.dynamicMode = .common
+
 		// 暂无歌词页面
 		let noLrcLabel: UILabel = UILabel()
 		noLrcLabel.backgroundColor = UIColor.clear
