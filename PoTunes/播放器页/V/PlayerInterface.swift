@@ -37,6 +37,7 @@ class PlayerInterface: UIView {
 	var streamer: FSAudioController?
 	var repeatMode: AudioRepeatMode?
 	var paused: Bool = true
+	// MARK: - Timer
 	var currentTimeTimer: Timer?
 	var playbackTimer: Timer?
 	
@@ -238,6 +239,20 @@ extension PlayerInterface {
 		addCurrentTimeTimer()
 		
 	}
+	
+	func changeInterface(_ index: Int) {
+		
+		let track: Track = self.tracks[self.index!] as! Track
+		
+		self.name?.text = track.name
+		
+		self.artist?.text = track.artist
+		
+		let cover = self.coverScroll?.viewAtIndex(self.index!) as! UIImageView
+		
+		self.reflection?.image = cover.image?.reflection(withAlpha: 0.4)
+		
+	}
 
 	func addCurrentTimeTimer() {
 		
@@ -397,18 +412,109 @@ extension PlayerInterface {
 extension PlayerInterface {
 	func playOrPause() {
 		
+		if self.tracks.count == 0 {
+			
+			HUD.flash(.label("向上滑动，更多精彩"))
+			
+			return
+			
+		}
+		
 	}
 	
 	func playPrevious() {
+		
+		if self.tracks.count == 0 {
+			
+			HUD.flash(.label("向上滑动，更多精彩"))
+			
+			return
+			
+		}
 		
 	}
 	
 	func playNext() {
 		
+		if self.tracks.count == 0 {
+			
+			HUD.flash(.label("向上滑动，更多精彩"))
+			
+			return
+			
+		}
+		
+		self.streamer = nil
+		
+		if self.repeatMode == AudioRepeatMode.shuffle {
+			
+			self.index = Int(arc4random()) % self.tracks.count
+			
+		} else if self.repeatMode == AudioRepeatMode.single {
+			
+			self.index = self.index!
+			
+		} else {
+			
+			if self.index == self.tracks.count - 1 {
+				
+				self.index = 0
+				
+			} else {
+				
+				self.index = self.index! + 1
+				
+			}
+		
+		}
+		
+		playTracks(tracks: self.tracks, index: self.index!)
+		
+		//change interface
+		self.coverScroll?.scrollToIndex(self.index!, animated: true)
+		
+		changeInterface(self.index!)
+		
+		HUD.flash(.image(UIImage(named: "nextB")))
 	}
 	
 	func doSeeking() {
 		
+		if self.tracks.count == 0 {
+			
+			HUD.flash(.label("向上滑动，更多精彩"))
+			
+			return
+			
+		}
+		
+		self.streamer = nil
+		
+		let cur: FSStreamPosition = (self.streamer?.activeStream.currentTimePlayed)!
+		
+		if cur.minute == 0 || cur.second <= 5 {
+			
+			if self.repeatMode == AudioRepeatMode.shuffle {
+				
+				self.index = Int(arc4random()) % self.tracks.count
+				
+			} else if self.repeatMode == AudioRepeatMode.single {
+				
+				self.index = self.index!
+				
+			} else {
+				
+				if self.index == 0 {
+					
+				  self.index = self.tracks.count - 1
+
+				} else {
+					
+					self.index = self.index! - 1
+			
+				}
+			}
+		}
 	}
 	
 	func playShuffle(_ recognizer: UISwipeGestureRecognizer) {
@@ -528,17 +634,7 @@ extension PlayerInterface: LTInfiniteScrollViewDelegate {
 		
 		}
 		
-		let track: Track = (self.tracks[index] as? Track)!
-		
-		self.name?.text = track.name
-		
-		self.artist?.text = track.artist
-		
-		let cover = self.coverScroll?.viewAtIndex(index) as! UIImageView
-		
-		print(index)
-		
-		self.reflection?.image = cover.image?.reflection(withAlpha: 0.4)
+		changeInterface(index)
 		
 	}
 }
