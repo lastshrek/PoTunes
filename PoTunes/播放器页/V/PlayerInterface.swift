@@ -63,23 +63,24 @@ class PlayerInterface: UIView {
 		initialSubviews()
 		
 		addGestureRecognizer()
+		
 	}
     
 	override func layoutSubviews() {
 		super.layoutSubviews()
 		self.coverScroll?.frame = CGRect(x: 0, y: 0, width: width, height: width)
-		self.reflection?.frame =  CGRect(x: 0, y: height - width, width: width, height: height)
+		self.reflection?.frame =  CGRect(x: 0, y: height - width, width: width, height: width)
 
 		self.lrcView?.frame = CGRect(x: 0, y: 0, width: width, height: width)
 		
-		self.bufferingIndicator?.frame = CGRect(x: 0, y: height - 30, width: width, height: 30)
+		self.bufferingIndicator?.frame = CGRect(x: 0, y: width, width: width, height: 15)
 		self.progress?.frame = (self.bufferingIndicator?.frame)!
 
 		self.playModeView?.frame = CGRect(x: width / 2 - 10, y: height - 50, width: 20, height: 20)
 		
 		// MARK: - 除3
-		self.name?.frame = CGRect(x: 0, y: width, width: width, height: 40)
-		self.artist?.frame = CGRect(x: 0, y: width + 40, width: width, height: 40)
+		self.name?.frame = CGRect(x: 0, y: width + 20, width: width, height: 40)
+		self.artist?.frame = CGRect(x: 0, y: width + 60, width: width, height: 40)
 	
 		self.timeView?.frame = CGRect(x: 0, y: self.progress!.frame.maxY, width: width, height: 20)
 		self.currentTime?.frame = CGRect(x: 2, y: 0, width: width / 2, height: 20)
@@ -87,16 +88,22 @@ class PlayerInterface: UIView {
 	}
 	
 	override func remoteControlReceived(with event: UIEvent?) {
+		
 		let remoteControl = event!.subtype
+		
 		switch remoteControl {
-		case .remoteControlTogglePlayPause, .remoteControlPlay, .remoteControlPause:
-			self.playOrPause()
-			break
-		case .remoteControlNextTrack:
-			self.playNext()
-		case .remoteControlPreviousTrack:
-			self.playPrevious()
-		default: break
+		
+			case .remoteControlTogglePlayPause, .remoteControlPlay, .remoteControlPause:
+				self.playOrPause()
+				break
+			
+			case .remoteControlNextTrack:
+				self.playNext()
+			
+			case .remoteControlPreviousTrack:
+				self.playPrevious()
+			
+			default: break
 		}
 	}
 	
@@ -122,9 +129,10 @@ extension PlayerInterface {
 		reflection.image = UIImage(named: "noArtwork")?.reflection(withAlpha: 0.4)
 		self.addSubview(reflection)
 		self.reflection = reflection
+		self.sendSubview(toBack: reflection)
 		
 		//缓冲条
-		let bufferingIndicator: LDProgressView = createProgressView(false, progress: 0, animate: false, showText: false, showStroke: false, progressInset: 0, showBackground: false, outerStrokeWidth: 0, type: LDProgressSolid, autoresizingMask: [.flexibleWidth, .flexibleTopMargin], borderRadius: 0, backgroundColor: UIColor.clear)
+		let bufferingIndicator: LDProgressView = createProgressView(false, progress: 0, animate: false, showText: false, showStroke: false, progressInset: 0, showBackground: false, outerStrokeWidth: 0, type: LDProgressSolid, autoresizingMask: [.flexibleWidth, .flexibleTopMargin], borderRadius: 0, backgroundColor: UIColor.lightText)
 		self.bufferingIndicator = bufferingIndicator
 		self.addSubview(bufferingIndicator)
 		//进度条
@@ -178,6 +186,7 @@ extension PlayerInterface {
 
 // MARK: - functional creation
 extension PlayerInterface {
+	
 	func createProgressView(_ flat: Bool, progress: CGFloat, animate: Bool, showText: Bool, showStroke: Bool, progressInset: NSNumber, showBackground: Bool, outerStrokeWidth: NSNumber, type: LDProgressType, autoresizingMask: UIViewAutoresizing, borderRadius: NSNumber, backgroundColor: UIColor) -> LDProgressView {
 		let buffer: LDProgressView = LDProgressView()
 		buffer.flat = flat as NSNumber!
@@ -212,6 +221,7 @@ extension PlayerInterface {
 
 // MARK : - addGestureRecognizers
 extension PlayerInterface {
+	
 	func addGestureRecognizer() {
 		//播放和暂停
 		let singleTap: UITapGestureRecognizer = UITapGestureRecognizer.init(target: self, action: #selector(playOrPause))
@@ -290,6 +300,7 @@ extension PlayerInterface {
 
 // MARK: - LTInfiniteScrollViewDataSource
 extension PlayerInterface: LTInfiniteScrollViewDataSource {
+	
 	func numberOfViews() -> Int {
 		
 		if self.tracks.count > 0 {
@@ -308,9 +319,9 @@ extension PlayerInterface: LTInfiniteScrollViewDataSource {
 	func viewAtIndex(_ index: Int, reusingView view: UIView?) -> UIView {
 		
 		let size = self.bounds.size.width / CGFloat(numberOfVisibleViews())
-		
+
 		let cover: UIImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: size, height: size))
-		
+
 		if self.tracks.count > 0 {
 			
 			let track: Track = (self.tracks[index] as? Track)!
@@ -319,16 +330,16 @@ extension PlayerInterface: LTInfiniteScrollViewDataSource {
 			
 			let url: URL = URL(string: urlStr)!
 			
-			
-				self.reflection?.image = cover.image
-			
-			
-			
-			cover.sd_setHighlightedImage(with: url, options: nil, completed: { (image, _, _, _) in
+			cover.sd_setImage(with: url, placeholderImage: UIImage(named: "noArtwork"), options: [], completed: { (image, _, _, _) in
 				
+				if index == self.index {
+					
+					self.reflection?.image = cover.image?.reflection(withAlpha: 0.4)
+
+				}
+
 			})
 			
-		
 		} else {
 			
 			cover.image = UIImage(named: "noArtwork")
@@ -357,6 +368,12 @@ extension PlayerInterface: LTInfiniteScrollViewDelegate {
 		self.name?.text = track.name
 		
 		self.artist?.text = track.artist
+		
+		let cover = self.coverScroll?.viewAtIndex(index) as! UIImageView
+		
+		print(index)
+		
+		self.reflection?.image = cover.image?.reflection(withAlpha: 0.4)
 		
 	}
 }

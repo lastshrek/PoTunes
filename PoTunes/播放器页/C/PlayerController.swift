@@ -46,7 +46,7 @@ extension PlayerController {
 	func didSelectTrack(_ notification: Notification) {
 		
 		print(notification)
-		
+				
 		let userInfo: Dictionary = notification.userInfo!
 		
 		let tracks = (userInfo["tracks"] as! Array<Any>?)!
@@ -59,7 +59,7 @@ extension PlayerController {
 		
 		self.player?.coverScroll?.reloadData()
 		
-		self.player?.coverScroll?.scrollToIndex((self.player?.index)!, animated: true)
+		self.player?.coverScroll?.scrollToIndex(index!, animated: true)
 		
 		let track: Track = tracks[index!] as! Track
 		
