@@ -247,8 +247,16 @@ extension PlayerInterface {
 		self.name?.text = track.name
 		
 		self.artist?.text = track.artist
+        
+        print(self.index!)
 		
-		let cover = self.coverScroll?.viewAtIndex(self.index!) as! UIImageView
+        print(self.tracks.count)
+        
+//		let cover = self.coverScroll?.viewAtIndex(self.index!) as! UIImageView
+        
+        let cover = UIImageView()
+        
+        cover.sd_setImage(with: URL(string: track.url))
 		
 		self.reflection?.image = cover.image?.reflection(withAlpha: 0.4)
 		
@@ -317,7 +325,7 @@ extension PlayerInterface {
 //			self.progress?.progress = 0
 //			
 //			self.lrcView.lrcName = nil;
-////
+//
 //			self.lrcView.chLrcName = nil;
 //			
 //			self.lrcView?.noLrcLabel?.text = "暂无歌词"
@@ -330,9 +338,7 @@ extension PlayerInterface {
 	func updatePlayBackProgress() {
 		
 		if (self.streamer?.activeStream.contentLength)! > 0 {
-			
-			print((self.bufferingIndicator?.progress)!)
-		
+					
 			if (self.bufferingIndicator?.progress)! >= CGFloat(1)  {
 
 				self.playbackTimer?.invalidate()
@@ -431,6 +437,41 @@ extension PlayerInterface {
 			return
 			
 		}
+        
+        let cur: FSStreamPosition = (self.streamer?.activeStream.currentTimePlayed)!
+
+        
+        if cur.minute == 0 || cur.second <= 5 {
+            
+            if self.repeatMode == AudioRepeatMode.shuffle {
+                
+                self.index = Int(arc4random()) % self.tracks.count
+                
+            } else if self.repeatMode == AudioRepeatMode.single {
+                
+                self.index = self.index!
+                
+            } else {
+                
+                if self.index == 0 {
+                    
+                    self.index = self.tracks.count - 1
+                    
+                } else {
+                    
+                    self.index = self.index! - 1
+                    
+                }
+            }
+        }
+        
+        playTracks(tracks: self.tracks, index: self.index!)
+        
+        self.coverScroll?.scrollToIndex(self.index!, animated: true)
+        
+        changeInterface(self.index!)
+        
+        HUD.flash(.image(UIImage(named: "prevB")), delay: 1.0)
 		
 	}
 	
@@ -488,33 +529,7 @@ extension PlayerInterface {
 			
 		}
 		
-		self.streamer = nil
 		
-		let cur: FSStreamPosition = (self.streamer?.activeStream.currentTimePlayed)!
-		
-		if cur.minute == 0 || cur.second <= 5 {
-			
-			if self.repeatMode == AudioRepeatMode.shuffle {
-				
-				self.index = Int(arc4random()) % self.tracks.count
-				
-			} else if self.repeatMode == AudioRepeatMode.single {
-				
-				self.index = self.index!
-				
-			} else {
-				
-				if self.index == 0 {
-					
-				  self.index = self.tracks.count - 1
-
-				} else {
-					
-					self.index = self.index! - 1
-			
-				}
-			}
-		}
 	}
 	
 	func playShuffle(_ recognizer: UISwipeGestureRecognizer) {
@@ -633,6 +648,9 @@ extension PlayerInterface: LTInfiniteScrollViewDelegate {
 			return
 		
 		}
+        self.index = index
+        
+        playTracks(tracks: self.tracks, index: index)
 		
 		changeInterface(index)
 		
