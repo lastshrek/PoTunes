@@ -26,6 +26,9 @@
 		3C155ED51DD448F000375469 /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C155ED41DD448F000375469 /* NavigationController.swift */; };
 		3C155ED71DD449AD00375469 /* NaviController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C155ED61DD449AD00375469 /* NaviController.swift */; };
 		3C155EDE1DD44A6400375469 /* SettingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C155EDD1DD44A6400375469 /* SettingController.swift */; };
+		3C1ADF061DDC12FC00B1CE5D /* LEColorPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C1ADF031DDC12FC00B1CE5D /* LEColorPicker.m */; };
+		3C1ADF071DDC12FC00B1CE5D /* UIColor+YUVSpace.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C1ADF051DDC12FC00B1CE5D /* UIColor+YUVSpace.m */; };
+		3C1ADF091DDC61ED00B1CE5D /* TrackEncoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C1ADF081DDC61ED00B1CE5D /* TrackEncoding.swift */; };
 		3C24CEDB1DD30D2F007C862C /* Main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C24CED81DD30D2F007C862C /* Main.swift */; };
 		3C24CEEB1DD32038007C862C /* Reflect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C24CEEA1DD32038007C862C /* Reflect.swift */; };
 		3C26B5721C4FD2AA0037893F /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CB2E3FD1BA7D19300805D4F /* AudioToolbox.framework */; };
@@ -158,6 +161,11 @@
 		3C155ED41DD448F000375469 /* NavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
 		3C155ED61DD449AD00375469 /* NaviController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NaviController.swift; sourceTree = "<group>"; };
 		3C155EDD1DD44A6400375469 /* SettingController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingController.swift; sourceTree = "<group>"; };
+		3C1ADF021DDC12FC00B1CE5D /* LEColorPicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LEColorPicker.h; sourceTree = "<group>"; };
+		3C1ADF031DDC12FC00B1CE5D /* LEColorPicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LEColorPicker.m; sourceTree = "<group>"; };
+		3C1ADF041DDC12FC00B1CE5D /* UIColor+YUVSpace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+YUVSpace.h"; sourceTree = "<group>"; };
+		3C1ADF051DDC12FC00B1CE5D /* UIColor+YUVSpace.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+YUVSpace.m"; sourceTree = "<group>"; };
+		3C1ADF081DDC61ED00B1CE5D /* TrackEncoding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackEncoding.swift; sourceTree = "<group>"; };
 		3C24CED81DD30D2F007C862C /* Main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Main.swift; sourceTree = "<group>"; };
 		3C24CEEA1DD32038007C862C /* Reflect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reflect.swift; sourceTree = "<group>"; };
 		3C4A41B81DD9A508008CE37F /* PlayerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerController.swift; sourceTree = "<group>"; };
@@ -452,6 +460,17 @@
 			path = C;
 			sourceTree = "<group>";
 		};
+		3C1ADF011DDC12FC00B1CE5D /* LEColorPicker */ = {
+			isa = PBXGroup;
+			children = (
+				3C1ADF021DDC12FC00B1CE5D /* LEColorPicker.h */,
+				3C1ADF031DDC12FC00B1CE5D /* LEColorPicker.m */,
+				3C1ADF041DDC12FC00B1CE5D /* UIColor+YUVSpace.h */,
+				3C1ADF051DDC12FC00B1CE5D /* UIColor+YUVSpace.m */,
+			);
+			path = LEColorPicker;
+			sourceTree = "<group>";
+		};
 		3C24CED61DD30D2F007C862C /* 首页 */ = {
 			isa = PBXGroup;
 			children = (
@@ -715,6 +734,7 @@
 				3CCFBF3D1DD41E6800514873 /* lrcLine.h */,
 				3CCFBF3E1DD41E6800514873 /* lrcLine.m */,
 				3CCFBF3F1DD41E6800514873 /* LrcLine.swift */,
+				3C1ADF081DDC61ED00B1CE5D /* TrackEncoding.swift */,
 			);
 			path = M;
 			sourceTree = "<group>";
@@ -776,6 +796,7 @@
 		3CFA580F1D6706D700341763 /* 3rdParty */ = {
 			isa = PBXGroup;
 			children = (
+				3C1ADF011DDC12FC00B1CE5D /* LEColorPicker */,
 				3C9642031D67184F00386ABB /* EVCircularProgressView */,
 				3C9641FB1D6712C500386ABB /* BaiduPush */,
 				3C9641F31D670FB800386ABB /* AutoNavi */,
@@ -1080,6 +1101,7 @@
 				3C0A1A981DD5B5B000E90306 /* MainPageControl.swift in Sources */,
 				3C155EB21DD428A100375469 /* PlaylistCell.swift in Sources */,
 				3CFA58D91D6706D700341763 /* UIScrollView+MJRefresh.m in Sources */,
+				3C1ADF091DDC61ED00B1CE5D /* TrackEncoding.swift in Sources */,
 				3CCFBF2F1DD41DAD00514873 /* PlayerInterface.swift in Sources */,
 				3CFA58CC1D6706D700341763 /* FSXMLHttpRequest.m in Sources */,
 				3CFA58C91D6706D700341763 /* FSParsePlaylistRequest.m in Sources */,
@@ -1100,6 +1122,7 @@
 				3C155ED31DD4437C00375469 /* PCNavigationController.m in Sources */,
 				3CFA58D61D6706D700341763 /* MJRefreshFooterView.m in Sources */,
 				3CDFB39A1DD77CD5006C0975 /* UIColor+RGB.swift in Sources */,
+				3C1ADF061DDC12FC00B1CE5D /* LEColorPicker.m in Sources */,
 				3CFA58C31D6706D700341763 /* id3_parser.cpp in Sources */,
 				3CF7AFBF1BAAA14000F764BD /* CommonUtility.m in Sources */,
 				3CFA58CA1D6706D700341763 /* FSParseRssPodcastFeedRequest.m in Sources */,
@@ -1113,6 +1136,7 @@
 				3C9641FA1D670FB800386ABB /* GeocodeAnnotation.m in Sources */,
 				3C24CEDB1DD30D2F007C862C /* Main.swift in Sources */,
 				3CB2E32B1BA7CA5D00805D4F /* PCButton.m in Sources */,
+				3C1ADF071DDC12FC00B1CE5D /* UIColor+YUVSpace.m in Sources */,
 				3C155EAE1DD4284000375469 /* PlaylistController.swift in Sources */,
 				3CFA58C51D6706D700341763 /* stream_configuration.cpp in Sources */,
 				3CFA58CB1D6706D700341763 /* FSPlaylistItem.m in Sources */,

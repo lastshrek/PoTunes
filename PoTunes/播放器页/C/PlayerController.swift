@@ -12,8 +12,6 @@ class PlayerController: UIViewController {
 
 	var player: PlayerInterface?
 
-
-	
 	override func viewDidLoad() {
 
 		super.viewDidLoad()
@@ -35,6 +33,7 @@ class PlayerController: UIViewController {
 
 // MARK: - getNotifications
 extension PlayerController {
+	
 	func getNotification() {
 		
 		let center: NotificationCenter = NotificationCenter.default
@@ -51,6 +50,8 @@ extension PlayerController {
 		
 		let index = userInfo["indexPath"] as? Int
 		
+		let title = userInfo["title"] as? String
+		
 		self.player?.tracks = tracks
 		
 		self.player?.index = index
@@ -58,14 +59,12 @@ extension PlayerController {
 		self.player?.coverScroll?.reloadData(initialIndex: index!)
 		
 		self.player?.coverScroll?.scrollToIndex(index!, animated: true)
-		
-		let track: Track = tracks[index!] as! Track
-		
-		self.player?.name?.text = track.name
-		
-		self.player?.artist?.text = track.artist
-		
+				
 		self.player?.playTracks(tracks: tracks, index: index!)
+		
+		self.player?.changeInterface(index!)
+		
+		self.player?.album?.text = title
 	
 //		let type: String = userInfo["type"] as! String
 	}

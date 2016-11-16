@@ -13,10 +13,12 @@ import LTInfiniteScrollViewSwift
 import PKHUD
 
 
+
 class PlayerInterface: UIView {
 	// MARK: - basic components
 	let width = UIScreen.main.bounds.size.width
 	let height = UIScreen.main.bounds.size.height
+	let backgroundView = UIView()
 	var coverScroll: LTInfiniteScrollView?
 	var reflection: UIImageView?
 	var bufferingIndicator: LDProgressView?
@@ -31,6 +33,8 @@ class PlayerInterface: UIView {
 	var lrcView: LrcView?
 	var tracks: Array<Any> = []
 	var index: Int?
+	var progressOriginal: Float?
+	var originalPoint: CGPoint?
 	
 	
 	// MARK: - streamer
@@ -43,8 +47,8 @@ class PlayerInterface: UIView {
 	
 
 	// MARK: - 播放模式
-	enum AudioRepeatMode {
-		case single
+	enum AudioRepeatMode: Int {
+		case single = 0
 //		case playlistOnce
 		case playlist
 		case towards
@@ -68,29 +72,41 @@ class PlayerInterface: UIView {
 		
 		addGestureRecognizer()
 		
+		self.repeatMode = AudioRepeatMode.towards
+		
 	}
+	
+	required init?(coder aDecoder: NSCoder) {
+		
+		fatalError("init(coder:) has not been implemented")
+	
+	}
+
     
 	override func layoutSubviews() {
 		super.layoutSubviews()
+		self.backgroundView.frame = self.bounds
+		
 		self.coverScroll?.frame = CGRect(x: 0, y: 0, width: width, height: width)
 		self.reflection?.frame =  CGRect(x: 0, y: height - width, width: width, height: width)
 
 		self.lrcView?.frame = CGRect(x: 0, y: 0, width: width, height: width)
 		
 		self.bufferingIndicator?.frame = CGRect(x: 0, y: width, width: width, height: 15)
-		self.progress?.frame = (self.bufferingIndicator?.frame)!
+		self.progress?.frame = CGRect(x: 0, y: width, width: width, height: 15)
 
 		self.playModeView?.frame = CGRect(x: width / 2 - 10, y: height - 50, width: 20, height: 20)
 		
 		// MARK: - 除3
 		self.name?.frame = CGRect(x: 0, y: width + 20, width: width, height: 40)
 		self.artist?.frame = CGRect(x: 0, y: width + 60, width: width, height: 40)
+		self.album?.frame = CGRect(x: 0, y: width + 100, width: width, height: 40)
 	
 		self.timeView?.frame = CGRect(x: 0, y: self.progress!.frame.maxY, width: width, height: 20)
 		self.currentTime?.frame = CGRect(x: 2, y: 0, width: width / 2, height: 20)
 		self.leftTime?.frame = CGRect(x: width / 2 - 2, y: 0, width: width / 2, height: (self.timeView?.bounds.size.height)!)
 	}
-	
+
 	override func remoteControlReceived(with event: UIEvent?) {
 		
 		let remoteControl = event!.subtype
@@ -110,21 +126,21 @@ class PlayerInterface: UIView {
 			default: break
 		}
 	}
-	
-	required init?(coder aDecoder: NSCoder) {
-		fatalError("init(coder:) has not been implemented")
-	}
 }
 // MARK: - initial subviews
 extension PlayerInterface {
 	func initialSubviews() {
+		// backgourndView
+		backgroundView.autoresizingMask = [.flexibleWidth, .flexibleTopMargin]
+		self.addSubview(backgroundView)
+		
 		let coverScroll: LTInfiniteScrollView = LTInfiniteScrollView()
 		coverScroll.dataSource = self
 		coverScroll.delegate = self
 		coverScroll.maxScrollDistance = 2
 		coverScroll.reloadData(initialIndex: 0)
 		self.coverScroll = coverScroll
-		self.addSubview(coverScroll)
+		self.backgroundView.addSubview(coverScroll)
 		
 		// 倒影封面
 		let reflection: UIImageView = UIImageView()
@@ -132,20 +148,20 @@ extension PlayerInterface {
 		reflection.image = UIImage(named: "noArtwork")?.reflection(withAlpha: 0.4)
 		self.addSubview(reflection)
 		self.reflection = reflection
-		self.sendSubview(toBack: reflection)
+		self.backgroundView.sendSubview(toBack: reflection)
 		
 		//缓冲条
 		let bufferingIndicator: LDProgressView = createProgressView(false, progress: 0, animate: false, showText: false, showStroke: false, progressInset: 0, showBackground: false, outerStrokeWidth: 0, type: LDProgressSolid, autoresizingMask: [.flexibleWidth, .flexibleTopMargin], borderRadius: 0, backgroundColor: UIColor.lightText)
 		self.bufferingIndicator = bufferingIndicator
-		self.addSubview(bufferingIndicator)
+		self.backgroundView.addSubview(bufferingIndicator)
 		//进度条
 		let progress: LDProgressView = createProgressView(false, progress: 0, animate: false, showText: false, showStroke: false, progressInset: 0, showBackground: false, outerStrokeWidth: 0, type: LDProgressSolid, autoresizingMask: [.flexibleWidth, .flexibleTopMargin], borderRadius: 0, backgroundColor: UIColor.clear)
 		self.progress = progress
-		self.addSubview(progress)
+		self.backgroundView.addSubview(progress)
 		//开始时间和剩余时间
 		let timeView: UIView = UIView()
 		timeView.autoresizingMask = [.flexibleWidth, .flexibleTopMargin]
-		self.addSubview(timeView)
+		self.backgroundView.addSubview(timeView)
 		self.timeView = timeView
 		//当前播放时间
 		let currentTime = createLabel([.flexibleHeight, .flexibleWidth], shadowOffset: CGSize(width: 0, height: 0), textColor: UIColor.white, text: nil, textAlignment: .left)
@@ -158,18 +174,18 @@ extension PlayerInterface {
 		//歌曲名
 		let name: TrackLabel = TrackLabel()
 		name.autoresizingMask = [.flexibleWidth, .flexibleTopMargin]
-		self.addSubview(name)
+		self.backgroundView.addSubview(name)
 		self.name = name
 		//歌手名
 		let artist: TrackLabel = TrackLabel()
 		artist.autoresizingMask = [.flexibleWidth, .flexibleTopMargin]
-		self.addSubview(artist)
+		self.backgroundView.addSubview(artist)
 		self.artist = artist
 		//专辑名
 		let album: TrackLabel = TrackLabel()
 		album.autoresizingMask = [.flexibleWidth, .flexibleTopMargin]
 		album.text = "尚未播放歌曲"
-		self.addSubview(album)
+		self.backgroundView.addSubview(album)
 		self.album = album
 		//播放模式
 		let playModeView: UIImageView = UIImageView()
@@ -177,7 +193,7 @@ extension PlayerInterface {
 		playModeView.image = UIImage(named: "repeatOnB.png")
 		playModeView.contentMode = .scaleAspectFit
 		self.playModeView = playModeView
-		self.addSubview(playModeView)
+		self.backgroundView.addSubview(playModeView)
 		// 歌词
 //		let lrcView: LrcView = LrcView()
 //		lrcView.autoresizingMask = [.flexibleWidth, .flexibleTopMargin]
@@ -186,7 +202,6 @@ extension PlayerInterface {
 //		self.addSubview(lrcView)
 	}
 }
-
 // MARK: - functional creation
 extension PlayerInterface {
 	
@@ -247,19 +262,57 @@ extension PlayerInterface {
 		self.name?.text = track.name
 		
 		self.artist?.text = track.artist
-        
-        print(self.index!)
 		
-        print(self.tracks.count)
-        
-//		let cover = self.coverScroll?.viewAtIndex(self.index!) as! UIImageView
-        
-        let cover = UIImageView()
-        
-        cover.sd_setImage(with: URL(string: track.url))
+		let cover: UIImageView = UIImageView()
 		
-		self.reflection?.image = cover.image?.reflection(withAlpha: 0.4)
+		cover.sd_setImage(with: URL(string: track.cover + "!/fw/600")) { (image, _, _, _) in
+			
+			self.reflection?.image = image?.reflection(withAlpha: 0.4)
+			
+			let colorPicker: LEColorPicker = LEColorPicker()
+			
+			let colorScheme = colorPicker.colorScheme(from: cover.image)
+			
+			self.progress?.color = colorScheme?.backgroundColor
+			
+			self.name?.textColor = colorScheme?.backgroundColor
+			
+			self.artist?.textColor = colorScheme?.backgroundColor
+			
+			self.album?.textColor = colorScheme?.backgroundColor
+			
+			// 设置锁屏信息
+			let artwork: MPMediaItemArtwork = MPMediaItemArtwork.init(image: cover.image!)
+			
+			let duration: TimeInterval = Double((self.streamer?.activeStream.duration.minute)!) * 60 + Double((self.streamer?.activeStream.duration.second)!)
+
+			
+			let info : [String:AnyObject] = [
+				
+				MPMediaItemPropertyArtist : track.artist as AnyObject,
+				
+				MPMediaItemPropertyAlbumTitle : self.album?.text as AnyObject,
+				
+				MPMediaItemPropertyTitle: track.name as AnyObject,
+				
+				MPMediaItemPropertyArtwork: artwork,
+				
+				MPMediaItemPropertyPlaybackDuration: duration as AnyObject
 		
+			]
+			
+			MPNowPlayingInfoCenter.default().nowPlayingInfo = info
+			
+		}
+		
+		// 记录最后一次播放的歌曲和以及播放模式
+		UserDefaults.standard.set(self.repeatMode?.rawValue, forKey: "repeatMode")
+		
+//		let tracksData: Data = NSKeyedArchiver.archivedData(withRootObject: self.tracks)
+		
+//		UserDefaults.standard.set(tracksData, forKey: "tracksData")
+		
+		UserDefaults.standard.set(self.index!, forKey: "index")
 	}
 
 	func addCurrentTimeTimer() {
@@ -361,8 +414,7 @@ extension PlayerInterface {
 		
 	}
 }
-
-// MARK : - addGestureRecognizers
+// MARK: - addGestureRecognizers
 extension PlayerInterface {
 	
 	func addGestureRecognizer() {
@@ -382,7 +434,7 @@ extension PlayerInterface {
 		swipeFromRight.direction = .left
 		self.addGestureRecognizer(swipeFromRight)
 		//快进
-		let longPress: UILongPressGestureRecognizer = UILongPressGestureRecognizer.init(target: self, action: #selector(doSeeking))
+		let longPress: UILongPressGestureRecognizer = UILongPressGestureRecognizer.init(target: self, action: #selector(doSeeking(recognizer:)))
 		longPress.numberOfTouchesRequired = 1
 		longPress.minimumPressDuration = 0.5
 		self.addGestureRecognizer(longPress)
@@ -416,15 +468,38 @@ extension PlayerInterface {
 }
 // MARK: - Play Control
 extension PlayerInterface {
+	
 	func playOrPause() {
 		
 		if self.tracks.count == 0 {
 			
-			HUD.flash(.label("向上滑动，更多精彩"))
+			HUD.flash(.label("向上滑动，更多精彩"), delay: 1.0)
 			
 			return
 			
 		}
+		
+		if self.paused == true {
+			
+			HUD.flash(.image(UIImage(named: "playB")), delay: 1.0)
+			
+		} else {
+			
+			HUD.flash(.image(UIImage(named: "pauseB")), delay: 1.0)
+
+		}
+		
+		self.paused = !(self.paused)
+		
+		if self.streamer?.activeStream == nil {
+			
+			playTracks(tracks: self.tracks, index: self.index!)
+			
+			return
+			
+		}
+		
+		self.streamer?.pause()
 		
 	}
 	
@@ -432,46 +507,46 @@ extension PlayerInterface {
 		
 		if self.tracks.count == 0 {
 			
-			HUD.flash(.label("向上滑动，更多精彩"))
+			HUD.flash(.label("向上滑动，更多精彩"), delay: 1.0)
 			
 			return
 			
 		}
         
-        let cur: FSStreamPosition = (self.streamer?.activeStream.currentTimePlayed)!
+		let cur: FSStreamPosition = (self.streamer?.activeStream.currentTimePlayed)!
 
-        
-        if cur.minute == 0 || cur.second <= 5 {
-            
-            if self.repeatMode == AudioRepeatMode.shuffle {
-                
-                self.index = Int(arc4random()) % self.tracks.count
-                
-            } else if self.repeatMode == AudioRepeatMode.single {
-                
-                self.index = self.index!
-                
-            } else {
-                
-                if self.index == 0 {
-                    
-                    self.index = self.tracks.count - 1
-                    
-                } else {
-                    
-                    self.index = self.index! - 1
-                    
-                }
-            }
-        }
-        
-        playTracks(tracks: self.tracks, index: self.index!)
-        
-        self.coverScroll?.scrollToIndex(self.index!, animated: true)
-        
-        changeInterface(self.index!)
-        
-        HUD.flash(.image(UIImage(named: "prevB")), delay: 1.0)
+		
+		if cur.minute == 0 || cur.second <= 5 {
+				
+				if self.repeatMode == AudioRepeatMode.shuffle {
+						
+						self.index = Int(arc4random()) % self.tracks.count
+						
+				} else if self.repeatMode == AudioRepeatMode.single {
+						
+						self.index = self.index!
+						
+				} else {
+						
+						if self.index == 0 {
+								
+								self.index = self.tracks.count - 1
+								
+						} else {
+								
+								self.index = self.index! - 1
+								
+						}
+				}
+		}
+		
+		playTracks(tracks: self.tracks, index: self.index!)
+		
+		self.coverScroll?.scrollToIndex(self.index!, animated: true)
+		
+		changeInterface(self.index!)
+		
+		HUD.flash(.image(UIImage(named: "prevB")), delay: 1.0)
 		
 	}
 	
@@ -479,14 +554,12 @@ extension PlayerInterface {
 		
 		if self.tracks.count == 0 {
 			
-			HUD.flash(.label("向上滑动，更多精彩"))
+			HUD.flash(.label("向上滑动，更多精彩"), delay: 1.0)
 			
 			return
 			
 		}
-		
-		self.streamer = nil
-		
+				
 		if self.repeatMode == AudioRepeatMode.shuffle {
 			
 			self.index = Int(arc4random()) % self.tracks.count
@@ -516,19 +589,73 @@ extension PlayerInterface {
 		
 		changeInterface(self.index!)
 		
-		HUD.flash(.image(UIImage(named: "nextB")))
+		HUD.flash(.image(UIImage(named: "nextB")), delay: 1.0)
 	}
 	
-	func doSeeking() {
+	func doSeeking(recognizer: UILongPressGestureRecognizer) {
 		
 		if self.tracks.count == 0 {
 			
-			HUD.flash(.label("向上滑动，更多精彩"))
+			HUD.flash(.label("向上滑动，更多精彩"), delay: 1.0)
 			
 			return
 			
 		}
 		
+		var seek: FSStreamPosition?
+		var lastPoint: CGPoint?
+		
+		
+		if recognizer.state == .began {
+			
+			var tempBounds = self.backgroundView.bounds
+			
+			tempBounds.size.width -= 40
+			
+			tempBounds.size.height -= 40
+			
+			backgroundView.bounds = tempBounds
+			
+			// get current playing time
+			let now = self.streamer?.activeStream.currentTimePlayed
+			
+			self.progressOriginal = now?.position
+			
+			self.originalPoint = recognizer.location(in: self)
+		}
+		
+		if recognizer.state == .changed {
+			
+			let changingPoint = recognizer.location(in: self)
+			
+			let seekForwardPercent = self.progressOriginal! + Float((changingPoint.x - (self.originalPoint?.x)!) / width);
+			
+			if seekForwardPercent >= 1 || seekForwardPercent < 0 { return }
+			
+			self.progress?.progress = CGFloat(seekForwardPercent)
+		}
+		
+		// change the progress
+		if recognizer.state == .ended {
+			
+			// restore
+			
+			lastPoint = recognizer.location(in: self)
+			
+			backgroundView.frame = self.frame
+			
+			self.playModeView?.frame = CGRect(x: self.width / 2 - 10,y: self.height - 20,width: 20,height: 20)
+			
+			// if didn't move don't change
+			if lastPoint?.x == self.originalPoint?.x { return }
+			
+			seek?.position = Float((self.progress?.progress)!)
+			
+			print(Float((self.progress?.progress)!))
+			
+			self.streamer?.activeStream.seek(to: seek)
+			
+		}
 		
 	}
 	
@@ -540,7 +667,7 @@ extension PlayerInterface {
 			
 			self.playModeView?.image = UIImage(named: "shuffleOnB")
 			
-			HUD.flash(.image(UIImage(named: "shuffleOnB")))
+			HUD.flash(.image(UIImage(named: "shuffleOnB")), delay: 1.0)
 		
 		} else {
 		
@@ -548,18 +675,21 @@ extension PlayerInterface {
 			
 			self.playModeView?.image = UIImage(named: "repeatOnB")
 			
-			HUD.flash(.image(UIImage(named: "repeatOnB")))
+			HUD.flash(.image(UIImage(named: "repeatOnB")), delay: 1.0)
 	
 		}
 		
-		UserDefaults.standard.set(self.repeatMode, forKey: "repeatMode")
+		UserDefaults.standard.set(self.repeatMode?.rawValue, forKey: "repeatMode")
+		
+		UserDefaults.standard.synchronize()
+	
 	}
 	
 	func singleRewind() {
 		
 		if self.repeatMode == AudioRepeatMode.single {
 			
-			HUD.flash(.image(UIImage(named: "repeatOnB")))
+			HUD.flash(.image(UIImage(named: "repeatOnB")), delay: 1.0)
 			
 			self.repeatMode = AudioRepeatMode.towards
 			
@@ -567,7 +697,7 @@ extension PlayerInterface {
 			
 		} else {
 			
-			HUD.flash(.image(UIImage(named: "repeatOneB")))
+			HUD.flash(.image(UIImage(named: "repeatOneB")), delay: 1.0)
 			
 			self.repeatMode = AudioRepeatMode.single
 			
@@ -575,7 +705,9 @@ extension PlayerInterface {
 			
 		}
 		
-		UserDefaults.standard.set(self.repeatMode, forKey: "repeatMode")
+		UserDefaults.standard.set(self.repeatMode?.rawValue, forKey: "repeatMode")
+		
+		UserDefaults.standard.synchronize()
 		
 	}
 	
@@ -648,9 +780,10 @@ extension PlayerInterface: LTInfiniteScrollViewDelegate {
 			return
 		
 		}
-        self.index = index
-        
-        playTracks(tracks: self.tracks, index: index)
+		
+		self.index = index
+		
+		playTracks(tracks: self.tracks, index: index)
 		
 		changeInterface(index)
 		

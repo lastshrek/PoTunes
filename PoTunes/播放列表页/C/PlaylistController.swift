@@ -191,6 +191,8 @@ class PlaylistController: UITableViewController {
 			
 			songList.tracks = tracks
 			
+			songList.title = playlist.title
+			
 			self.navigationController?.pushViewController(songList, animated: true)
 		})
 	}

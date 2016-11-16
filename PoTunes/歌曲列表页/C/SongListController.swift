@@ -72,6 +72,7 @@ extension SongListController {
 	}
 	
 	override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+		
 		tableView.deselectRow(at: indexPath, animated: true)
 				
 		let main  = Notification.Name("selected")
@@ -81,7 +82,8 @@ extension SongListController {
 		let userInfo = [
 										"indexPath": indexPath.row,
 										"tracks": self.tracks,
-										"type": "online"
+										"type": "online",
+										"title": self.title!
 									] as [String : Any]
 		
 		
