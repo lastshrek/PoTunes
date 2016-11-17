@@ -34,7 +34,13 @@ class LrcView: DRNRealTimeBlurView {
 	fileprivate lazy var lyricsLines: NSMutableArray = {[]}()
 	
 	var currentTime: TimeInterval? {
+		
+		willSet {
 			
+			currentIndex = -1
+			
+		}
+	
 		didSet {
 		
 			guard let `currentTime` = currentTime else { return }
@@ -44,11 +50,6 @@ class LrcView: DRNRealTimeBlurView {
 //				currentIndex = -1
 //			
 //			}
-			print(oldValue as TimeInterval!)
-			
-			
-			print(currentTime)
-			
 			let minute: Int = (Int)(currentTime / 60)
 			let second: Int = (Int)(currentTime) % 60
 			let currentTimeStr = String(format: "%02d:%02d", minute, second)
@@ -69,18 +70,23 @@ class LrcView: DRNRealTimeBlurView {
 				
 					let nextLine = self.lyricsLines[nextIdx] as! LrcLine
 					
-					nextLineTime = nextLine.time! as String
+					nextLineTime = nextLine.time!
 				
 				}
 				
 				// 判断是否为正在播放的歌词
-				if currentTimeStr.compare(currentLineTime!) != .orderedAscending && currentTimeStr.compare(nextLineTime!) == .orderedAscending && currentIndex != idx {
+				if currentTimeStr.compare(currentLineTime!) != .orderedAscending
+					&& currentTimeStr.compare(nextLineTime!) == .orderedAscending
+					&& currentIndex != idx {
 					//刷新tableView
 					let reloadRows: Array = [IndexPath(row: currentIndex!, section: 0), IndexPath(row: idx	, section: 0)]
 					
-					currentIndex = idx
 					
-					tableView.reloadRows(at: reloadRows, with: .none)
+					
+					self.currentIndex = idx
+					
+					
+					self.tableView.reloadRows(at: reloadRows, with: .none)
 					//滚动到对应的
 					let indexPath = IndexPath(row: idx, section: 0)
 					
@@ -157,10 +163,15 @@ class LrcView: DRNRealTimeBlurView {
 		self.addSubview(tableView)
 	}
 	override func layoutSubviews() {
+		
 		super.layoutSubviews()
+		
 		tableView.frame = self.bounds
+		
 		self.tableView.contentInset = UIEdgeInsetsMake(self.bounds.size.height * 0.5, 0, self.bounds.size.height * 0.5, 0)
+		
 		noLrcLabel.frame = self.bounds
+	
 	}
 	
 
@@ -197,6 +208,8 @@ extension LrcView: UITableViewDelegate {
 		if self.currentIndex == indexPath.row {
 			
 			cell.textLabel?.textColor = UIColor.white
+			
+			print(indexPath.row)
 			
 		} else {
 			
