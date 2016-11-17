@@ -511,6 +511,7 @@ extension PlayerInterface {
 			
 			return
 			
+			
 		}
         
 		let cur: FSStreamPosition = (self.streamer?.activeStream.currentTimePlayed)!
@@ -547,6 +548,7 @@ extension PlayerInterface {
 		changeInterface(self.index!)
 		
 		HUD.flash(.image(UIImage(named: "prevB")), delay: 1.0)
+		
 		
 	}
 	
@@ -602,7 +604,7 @@ extension PlayerInterface {
 			
 		}
 		
-		var seek: FSStreamPosition?
+		var seek: FSStreamPosition = FSStreamPosition()
 		var lastPoint: CGPoint?
 		
 		
@@ -649,14 +651,12 @@ extension PlayerInterface {
 			// if didn't move don't change
 			if lastPoint?.x == self.originalPoint?.x { return }
 			
-			seek?.position = Float((self.progress?.progress)!)
+			seek.position = Float((self.progress?.progress)!)
 			
-			print(Float((self.progress?.progress)!))
+			print(seek.position)
 			
 			self.streamer?.activeStream.seek(to: seek)
-			
 		}
-		
 	}
 	
 	func playShuffle(_ recognizer: UISwipeGestureRecognizer) {
