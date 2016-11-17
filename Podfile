@@ -8,7 +8,6 @@ target '破音万里' do
 	pod 'SDWebImage'
 	pod 'Alamofire', '~> 4.0'
 	pod 'FontAwesome.swift'
-	pod 'DynamicBlurView'
 	pod 'TDImageColors', '~> 0.2'
 	pod 'FMDB'
 	pod 'Masonry'

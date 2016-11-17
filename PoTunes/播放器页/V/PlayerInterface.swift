@@ -19,18 +19,18 @@ class PlayerInterface: UIView {
 	let width = UIScreen.main.bounds.size.width
 	let height = UIScreen.main.bounds.size.height
 	let backgroundView = UIView()
-	var coverScroll: LTInfiniteScrollView?
-	var reflection: UIImageView?
-	var bufferingIndicator: LDProgressView?
+	var coverScroll = LTInfiniteScrollView()
+	var reflection = UIImageView()
+	var bufferingIndicator :LDProgressView?
 	var progress: LDProgressView?
-	var timeView: UIView?
-	var currentTime: UILabel?
-	var leftTime: UILabel?
+	var timeView = UIView()
+	var currentTime = UILabel()
+	var leftTime = UILabel()
 	var name: TrackLabel?
 	var artist: TrackLabel?
 	var album: TrackLabel?
-	var playModeView: UIImageView?
-	var lrcView: LrcView?
+	var playModeView = UIImageView()
+	var lrcView = LrcView()
 	var tracks: Array<Any> = []
 	var index: Int?
 	var progressOriginal: Float?
@@ -38,7 +38,7 @@ class PlayerInterface: UIView {
 	
 	
 	// MARK: - streamer
-	var streamer: FSAudioController?
+	var streamer = FSAudioController()
 	var repeatMode: AudioRepeatMode?
 	var paused: Bool = true
 	// MARK: - Timer
@@ -72,7 +72,7 @@ class PlayerInterface: UIView {
 		
 		addGestureRecognizer()
 		
-		self.repeatMode = AudioRepeatMode.towards
+		repeatMode = AudioRepeatMode.towards
 		
 	}
 	
@@ -81,30 +81,30 @@ class PlayerInterface: UIView {
 		fatalError("init(coder:) has not been implemented")
 	
 	}
-
-    
+	
 	override func layoutSubviews() {
 		super.layoutSubviews()
-		self.backgroundView.frame = self.bounds
 		
-		self.coverScroll?.frame = CGRect(x: 0, y: 0, width: width, height: width)
-		self.reflection?.frame =  CGRect(x: 0, y: height - width, width: width, height: width)
+		backgroundView.frame = self.bounds
+		
+		reflection.frame =  CGRect(x: 0, y: height - width, width: width, height: width)
+		coverScroll.frame = CGRect(x: 0, y: 0, width: width, height: width)
 
-		self.lrcView?.frame = CGRect(x: 0, y: 0, width: width, height: width)
-		
-		self.bufferingIndicator?.frame = CGRect(x: 0, y: width, width: width, height: 15)
-		self.progress?.frame = CGRect(x: 0, y: width, width: width, height: 15)
+		lrcView.frame = CGRect(x: 0, y: 0, width: width, height: width)
 
-		self.playModeView?.frame = CGRect(x: width / 2 - 10, y: height - 50, width: 20, height: 20)
-		
+		bufferingIndicator?.frame = CGRect(x: 0, y: width, width: width, height: 15)
+		progress?.frame = CGRect(x: 0, y: width, width: width, height: 15)
+
+		playModeView.frame = CGRect(x: width / 2 - 10, y: height - 50, width: 20, height: 20)
+
 		// MARK: - 除3
 		self.name?.frame = CGRect(x: 0, y: width + 20, width: width, height: 40)
 		self.artist?.frame = CGRect(x: 0, y: width + 60, width: width, height: 40)
 		self.album?.frame = CGRect(x: 0, y: width + 100, width: width, height: 40)
-	
-		self.timeView?.frame = CGRect(x: 0, y: self.progress!.frame.maxY, width: width, height: 20)
-		self.currentTime?.frame = CGRect(x: 2, y: 0, width: width / 2, height: 20)
-		self.leftTime?.frame = CGRect(x: width / 2 - 2, y: 0, width: width / 2, height: (self.timeView?.bounds.size.height)!)
+
+		timeView.frame = CGRect(x: 0, y: (self.progress?.frame.maxY)!, width: width, height: 20)
+		currentTime.frame = CGRect(x: 2, y: 0, width: width / 2, height: 20)
+		leftTime.frame = CGRect(x: width / 2 - 2, y: 0, width: width / 2, height: (self.timeView.bounds.size.height))
 	}
 
 	override func remoteControlReceived(with event: UIEvent?) {
@@ -131,24 +131,21 @@ class PlayerInterface: UIView {
 extension PlayerInterface {
 	func initialSubviews() {
 		// backgourndView
+		backgroundView.backgroundColor = UIColor.black
 		backgroundView.autoresizingMask = [.flexibleWidth, .flexibleTopMargin]
 		self.addSubview(backgroundView)
 		
-		let coverScroll: LTInfiniteScrollView = LTInfiniteScrollView()
+		// 倒影封面
+		reflection.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+		reflection.image = UIImage(named: "noArtwork")?.reflection(withAlpha: 0.4)
+		self.backgroundView.addSubview(reflection)
+		self.backgroundView.sendSubview(toBack: reflection)
+		
 		coverScroll.dataSource = self
 		coverScroll.delegate = self
 		coverScroll.maxScrollDistance = 2
 		coverScroll.reloadData(initialIndex: 0)
-		self.coverScroll = coverScroll
 		self.backgroundView.addSubview(coverScroll)
-		
-		// 倒影封面
-		let reflection: UIImageView = UIImageView()
-		reflection.autoresizingMask = [.flexibleHeight, .flexibleWidth]
-		reflection.image = UIImage(named: "noArtwork")?.reflection(withAlpha: 0.4)
-		self.addSubview(reflection)
-		self.reflection = reflection
-		self.backgroundView.sendSubview(toBack: reflection)
 		
 		//缓冲条
 		let bufferingIndicator: LDProgressView = createProgressView(false, progress: 0, animate: false, showText: false, showStroke: false, progressInset: 0, showBackground: false, outerStrokeWidth: 0, type: LDProgressSolid, autoresizingMask: [.flexibleWidth, .flexibleTopMargin], borderRadius: 0, backgroundColor: UIColor.lightText)
@@ -159,17 +156,15 @@ extension PlayerInterface {
 		self.progress = progress
 		self.backgroundView.addSubview(progress)
 		//开始时间和剩余时间
-		let timeView: UIView = UIView()
 		timeView.autoresizingMask = [.flexibleWidth, .flexibleTopMargin]
 		self.backgroundView.addSubview(timeView)
-		self.timeView = timeView
 		//当前播放时间
 		let currentTime = createLabel([.flexibleHeight, .flexibleWidth], shadowOffset: CGSize(width: 0, height: 0), textColor: UIColor.white, text: nil, textAlignment: .left)
 		self.currentTime = currentTime
-		self.timeView?.addSubview(currentTime)
+		self.timeView.addSubview(currentTime)
 		//剩余时间
 		let leftTime = createLabel([.flexibleHeight, .flexibleWidth, .flexibleLeftMargin], shadowOffset: CGSize(width: 0, height: 0), textColor: UIColor.white, text: nil, textAlignment: .right)
-		self.timeView?.addSubview(leftTime)
+		self.timeView.addSubview(leftTime)
 		self.leftTime = leftTime
 		//歌曲名
 		let name: TrackLabel = TrackLabel()
@@ -188,18 +183,16 @@ extension PlayerInterface {
 		self.backgroundView.addSubview(album)
 		self.album = album
 		//播放模式
-		let playModeView: UIImageView = UIImageView()
 		playModeView.autoresizingMask = [.flexibleWidth, .flexibleTopMargin]
 		playModeView.image = UIImage(named: "repeatOnB.png")
 		playModeView.contentMode = .scaleAspectFit
-		self.playModeView = playModeView
 		self.backgroundView.addSubview(playModeView)
 		// 歌词
-//		let lrcView: LrcView = LrcView()
-//		lrcView.autoresizingMask = [.flexibleWidth, .flexibleTopMargin]
-//		lrcView.isHidden = true
-//		self.lrcView = lrcView
-//		self.addSubview(lrcView)
+		lrcView.autoresizingMask = [.flexibleWidth, .flexibleTopMargin]
+		lrcView.isHidden = false
+		self.addSubview(lrcView)
+		self.lrcView.renderStatic = true
+
 	}
 }
 // MARK: - functional creation
@@ -243,13 +236,9 @@ extension PlayerInterface {
 		
 		self.paused = false
 		
-		self.streamer = nil
-		
-		self.streamer = FSAudioController()
-		
 		let track: Track = tracks[index] as! Track
 		
-		self.streamer?.activeStream.play(from: URL(string: track.url))
+		streamer.activeStream.play(from: URL(string: track.url))
 		
 		addCurrentTimeTimer()
 		
@@ -257,54 +246,64 @@ extension PlayerInterface {
 	
 	func changeInterface(_ index: Int) {
 		
-		let track: Track = self.tracks[self.index!] as! Track
-		
-		self.name?.text = track.name
-		
-		self.artist?.text = track.artist
-		
-		let cover: UIImageView = UIImageView()
-		
-		cover.sd_setImage(with: URL(string: track.cover + "!/fw/600")) { (image, _, _, _) in
+		DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
 			
-			self.reflection?.image = image?.reflection(withAlpha: 0.4)
-			
-			let colorPicker: LEColorPicker = LEColorPicker()
-			
-			let colorScheme = colorPicker.colorScheme(from: cover.image)
-			
-			self.progress?.color = colorScheme?.backgroundColor
-			
-			self.name?.textColor = colorScheme?.backgroundColor
-			
-			self.artist?.textColor = colorScheme?.backgroundColor
-			
-			self.album?.textColor = colorScheme?.backgroundColor
-			
-			// 设置锁屏信息
-			let artwork: MPMediaItemArtwork = MPMediaItemArtwork.init(image: cover.image!)
-			
-			let duration: TimeInterval = Double((self.streamer?.activeStream.duration.minute)!) * 60 + Double((self.streamer?.activeStream.duration.second)!)
+			self.lrcView.renderStatic = false
 
-			
-			let info : [String:AnyObject] = [
-				
-				MPMediaItemPropertyArtist : track.artist as AnyObject,
-				
-				MPMediaItemPropertyAlbumTitle : self.album?.text as AnyObject,
-				
-				MPMediaItemPropertyTitle: track.name as AnyObject,
-				
-				MPMediaItemPropertyArtwork: artwork,
-				
-				MPMediaItemPropertyPlaybackDuration: duration as AnyObject
-		
-			]
-			
-			MPNowPlayingInfoCenter.default().nowPlayingInfo = info
-			
 		}
 		
+		DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+			
+			self.lrcView.renderStatic = true
+			
+			let track: Track = self.tracks[self.index!] as! Track
+			
+			self.name?.text = track.name
+			
+			self.artist?.text = track.artist
+			
+			let cover: UIImageView = UIImageView()
+			
+			cover.sd_setImage(with: URL(string: track.cover + "!/fw/600")) { (image, _, _, _) in
+				
+				self.reflection.image = image?.reflection(withAlpha: 0.4)
+				
+				let colorPicker: LEColorPicker = LEColorPicker()
+				
+				let colorScheme = colorPicker.colorScheme(from: cover.image)
+				
+				self.progress?.color = colorScheme?.backgroundColor
+				
+				self.name?.textColor = colorScheme?.backgroundColor
+				
+				self.artist?.textColor = colorScheme?.backgroundColor
+				
+				self.album?.textColor = colorScheme?.backgroundColor
+				
+				// 设置锁屏信息
+				let artwork: MPMediaItemArtwork = MPMediaItemArtwork.init(image: cover.image!)
+				
+				let duration: TimeInterval = Double((self.streamer.activeStream.duration.minute)) * 60 + Double((self.streamer.activeStream.duration.second))
+				
+				
+				let info : [String:AnyObject] = [
+					
+					MPMediaItemPropertyArtist : track.artist as AnyObject,
+					
+					MPMediaItemPropertyAlbumTitle : self.album!.text as AnyObject,
+					
+					MPMediaItemPropertyTitle: track.name as AnyObject,
+					
+					MPMediaItemPropertyArtwork: artwork,
+					
+					MPMediaItemPropertyPlaybackDuration: duration as AnyObject
+					
+				]
+				
+				MPNowPlayingInfoCenter.default().nowPlayingInfo = info
+				
+			}
+		}
 		// 记录最后一次播放的歌曲和以及播放模式
 		UserDefaults.standard.set(self.repeatMode?.rawValue, forKey: "repeatMode")
 		
@@ -324,28 +323,28 @@ extension PlayerInterface {
 		updateCurrentTime()
 		updatePlayBackProgress()
 		
-		self.currentTimeTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateCurrentTime), userInfo: nil, repeats: true)
-		self.playbackTimer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(updatePlayBackProgress), userInfo: nil, repeats: true)
+		currentTimeTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateCurrentTime), userInfo: nil, repeats: true)
+		playbackTimer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(updatePlayBackProgress), userInfo: nil, repeats: true)
 		
-		RunLoop.main.add(self.currentTimeTimer!, forMode: .commonModes)
-		RunLoop.main.add(self.playbackTimer!, forMode: .commonModes)
+		RunLoop.main.add(currentTimeTimer!, forMode: .commonModes)
+		RunLoop.main.add(playbackTimer!, forMode: .commonModes)
 		
 	}
 	// remove timers
 	func removeCurrentTimeTimer() {
-		self.currentTimeTimer?.invalidate()
-		self.playbackTimer?.invalidate()
-		self.currentTimeTimer = nil
-		self.playbackTimer = nil
-		self.bufferingIndicator?.progress = 0
-		self.progress?.progress = 0
+		currentTimeTimer?.invalidate()
+		playbackTimer?.invalidate()
+		currentTimeTimer = nil
+		playbackTimer = nil
+		bufferingIndicator?.progress = 0
+		progress?.progress = 0
 	}
 	
 	func updateCurrentTime() {
-		if self.streamer?.activeStream.duration.minute == 0 && self.streamer?.activeStream.duration.second == 0 { return }
+		if streamer.activeStream.duration.minute == 0 && streamer.activeStream.duration.second == 0 { return }
 		// get currentTime and duration
-		let cur: FSStreamPosition = (self.streamer?.activeStream.currentTimePlayed)!
-		let total: FSStreamPosition = (self.streamer?.activeStream.duration)!
+		let cur: FSStreamPosition = (streamer.activeStream.currentTimePlayed)
+		let total: FSStreamPosition = (streamer.activeStream.duration)
 		// set play progress
 		let progress: Double = (Double)(cur.minute * 60 + cur.second) / (Double)(total.minute * 60 + total.second)
 		
@@ -365,15 +364,15 @@ extension PlayerInterface {
 			leftSec = "0" + leftSec
 		}
 		
-		self.currentTime?.text = NSString(format: "%d:%@", cur.minute, currSecond) as String
-		self.leftTime?.text = NSString(format: "%@:%@", leftMin, leftSec) as String
+		currentTime.text = NSString(format: "%d:%@", cur.minute, currSecond) as String
+		leftTime.text = NSString(format: "%@:%@", leftMin, leftSec) as String
 		
 		// when play at the end of file
 		weak var weakself: PlayerInterface? = self
 //		self.streamer?.onStateChange = { (streamState) -> Void in
 //			print("播放下一首")
 //		}
-		self.streamer?.activeStream.onCompletion = { () ->Void in
+		self.streamer.activeStream.onCompletion = { () ->Void in
 			
 //			self.progress?.progress = 0
 //			
@@ -390,25 +389,25 @@ extension PlayerInterface {
 	
 	func updatePlayBackProgress() {
 		
-		if (self.streamer?.activeStream.contentLength)! > 0 {
+		if (streamer.activeStream.contentLength) > 0 {
 					
-			if (self.bufferingIndicator?.progress)! >= CGFloat(1)  {
+			if (bufferingIndicator?.progress)! >= CGFloat(1)  {
 
-				self.playbackTimer?.invalidate()
+				playbackTimer?.invalidate()
 			
-				self.playbackTimer = nil
+				playbackTimer = nil
 				
-				self.bufferingIndicator?.progress = CGFloat(1)
+				bufferingIndicator?.progress = CGFloat(1)
 				
 			}
 			
-			let currentOffset = self.streamer?.activeStream.currentSeekByteOffset
+			let currentOffset = streamer.activeStream.currentSeekByteOffset
 			
-			let totalBufferedData = Int((currentOffset?.start)!) + (self.streamer?.activeStream.prebufferedByteCount)!
+			let totalBufferedData = Int(currentOffset.start) + streamer.activeStream.prebufferedByteCount
 			
-			let bufferedDataFromTotal = Float(totalBufferedData) / Float((self.streamer?.activeStream.contentLength)!)
+			let bufferedDataFromTotal = Float(totalBufferedData) / Float(streamer.activeStream.contentLength)
 			
-			self.bufferingIndicator?.progress = CGFloat(bufferedDataFromTotal)
+			bufferingIndicator?.progress = CGFloat(bufferedDataFromTotal)
 		
 		}
 		
@@ -491,7 +490,7 @@ extension PlayerInterface {
 		
 		self.paused = !(self.paused)
 		
-		if self.streamer?.activeStream == nil {
+		if streamer.activeStream == nil {
 			
 			playTracks(tracks: self.tracks, index: self.index!)
 			
@@ -499,7 +498,7 @@ extension PlayerInterface {
 			
 		}
 		
-		self.streamer?.pause()
+		streamer.pause()
 		
 	}
 	
@@ -514,7 +513,7 @@ extension PlayerInterface {
 			
 		}
         
-		let cur: FSStreamPosition = (self.streamer?.activeStream.currentTimePlayed)!
+		let cur: FSStreamPosition = (self.streamer.activeStream.currentTimePlayed)
 
 		
 		if cur.minute == 0 || cur.second <= 5 {
@@ -543,7 +542,7 @@ extension PlayerInterface {
 		
 		playTracks(tracks: self.tracks, index: self.index!)
 		
-		self.coverScroll?.scrollToIndex(self.index!, animated: true)
+		self.coverScroll.scrollToIndex(self.index!, animated: true)
 		
 		changeInterface(self.index!)
 		
@@ -587,7 +586,7 @@ extension PlayerInterface {
 		playTracks(tracks: self.tracks, index: self.index!)
 		
 		//change interface
-		self.coverScroll?.scrollToIndex(self.index!, animated: true)
+		self.coverScroll.scrollToIndex(self.index!, animated: true)
 		
 		changeInterface(self.index!)
 		
@@ -619,9 +618,9 @@ extension PlayerInterface {
 			backgroundView.bounds = tempBounds
 			
 			// get current playing time
-			let now = self.streamer?.activeStream.currentTimePlayed
+			let now = self.streamer.activeStream.currentTimePlayed
 			
-			self.progressOriginal = now?.position
+			self.progressOriginal = now.position
 			
 			self.originalPoint = recognizer.location(in: self)
 		}
@@ -646,7 +645,7 @@ extension PlayerInterface {
 			
 			backgroundView.frame = self.frame
 			
-			self.playModeView?.frame = CGRect(x: self.width / 2 - 10,y: self.height - 20,width: 20,height: 20)
+			self.playModeView.frame = CGRect(x: self.width / 2 - 10,y: self.height - 20,width: 20,height: 20)
 			
 			// if didn't move don't change
 			if lastPoint?.x == self.originalPoint?.x { return }
@@ -655,7 +654,7 @@ extension PlayerInterface {
 			
 			print(seek.position)
 			
-			self.streamer?.activeStream.seek(to: seek)
+			self.streamer.activeStream.seek(to: seek)
 		}
 	}
 	
@@ -665,7 +664,7 @@ extension PlayerInterface {
 			
 			self.repeatMode = AudioRepeatMode.shuffle
 			
-			self.playModeView?.image = UIImage(named: "shuffleOnB")
+			self.playModeView.image = UIImage(named: "shuffleOnB")
 			
 			HUD.flash(.image(UIImage(named: "shuffleOnB")), delay: 1.0)
 		
@@ -673,7 +672,7 @@ extension PlayerInterface {
 		
 			self.repeatMode = AudioRepeatMode.towards
 			
-			self.playModeView?.image = UIImage(named: "repeatOnB")
+			self.playModeView.image = UIImage(named: "repeatOnB")
 			
 			HUD.flash(.image(UIImage(named: "repeatOnB")), delay: 1.0)
 	
@@ -693,7 +692,7 @@ extension PlayerInterface {
 			
 			self.repeatMode = AudioRepeatMode.towards
 			
-			self.playModeView?.image = UIImage(named: "repeatOnB")
+			self.playModeView.image = UIImage(named: "repeatOnB")
 			
 		} else {
 			
@@ -701,7 +700,7 @@ extension PlayerInterface {
 			
 			self.repeatMode = AudioRepeatMode.single
 			
-			self.playModeView?.image = UIImage(named: "repeatOneB")
+			self.playModeView.image = UIImage(named: "repeatOneB")
 			
 		}
 		
@@ -752,7 +751,7 @@ extension PlayerInterface: LTInfiniteScrollViewDataSource {
 				
 				if index == self.index {
 					
-					self.reflection?.image = cover.image?.reflection(withAlpha: 0.4)
+					self.reflection.image = cover.image?.reflection(withAlpha: 0.4)
 
 				}
 

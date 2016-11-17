@@ -32,6 +32,8 @@
 		3C24CEDB1DD30D2F007C862C /* Main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C24CED81DD30D2F007C862C /* Main.swift */; };
 		3C24CEEB1DD32038007C862C /* Reflect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C24CEEA1DD32038007C862C /* Reflect.swift */; };
 		3C26B5721C4FD2AA0037893F /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CB2E3FD1BA7D19300805D4F /* AudioToolbox.framework */; };
+		3C3BD3181DDDA264007545DC /* DRNRealTimeBlurView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3BD3141DDDA264007545DC /* DRNRealTimeBlurView.m */; };
+		3C3BD3191DDDA264007545DC /* UIImage+BoxBlur.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3BD3161DDDA264007545DC /* UIImage+BoxBlur.m */; };
 		3C4A41B91DD9A508008CE37F /* PlayerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C4A41B81DD9A508008CE37F /* PlayerController.swift */; };
 		3C4A41BB1DD9D350008CE37F /* TrackLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C4A41BA1DD9D350008CE37F /* TrackLabel.swift */; };
 		3C5813711BE4BFEA0012C689 /* guide.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3C5813701BE4BFEA0012C689 /* guide.plist */; };
@@ -66,7 +68,6 @@
 		3CCFBF2F1DD41DAD00514873 /* PlayerInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CCFBF2E1DD41DAD00514873 /* PlayerInterface.swift */; };
 		3CCFBF381DD41E0300514873 /* LrcCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CCFBF321DD41E0300514873 /* LrcCell.swift */; };
 		3CCFBF3B1DD41E0300514873 /* LrcView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CCFBF361DD41E0300514873 /* LrcView.swift */; };
-		3CCFBF401DD41E6800514873 /* lrcLine.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CCFBF3E1DD41E6800514873 /* lrcLine.m */; };
 		3CCFBF411DD41E6800514873 /* LrcLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CCFBF3F1DD41E6800514873 /* LrcLine.swift */; };
 		3CCFBF4D1DD41F1C00514873 /* NSString+DirDoc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CCFBF441DD41F1C00514873 /* NSString+DirDoc.swift */; };
 		3CCFBF4E1DD41F1C00514873 /* UIColor+RGBValues.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CCFBF461DD41F1C00514873 /* UIColor+RGBValues.m */; };
@@ -168,6 +169,10 @@
 		3C1ADF081DDC61ED00B1CE5D /* TrackEncoding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackEncoding.swift; sourceTree = "<group>"; };
 		3C24CED81DD30D2F007C862C /* Main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Main.swift; sourceTree = "<group>"; };
 		3C24CEEA1DD32038007C862C /* Reflect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reflect.swift; sourceTree = "<group>"; };
+		3C3BD3131DDDA264007545DC /* DRNRealTimeBlurView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DRNRealTimeBlurView.h; sourceTree = "<group>"; };
+		3C3BD3141DDDA264007545DC /* DRNRealTimeBlurView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DRNRealTimeBlurView.m; sourceTree = "<group>"; };
+		3C3BD3151DDDA264007545DC /* UIImage+BoxBlur.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+BoxBlur.h"; sourceTree = "<group>"; };
+		3C3BD3161DDDA264007545DC /* UIImage+BoxBlur.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+BoxBlur.m"; sourceTree = "<group>"; };
 		3C4A41B81DD9A508008CE37F /* PlayerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerController.swift; sourceTree = "<group>"; };
 		3C4A41BA1DD9D350008CE37F /* TrackLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackLabel.swift; sourceTree = "<group>"; };
 		3C5813701BE4BFEA0012C689 /* guide.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = guide.plist; sourceTree = "<group>"; };
@@ -222,8 +227,6 @@
 		3CCFBF2E1DD41DAD00514873 /* PlayerInterface.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerInterface.swift; sourceTree = "<group>"; };
 		3CCFBF321DD41E0300514873 /* LrcCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LrcCell.swift; sourceTree = "<group>"; };
 		3CCFBF361DD41E0300514873 /* LrcView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LrcView.swift; sourceTree = "<group>"; };
-		3CCFBF3D1DD41E6800514873 /* lrcLine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lrcLine.h; sourceTree = "<group>"; };
-		3CCFBF3E1DD41E6800514873 /* lrcLine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = lrcLine.m; sourceTree = "<group>"; };
 		3CCFBF3F1DD41E6800514873 /* LrcLine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LrcLine.swift; sourceTree = "<group>"; };
 		3CCFBF441DD41F1C00514873 /* NSString+DirDoc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSString+DirDoc.swift"; sourceTree = "<group>"; };
 		3CCFBF451DD41F1C00514873 /* UIColor+RGBValues.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+RGBValues.h"; sourceTree = "<group>"; };
@@ -497,6 +500,17 @@
 			path = "3rdParty-Swift";
 			sourceTree = "<group>";
 		};
+		3C3BD3111DDDA264007545DC /* DRNRealTimeBlurView */ = {
+			isa = PBXGroup;
+			children = (
+				3C3BD3131DDDA264007545DC /* DRNRealTimeBlurView.h */,
+				3C3BD3141DDDA264007545DC /* DRNRealTimeBlurView.m */,
+				3C3BD3151DDDA264007545DC /* UIImage+BoxBlur.h */,
+				3C3BD3161DDDA264007545DC /* UIImage+BoxBlur.m */,
+			);
+			path = DRNRealTimeBlurView;
+			sourceTree = "<group>";
+		};
 		3C4A41B71DD9A4EA008CE37F /* C */ = {
 			isa = PBXGroup;
 			children = (
@@ -731,8 +745,6 @@
 		3CCFBF3C1DD41E6800514873 /* M */ = {
 			isa = PBXGroup;
 			children = (
-				3CCFBF3D1DD41E6800514873 /* lrcLine.h */,
-				3CCFBF3E1DD41E6800514873 /* lrcLine.m */,
 				3CCFBF3F1DD41E6800514873 /* LrcLine.swift */,
 				3C1ADF081DDC61ED00B1CE5D /* TrackEncoding.swift */,
 			);
@@ -796,6 +808,7 @@
 		3CFA580F1D6706D700341763 /* 3rdParty */ = {
 			isa = PBXGroup;
 			children = (
+				3C3BD3111DDDA264007545DC /* DRNRealTimeBlurView */,
 				3C1ADF011DDC12FC00B1CE5D /* LEColorPicker */,
 				3C9642031D67184F00386ABB /* EVCircularProgressView */,
 				3C9641FB1D6712C500386ABB /* BaiduPush */,
@@ -1089,7 +1102,6 @@
 			files = (
 				3C155EDE1DD44A6400375469 /* SettingController.swift in Sources */,
 				3CCFBF411DD41E6800514873 /* LrcLine.swift in Sources */,
-				3CCFBF401DD41E6800514873 /* lrcLine.m in Sources */,
 				3CCFBF3B1DD41E0300514873 /* LrcView.swift in Sources */,
 				3C4A41B91DD9A508008CE37F /* PlayerController.swift in Sources */,
 				3CCFBF4D1DD41F1C00514873 /* NSString+DirDoc.swift in Sources */,
@@ -1135,6 +1147,7 @@
 				3C155ED71DD449AD00375469 /* NaviController.swift in Sources */,
 				3C9641FA1D670FB800386ABB /* GeocodeAnnotation.m in Sources */,
 				3C24CEDB1DD30D2F007C862C /* Main.swift in Sources */,
+				3C3BD3191DDDA264007545DC /* UIImage+BoxBlur.m in Sources */,
 				3CB2E32B1BA7CA5D00805D4F /* PCButton.m in Sources */,
 				3C1ADF071DDC12FC00B1CE5D /* UIColor+YUVSpace.m in Sources */,
 				3C155EAE1DD4284000375469 /* PlaylistController.swift in Sources */,
@@ -1146,6 +1159,7 @@
 				3CB2E32A1BA7CA5D00805D4F /* PCLabel.m in Sources */,
 				3CFA58D81D6706D700341763 /* UIScrollView+MJExtension.m in Sources */,
 				3CCFBF541DD4201B00514873 /* LrcCell.m in Sources */,
+				3C3BD3181DDDA264007545DC /* DRNRealTimeBlurView.m in Sources */,
 				3C0A1A9A1DD5B72000E90306 /* MainControllers.swift in Sources */,
 				3CFA58BF1D6706D700341763 /* caching_stream.cpp in Sources */,
 				3CF7AFC21BAAA19500F764BD /* LineDashPolyline.m in Sources */,

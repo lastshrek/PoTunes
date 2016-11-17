@@ -22,7 +22,6 @@ PODS:
     - AFNetworking/NSURLSession
   - Alamofire (4.0.1)
   - DGElasticPullToRefresh (1.1)
-  - DynamicBlurView (1.3.0)
   - FMDB (2.6.2):
     - FMDB/standard (= 2.6.2)
   - FMDB/standard (2.6.2)
@@ -40,7 +39,6 @@ DEPENDENCIES:
   - AFNetworking (= 2.6.3)
   - Alamofire (~> 4.0)
   - DGElasticPullToRefresh
-  - DynamicBlurView
   - FMDB
   - FontAwesome.swift
   - LDProgressView (>= 1.1)
@@ -54,7 +52,6 @@ SPEC CHECKSUMS:
   AFNetworking: cb8d14a848e831097108418f5d49217339d4eb60
   Alamofire: 7682d43245de14874acd142ec137b144aa1dd335
   DGElasticPullToRefresh: 28f11a6026302a90f8ffebbc6e24748e584dddd3
-  DynamicBlurView: ca9f6836d4123e20ac1636814077b278b34dd2a2
   FMDB: 854a0341b4726e53276f2a8996f06f1b80f9259a
   FontAwesome.swift: 2d32a3d62195343c2004b7c9043294ed2948553a
   LDProgressView: f6afc7c30d2a9edf33001515f3189338567a32d2
@@ -64,6 +61,6 @@ SPEC CHECKSUMS:
   SDWebImage: 098e97e6176540799c27e804c96653ee0833d13c
   TDImageColors: 73feaadb478d4ffa9c3d5c09e2621f8768aa02f9
 
-PODFILE CHECKSUM: 7f94fe714339e174a716bc3d2a217773abeb7502
+PODFILE CHECKSUM: 5012805c4d76f572c0e79cef24fba7cd4cababb5
 
 COCOAPODS: 1.1.1
