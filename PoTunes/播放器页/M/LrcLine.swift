@@ -9,6 +9,6 @@
 import UIKit
 
 class LrcLine: NSObject {
-    var time: NSString?
-    var lyrics: NSString?
+    var time: String?
+    var lyrics: String?
 }

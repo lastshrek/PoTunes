@@ -74,7 +74,6 @@
 		3CCFBF4F1DD41F1C00514873 /* UIImage+BoxBlur.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CCFBF481DD41F1C00514873 /* UIImage+BoxBlur.m */; };
 		3CCFBF501DD41F1C00514873 /* UIImage+Reflection.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CCFBF4A1DD41F1C00514873 /* UIImage+Reflection.m */; };
 		3CCFBF511DD41F1C00514873 /* UIView+Geometry.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CCFBF4C1DD41F1C00514873 /* UIView+Geometry.m */; };
-		3CCFBF541DD4201B00514873 /* LrcCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CCFBF531DD4201B00514873 /* LrcCell.m */; };
 		3CDFB3931DD76E5D006C0975 /* SongListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CDFB3911DD76E5D006C0975 /* SongListController.swift */; };
 		3CDFB3981DD776D8006C0975 /* TrackCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CDFB3971DD776D8006C0975 /* TrackCell.swift */; };
 		3CDFB39A1DD77CD5006C0975 /* UIColor+RGB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CDFB3991DD77CD5006C0975 /* UIColor+RGB.swift */; };
@@ -237,8 +236,6 @@
 		3CCFBF4A1DD41F1C00514873 /* UIImage+Reflection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Reflection.m"; sourceTree = "<group>"; };
 		3CCFBF4B1DD41F1C00514873 /* UIView+Geometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Geometry.h"; sourceTree = "<group>"; };
 		3CCFBF4C1DD41F1C00514873 /* UIView+Geometry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Geometry.m"; sourceTree = "<group>"; };
-		3CCFBF521DD4201B00514873 /* LrcCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LrcCell.h; sourceTree = "<group>"; };
-		3CCFBF531DD4201B00514873 /* LrcCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LrcCell.m; sourceTree = "<group>"; };
 		3CDFB3911DD76E5D006C0975 /* SongListController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SongListController.swift; sourceTree = "<group>"; };
 		3CDFB3971DD776D8006C0975 /* TrackCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackCell.swift; sourceTree = "<group>"; };
 		3CDFB3991DD77CD5006C0975 /* UIColor+RGB.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+RGB.swift"; sourceTree = "<group>"; };
@@ -733,8 +730,6 @@
 				3C4A41BA1DD9D350008CE37F /* TrackLabel.swift */,
 				3C0CE1CB1DD5D9D000E76BDA /* PCSongListTableViewCell.h */,
 				3C0CE1CC1DD5D9D000E76BDA /* PCSongListTableViewCell.m */,
-				3CCFBF521DD4201B00514873 /* LrcCell.h */,
-				3CCFBF531DD4201B00514873 /* LrcCell.m */,
 				3CCFBF321DD41E0300514873 /* LrcCell.swift */,
 				3CCFBF361DD41E0300514873 /* LrcView.swift */,
 				3CCFBF2E1DD41DAD00514873 /* PlayerInterface.swift */,
@@ -1158,7 +1153,6 @@
 				3CDFB3931DD76E5D006C0975 /* SongListController.swift in Sources */,
 				3CB2E32A1BA7CA5D00805D4F /* PCLabel.m in Sources */,
 				3CFA58D81D6706D700341763 /* UIScrollView+MJExtension.m in Sources */,
-				3CCFBF541DD4201B00514873 /* LrcCell.m in Sources */,
 				3C3BD3181DDDA264007545DC /* DRNRealTimeBlurView.m in Sources */,
 				3C0A1A9A1DD5B72000E90306 /* MainControllers.swift in Sources */,
 				3CFA58BF1D6706D700341763 /* caching_stream.cpp in Sources */,

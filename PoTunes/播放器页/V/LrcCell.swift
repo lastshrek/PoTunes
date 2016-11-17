@@ -12,7 +12,7 @@ class LrcCell: UITableViewCell {
 	var lrcLine: LrcLine? {
 		didSet {
 			guard let `lrcLine` = lrcLine else { return }
-			self.textLabel?.text = lrcLine.lyrics as? String
+			self.textLabel?.text = lrcLine.lyrics
 		}
 	}
 	

@@ -34,30 +34,32 @@ class LrcView: DRNRealTimeBlurView {
 	fileprivate lazy var lyricsLines: NSMutableArray = {[]}()
 	
 	var currentTime: TimeInterval? {
-	
+			
 		didSet {
 		
 			guard let `currentTime` = currentTime else { return }
 			
-			if currentTime < oldValue {
+//			if currentTime < oldValue {
+//			
+//				currentIndex = -1
+//			
+//			}
+			print(oldValue as TimeInterval!)
 			
-				currentIndex = -1
 			
-			}
-			
-			self.currentTime = currentTime
+			print(currentTime)
 			
 			let minute: Int = (Int)(currentTime / 60)
 			let second: Int = (Int)(currentTime) % 60
 			let currentTimeStr = String(format: "%02d:%02d", minute, second)
 			let count = self.lyricsLines.count
-			let idx = currentIndex! + 1
+			let idx = self.currentIndex! + 1
 			
 			for idx in idx..<count {
 			
 				let currentLine = self.lyricsLines[idx] as! LrcLine
 				//当前模型时间
-				let currentLineTime = currentLine.time as! String
+				let currentLineTime = currentLine.time
 				//下一个模型时间
 				var nextLineTime: String? = nil
 				
@@ -72,7 +74,7 @@ class LrcView: DRNRealTimeBlurView {
 				}
 				
 				// 判断是否为正在播放的歌词
-				if currentTimeStr.compare(currentLineTime) != .orderedAscending && currentTimeStr.compare(nextLineTime!) == .orderedAscending && currentIndex != idx {
+				if currentTimeStr.compare(currentLineTime!) != .orderedAscending && currentTimeStr.compare(nextLineTime!) == .orderedAscending && currentIndex != idx {
 					//刷新tableView
 					let reloadRows: Array = [IndexPath(row: currentIndex!, section: 0), IndexPath(row: idx	, section: 0)]
 					
@@ -86,6 +88,36 @@ class LrcView: DRNRealTimeBlurView {
 				}
 			}
 		}
+	}
+	
+	var lyricStr: String? {
+		
+		didSet {
+			
+			guard let `lyricStr` = lyricStr else { return }
+			
+			self.lyricStr = lyricStr
+			
+			let lrcComponents = lyricStr.components(separatedBy: "[")
+			
+			for line: String in lrcComponents {
+				
+				let lrc = LrcLine()
+				//如果是歌名的头部信息
+				let array = line.components(separatedBy: "]")
+				
+				lrc.time = array.first?.replacingOccurrences(of: "[", with: "")
+				
+				lrc.lyrics = array.last
+				
+				self.lyricsLines.add(lrc)
+				
+			}
+			
+			self.tableView.reloadData()
+			
+		}
+		
 	}
 
 
