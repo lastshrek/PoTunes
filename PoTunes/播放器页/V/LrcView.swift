@@ -45,11 +45,6 @@ class LrcView: DRNRealTimeBlurView {
 		
 			guard let `currentTime` = currentTime else { return }
 			
-//			if currentTime < oldValue {
-//			
-//				currentIndex = -1
-//			
-//			}
 			let minute: Int = (Int)(currentTime / 60)
 			let second: Int = (Int)(currentTime) % 60
 			let currentTimeStr = String(format: "%02d:%02d", minute, second)
