@@ -274,13 +274,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		067ED0DD1E10C8D4A57D871F862B660F /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Pods;
-			sourceTree = "<group>";
-		};
 		785553737B06AFC3DA711DDEB7D56194 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -309,7 +302,6 @@
 			children = (
 				93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */,
 				785553737B06AFC3DA711DDEB7D56194 /* Frameworks */,
-				067ED0DD1E10C8D4A57D871F862B660F /* Pods */,
 				EACC3F028F6808360AC8BE0DC43E14C0 /* Products */,
 				80D1A43156D759FB41A902C2AB0E53D6 /* Targets Support Files */,
 			);
