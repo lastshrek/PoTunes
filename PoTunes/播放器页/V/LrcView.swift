@@ -45,7 +45,6 @@ class LrcView: DRNRealTimeBlurView {
 			let second: Int = (Int)(currentTime) % 60
 			let currentTimeStr = String(format: "%02d:%02d", minute, second)
 			let count = self.lyricsLines.count
-			let idx = self.currentIndex! + 1
 			
 			for idx in idx..<count {
 			
