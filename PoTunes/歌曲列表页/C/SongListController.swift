@@ -15,9 +15,13 @@ protocol SongListDelegate: class {
 class SongListController: UITableViewController {
 	
 	var tracks: Array<Any> = []
+	
 	var shareToWechat: UITableView?
+	
 	var hover: UIView?
+	
 	var sharedTrack: Track?
+	
 	weak var delegate: SongListDelegate?
 	
 	override func viewDidLoad() {
