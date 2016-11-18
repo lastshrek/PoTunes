@@ -35,11 +35,7 @@ class LrcView: DRNRealTimeBlurView {
 	
 	var currentTime: TimeInterval? {
 		
-		willSet {
-			
-			currentIndex = -1
-			
-		}
+
 	
 		didSet {
 		
