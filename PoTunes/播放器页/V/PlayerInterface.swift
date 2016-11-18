@@ -89,22 +89,28 @@ class PlayerInterface: UIView {
 		backgroundView.frame = self.bounds
 		
 		reflection.frame =  CGRect(x: 0, y: height - width, width: width, height: width)
+		
 		coverScroll.frame = CGRect(x: 0, y: 0, width: width, height: width)
 
 		lrcView.frame = CGRect(x: 0, y: 0, width: width, height: width)
 
 		bufferingIndicator?.frame = CGRect(x: 0, y: width, width: width, height: 15)
+		
 		progress?.frame = CGRect(x: 0, y: width, width: width, height: 15)
 
 		playModeView.frame = CGRect(x: width / 2 - 10, y: height - 50, width: 20, height: 20)
 
 		// MARK: - 除3
 		self.name?.frame = CGRect(x: 0, y: width + 20, width: width, height: 40)
+		
 		self.artist?.frame = CGRect(x: 0, y: width + 60, width: width, height: 40)
+		
 		self.album?.frame = CGRect(x: 0, y: width + 100, width: width, height: 40)
-
+		
 		timeView.frame = CGRect(x: 0, y: (self.progress?.frame.maxY)!, width: width, height: 20)
+		
 		currentTime.frame = CGRect(x: 2, y: 0, width: width / 2, height: 20)
+		
 		leftTime.frame = CGRect(x: width / 2 - 2, y: 0, width: width / 2, height: (self.timeView.bounds.size.height))
 	}
 
@@ -133,65 +139,106 @@ extension PlayerInterface {
 	func initialSubviews() {
 		// backgourndView
 		backgroundView.backgroundColor = UIColor.black
-		backgroundView.autoresizingMask = [.flexibleWidth, .flexibleTopMargin]
-		self.addSubview(backgroundView)
 		
+		backgroundView.autoresizingMask = [.flexibleWidth, .flexibleTopMargin]
+		
+		self.addSubview(backgroundView)
 		// 倒影封面
 		reflection.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+		
 		reflection.image = UIImage(named: "noArtwork")?.reflection(withAlpha: 0.4)
+		
 		self.backgroundView.addSubview(reflection)
+		
 		self.backgroundView.sendSubview(toBack: reflection)
 		
 		coverScroll.dataSource = self
+		
 		coverScroll.delegate = self
+		
 		coverScroll.maxScrollDistance = 2
+		
 		coverScroll.reloadData(initialIndex: 0)
+		
 		self.backgroundView.addSubview(coverScroll)
 		
 		//缓冲条
 		let bufferingIndicator: LDProgressView = createProgressView(false, progress: 0, animate: false, showText: false, showStroke: false, progressInset: 0, showBackground: false, outerStrokeWidth: 0, type: LDProgressSolid, autoresizingMask: [.flexibleWidth, .flexibleTopMargin], borderRadius: 0, backgroundColor: UIColor.lightText)
+		
 		self.bufferingIndicator = bufferingIndicator
+		
 		self.backgroundView.addSubview(bufferingIndicator)
+		
 		//进度条
 		let progress: LDProgressView = createProgressView(false, progress: 0, animate: false, showText: false, showStroke: false, progressInset: 0, showBackground: false, outerStrokeWidth: 0, type: LDProgressSolid, autoresizingMask: [.flexibleWidth, .flexibleTopMargin], borderRadius: 0, backgroundColor: UIColor.clear)
+		
 		self.progress = progress
+		
 		self.backgroundView.addSubview(progress)
+		
 		//开始时间和剩余时间
 		timeView.autoresizingMask = [.flexibleWidth, .flexibleTopMargin]
+		
 		self.backgroundView.addSubview(timeView)
 		//当前播放时间
 		let currentTime = createLabel([.flexibleHeight, .flexibleWidth], shadowOffset: CGSize(width: 0, height: 0), textColor: UIColor.white, text: nil, textAlignment: .left)
+		
 		self.currentTime = currentTime
+		
 		self.timeView.addSubview(currentTime)
+		
 		//剩余时间
 		let leftTime = createLabel([.flexibleHeight, .flexibleWidth, .flexibleLeftMargin], shadowOffset: CGSize(width: 0, height: 0), textColor: UIColor.white, text: nil, textAlignment: .right)
+		
 		self.timeView.addSubview(leftTime)
+		
 		self.leftTime = leftTime
+		
 		//歌曲名
 		let name: TrackLabel = TrackLabel()
+		
 		name.autoresizingMask = [.flexibleWidth, .flexibleTopMargin]
+		
 		self.backgroundView.addSubview(name)
+		
 		self.name = name
+		
 		//歌手名
 		let artist: TrackLabel = TrackLabel()
+		
 		artist.autoresizingMask = [.flexibleWidth, .flexibleTopMargin]
+		
 		self.backgroundView.addSubview(artist)
+		
 		self.artist = artist
+		
 		//专辑名
 		let album: TrackLabel = TrackLabel()
+		
 		album.autoresizingMask = [.flexibleWidth, .flexibleTopMargin]
+		
 		album.text = "尚未播放歌曲"
+		
 		self.backgroundView.addSubview(album)
+		
 		self.album = album
+		
 		//播放模式
 		playModeView.autoresizingMask = [.flexibleWidth, .flexibleTopMargin]
+		
 		playModeView.image = UIImage(named: "repeatOnB.png")
+		
 		playModeView.contentMode = .scaleAspectFit
+		
 		self.backgroundView.addSubview(playModeView)
+		
 		// 歌词
 		lrcView.autoresizingMask = [.flexibleWidth, .flexibleTopMargin]
+		
 		lrcView.isHidden = true
+		
 		self.addSubview(lrcView)
+		
 		self.lrcView.renderStatic = true
 
 	}
@@ -199,34 +246,72 @@ extension PlayerInterface {
 // MARK: - functional creation
 extension PlayerInterface {
 	
-	func createProgressView(_ flat: Bool, progress: CGFloat, animate: Bool, showText: Bool, showStroke: Bool, progressInset: NSNumber, showBackground: Bool, outerStrokeWidth: NSNumber, type: LDProgressType, autoresizingMask: UIViewAutoresizing, borderRadius: NSNumber, backgroundColor: UIColor) -> LDProgressView {
-		let buffer: LDProgressView = LDProgressView()
-		buffer.flat = flat as NSNumber!
-		buffer.progress = progress
-		buffer.animate = animate as NSNumber!
-		buffer.showText = showText as NSNumber!
-		buffer.showStroke = showStroke as NSNumber!
-		buffer.progressInset = progressInset
-		buffer.showBackground = showBackground as NSNumber!
-		buffer.outerStrokeWidth = outerStrokeWidth
-		buffer.type = type
-		buffer.borderRadius = borderRadius
-		buffer.backgroundColor = backgroundColor
-		buffer.autoresizingMask = autoresizingMask
-		return buffer
+	func createProgressView(_ flat: Bool,
+	                        progress: CGFloat,
+	                        animate: Bool,
+	                        showText: Bool,
+	                        showStroke: Bool,
+	                        progressInset: NSNumber,
+	                        showBackground: Bool,
+	                        outerStrokeWidth: NSNumber,
+	                        type: LDProgressType,
+	                        autoresizingMask: UIViewAutoresizing,
+	                        borderRadius: NSNumber,
+	                        backgroundColor: UIColor)
+		-> LDProgressView {
+		
+		
+			let buffer: LDProgressView = LDProgressView()
+
+			buffer.flat = flat as NSNumber!
+		
+			buffer.progress = progress
+		
+			buffer.animate = animate as NSNumber!
+		
+			buffer.showText = showText as NSNumber!
+		
+			buffer.showStroke = showStroke as NSNumber!
+		
+			buffer.progressInset = progressInset
+		
+			buffer.showBackground = showBackground as NSNumber!
+		
+			buffer.outerStrokeWidth = outerStrokeWidth
+		
+			buffer.type = type
+		
+			buffer.borderRadius = borderRadius
+		
+			buffer.backgroundColor = backgroundColor
+		
+			buffer.autoresizingMask = autoresizingMask
+		
+			return buffer
 	}
 	
 	func createLabel(_ autoresizingMask: UIViewAutoresizing, shadowOffset: CGSize?, textColor: UIColor, text: String?, textAlignment: NSTextAlignment) -> UILabel {
+		
 		let label: UILabel = UILabel()
+		
 		label.autoresizingMask = autoresizingMask
+		
 		label.textColor = textColor
+		
 		label.textAlignment = textAlignment
+		
 		if let unwrappedOffset = shadowOffset {
+		
 			label.shadowOffset = unwrappedOffset
+		
 		}
+		
 		if let unwrappedText = text {
+		
 			label.text = unwrappedText
+		
 		}
+		
 		return label
 	}
 }
@@ -263,7 +348,7 @@ extension PlayerInterface {
 			
 			self.artist?.text = track.artist
 			
-			self.lrcView.lyricStr = "[00:00.00] [00:03.82]Standing in a crowded room and I can't see your face [00:11.47]Put your arms around me, tell me everything's OK [00:19.29]In my mind, I'm running round a cold and empty space [00:27.00]Just put your arms around me, tell me everything's OK [00:31.02] [00:34.94]Break my bones but you won't see me fall, oh [00:42.64]The rising tide will rise against them all, oh [00:49.41] [00:49.60]Darling, hold my hand [00:53.38]Oh, won't you hold my hand? [00:57.29]Cause I don't wanna walk on my own anymore [01:00.91]Won't you understand? [01:03.97]Cause I don't wanna walk alone [01:06.24] [01:06.58]I'm ready for this, there's no denying [01:10.40]I'm ready for this, you stop me falling [01:14.32]I'm ready for this, I need you all in [01:18.11]I'm ready for this, so darling, hold my hand [01:21.64] [01:21.80]Soul is like a melting pot when you're not next to me [01:29.57]Tell me that you've got me and you're never gonna leave [01:37.33]Tryna find a moment where I can find release [01:44.66]Please tell me that you've got me [01:46.53]and you're never gonna leave [01:48.62] [01:52.92]Break my bones but you won't see me fall, oh [02:00.54]The rising tide will rise against them all, oh [02:07.43] [02:07.65]Darling, hold my hand [02:11.24]Oh, won't you hold my hand? [02:15.21]Cause I don't wanna walk on my own anymore [02:18.72]Won't you understand? [02:22.05]Cause I don't wanna walk alone [02:24.05] [02:24.46]I'm ready for this, there's no denying [02:28.37]I'm ready for this, you stop me falling [02:32.38]I'm ready for this, I need you all in [02:36.13]I'm ready for this, so darling, hold my hand [02:39.45] [02:39.69]Don't wanna know [02:42.68]That feeling when I'm all alone [02:46.50]So please don't make me wait, [02:48.43]cause I don't wanna break [02:50.39]And I don't wanna fall [02:52.75] [02:55.07]When you're next to me [02:58.24]Can tell I'm not afraid to be [03:02.18]That you don't make me wait, [03:03.93]and never let me break [03:05.94]You never let me fall [03:08.56] [03:10.17]Darling, hold my hand [03:17.67]Cause I don't wanna walk on my own anymore [03:21.26]Won't you understand? [03:24.55]Cause I don't wanna walk alone [03:26.40] [03:26.87]I'm ready for this, there's no denying [03:30.78]I'm ready for this, you stop me falling [03:34.70]I'm ready for this, I need you all in [03:38.58]I'm ready for this, so darling, hold my hand [03:42.62] "
+			self.lrcView.parseLyrics(lyrics: "[00:00.00] [00:03.82]Standing in a crowded room and I can't see your face [00:11.47]Put your arms around me, tell me everything's OK [00:19.29]In my mind, I'm running round a cold and empty space [00:27.00]Just put your arms around me, tell me everything's OK [00:31.02] [00:34.94]Break my bones but you won't see me fall, oh [00:42.64]The rising tide will rise against them all, oh [00:49.41] [00:49.60]Darling, hold my hand [00:53.38]Oh, won't you hold my hand? [00:57.29]Cause I don't wanna walk on my own anymore [01:00.91]Won't you understand? [01:03.97]Cause I don't wanna walk alone [01:06.24] [01:06.58]I'm ready for this, there's no denying [01:10.40]I'm ready for this, you stop me falling [01:14.32]I'm ready for this, I need you all in [01:18.11]I'm ready for this, so darling, hold my hand [01:21.64] [01:21.80]Soul is like a melting pot when you're not next to me [01:29.57]Tell me that you've got me and you're never gonna leave [01:37.33]Tryna find a moment where I can find release [01:44.66]Please tell me that you've got me [01:46.53]and you're never gonna leave [01:48.62] [01:52.92]Break my bones but you won't see me fall, oh [02:00.54]The rising tide will rise against them all, oh [02:07.43] [02:07.65]Darling, hold my hand [02:11.24]Oh, won't you hold my hand? [02:15.21]Cause I don't wanna walk on my own anymore [02:18.72]Won't you understand? [02:22.05]Cause I don't wanna walk alone [02:24.05] [02:24.46]I'm ready for this, there's no denying [02:28.37]I'm ready for this, you stop me falling [02:32.38]I'm ready for this, I need you all in [02:36.13]I'm ready for this, so darling, hold my hand [02:39.45] [02:39.69]Don't wanna know [02:42.68]That feeling when I'm all alone [02:46.50]So please don't make me wait, [02:48.43]cause I don't wanna break [02:50.39]And I don't wanna fall [02:52.75] [02:55.07]When you're next to me [02:58.24]Can tell I'm not afraid to be [03:02.18]That you don't make me wait, [03:03.93]and never let me break [03:05.94]You never let me fall [03:08.56] [03:10.17]Darling, hold my hand [03:17.67]Cause I don't wanna walk on my own anymore [03:21.26]Won't you understand? [03:24.55]Cause I don't wanna walk alone [03:26.40] [03:26.87]I'm ready for this, there's no denying [03:30.78]I'm ready for this, you stop me falling [03:34.70]I'm ready for this, I need you all in [03:38.58]I'm ready for this, so darling, hold my hand [03:42.62] ")
 			
 			self.lrcView.noLrcLabel.isHidden = true
 			
@@ -326,29 +411,41 @@ extension PlayerInterface {
 		removeCurrentTimeTimer()
 		// ensure the timer is up-to-now
 		updateCurrentTime()
+		
 		updatePlayBackProgress()
 		
 		currentTimeTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateCurrentTime), userInfo: nil, repeats: true)
+		
 		playbackTimer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(updatePlayBackProgress), userInfo: nil, repeats: true)
 		
 		RunLoop.main.add(currentTimeTimer!, forMode: .commonModes)
+		
 		RunLoop.main.add(playbackTimer!, forMode: .commonModes)
 		
 	}
 	// remove timers
 	func removeCurrentTimeTimer() {
+		
 		currentTimeTimer?.invalidate()
+		
 		playbackTimer?.invalidate()
+		
 		currentTimeTimer = nil
+		
 		playbackTimer = nil
+		
 		bufferingIndicator?.progress = 0
+		
 		progress?.progress = 0
+	
 	}
 	
 	func updateCurrentTime() {
+		
 		if streamer.activeStream.duration.minute == 0 && streamer.activeStream.duration.second == 0 { return }
 		// get currentTime and duration
 		let cur: FSStreamPosition = (streamer.activeStream.currentTimePlayed)
+		
 		let total: FSStreamPosition = (streamer.activeStream.duration)
 		// set play progress
 		let progress: Double = (Double)(cur.minute * 60 + cur.second) / (Double)(total.minute * 60 + total.second)
@@ -357,19 +454,27 @@ extension PlayerInterface {
 		
 		// set current time and time remaining
 		var currSecond: String = String(cur.second)
+		
 		let totalLeftSecond = (total.minute * 60) + (total.second) - (cur.minute * 60) - (cur.second)
+		
 		let leftMin: String = String(totalLeftSecond / 60)
+		
 		var leftSec: String = String(totalLeftSecond % 60)
 		
 		if cur.second < 10 {
+			
 			currSecond = "0" + currSecond
+		
 		}
 		
 		if Int(leftSec)! < 10 {
+			
 			leftSec = "0" + leftSec
+		
 		}
 		
 		currentTime.text = NSString(format: "%d:%@", cur.minute, currSecond) as String
+		
 		leftTime.text = NSString(format: "%@:%@", leftMin, leftSec) as String
 		
 		// when play at the end of file

@@ -28,98 +28,94 @@ fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
 class LrcView: DRNRealTimeBlurView {
 	
 	var noLrcLabel = UILabel()
+	
 	lazy var chLrcArray: NSMutableArray = {[]}()
+	
 	fileprivate var tableView = UITableView()
+	
 	fileprivate var currentIndex: Int?
+	
 	fileprivate lazy var lyricsLines: NSMutableArray = {[]}()
 	
 	var currentTime: TimeInterval? {
 		
-
-	
 		didSet {
-		
+
 			guard let `currentTime` = currentTime else { return }
 			
-			let minute: Int = (Int)(currentTime / 60)
-			let second: Int = (Int)(currentTime) % 60
-			let currentTimeStr = String(format: "%02d:%02d", minute, second)
-			let count = self.lyricsLines.count
+			if (oldValue == nil) {
 			
-//			for idx in idx..<count {
-//			
-//				let currentLine = self.lyricsLines[idx] as! LrcLine
-//				//当前模型时间
-//				let currentLineTime = currentLine.time
-//				//下一个模型时间
-//				var nextLineTime: String? = nil
-//				
-//				let nextIdx = idx + 1
-//				
-//				if nextIdx < self.lyricsLines.count {
-//				
-//					let nextLine = self.lyricsLines[nextIdx] as! LrcLine
-//					
-//					nextLineTime = nextLine.time!
-//				
-//				}
-//				
-//				// 判断是否为正在播放的歌词
-//				if currentTimeStr.compare(currentLineTime!) != .orderedAscending
-//					&& currentTimeStr.compare(nextLineTime!) == .orderedAscending
-//					&& currentIndex != idx {
-//					//刷新tableView
-//					let reloadRows: Array = [IndexPath(row: currentIndex!, section: 0), IndexPath(row: idx	, section: 0)]
-//					
-//					
-//					
-//					self.currentIndex = idx
-//					
-//					
-//					self.tableView.reloadRows(at: reloadRows, with: .none)
-//					//滚动到对应的
-//					let indexPath = IndexPath(row: idx, section: 0)
-//					
-//					tableView.scrollToRow(at: indexPath, at: .top, animated: true)
-//				}
-//			}
-		}
-	}
-	
-	var lyricStr: String? {
-		
-		didSet {
-			
-			guard let `lyricStr` = lyricStr else { return }
-			
-			self.lyricStr = lyricStr
-			
-			let lrcComponents = lyricStr.components(separatedBy: "[")
-			
-			for line: String in lrcComponents {
-				
-				let lrc = LrcLine()
-				//如果是歌名的头部信息
-				let array = line.components(separatedBy: "]")
-				
-				lrc.time = array.first?.replacingOccurrences(of: "[", with: "")
-				
-				lrc.lyrics = array.last
-				
-				self.lyricsLines.add(lrc)
+				currentIndex = -1
 				
 			}
 			
-			self.tableView.reloadData()
+			print(currentIndex as Any)
 			
+			let minute: Int = (Int)(currentTime / 60)
+			
+			let second: Int = (Int)(currentTime) % 60
+			
+			let currentTimeStr = String(format: "%02d:%02d", minute, second)
+			
+			let count = self.lyricsLines.count
+			
+			let idx = currentIndex! + 1
+			
+			for idx in 0..<count {
+				
+				let lyric = self.lyricsLines[idx] as! LrcLine
+				
+				
+				// 当前模型时间
+				let lyricTime = lyric.time!
+				
+				// 下一个模型的时间
+				var nextLyricTime = ""
+				
+				let nextIdx = idx + 1
+				
+				if nextIdx < lyricsLines.count {
+					
+					let nextLyric = lyricsLines[nextIdx] as! LrcLine
+					
+					nextLyricTime = nextLyric.time!
+					
+				}
+				
+				
+				// 判断是否为正在播放的歌词
+				if currentTimeStr.compare(lyricTime) != .orderedAscending
+						&& currentTimeStr.compare(nextLyricTime) == .orderedAscending
+						&& currentIndex != idx {
+					//刷新tableView
+					let reloadRows: Array = [IndexPath(row: currentIndex!, section: 0), IndexPath(row: idx	, section: 0)]
+
+
+
+					self.currentIndex = idx
+
+
+					self.tableView.reloadRows(at: reloadRows, with: .none)
+					//滚动到对应的
+					let indexPath = IndexPath(row: idx, section: 0)
+
+					tableView.scrollToRow(at: indexPath, at: .top, animated: true)
+
+				}
+			}
 		}
-		
 	}
+	
+		
+	
 
 
 	override init(frame: CGRect) {
+		
 		super.init(frame: frame)
+		
 		setup()
+	
 	}
 
 	required init?(coder aDecoder: NSCoder) {
@@ -151,7 +147,9 @@ class LrcView: DRNRealTimeBlurView {
 		tableView.register(LrcCell.self, forCellReuseIdentifier: "lrc")
 		
 		self.addSubview(tableView)
+		
 	}
+	
 	override func layoutSubviews() {
 		
 		super.layoutSubviews()
@@ -164,12 +162,35 @@ class LrcView: DRNRealTimeBlurView {
 	
 	}
 	
+}
 
+extension LrcView {
 	
-
+	func parseLyrics(lyrics: String) {
+		
+		lyricsLines = []
+		
+		let sepArr = lyrics.components(separatedBy: "[")
+		
+		for lyric in sepArr {
+			
+			let lrc = LrcLine()
+			
+			//如果是歌名的头部信息
+			let array = lyric.components(separatedBy: "]")
+			
+			lrc.time = array.first?.replacingOccurrences(of: "[", with: "")
+			
+			lrc.lyrics = array.last
+			
+			self.lyricsLines.add(lrc)
+			
+		}
+		
+		self.tableView.reloadData()
+		
+	}
 	
-
-
 }
 
 extension LrcView: UITableViewDataSource {
@@ -198,8 +219,6 @@ extension LrcView: UITableViewDelegate {
 		if self.currentIndex == indexPath.row {
 			
 			cell.textLabel?.textColor = UIColor.white
-			
-			print(indexPath.row)
 			
 		} else {
 			
