@@ -46,43 +46,43 @@ class LrcView: DRNRealTimeBlurView {
 			let currentTimeStr = String(format: "%02d:%02d", minute, second)
 			let count = self.lyricsLines.count
 			
-			for idx in idx..<count {
-			
-				let currentLine = self.lyricsLines[idx] as! LrcLine
-				//当前模型时间
-				let currentLineTime = currentLine.time
-				//下一个模型时间
-				var nextLineTime: String? = nil
-				
-				let nextIdx = idx + 1
-				
-				if nextIdx < self.lyricsLines.count {
-				
-					let nextLine = self.lyricsLines[nextIdx] as! LrcLine
-					
-					nextLineTime = nextLine.time!
-				
-				}
-				
-				// 判断是否为正在播放的歌词
-				if currentTimeStr.compare(currentLineTime!) != .orderedAscending
-					&& currentTimeStr.compare(nextLineTime!) == .orderedAscending
-					&& currentIndex != idx {
-					//刷新tableView
-					let reloadRows: Array = [IndexPath(row: currentIndex!, section: 0), IndexPath(row: idx	, section: 0)]
-					
-					
-					
-					self.currentIndex = idx
-					
-					
-					self.tableView.reloadRows(at: reloadRows, with: .none)
-					//滚动到对应的
-					let indexPath = IndexPath(row: idx, section: 0)
-					
-					tableView.scrollToRow(at: indexPath, at: .top, animated: true)
-				}
-			}
+//			for idx in idx..<count {
+//			
+//				let currentLine = self.lyricsLines[idx] as! LrcLine
+//				//当前模型时间
+//				let currentLineTime = currentLine.time
+//				//下一个模型时间
+//				var nextLineTime: String? = nil
+//				
+//				let nextIdx = idx + 1
+//				
+//				if nextIdx < self.lyricsLines.count {
+//				
+//					let nextLine = self.lyricsLines[nextIdx] as! LrcLine
+//					
+//					nextLineTime = nextLine.time!
+//				
+//				}
+//				
+//				// 判断是否为正在播放的歌词
+//				if currentTimeStr.compare(currentLineTime!) != .orderedAscending
+//					&& currentTimeStr.compare(nextLineTime!) == .orderedAscending
+//					&& currentIndex != idx {
+//					//刷新tableView
+//					let reloadRows: Array = [IndexPath(row: currentIndex!, section: 0), IndexPath(row: idx	, section: 0)]
+//					
+//					
+//					
+//					self.currentIndex = idx
+//					
+//					
+//					self.tableView.reloadRows(at: reloadRows, with: .none)
+//					//滚动到对应的
+//					let indexPath = IndexPath(row: idx, section: 0)
+//					
+//					tableView.scrollToRow(at: indexPath, at: .top, animated: true)
+//				}
+//			}
 		}
 	}
 	
