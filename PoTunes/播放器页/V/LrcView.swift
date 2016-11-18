@@ -8,22 +8,6 @@
 
 import UIKit
 
-fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
-	
-	switch (lhs, rhs) {
-  
-	case let (l?, r?):
-    return l < r
-  
-	case (nil, _?):
-    return true
-  
-	default:
-    return false
-  
-	}
-}
-
 //MARK: - 代理
 class LrcView: DRNRealTimeBlurView {
 	
@@ -48,8 +32,6 @@ class LrcView: DRNRealTimeBlurView {
 				currentIndex = -1
 				
 			}
-			
-			print(currentIndex as Any)
 			
 			let minute: Int = (Int)(currentTime / 60)
 			
@@ -82,7 +64,6 @@ class LrcView: DRNRealTimeBlurView {
 					
 				}
 				
-				
 				// 判断是否为正在播放的歌词
 				if currentTimeStr.compare(lyricTime) != .orderedAscending
 						&& currentTimeStr.compare(nextLyricTime) == .orderedAscending
@@ -106,10 +87,7 @@ class LrcView: DRNRealTimeBlurView {
 		}
 	}
 	
-		
 	
-
-
 	override init(frame: CGRect) {
 		
 		super.init(frame: frame)
@@ -206,6 +184,7 @@ extension LrcView: UITableViewDataSource {
 		return self.lyricsLines.count
 		
 	}
+	
 }
 
 extension LrcView: UITableViewDelegate {
@@ -228,4 +207,5 @@ extension LrcView: UITableViewDelegate {
 		
 		return cell
 	}
+	
 }

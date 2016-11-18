@@ -53,7 +53,6 @@
 		3CB2E3031BA7B26800805D4F /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3CB2E3021BA7B26800805D4F /* Images.xcassets */; };
 		3CB2E3061BA7B26800805D4F /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3CB2E3041BA7B26800805D4F /* LaunchScreen.xib */; };
 		3CB2E3121BA7B26800805D4F /* PoTunesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB2E3111BA7B26800805D4F /* PoTunesTests.m */; };
-		3CB2E32A1BA7CA5D00805D4F /* PCLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB2E3251BA7CA5D00805D4F /* PCLabel.m */; };
 		3CB2E32B1BA7CA5D00805D4F /* PCButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB2E3271BA7CA5D00805D4F /* PCButton.m */; };
 		3CB2E3B11BA7CF2200805D4F /* BebasNeue.otf in Resources */ = {isa = PBXBuildFile; fileRef = 3CB2E3B01BA7CF2200805D4F /* BebasNeue.otf */; };
 		3CB2E3FC1BA7D18900805D4F /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CB2E3FB1BA7D18900805D4F /* CFNetwork.framework */; };
@@ -106,7 +105,6 @@
 		3CFA58D91D6706D700341763 /* UIScrollView+MJRefresh.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CFA587C1D6706D700341763 /* UIScrollView+MJRefresh.m */; };
 		3CFA58DA1D6706D700341763 /* UIView+MJExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CFA587E1D6706D700341763 /* UIView+MJExtension.m */; };
 		3CFA58DB1D6706D700341763 /* PoTunes.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = 3CFA587F1D6706D700341763 /* PoTunes.entitlements */; };
-		3CFFC7FF1D5DC49000696F66 /* PCLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFFC7FE1D5DC49000696F66 /* PCLabel.swift */; };
 		3CFFC8031D5DC65D00696F66 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3CFFC8021D5DC65D00696F66 /* Main.storyboard */; };
 /* End PBXBuildFile section */
 
@@ -193,7 +191,6 @@
 		3C9641FD1D6712C500386ABB /* libBPush.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libBPush.a; sourceTree = "<group>"; };
 		3C9642041D67184F00386ABB /* EVCircularProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EVCircularProgressView.h; sourceTree = "<group>"; };
 		3C9642051D67184F00386ABB /* EVCircularProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EVCircularProgressView.m; sourceTree = "<group>"; };
-		3C96420D1D6AAF4C00386ABB /* ArticleCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ArticleCell.xib; sourceTree = "<group>"; };
 		3CA224FD1BAFDCDC0028387F /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		3CB09B761D5F661500DEAEDA /* 破音万里-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "破音万里-Bridging-Header.h"; sourceTree = "<group>"; };
 		3CB2E2F21BA7B26800805D4F /* PoTunes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PoTunes.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -206,8 +203,6 @@
 		3CB2E30B1BA7B26800805D4F /* 破音万里.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "破音万里.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3CB2E3101BA7B26800805D4F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3CB2E3111BA7B26800805D4F /* PoTunesTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PoTunesTests.m; sourceTree = "<group>"; };
-		3CB2E3241BA7CA5D00805D4F /* PCLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCLabel.h; sourceTree = "<group>"; };
-		3CB2E3251BA7CA5D00805D4F /* PCLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCLabel.m; sourceTree = "<group>"; };
 		3CB2E3261BA7CA5D00805D4F /* PCButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCButton.h; sourceTree = "<group>"; };
 		3CB2E3271BA7CA5D00805D4F /* PCButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCButton.m; sourceTree = "<group>"; };
 		3CB2E3B01BA7CF2200805D4F /* BebasNeue.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = BebasNeue.otf; sourceTree = "<group>"; };
@@ -240,8 +235,6 @@
 		3CDFB3971DD776D8006C0975 /* TrackCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackCell.swift; sourceTree = "<group>"; };
 		3CDFB3991DD77CD5006C0975 /* UIColor+RGB.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+RGB.swift"; sourceTree = "<group>"; };
 		3CDFB39B1DD83F48006C0975 /* BarItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BarItem.swift; sourceTree = "<group>"; };
-		3CF7AFBA1BAA997D00F764BD /* GeocodeAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeocodeAnnotation.h; sourceTree = "<group>"; };
-		3CF7AFBB1BAA997D00F764BD /* GeocodeAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeocodeAnnotation.m; sourceTree = "<group>"; };
 		3CF7AFBD1BAAA14000F764BD /* CommonUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonUtility.h; sourceTree = "<group>"; };
 		3CF7AFBE1BAAA14000F764BD /* CommonUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonUtility.m; sourceTree = "<group>"; };
 		3CF7AFC01BAAA19500F764BD /* LineDashPolyline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LineDashPolyline.h; sourceTree = "<group>"; };
@@ -298,7 +291,6 @@
 		3CFA587E1D6706D700341763 /* UIView+MJExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+MJExtension.m"; sourceTree = "<group>"; };
 		3CFA587F1D6706D700341763 /* PoTunes.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = PoTunes.entitlements; sourceTree = "<group>"; };
 		3CFFC7F61D5DBF3500696F66 /* 破音万里-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "破音万里-Bridging-Header.h"; sourceTree = "<group>"; };
-		3CFFC7FE1D5DC49000696F66 /* PCLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PCLabel.swift; sourceTree = "<group>"; };
 		3CFFC8021D5DC65D00696F66 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		5ACE65060298DC83FD3A5186 /* Pods-破音万里.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-破音万里.release.xcconfig"; path = "Pods/Target Support Files/Pods-破音万里/Pods-破音万里.release.xcconfig"; sourceTree = "<group>"; };
 		AEEF67891B1F3F39F233DA7F /* Pods_____.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = "Pods_____.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -663,12 +655,8 @@
 			children = (
 				3CCA14EE1BA8080700D45C52 /* SharedMapView.h */,
 				3CCA14EF1BA8080700D45C52 /* SharedMapView.m */,
-				3CB2E3241BA7CA5D00805D4F /* PCLabel.h */,
-				3CB2E3251BA7CA5D00805D4F /* PCLabel.m */,
 				3CB2E3261BA7CA5D00805D4F /* PCButton.h */,
 				3CB2E3271BA7CA5D00805D4F /* PCButton.m */,
-				3CFFC7FE1D5DC49000696F66 /* PCLabel.swift */,
-				3C96420D1D6AAF4C00386ABB /* ArticleCell.xib */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -680,8 +668,6 @@
 				3CF7AFC11BAAA19500F764BD /* LineDashPolyline.m */,
 				3CF7AFBD1BAAA14000F764BD /* CommonUtility.h */,
 				3CF7AFBE1BAAA14000F764BD /* CommonUtility.m */,
-				3CF7AFBA1BAA997D00F764BD /* GeocodeAnnotation.h */,
-				3CF7AFBB1BAA997D00F764BD /* GeocodeAnnotation.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -1032,14 +1018,14 @@
 /* Begin PBXShellScriptBuildPhase section */
 		3C77D24F1BE3D6FD0029AB70 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
+			buildActionMask = 8;
 			files = (
 			);
 			inputPaths = (
 			);
 			outputPaths = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
+			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
 			shellScript = "#!/bin/bash\nbuildNumber=$(/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"$INFOPLIST_FILE\")\nbuildNumber=$(($buildNumber + 1))\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"$INFOPLIST_FILE\"";
 		};
@@ -1124,7 +1110,6 @@
 				3C155ED51DD448F000375469 /* NavigationController.swift in Sources */,
 				3C155EC31DD43A7A00375469 /* DownloadedCell.swift in Sources */,
 				3C155ED21DD4437C00375469 /* PCNaviController.m in Sources */,
-				3CFFC7FF1D5DC49000696F66 /* PCLabel.swift in Sources */,
 				3CDFB39C1DD83F48006C0975 /* BarItem.swift in Sources */,
 				3C155ED31DD4437C00375469 /* PCNavigationController.m in Sources */,
 				3CFA58D61D6706D700341763 /* MJRefreshFooterView.m in Sources */,
@@ -1151,7 +1136,6 @@
 				3CCFBF4E1DD41F1C00514873 /* UIColor+RGBValues.m in Sources */,
 				3CFA58C41D6706D700341763 /* input_stream.cpp in Sources */,
 				3CDFB3931DD76E5D006C0975 /* SongListController.swift in Sources */,
-				3CB2E32A1BA7CA5D00805D4F /* PCLabel.m in Sources */,
 				3CFA58D81D6706D700341763 /* UIScrollView+MJExtension.m in Sources */,
 				3C3BD3181DDDA264007545DC /* DRNRealTimeBlurView.m in Sources */,
 				3C0A1A9A1DD5B72000E90306 /* MainControllers.swift in Sources */,

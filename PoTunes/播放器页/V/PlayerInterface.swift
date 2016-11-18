@@ -121,13 +121,17 @@ class PlayerInterface: UIView {
 		switch remoteControl {
 		
 			case .remoteControlTogglePlayPause, .remoteControlPlay, .remoteControlPause:
+				
 				self.playOrPause()
+			
 				break
 			
 			case .remoteControlNextTrack:
+				
 				self.playNext()
 			
 			case .remoteControlPreviousTrack:
+				
 				self.playPrevious()
 			
 			default: break

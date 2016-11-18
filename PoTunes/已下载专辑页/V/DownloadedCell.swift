@@ -8,7 +8,7 @@
 
 import UIKit
 
-class DownloadedCell:  PCSongListTableViewCell{
+class DownloadedCell:  PlaylistCell {
 	
 	override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
 		super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -26,6 +26,6 @@ class DownloadedCell:  PCSongListTableViewCell{
 		self.contentView.frame = self.bounds
 		self.imageView?.frame = CGRect(x: 10, y: 0, width: height, height: height)
 		self.textLabel?.frame = CGRect(x: height + 15, y: 0, width: width - height - 15, height: height)
-		self.divider?.frame = CGRect(x: height + 15, y: 0, width: width - height - 15, height: 1)
+//		self.divider?.frame = CGRect(x: height + 15, y: 0, width: width - height - 15, height: 1)
 	}
 }

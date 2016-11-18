@@ -54,14 +54,23 @@ class MainControllers: UIView {
 	
 	//MARK: - TODO
 	func setupSingleViewControllerToScrollView(_ controller: UIViewController, hidden: Bool, frame: CGRect) {
+		
 		let nav: NavigationController = NavigationController(rootViewController: controller)
-		nav.view.frame = CGRect(x: 0, y: 20, width: self.bounds.size.width, height: self.bounds.size.height)
+		
+		nav.view.frame = CGRect(x: 0, y: 64, width: frame.size.width, height: frame.size.height)
+		
 		self.controllers.add(nav)
+		
 		self.addSubview(nav.view)
+		
 		nav.view.isHidden = hidden
+		
 		if hidden == false {
+		
 			self.selectedView = nav.view
+		
 		}
+		
 	}
 	
 	//MARK: - 点击tabBarButton事件
@@ -78,8 +87,11 @@ class MainControllers: UIView {
 	}
 	
 	func setupTabBarItem(_ count: Int, frame: CGRect) {
+		
 		let iconArr: Array = [FontAwesome.home, FontAwesome.music, FontAwesome.road, FontAwesome.wrench]
+		
 		for i in 0..<count {
+		
 			let button: BarItem = BarItem(frame: CGRect(x: CGFloat(i) * self.bounds.size.width / CGFloat(count), y: 0, width: self.bounds.size.width / CGFloat(count), height: 64))
 			button.setTitle(String.fontAwesomeIcon(name: iconArr[i]), for: .normal)
 			if i == 0 {

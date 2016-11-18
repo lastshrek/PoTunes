@@ -15,6 +15,7 @@ class AlbumDownloadViewController: UITableViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		tableView.separatorStyle = .none
+		tableView.contentInset = UIEdgeInsetsMake(0, 0, 64, 0)
 		tableView.register(DownloadedCell.self, forCellReuseIdentifier: "downloaded")
 		
 	}
@@ -29,10 +30,14 @@ class AlbumDownloadViewController: UITableViewController {
 	override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 			// #warning Incomplete implementation, return the number of rows
 		if section == 0 {
+		
 			return 1
+		
 		} else {
+			
 			return 10
 		}
+		
 	}
 
 	

@@ -12,6 +12,8 @@ class SettingController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+			tableView.contentInset = UIEdgeInsetsMake(0, 0, 64, 0)
+
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false

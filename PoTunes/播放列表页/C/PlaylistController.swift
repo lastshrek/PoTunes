@@ -24,6 +24,8 @@ class PlaylistController: UITableViewController {
 	
 	weak var delegate: PlaylistDelegate?
 	
+	var recognizer: UIGestureRecognizer?
+	
 	override func viewDidLoad() {
 		
 		super.viewDidLoad()
@@ -37,6 +39,7 @@ class PlaylistController: UITableViewController {
 		tableView.backgroundColor = UIColor.black
 		
 		tableView.register(PlaylistCell.self, forCellReuseIdentifier: "playlist")
+		
 		// Refresh
 		addPullToRefresh()
 		// MARK: -  检查本地缓存播放列表
@@ -120,6 +123,13 @@ class PlaylistController: UITableViewController {
 				self.delegate?.tabBarCount(count: 3)
 			
 			}
+			
+			let path = self.dirDoc() + "/article.plist"
+			
+			print(response.data)
+			
+//			self.playlists.writeToFile()
+			
 		})
 	}
 	
@@ -148,17 +158,17 @@ class PlaylistController: UITableViewController {
 			let url: URL = URL(string: playlist.cover)!
 			
 			cell.imageView?.sd_setImage(with: url, placeholderImage: UIImage(named:"defaultArtCover"))
+			
+			// MARK: - 添加下载手势 - TODO
+			let downloadSwipe: UISwipeGestureRecognizer = UISwipeGestureRecognizer.init(target: self, action: #selector(download(recognizer:)))
+			
+			downloadSwipe.direction = .right
+			
+			downloadSwipe.numberOfTouchesRequired = 1
+			
+			cell.addGestureRecognizer(downloadSwipe)
 		
 		}
-		
-		// MARK: - 添加下载手势 - TODO
-		let downloadSwipe: UISwipeGestureRecognizer = UISwipeGestureRecognizer.init(target: self, action: #selector(PlaylistController.download))
-		
-		downloadSwipe.direction = .right
-		
-		downloadSwipe.numberOfTouchesRequired = 1
-		
-		cell.addGestureRecognizer(downloadSwipe)
 		
 		return cell
 	}
@@ -197,9 +207,13 @@ class PlaylistController: UITableViewController {
 		})
 	}
 	// MARK: - 下载每月歌曲 - TODO
-	func download() {
-		debugPrint("123")
+	func download(recognizer: UIGestureRecognizer) {
+		
+		
+		
 	}
+	
+	
 	
 }
 
