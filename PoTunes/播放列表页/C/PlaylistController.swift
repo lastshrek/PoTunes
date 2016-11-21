@@ -22,6 +22,7 @@ class PlaylistController: UITableViewController {
 	
 	var playlists: Array<Any> = []
 	
+	
 	weak var delegate: PlaylistDelegate?
 	
 	var recognizer: UIGestureRecognizer?
@@ -40,11 +41,17 @@ class PlaylistController: UITableViewController {
 		
 		tableView.register(PlaylistCell.self, forCellReuseIdentifier: "playlist")
 		
+		tableView.contentInset = UIEdgeInsetsMake(0, 0, 64, 0)
+		
+		tableView.contentOffset = CGPoint(x: 0, y: 0)
+		
 		// Refresh
 		addPullToRefresh()
 		// MARK: -  检查本地缓存播放列表
 		checkLocalPlaylists()
-		// add delegate
+		
+		debugPrint(self.dirDoc())
+		
 	}
 	
 	func checkLocalPlaylists() {
@@ -124,12 +131,6 @@ class PlaylistController: UITableViewController {
 			
 			}
 			
-			let path = self.dirDoc() + "/article.plist"
-			
-			print(response.data)
-			
-//			self.playlists.writeToFile()
-			
 		})
 	}
 	
@@ -182,7 +183,7 @@ class PlaylistController: UITableViewController {
 		let playlist: Playlist = self.playlists[indexPath.row] as! Playlist
 
 		let url = URL(string: T_URL + "\(playlist.ID)")
-		// MARK: - 上线屏蔽 - TODO
+
 		Alamofire.request(url!).response(completionHandler: { (response) in
 			
 			let tracks: Array = Reflect<Track>.mapObjects(data: response.data)
@@ -209,12 +210,39 @@ class PlaylistController: UITableViewController {
 	// MARK: - 下载每月歌曲 - TODO
 	func download(recognizer: UIGestureRecognizer) {
 		
-		
-		
+		DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+			
+			HUD.flash(.label("开始下载"), delay: 0.6)
+			
+			let position = recognizer.location(in: self.tableView)
+			
+			let indexPath: IndexPath = self.tableView.indexPathForRow(at: position)!
+			
+			print(indexPath)
+			
+//			let playlist = self.playlists[(indexPath?.row)!] as? Playlist
+//			
+//			// get album name
+//			let album = playlist?.title
+//			
+//			let url = URL(string: T_URL + "\(playlist?.ID)")
+//			
+//			Alamofire.request(url!).response(completionHandler: { (response) in
+//				
+//				let tracks: Array = Reflect<Track>.mapObjects(data: response.data)
+//				
+//				let name = Notification.Name("fullAlbum")
+//				
+//				let userInfo = ["album": album, "tracks": tracks] as [String : Any]
+//				
+//				let notify = Notification.init(name: name, object: nil, userInfo: userInfo)
+//				
+//				NotificationCenter.default.post(notify)
+//				
+//			})
+		}
 	}
-	
-	
-	
 }
+
 
 

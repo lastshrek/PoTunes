@@ -15,7 +15,6 @@
 		3C155EAE1DD4284000375469 /* PlaylistController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C155EA81DD4284000375469 /* PlaylistController.swift */; };
 		3C155EAF1DD4284000375469 /* Playlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C155EAA1DD4284000375469 /* Playlist.swift */; };
 		3C155EB21DD428A100375469 /* PlaylistCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C155EB11DD428A100375469 /* PlaylistCell.swift */; };
-		3C155EB51DD4292E00375469 /* DBHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C155EB41DD4292E00375469 /* DBHelper.m */; };
 		3C155EBB1DD429B700375469 /* PCDownloadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C155EBA1DD429B700375469 /* PCDownloadManager.m */; };
 		3C155EBD1DD42A1C00375469 /* AlbumDownloadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C155EBC1DD42A1C00375469 /* AlbumDownloadViewController.swift */; };
 		3C155EC11DD439F700375469 /* PCDownLoadedCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C155EC01DD439F700375469 /* PCDownLoadedCell.m */; };
@@ -48,6 +47,7 @@
 		3C9641FE1D6712C500386ABB /* libBPush.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C9641FD1D6712C500386ABB /* libBPush.a */; };
 		3C9642061D67184F00386ABB /* EVCircularProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C9642051D67184F00386ABB /* EVCircularProgressView.m */; };
 		3CA224FE1BAFDCDC0028387F /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CA224FD1BAFDCDC0028387F /* CoreMedia.framework */; };
+		3CA3E5D11DE2AB5300CB36ED /* DBHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CA3E5D01DE2AB5300CB36ED /* DBHelper.swift */; };
 		3CB2E2F81BA7B26800805D4F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB2E2F71BA7B26800805D4F /* main.m */; };
 		3CB2E2FB1BA7B26800805D4F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB2E2FA1BA7B26800805D4F /* AppDelegate.m */; };
 		3CB2E3031BA7B26800805D4F /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3CB2E3021BA7B26800805D4F /* Images.xcassets */; };
@@ -142,8 +142,6 @@
 		3C155EA81DD4284000375469 /* PlaylistController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaylistController.swift; sourceTree = "<group>"; };
 		3C155EAA1DD4284000375469 /* Playlist.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Playlist.swift; sourceTree = "<group>"; };
 		3C155EB11DD428A100375469 /* PlaylistCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaylistCell.swift; sourceTree = "<group>"; };
-		3C155EB31DD4292E00375469 /* DBHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBHelper.h; sourceTree = "<group>"; };
-		3C155EB41DD4292E00375469 /* DBHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DBHelper.m; sourceTree = "<group>"; };
 		3C155EB91DD429B700375469 /* PCDownloadManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCDownloadManager.h; sourceTree = "<group>"; };
 		3C155EBA1DD429B700375469 /* PCDownloadManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCDownloadManager.m; sourceTree = "<group>"; };
 		3C155EBC1DD42A1C00375469 /* AlbumDownloadViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlbumDownloadViewController.swift; sourceTree = "<group>"; };
@@ -192,6 +190,7 @@
 		3C9642041D67184F00386ABB /* EVCircularProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EVCircularProgressView.h; sourceTree = "<group>"; };
 		3C9642051D67184F00386ABB /* EVCircularProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EVCircularProgressView.m; sourceTree = "<group>"; };
 		3CA224FD1BAFDCDC0028387F /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		3CA3E5D01DE2AB5300CB36ED /* DBHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DBHelper.swift; sourceTree = "<group>"; };
 		3CB09B761D5F661500DEAEDA /* 破音万里-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "破音万里-Bridging-Header.h"; sourceTree = "<group>"; };
 		3CB2E2F21BA7B26800805D4F /* PoTunes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PoTunes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3CB2E2F61BA7B26800805D4F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -737,8 +736,6 @@
 			children = (
 				3C155EB91DD429B700375469 /* PCDownloadManager.h */,
 				3C155EBA1DD429B700375469 /* PCDownloadManager.m */,
-				3C155EB31DD4292E00375469 /* DBHelper.h */,
-				3C155EB41DD4292E00375469 /* DBHelper.m */,
 				3CCFBF441DD41F1C00514873 /* NSString+DirDoc.swift */,
 				3CDFB3991DD77CD5006C0975 /* UIColor+RGB.swift */,
 				3CCFBF451DD41F1C00514873 /* UIColor+RGBValues.h */,
@@ -749,6 +746,7 @@
 				3CCFBF4A1DD41F1C00514873 /* UIImage+Reflection.m */,
 				3CCFBF4B1DD41F1C00514873 /* UIView+Geometry.h */,
 				3CCFBF4C1DD41F1C00514873 /* UIView+Geometry.m */,
+				3CA3E5D01DE2AB5300CB36ED /* DBHelper.swift */,
 			);
 			path = Category;
 			sourceTree = "<group>";
@@ -948,7 +946,7 @@
 		3CB2E2EA1BA7B26800805D4F /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0810;
+				LastUpgradeCheck = 0820;
 				ORGANIZATIONNAME = Purchas;
 				TargetAttributes = {
 					3CB2E2F11BA7B26800805D4F = {
@@ -1134,6 +1132,7 @@
 				3CFA58C51D6706D700341763 /* stream_configuration.cpp in Sources */,
 				3CFA58CB1D6706D700341763 /* FSPlaylistItem.m in Sources */,
 				3CCFBF4E1DD41F1C00514873 /* UIColor+RGBValues.m in Sources */,
+				3CA3E5D11DE2AB5300CB36ED /* DBHelper.swift in Sources */,
 				3CFA58C41D6706D700341763 /* input_stream.cpp in Sources */,
 				3CDFB3931DD76E5D006C0975 /* SongListController.swift in Sources */,
 				3CFA58D81D6706D700341763 /* UIScrollView+MJExtension.m in Sources */,
@@ -1152,7 +1151,6 @@
 				3CB2E2FB1BA7B26800805D4F /* AppDelegate.m in Sources */,
 				3CFA58CD1D6706D700341763 /* Reachability.m in Sources */,
 				3CCFBF4F1DD41F1C00514873 /* UIImage+BoxBlur.m in Sources */,
-				3C155EB51DD4292E00375469 /* DBHelper.m in Sources */,
 				3C0A1A961DD5B35400E90306 /* MainScrollview.swift in Sources */,
 				3CB2E2F81BA7B26800805D4F /* main.m in Sources */,
 			);

@@ -84,6 +84,7 @@ class PlayerInterface: UIView {
 	}
 	
 	override func layoutSubviews() {
+		
 		super.layoutSubviews()
 		
 		backgroundView.frame = self.bounds
@@ -167,14 +168,34 @@ extension PlayerInterface {
 		self.backgroundView.addSubview(coverScroll)
 		
 		//缓冲条
-		let bufferingIndicator: LDProgressView = createProgressView(false, progress: 0, animate: false, showText: false, showStroke: false, progressInset: 0, showBackground: false, outerStrokeWidth: 0, type: LDProgressSolid, autoresizingMask: [.flexibleWidth, .flexibleTopMargin], borderRadius: 0, backgroundColor: UIColor.lightText)
+		let bufferingIndicator: LDProgressView = createProgressView(false, progress: 0,
+		                                                            animate: false,
+		                                                            showText: false,
+		                                                            showStroke: false,
+		                                                            progressInset: 0,
+		                                                            showBackground: false,
+		                                                            outerStrokeWidth: 0,
+		                                                            type: LDProgressSolid,
+		                                                            autoresizingMask: [.flexibleWidth, .flexibleTopMargin],
+		                                                            borderRadius: 0,
+		                                                            backgroundColor: UIColor.lightText)
 		
 		self.bufferingIndicator = bufferingIndicator
 		
 		self.backgroundView.addSubview(bufferingIndicator)
 		
 		//进度条
-		let progress: LDProgressView = createProgressView(false, progress: 0, animate: false, showText: false, showStroke: false, progressInset: 0, showBackground: false, outerStrokeWidth: 0, type: LDProgressSolid, autoresizingMask: [.flexibleWidth, .flexibleTopMargin], borderRadius: 0, backgroundColor: UIColor.clear)
+		let progress: LDProgressView = createProgressView(false, progress: 0,
+		                                                  animate: false,
+		                                                  showText: false,
+		                                                  showStroke: false,
+		                                                  progressInset: 0,
+		                                                  showBackground: false,
+		                                                  outerStrokeWidth: 0,
+		                                                  type: LDProgressSolid,
+		                                                  autoresizingMask: [.flexibleWidth, .flexibleTopMargin],
+		                                                  borderRadius: 0,
+		                                                  backgroundColor: UIColor.clear)
 		
 		self.progress = progress
 		
@@ -185,14 +206,22 @@ extension PlayerInterface {
 		
 		self.backgroundView.addSubview(timeView)
 		//当前播放时间
-		let currentTime = createLabel([.flexibleHeight, .flexibleWidth], shadowOffset: CGSize(width: 0, height: 0), textColor: UIColor.white, text: nil, textAlignment: .left)
+		let currentTime = createLabel([.flexibleHeight, .flexibleWidth],
+		                              shadowOffset: CGSize(width: 0, height: 0),
+		                              textColor: UIColor.white,
+		                              text: nil,
+		                              textAlignment: .left)
 		
 		self.currentTime = currentTime
 		
 		self.timeView.addSubview(currentTime)
 		
 		//剩余时间
-		let leftTime = createLabel([.flexibleHeight, .flexibleWidth, .flexibleLeftMargin], shadowOffset: CGSize(width: 0, height: 0), textColor: UIColor.white, text: nil, textAlignment: .right)
+		let leftTime = createLabel([.flexibleHeight, .flexibleWidth, .flexibleLeftMargin],
+		                           shadowOffset: CGSize(width: 0, height: 0),
+		                           textColor: UIColor.white,
+		                           text: nil,
+		                           textAlignment: .right)
 		
 		self.timeView.addSubview(leftTime)
 		
@@ -489,11 +518,8 @@ extension PlayerInterface {
 		self.streamer.activeStream.onCompletion = { () ->Void in
 			
 //			self.progress?.progress = 0
-//			
-//			self.lrcView.lrcName = nil;
-//
-//			self.lrcView.chLrcName = nil;
-//			
+
+			
 //			self.lrcView?.noLrcLabel?.text = "暂无歌词"
 			
 			weakself?.playNext()

@@ -8,6 +8,7 @@
 
 import UIKit
 import Masonry
+import FMDB
 
 
 class Main: UIViewController, UIGestureRecognizerDelegate, UIAlertViewDelegate {
@@ -19,6 +20,7 @@ class Main: UIViewController, UIGestureRecognizerDelegate, UIAlertViewDelegate {
 	var mainControllers: MainControllers = MainControllers()
 	var player: PlayerController = PlayerController()
 	lazy var songs: NSArray = { [] }()
+	var db: FMDatabase?
 
 	override func viewDidLoad() {
 		
@@ -36,12 +38,17 @@ class Main: UIViewController, UIGestureRecognizerDelegate, UIAlertViewDelegate {
 		// 获取上次播放曲目
 		//_ = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString")
 		//print("--------")
+		// create DB
+		createDB()
+		
 	}
     
 
 	// 去除状态栏
 	override var prefersStatusBarHidden : Bool {
+		
 		return true
+	
 	}
 	
 	// MARK: - 添加ScrollView
@@ -77,6 +84,25 @@ class Main: UIViewController, UIGestureRecognizerDelegate, UIAlertViewDelegate {
 		
 		scrollView.addSubview(mainControllers)
 	
+	}
+	
+	// MARK: - createDB
+	func createDB() {
+		
+		// DB Location
+		
+		let path = self.dirDoc().appending("/downloadingSong.db")
+		
+		db = FMDatabase(path: path)
+		
+		db?.open()
+		
+		let createStr = "CREATE TABLE IF NOT EXISTS t_downloading (id integer PRIMARY KEY, author text, title text, sourceURL text,indexPath integer,thumb text,album text,downloaded bool, identifier text);"
+		
+		db?.executeStatements(createStr)
+		
+		db?.shouldCacheStatements()
+		
 	}
 	
 }

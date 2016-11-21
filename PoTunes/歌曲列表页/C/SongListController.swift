@@ -9,7 +9,9 @@
 import UIKit
 
 protocol SongListDelegate: class {
+	
 	func songListControllerDidSelectRowAtIndexPath(indexPath: IndexPath)
+
 }
 
 class SongListController: UITableViewController {
