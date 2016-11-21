@@ -19,7 +19,7 @@ class DBHelper: NSObject {
 		
 		// setup code
 		
-		let path = instance.dirDoc() + "downloadingSong.db"
+		let path = instance.dirDoc() + "/downloadingSong.db"
 		
 		instance.queue = FMDatabaseQueue(path: path)
 
@@ -27,7 +27,7 @@ class DBHelper: NSObject {
 	}()
 	
 	
-	func loadData(complete : @escaping (FMDatabase) -> ()) {
+	func inDatabase(complete : @escaping (FMDatabase) -> ()) {
 		
 		queue?.inDatabase({ (db) in
 			

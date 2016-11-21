@@ -16,7 +16,7 @@
 		3C155EAF1DD4284000375469 /* Playlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C155EAA1DD4284000375469 /* Playlist.swift */; };
 		3C155EB21DD428A100375469 /* PlaylistCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C155EB11DD428A100375469 /* PlaylistCell.swift */; };
 		3C155EBB1DD429B700375469 /* PCDownloadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C155EBA1DD429B700375469 /* PCDownloadManager.m */; };
-		3C155EBD1DD42A1C00375469 /* AlbumDownloadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C155EBC1DD42A1C00375469 /* AlbumDownloadViewController.swift */; };
+		3C155EBD1DD42A1C00375469 /* AlbumDownloadController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C155EBC1DD42A1C00375469 /* AlbumDownloadController.swift */; };
 		3C155EC11DD439F700375469 /* PCDownLoadedCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C155EC01DD439F700375469 /* PCDownLoadedCell.m */; };
 		3C155EC31DD43A7A00375469 /* DownloadedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C155EC21DD43A7A00375469 /* DownloadedCell.swift */; };
 		3C155ED11DD4437C00375469 /* PCBaiduNavController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C155ECB1DD4437C00375469 /* PCBaiduNavController.m */; };
@@ -144,7 +144,7 @@
 		3C155EB11DD428A100375469 /* PlaylistCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaylistCell.swift; sourceTree = "<group>"; };
 		3C155EB91DD429B700375469 /* PCDownloadManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCDownloadManager.h; sourceTree = "<group>"; };
 		3C155EBA1DD429B700375469 /* PCDownloadManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCDownloadManager.m; sourceTree = "<group>"; };
-		3C155EBC1DD42A1C00375469 /* AlbumDownloadViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlbumDownloadViewController.swift; sourceTree = "<group>"; };
+		3C155EBC1DD42A1C00375469 /* AlbumDownloadController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlbumDownloadController.swift; sourceTree = "<group>"; };
 		3C155EBF1DD439F700375469 /* PCDownLoadedCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCDownLoadedCell.h; sourceTree = "<group>"; };
 		3C155EC01DD439F700375469 /* PCDownLoadedCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCDownLoadedCell.m; sourceTree = "<group>"; };
 		3C155EC21DD43A7A00375469 /* DownloadedCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadedCell.swift; sourceTree = "<group>"; };
@@ -352,7 +352,7 @@
 		3C155EA31DD427E800375469 /* C */ = {
 			isa = PBXGroup;
 			children = (
-				3C155EBC1DD42A1C00375469 /* AlbumDownloadViewController.swift */,
+				3C155EBC1DD42A1C00375469 /* AlbumDownloadController.swift */,
 			);
 			path = C;
 			sourceTree = "<group>";
@@ -1097,7 +1097,7 @@
 				3CFA58CC1D6706D700341763 /* FSXMLHttpRequest.m in Sources */,
 				3CFA58C91D6706D700341763 /* FSParsePlaylistRequest.m in Sources */,
 				3CFA58C61D6706D700341763 /* FSAudioController.m in Sources */,
-				3C155EBD1DD42A1C00375469 /* AlbumDownloadViewController.swift in Sources */,
+				3C155EBD1DD42A1C00375469 /* AlbumDownloadController.swift in Sources */,
 				3CDFB3981DD776D8006C0975 /* TrackCell.swift in Sources */,
 				3CFA58C01D6706D700341763 /* file_output.cpp in Sources */,
 				3C0CE1CD1DD5D9D000E76BDA /* PCSongListTableViewCell.m in Sources */,

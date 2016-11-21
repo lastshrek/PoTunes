@@ -210,36 +210,37 @@ class PlaylistController: UITableViewController {
 	// MARK: - 下载每月歌曲 - TODO
 	func download(recognizer: UIGestureRecognizer) {
 		
+		// FIXME: - 缺少下载歌词环节
+		
+		let position = recognizer.location(in: self.tableView)
+		
+		let indexPath: IndexPath = self.tableView.indexPathForRow(at: position)!
+		
+		let playlist = playlists[indexPath.row] as! Playlist
+		
+		let album = playlist.title
+		
+		let url = URL(string: T_URL + "\(playlist.ID)")
+		
 		DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
 			
 			HUD.flash(.label("开始下载"), delay: 0.6)
 			
-			let position = recognizer.location(in: self.tableView)
-			
-			let indexPath: IndexPath = self.tableView.indexPathForRow(at: position)!
-			
-			print(indexPath)
-			
-//			let playlist = self.playlists[(indexPath?.row)!] as? Playlist
-//			
-//			// get album name
-//			let album = playlist?.title
-//			
-//			let url = URL(string: T_URL + "\(playlist?.ID)")
-//			
-//			Alamofire.request(url!).response(completionHandler: { (response) in
-//				
-//				let tracks: Array = Reflect<Track>.mapObjects(data: response.data)
-//				
-//				let name = Notification.Name("fullAlbum")
-//				
-//				let userInfo = ["album": album, "tracks": tracks] as [String : Any]
-//				
-//				let notify = Notification.init(name: name, object: nil, userInfo: userInfo)
-//				
-//				NotificationCenter.default.post(notify)
-//				
-//			})
+			Alamofire.request(url!).response(completionHandler: { (response) in
+				
+				let tracks: Array = Reflect<Track>.mapObjects(data: response.data)
+				
+				debugPrint(tracks.count)
+				
+				let name = Notification.Name("fullAlbum")
+				
+				let userInfo = ["album": album, "tracks": tracks] as [String : Any]
+				
+				let notify = Notification.init(name: name, object: nil, userInfo: userInfo)
+				
+				NotificationCenter.default.post(notify)
+				
+			})
 		}
 	}
 }

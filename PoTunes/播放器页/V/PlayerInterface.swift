@@ -370,7 +370,7 @@ extension PlayerInterface {
 			self.lrcView.renderStatic = false
 
 		}
-		
+				
 		DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
 			
 			self.lrcView.renderStatic = true

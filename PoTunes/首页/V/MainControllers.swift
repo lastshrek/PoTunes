@@ -54,7 +54,7 @@ class MainControllers: UIView {
 		setupSingleViewControllerToScrollView(playlist, hidden: false, frame: frame)
 		
 		//已下载专辑页面
-		let albumDownload: AlbumDownloadViewController = AlbumDownloadViewController()
+		let albumDownload = AlbumDownloadController()
 		
 		setupSingleViewControllerToScrollView(albumDownload, hidden: true, frame: frame)
 		//导航页面
