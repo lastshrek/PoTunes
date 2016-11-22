@@ -72,8 +72,6 @@ extension SongListController {
 		
 		cell.imageView?.sd_setImage(with: url, placeholderImage: UIImage(named:"noArtwork"))
 		
-		cell.playBtn.addTarget(self, action: #selector(SongListController.didClickPlayBtn(btn:)), for: .touchUpInside)
-		
 		return cell
 	}
 	

@@ -10,6 +10,7 @@ import UIKit
 import Alamofire
 import FMDB
 import AFNetworking
+import PKHUD
 
 protocol AlbumDownloadedDelegate: class {
 	
@@ -76,7 +77,6 @@ class AlbumDownloadController: UITableViewController {
 	}()
 	
 	var op: AFHTTPRequestOperation?
-	
 
 	override func viewDidLoad() {
 		
@@ -90,9 +90,10 @@ class AlbumDownloadController: UITableViewController {
 		
 		getNotification()
 		
+		// 修复之前的下载文件名称
+		repaireFormerTrackName()
+		
 	}
-	
-	
 	
 	func getNotification() {
 		
@@ -128,12 +129,8 @@ class AlbumDownloadController: UITableViewController {
 		
 		for track in tracks {
 			
-			let urlComponent = track.url.components(separatedBy: "/")
-			
-			let count = urlComponent.count
-			
 			//eg. 20160601.mp3
-			let identifier: String = urlComponent[count - 3] + urlComponent[count - 2] + urlComponent[count - 1]
+			let identifier: String = getIdentifier(urlStr: track.url)
 			
 			let newIdentifier = track.artist + " - " + track.name
 			
@@ -287,6 +284,102 @@ class AlbumDownloadController: UITableViewController {
 			
 	}
 	
+	func repaireFormerTrackName() {
+		
+		let user = UserDefaults.standard
+		
+		let repaired = user.object(forKey: "repaired")
+		
+		if repaired == nil {
+			
+			let query = "SELECT * FROM t_downloading"
+			
+			self.db.inDatabase({ (database) in
+				
+				HUD.show(.label("数据升级中请稍候"))
+				
+				let s = database?.executeQuery(query, withArgumentsIn: nil)
+				
+				let manager = FileManager.default
+				
+				let rootPath = self.dirDoc()
+				
+				while (s?.next())! {
+					
+					let identy = s?.string(forColumn: "identifier")
+					
+					if identy == nil {
+						
+						// 修改数据库
+						
+						let urlStr: String = (s?.string(forColumn: "sourceURL"))!
+						
+						let identifier = self.getIdentifier(urlStr: urlStr)
+						
+						let identifierUpdate = "UPDATE t_downloading SET identifier = '\(identifier)' WHERE sourceURL = '\(urlStr)'"
+						
+						DispatchQueue.global(qos: .background).async {
+							
+							database?.executeUpdate(identifierUpdate, withArgumentsIn: nil)
+							
+						}
+						
+						let artist = s?.string(forColumn: "author")
+						
+						let title = s?.string(forColumn: "title")
+						
+						let filePath = rootPath + "/\(artist!)" + " - " + "\(title!).mp3"
+						
+						let realPath = filePath.replacingOccurrences(of: " / ", with: " ")
+						
+						do {
+							
+							if manager.fileExists(atPath: realPath) {
+								
+								let dstPath = rootPath + "/\(identifier)"
+								
+								try manager.moveItem(at: URL(string:realPath)! , to: URL(string:dstPath)!)
+								
+							}
+							
+						} catch {
+							
+							print("Could not clear temp folder: \(error)")
+							
+						}
+
+						
+					}
+					
+				}
+				
+				s?.close()
+				
+				DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+					
+					HUD.hide()
+					
+					HUD.flash(.success, delay: 0.6)
+				}
+				
+				user.set("repaired", forKey: "repaired")
+				
+			})
+		}
+	}
+	
+	func getIdentifier(urlStr: String) -> String {
+		
+		let urlComponent: Array = urlStr.components(separatedBy: "/")
+		
+		let count = urlComponent.count
+		
+		let identifier: String = (urlComponent[count - 3]) + (urlComponent[count - 2]) + (urlComponent[count - 1])
+		
+		return identifier
+		
+	}
+	
 }
 
 extension AlbumDownloadController {
@@ -336,7 +429,7 @@ extension AlbumDownloadController {
 				
 				if (s?.next())! {
 					
-					let url = URL(string: (s?.string(forColumn: "thumb"))!)
+					let url = URL(string: (s?.string(forColumn: "thumb"))! + "!/fw/100" )
 					
 					cell.imageView?.sd_setImage(with: url, placeholderImage: UIImage(named: "defaultCover"))
 					
@@ -365,21 +458,47 @@ extension AlbumDownloadController {
 			
 			let download = DownloadController()
 			
-			let tracks: Array<Track> = []
+			var tracks: Array<Track> = []
 			
 			let title = downloadAlbums[indexPath.row]
 			
-			let query = "SELECT * FROM t_downloading WHERE album = '\(title)' and downloaded = 1 order by index desc;"
+			let query = "SELECT * FROM t_downloading WHERE album = '\(title)' and downloaded = 1 order by indexPath;"
 			
 			self.db.inDatabase({ (database) in
 				
 				let s = database?.executeQuery(query, withArgumentsIn: nil)
 				
+				while (s?.next())! {
+					
+					let track = Track()
+					
+					track.artist = (s?.string(forColumn: "author"))!
+					
+					track.name = (s?.string(forColumn: "title"))!
+					
+					track.url = (s?.string(forColumn: "sourceURL"))!
+					
+					track.ID = (Int)((s?.int(forColumn: "indexPath"))!)
+					
+					track.cover = (s?.string(forColumn: "thumb"))!
+					
+					tracks.append(track)
+					
+				}
 				
+				s?.close()
+				
+				download.title = title.components(separatedBy: " - ").last
+				
+				download.tracks = tracks
+				
+				download.delegate = self
+				
+				self.navigationController?.pushViewController(download, animated: true)
+
 				
 			})
 			
-			self.navigationController?.pushViewController(download, animated: true)
 			
 		}
 		
@@ -460,4 +579,14 @@ extension AlbumDownloadController {
 			
 		}
 	}
+}
+
+extension AlbumDownloadController: DownloadControllerDelegate {
+	
+	func didDeletedTrack(track: Track) {
+		
+		
+		
+	}
+	
 }

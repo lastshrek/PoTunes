@@ -13,8 +13,6 @@ class TrackCell: UITableViewCell {
 	
 	let divider: UIView = UIView()
 	
-	let playBtn: UIButton = UIButton()
-
 	override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
 	
 		super.init(style: .subtitle, reuseIdentifier: reuseIdentifier)
@@ -38,14 +36,6 @@ class TrackCell: UITableViewCell {
 		
 		self.addSubview(divider)
 		
-		// 播放按钮
-		playBtn.titleLabel?.font = UIFont.fontAwesome(ofSize: 30)
-		
-		playBtn.setTitleColor(UIColor.colorByRGB(red: 17, green: 133, blue: 117, alpha: 0.8), for: .normal)
-		
-		playBtn.setTitle(String.fontAwesomeIcon(name: .playCircleO), for: .normal)
-		
-		self.addSubview(playBtn)
 	}
 	
 	required init?(coder aDecoder: NSCoder) {
@@ -70,7 +60,6 @@ class TrackCell: UITableViewCell {
 		
 		self.divider.frame = CGRect(x: ((self.imageView?.frame)?.maxX)! + 10, y: height - 0.3, width: width, height: 0.3)
 		
-		self.playBtn.frame = CGRect(x: width - height + 10, y: 10, width: height - 20, height: height - 20)
 	}
 
 }

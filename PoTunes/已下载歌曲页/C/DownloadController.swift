@@ -16,7 +16,7 @@ protocol DownloadControllerDelegate: class {
 
 class DownloadController: UITableViewController {
 	
-	var tracks: Array<Track>?
+	var tracks: Array<Track> = []
 	
 	weak var delegate: DownloadControllerDelegate?
 	
@@ -33,6 +33,8 @@ class DownloadController: UITableViewController {
 		tableView.separatorStyle = .none
 		
 		tableView.backgroundColor = UIColor.white
+		
+		tableView.register(TrackCell.self, forCellReuseIdentifier: "track")
 		
 	}
 
@@ -51,7 +53,7 @@ class DownloadController: UITableViewController {
 			
 		} else {
 			
-			return self.tracks!.count
+			return tracks.count
 			
 		}
 	}
@@ -62,16 +64,26 @@ class DownloadController: UITableViewController {
 		return 66
 		
 	}
-
-    /*
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
-
-        // Configure the cell...
-
-        return cell
-    }
-    */
+	
+	
+	override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+		
+		let cell: TrackCell = tableView.dequeueReusableCell(withIdentifier: "track", for: indexPath) as! TrackCell
+		
+		// Configure the cell...
+		let track: Track = self.tracks[indexPath.row]
+		
+		cell.textLabel?.text = track.name
+		
+		cell.detailTextLabel?.text = track.artist
+		
+		let url: URL = URL(string: track.cover + "!/fw/100")!
+		
+		cell.imageView?.sd_setImage(with: url, placeholderImage: UIImage(named:"noArtwork"))
+		
+		return cell
+	}
+	
 
     /*
     // Override to support conditional editing of the table view.

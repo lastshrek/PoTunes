@@ -112,9 +112,7 @@ class PlaylistController: UITableViewController {
 				
 				return
 			}
-			
-			HUD.flash(.label("加载成功"), delay: 1.0)
-			
+						
 			self.playlists = playlists//重设tabBar个数
 			
 			self.tableView.dg_stopLoading()
