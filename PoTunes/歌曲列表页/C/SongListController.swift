@@ -16,7 +16,7 @@ protocol SongListDelegate: class {
 
 class SongListController: UITableViewController {
 	
-	var tracks: Array<Any> = []
+	var tracks: Array<Track> = []
 	
 	var shareToWechat: UITableView?
 	
@@ -62,7 +62,7 @@ extension SongListController {
 		let cell: TrackCell = tableView.dequeueReusableCell(withIdentifier: "track", for: indexPath) as! TrackCell
 		
 		// Configure the cell...
-		let track: Track = self.tracks[indexPath.row] as! Track
+		let track: Track = self.tracks[indexPath.row]
 		
 		cell.textLabel?.text = track.name
 		

@@ -43,7 +43,7 @@ class LrcView: DRNRealTimeBlurView {
 			
 			let idx = currentIndex! + 1
 			
-			for idx in idx..<count {
+			for idx in 0..<count {
 				
 				let lyric = self.lyricsLines[idx] as! LrcLine
 				
@@ -71,10 +71,7 @@ class LrcView: DRNRealTimeBlurView {
 					//刷新tableView
 					let reloadRows: Array = [IndexPath(row: currentIndex!, section: 0), IndexPath(row: idx	, section: 0)]
 
-
-
 					self.currentIndex = idx
-
 
 					self.tableView.reloadRows(at: reloadRows, with: .none)
 					//滚动到对应的

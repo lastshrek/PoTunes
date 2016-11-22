@@ -35,6 +35,7 @@
 		3C3BD3191DDDA264007545DC /* UIImage+BoxBlur.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3BD3161DDDA264007545DC /* UIImage+BoxBlur.m */; };
 		3C4A41B91DD9A508008CE37F /* PlayerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C4A41B81DD9A508008CE37F /* PlayerController.swift */; };
 		3C4A41BB1DD9D350008CE37F /* TrackLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C4A41BA1DD9D350008CE37F /* TrackLabel.swift */; };
+		3C57B76A1DE448F200306ACB /* DownloadController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C57B7691DE448F200306ACB /* DownloadController.swift */; };
 		3C5813711BE4BFEA0012C689 /* guide.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3C5813701BE4BFEA0012C689 /* guide.plist */; };
 		3C77D24D1BE3D0F00029AB70 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C77D2421BE3BD8C0029AB70 /* CoreTelephony.framework */; };
 		3C77D24E1BE3D1110029AB70 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C77D2441BE3BD940029AB70 /* SystemConfiguration.framework */; };
@@ -170,6 +171,7 @@
 		3C3BD3161DDDA264007545DC /* UIImage+BoxBlur.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+BoxBlur.m"; sourceTree = "<group>"; };
 		3C4A41B81DD9A508008CE37F /* PlayerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerController.swift; sourceTree = "<group>"; };
 		3C4A41BA1DD9D350008CE37F /* TrackLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackLabel.swift; sourceTree = "<group>"; };
+		3C57B7691DE448F200306ACB /* DownloadController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadController.swift; sourceTree = "<group>"; };
 		3C5813701BE4BFEA0012C689 /* guide.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = guide.plist; sourceTree = "<group>"; };
 		3C77D2421BE3BD8C0029AB70 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		3C77D2441BE3BD940029AB70 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
@@ -507,6 +509,22 @@
 			path = C;
 			sourceTree = "<group>";
 		};
+		3C57B7671DE4488B00306ACB /* 已下载歌曲页 */ = {
+			isa = PBXGroup;
+			children = (
+				3C57B7681DE4489800306ACB /* C */,
+			);
+			path = "已下载歌曲页";
+			sourceTree = "<group>";
+		};
+		3C57B7681DE4489800306ACB /* C */ = {
+			isa = PBXGroup;
+			children = (
+				3C57B7691DE448F200306ACB /* DownloadController.swift */,
+			);
+			path = C;
+			sourceTree = "<group>";
+		};
 		3C9641E11D670DCE00386ABB /* DarwinNotificationHelper */ = {
 			isa = PBXGroup;
 			children = (
@@ -578,6 +596,7 @@
 		3CB2E2F41BA7B26800805D4F /* PoTunes */ = {
 			isa = PBXGroup;
 			children = (
+				3C57B7671DE4488B00306ACB /* 已下载歌曲页 */,
 				3CDFB38D1DD76C95006C0975 /* 歌曲列表页 */,
 				3C155ED81DD44A4700375469 /* 设置页 */,
 				3C155EC71DD4437C00375469 /* 导航页 */,
@@ -1118,6 +1137,7 @@
 				3CFA58CA1D6706D700341763 /* FSParseRssPodcastFeedRequest.m in Sources */,
 				3C9641E41D670DCE00386ABB /* DarwinNotificationHelper.m in Sources */,
 				3CCFBF381DD41E0300514873 /* LrcCell.swift in Sources */,
+				3C57B76A1DE448F200306ACB /* DownloadController.swift in Sources */,
 				3CFA58BD1D6706D700341763 /* audio_queue.cpp in Sources */,
 				3CCFBF511DD41F1C00514873 /* UIView+Geometry.m in Sources */,
 				3CFA58C81D6706D700341763 /* FSCheckContentTypeRequest.m in Sources */,
