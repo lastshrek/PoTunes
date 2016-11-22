@@ -27,25 +27,40 @@ class DownloadController: UITableViewController {
 	var sharedTrack: Track?
 
 	override func viewDidLoad() {
-			super.viewDidLoad()
-
-			// Uncomment the following line to preserve selection between presentations
-			// self.clearsSelectionOnViewWillAppear = false
-
-			// Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-			// self.navigationItem.rightBarButtonItem = self.editButtonItem()
+		
+		super.viewDidLoad()
+		
+		tableView.separatorStyle = .none
+		
+		tableView.backgroundColor = UIColor.white
+		
 	}
 
 	// MARK: - Table view data source
 
 	override func numberOfSections(in tableView: UITableView) -> Int {
 			// #warning Incomplete implementation, return the number of sections
-			return 0
+			return 1
 	}
 
 	override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 			// #warning Incomplete implementation, return the number of rows
-			return 0
+		if tableView.tag == 2 {
+			
+			return 2
+			
+		} else {
+			
+			return self.tracks!.count
+			
+		}
+	}
+	
+	
+	override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+		
+		return 66
+		
 	}
 
     /*

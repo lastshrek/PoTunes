@@ -365,7 +365,19 @@ extension AlbumDownloadController {
 			
 			let download = DownloadController()
 			
+			let tracks: Array<Track> = []
 			
+			let title = downloadAlbums[indexPath.row]
+			
+			let query = "SELECT * FROM t_downloading WHERE album = '\(title)' and downloaded = 1 order by index desc;"
+			
+			self.db.inDatabase({ (database) in
+				
+				let s = database?.executeQuery(query, withArgumentsIn: nil)
+				
+				
+				
+			})
 			
 			self.navigationController?.pushViewController(download, animated: true)
 			

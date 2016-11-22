@@ -66,7 +66,7 @@ extension PlayerController {
 		
 		self.player?.changeInterface(index!)
 		
-		self.player?.album?.text = title
+		self.player?.album?.text = title?.components(separatedBy: " - ").last
 	
 //		let type: String = userInfo["type"] as! String
 	}
