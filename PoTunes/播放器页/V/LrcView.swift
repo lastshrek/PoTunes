@@ -43,7 +43,7 @@ class LrcView: DRNRealTimeBlurView {
 			
 			let idx = currentIndex! + 1
 			
-			for idx in 0..<count {
+			for idx in idx..<count {
 				
 				let lyric = self.lyricsLines[idx] as! LrcLine
 				

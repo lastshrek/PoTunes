@@ -12,7 +12,8 @@
 //  AFNetworking 2.0:   https://github.com/AFNetworking/AFNetworking
 
 #import <Foundation/Foundation.h>
-#import "AFNetworking.h"
+#import <AFNetworking/AFNetworking.h>
+
 
 
 typedef void(^DownloadProgressBlock)(CGFloat progress, CGFloat totalMBRead, CGFloat totalMBExpectedToRead);

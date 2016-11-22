@@ -18,12 +18,20 @@ extension NSObject {
 	
 	}
 	
-	class func cachesDir() -> String {
+	func cachesDir() -> String {
 		
 		let paths = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true) as [String]
 		
 		return paths[0]
 	
+	}
+	
+	func doubleQuotation(single: String) -> String {
+		
+		let double = single.replacingOccurrences(of: "'", with: "''")
+		
+		return double
+		
 	}
 	
 }

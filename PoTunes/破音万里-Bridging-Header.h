@@ -4,7 +4,7 @@
 
 #import "UIImage+Reflection.h"
 #import <SDWebImage/UIImageView+WebCache.h>
-//#import "PCSongListTableViewCell.h"
+#import "PCDownloadManager.h"
 #import "WXApiObject.h"
 #import "WXApi.h"
 #import "UIImage+Reflection.h"
@@ -15,3 +15,4 @@
 #import "Reachability.h"
 #import "LEColorPicker.h"
 #import "DRNRealTimeBlurView.h"
+#import <AFNetworking/AFNetworking.h>
