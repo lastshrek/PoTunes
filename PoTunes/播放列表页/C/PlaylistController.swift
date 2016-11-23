@@ -15,7 +15,7 @@ protocol PlaylistDelegate: class {
 	func tabBarCount(count: Int)
 }
 
-let P_URL = "http://127.0.0.1:3000/api/app/playlists"
+let P_URL = "https://poche.fm/api/app/playlists/"
 let T_URL = "http://127.0.0.1:3000/api/app/playlists/"
 
 class PlaylistController: UITableViewController {
@@ -180,7 +180,7 @@ class PlaylistController: UITableViewController {
 		
 		let playlist: Playlist = self.playlists[indexPath.row] as! Playlist
 
-		let url = URL(string: T_URL + "\(playlist.ID)")
+		let url = URL(string: P_URL + "\(playlist.ID)")
 
 		Alamofire.request(url!).response(completionHandler: { (response) in
 			

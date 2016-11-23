@@ -14,7 +14,15 @@ import PKHUD
 
 
 
-class PlayerInterface: UIView {
+class PlayerInterface: UIView, UIApplicationDelegate {
+    
+    static let shared: PlayerInterface = {
+        
+        let instance = PlayerInterface()
+        
+        return instance
+        
+    }()
 	// MARK: - basic components
 	let width = UIScreen.main.bounds.size.width
 	let height = UIScreen.main.bounds.size.height
@@ -74,14 +82,25 @@ class PlayerInterface: UIView {
 		addGestureRecognizer()
 		
 		repeatMode = AudioRepeatMode.towards
-		
+        
+        UIApplication.shared.beginReceivingRemoteControlEvents()
+        
+        self.becomeFirstResponder()
+        
 	}
+    
+    override var canBecomeFirstResponder: Bool {
+        
+        return true
+        
+    }
 	
 	required init?(coder aDecoder: NSCoder) {
 		
 		fatalError("init(coder:) has not been implemented")
 	
 	}
+    
 	
 	override func layoutSubviews() {
 		
@@ -114,30 +133,32 @@ class PlayerInterface: UIView {
 		
 		leftTime.frame = CGRect(x: width / 2 - 2, y: 0, width: width / 2, height: (self.timeView.bounds.size.height))
 	}
+    
+    
+    override func remoteControlReceived(with event: UIEvent?) {
+        
+        let remoteControl = event!.subtype
+        
+        switch remoteControl {
+            
+        case .remoteControlPlay, .remoteControlPause:
+            
+            self.playOrPause()
+            
+            break
+            
+        case .remoteControlNextTrack:
+            
+            self.playNext()
+            
+        case .remoteControlPreviousTrack:
+            
+            self.playPrevious()
+            
+        default: break
+        }
+    }
 
-	override func remoteControlReceived(with event: UIEvent?) {
-		
-		let remoteControl = event!.subtype
-		
-		switch remoteControl {
-		
-			case .remoteControlTogglePlayPause, .remoteControlPlay, .remoteControlPause:
-				
-				self.playOrPause()
-			
-				break
-			
-			case .remoteControlNextTrack:
-				
-				self.playNext()
-			
-			case .remoteControlPreviousTrack:
-				
-				self.playPrevious()
-			
-			default: break
-		}
-	}
 }
 // MARK: - initial subviews
 extension PlayerInterface {
@@ -352,6 +373,8 @@ extension PlayerInterface {
 extension PlayerInterface {
 	// play tracks
 	func playTracks(tracks: Array<Any>, index: Int) {
+        
+        streamer.activeStream.stop()
 		
 		self.paused = false
 		
@@ -372,6 +395,14 @@ extension PlayerInterface {
 		}
 				
 		DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            
+            self.progress?.progress = 0
+            
+            self.bufferingIndicator?.progress = 0
+            
+            self.currentTime.text = "0:00"
+            
+            self.leftTime.text = "0:00"
 			
 			self.lrcView.renderStatic = true
 			

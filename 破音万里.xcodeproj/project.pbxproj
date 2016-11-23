@@ -991,7 +991,7 @@
 						CreatedOnToolsVersion = 6.4;
 						DevelopmentTeam = 7LKFCH3GR5;
 						LastSwiftMigration = 0800;
-						ProvisioningStyle = Manual;
+						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
 								enabled = 1;
@@ -1279,6 +1279,7 @@
 				CODE_SIGN_ENTITLEMENTS = PoTunes/3rdParty/PoTunes.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer: PengCheng Zhao (2P9E2Y5942)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 7LKFCH3GR5;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1311,8 +1312,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = fm.poche.PoTunes;
 				PRODUCT_MODULE_NAME = PotunesRemix;
 				PRODUCT_NAME = PoTunes;
-				PROVISIONING_PROFILE = "20c331b0-5d26-45c8-9ef6-a63ef321873f";
-				PROVISIONING_PROFILE_SPECIFIER = PoTunes;
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "PoTunes/破音万里-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 			};
@@ -1437,6 +1438,7 @@
 				CODE_SIGN_ENTITLEMENTS = PoTunes/3rdParty/PoTunes.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer: PengCheng Zhao (2P9E2Y5942)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 7LKFCH3GR5;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1469,8 +1471,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = fm.poche.PoTunes;
 				PRODUCT_MODULE_NAME = PotunesRemix;
 				PRODUCT_NAME = PoTunes;
-				PROVISIONING_PROFILE = "20c331b0-5d26-45c8-9ef6-a63ef321873f";
-				PROVISIONING_PROFILE_SPECIFIER = PoTunes;
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "PoTunes/破音万里-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
@@ -1487,7 +1489,8 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = PoTunes/3rdParty/PoTunes.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: PengCheng Zhao (7LKFCH3GR5)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 7LKFCH3GR5;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1521,8 +1524,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = fm.poche.PoTunes;
 				PRODUCT_MODULE_NAME = PotunesRemix;
 				PRODUCT_NAME = PoTunes;
-				PROVISIONING_PROFILE = "d254e3bb-9686-42de-ad63-c6810e9ad156";
-				PROVISIONING_PROFILE_SPECIFIER = real;
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "PoTunes/破音万里-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 			};

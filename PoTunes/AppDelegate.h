@@ -10,11 +10,10 @@
 
 typedef void (^PlayerRemoteEventBlock)(UIEvent *event);//播放器远程事件block
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate>
+@interface AppDelegate : UIResponder
 
 @property (strong, nonatomic) UIWindow *window;
 
-@property (nonatomic, copy) PlayerRemoteEventBlock remoteEventBlock;
 
 @end
 

@@ -10,6 +10,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import "BPush.h"
 #import "WXApi.h"
+#import "PotunesRemix-swift.h"
 //#import "MBProgressHUD+MJ.h"
 @interface AppDelegate ()<WXApiDelegate>
 
@@ -22,13 +23,13 @@
     [NSThread sleepForTimeInterval:1];
     
     //设置音乐后台播放的会话类型
-    [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
     AVAudioSession *session = [AVAudioSession sharedInstance];
     [session setActive:YES error:nil];
     [session setCategory:AVAudioSessionCategoryPlayback error:nil];
-    //开启远程事件
-    [application beginReceivingRemoteControlEvents];
-    
+
+    // 接受远程事件
+    [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
+    [self becomeFirstResponder];
 
 
     //注册通知·
@@ -56,6 +57,12 @@
         
     return YES;
 }
+
+- (BOOL)canBecomeFirstResponder
+{
+    return YES;
+}
+
 
 // 此方法是 用户点击了通知，应用在前台 或者开启后台并且应用在后台 时调起
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
@@ -160,12 +167,7 @@
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
-/** 接收远程事件 */
-- (void)remoteControlReceivedWithEvent:(UIEvent *)event {
-    if (event.type == UIEventTypeRemoteControl) {
-        self.remoteEventBlock(event);
-    }
-}
+
 
 
 @end
