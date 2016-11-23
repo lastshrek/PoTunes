@@ -500,6 +500,26 @@ extension AlbumDownloadController {
 			})
 			
 			
+		} else {
+			
+			let downloading = DownloadingController()
+			
+			if op == nil || op?.isPaused() == true {
+				
+				downloading.isPaused = true
+				
+			} else {
+				
+				downloading.isPaused = false
+				
+			}
+			
+			downloading.delegate = self
+			
+			downloading.downloadingArray = downloadingArray
+			
+			self.navigationController?.pushViewController(downloading, animated: true)
+			
 		}
 		
 	}
@@ -586,6 +606,18 @@ extension AlbumDownloadController: DownloadControllerDelegate {
 	func didDeletedTrack(track: Track) {
 		
 		
+		
+	}
+	
+}
+
+extension AlbumDownloadController: DownloadingControllerDelegate {
+	
+	func didClickThePauseButton(button: UIButton) {
+		
+	}
+	
+	func didClickTheDeleteButton(button: UIButton) {
 		
 	}
 	
