@@ -342,11 +342,13 @@ extension TrackListController {
 		
 		let title = self.doubleQuotation(single: track.name)
 		
-		let query = "SELECT * FROM t_downloading WHERE author = ? and title = ?;"
+		let album = artist + " - " + title
+		
+		let query = "SELECT * FROM t_downloading WHERE author = ? and title = ? and album = ?;"
 		
 		db.inDatabase { (database) in
 			
-			let s = database?.executeQuery(query, withArgumentsIn: [artist, title])
+			let s = database?.executeQuery(query, withArgumentsIn: [artist, title, album])
 			
 			if (s?.next())! {
 				
