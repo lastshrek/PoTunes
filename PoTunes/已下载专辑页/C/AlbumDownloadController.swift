@@ -398,7 +398,6 @@ extension AlbumDownloadController {
 		
 		downloadingArray.append(newIdentifier)
 		
-		
 		if self.op == nil || (self.op?.isCancelled)! || (self.op?.isFinished)! || (self.op?.isPaused())! {
 			
 			self.beginDownloadMusic(urlStr: track.url, identifier: identifier, newIdentifier: newIdentifier)

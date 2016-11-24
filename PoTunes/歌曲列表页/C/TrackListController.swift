@@ -328,7 +328,7 @@ extension TrackListController {
 		
 		if online == nil { return }
 		
-		
+
 		
 		let position = recognizer.location(in: tableView)
 		
@@ -342,13 +342,11 @@ extension TrackListController {
 		
 		let title = self.doubleQuotation(single: track.name)
 		
-		let album = artist + " - " + title
-		
 		let query = "SELECT * FROM t_downloading WHERE author = ? and title = ? and album = ?;"
 		
 		db.inDatabase { (database) in
 			
-			let s = database?.executeQuery(query, withArgumentsIn: [artist, title, album])
+			let s = database?.executeQuery(query, withArgumentsIn: [artist, title, self.title!])
 			
 			if (s?.next())! {
 				

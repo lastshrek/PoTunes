@@ -244,7 +244,7 @@ class PlaylistController: UITableViewController {
 					
 					let title = self.doubleQuotation(single: track.name)
 					
-					let album = artist + " - " + title
+					let album = playlist.title
 					
 					let query = "SELECT * FROM t_downloading WHERE author = ? and title = ? and album = ?;"
 					
