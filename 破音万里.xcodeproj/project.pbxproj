@@ -75,7 +75,7 @@
 		3CCFBF4F1DD41F1C00514873 /* UIImage+BoxBlur.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CCFBF481DD41F1C00514873 /* UIImage+BoxBlur.m */; };
 		3CCFBF501DD41F1C00514873 /* UIImage+Reflection.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CCFBF4A1DD41F1C00514873 /* UIImage+Reflection.m */; };
 		3CCFBF511DD41F1C00514873 /* UIView+Geometry.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CCFBF4C1DD41F1C00514873 /* UIView+Geometry.m */; };
-		3CDFB3931DD76E5D006C0975 /* SongListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CDFB3911DD76E5D006C0975 /* SongListController.swift */; };
+		3CDFB3931DD76E5D006C0975 /* TrackListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CDFB3911DD76E5D006C0975 /* TrackListController.swift */; };
 		3CDFB3981DD776D8006C0975 /* TrackCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CDFB3971DD776D8006C0975 /* TrackCell.swift */; };
 		3CDFB39A1DD77CD5006C0975 /* UIColor+RGB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CDFB3991DD77CD5006C0975 /* UIColor+RGB.swift */; };
 		3CDFB39C1DD83F48006C0975 /* BarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CDFB39B1DD83F48006C0975 /* BarItem.swift */; };
@@ -146,7 +146,7 @@
 		3C155EB11DD428A100375469 /* PlaylistCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaylistCell.swift; sourceTree = "<group>"; };
 		3C155EB91DD429B700375469 /* PCDownloadManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCDownloadManager.h; sourceTree = "<group>"; };
 		3C155EBA1DD429B700375469 /* PCDownloadManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCDownloadManager.m; sourceTree = "<group>"; };
-		3C155EBC1DD42A1C00375469 /* AlbumDownloadController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlbumDownloadController.swift; sourceTree = "<group>"; };
+		3C155EBC1DD42A1C00375469 /* AlbumDownloadController.swift */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.swift; path = AlbumDownloadController.swift; sourceTree = "<group>"; tabWidth = 4; };
 		3C155EBF1DD439F700375469 /* PCDownLoadedCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCDownLoadedCell.h; sourceTree = "<group>"; };
 		3C155EC01DD439F700375469 /* PCDownLoadedCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCDownLoadedCell.m; sourceTree = "<group>"; };
 		3C155EC21DD43A7A00375469 /* DownloadedCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadedCell.swift; sourceTree = "<group>"; };
@@ -221,7 +221,7 @@
 		3CB2E4591BA7D4FA00805D4F /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		3CCA14EE1BA8080700D45C52 /* SharedMapView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SharedMapView.h; sourceTree = "<group>"; };
 		3CCA14EF1BA8080700D45C52 /* SharedMapView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SharedMapView.m; sourceTree = "<group>"; };
-		3CCFBF2E1DD41DAD00514873 /* PlayerInterface.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerInterface.swift; sourceTree = "<group>"; };
+		3CCFBF2E1DD41DAD00514873 /* PlayerInterface.swift */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.swift; path = PlayerInterface.swift; sourceTree = "<group>"; tabWidth = 2; };
 		3CCFBF321DD41E0300514873 /* LrcCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LrcCell.swift; sourceTree = "<group>"; };
 		3CCFBF361DD41E0300514873 /* LrcView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LrcView.swift; sourceTree = "<group>"; };
 		3CCFBF3F1DD41E6800514873 /* LrcLine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LrcLine.swift; sourceTree = "<group>"; };
@@ -234,7 +234,7 @@
 		3CCFBF4A1DD41F1C00514873 /* UIImage+Reflection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Reflection.m"; sourceTree = "<group>"; };
 		3CCFBF4B1DD41F1C00514873 /* UIView+Geometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Geometry.h"; sourceTree = "<group>"; };
 		3CCFBF4C1DD41F1C00514873 /* UIView+Geometry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Geometry.m"; sourceTree = "<group>"; };
-		3CDFB3911DD76E5D006C0975 /* SongListController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SongListController.swift; sourceTree = "<group>"; };
+		3CDFB3911DD76E5D006C0975 /* TrackListController.swift */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.swift; path = TrackListController.swift; sourceTree = "<group>"; tabWidth = 4; };
 		3CDFB3971DD776D8006C0975 /* TrackCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackCell.swift; sourceTree = "<group>"; };
 		3CDFB3991DD77CD5006C0975 /* UIColor+RGB.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+RGB.swift"; sourceTree = "<group>"; };
 		3CDFB39B1DD83F48006C0975 /* BarItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BarItem.swift; sourceTree = "<group>"; };
@@ -802,7 +802,7 @@
 		3CDFB3901DD76E5D006C0975 /* C */ = {
 			isa = PBXGroup;
 			children = (
-				3CDFB3911DD76E5D006C0975 /* SongListController.swift */,
+				3CDFB3911DD76E5D006C0975 /* TrackListController.swift */,
 			);
 			path = C;
 			sourceTree = "<group>";
@@ -1173,7 +1173,7 @@
 				3CCFBF4E1DD41F1C00514873 /* UIColor+RGBValues.m in Sources */,
 				3CA3E5D11DE2AB5300CB36ED /* DBHelper.swift in Sources */,
 				3CFA58C41D6706D700341763 /* input_stream.cpp in Sources */,
-				3CDFB3931DD76E5D006C0975 /* SongListController.swift in Sources */,
+				3CDFB3931DD76E5D006C0975 /* TrackListController.swift in Sources */,
 				3CFA58D81D6706D700341763 /* UIScrollView+MJExtension.m in Sources */,
 				3C3BD3181DDDA264007545DC /* DRNRealTimeBlurView.m in Sources */,
 				3C0A1A9A1DD5B72000E90306 /* MainControllers.swift in Sources */,

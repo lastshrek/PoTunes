@@ -10,17 +10,20 @@ import UIKit
 import Alamofire
 import DGElasticPullToRefresh
 import PKHUD
+import FMDB
 
 protocol PlaylistDelegate: class {
 	func tabBarCount(count: Int)
 }
 
 let P_URL = "https://poche.fm/api/app/playlists/"
-let T_URL = "http://127.0.0.1:3000/api/app/playlists/"
 
 class PlaylistController: UITableViewController {
 	
-	var playlists: Array<Any> = []
+	var playlists: Array<Playlist> = []
+	
+	lazy var db: FMDatabaseQueue = DBHelper.sharedInstance.queue!
+
 	
 	
 	weak var delegate: PlaylistDelegate?
@@ -63,15 +66,15 @@ class PlaylistController: UITableViewController {
 			let filePath: String = rootPath + "/article.plist"
 			
 			if let dictArr: NSArray  = NSArray(contentsOfFile: filePath) {
-				// MARK: - 本地存有article.plist时需测试
-				var contentArray = Array<Any>()
-			
-				for dict in dictArr {
-				
-					contentArray.append(dict)
-				
-				}
-				self.playlists = contentArray
+//				// MARK: - 本地存有article.plist时需测试
+//				var contentArray = Array<Playlist>()
+//			
+//				for dict in dictArr {
+//				
+//					contentArray.append(dict)
+//				
+//				}
+//				self.playlists = contentArray
 				
 			} else {
 				
@@ -129,6 +132,12 @@ class PlaylistController: UITableViewController {
 			
 			}
 			
+			let user = UserDefaults.standard
+			
+			user.set("online", forKey: "online")
+			
+			user.synchronize()
+			
 		})
 	}
 	
@@ -143,7 +152,7 @@ class PlaylistController: UITableViewController {
 		
 		let cell = tableView.dequeueReusableCell(withIdentifier: "playlist", for: indexPath) as! PlaylistCell
 		
-		let playlist: Playlist = (self.playlists[indexPath.row] as AnyObject) as! Playlist
+		let playlist: Playlist = self.playlists[indexPath.row]
 		
 		cell.textLabel?.text = "『" + playlist.title + "』"
 		
@@ -178,7 +187,7 @@ class PlaylistController: UITableViewController {
 		
 		HUD.show(.label("加载歌曲"))
 		
-		let playlist: Playlist = self.playlists[indexPath.row] as! Playlist
+		let playlist: Playlist = self.playlists[indexPath.row]
 
 		let url = URL(string: P_URL + "\(playlist.ID)")
 
@@ -188,7 +197,7 @@ class PlaylistController: UITableViewController {
 			
 			if tracks.count == 0 {
 			
-				HUD.flash(.label("加载失败，请检查网络"), delay: 1.0)
+				HUD.flash(.label("加载失败，请检查网络"), delay: 0.5)
 				
 				return
 			}
@@ -196,13 +205,14 @@ class PlaylistController: UITableViewController {
 			HUD.hide()
 			
 			// MARK: - Push Controller - TODO
-			let songList: SongListController = SongListController()
+			let trackList: TrackListController = TrackListController()
 			
-			songList.tracks = tracks
+			trackList.tracks = tracks
 			
-			songList.title = playlist.title
+			trackList.title = playlist.title
 			
-			self.navigationController?.pushViewController(songList, animated: true)
+			self.navigationController?.pushViewController(trackList, animated: true)
+			
 		})
 	}
 	// MARK: - 下载每月歌曲 - TODO
@@ -214,29 +224,64 @@ class PlaylistController: UITableViewController {
 		
 		let indexPath: IndexPath = self.tableView.indexPathForRow(at: position)!
 		
-		let playlist = playlists[indexPath.row] as! Playlist
+		let playlist = playlists[indexPath.row]
 		
 		let album = playlist.title
 		
-		let url = URL(string: T_URL + "\(playlist.ID)")
+		let url = URL(string: P_URL + "\(playlist.ID)")
 		
 		DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-			
-			HUD.flash(.label("开始下载"), delay: 0.6)
 			
 			Alamofire.request(url!).response(completionHandler: { (response) in
 				
 				let tracks: Array = Reflect<Track>.mapObjects(data: response.data)
+
+				var downloadArray: Array<Track> = []
 				
-				debugPrint(tracks.count)
+				for track in tracks {
+					
+					let artist = self.doubleQuotation(single: track.artist)
+					
+					let title = self.doubleQuotation(single: track.name)
+					
+					let album = playlist.title
+					
+					let query = "SELECT * FROM t_downloading WHERE author = ? and title = ? and album = ?;"
+					
+					self.db.inDatabase({ (database) in
+						
+						let s = database?.executeQuery(query, withArgumentsIn: [artist, title, album])
+						
+						if s?.next() == nil {
+							
+							downloadArray.append(track)
+							
+						}
+						
+						s?.close()
+						
+					})
+					
+				}
 				
-				let name = Notification.Name("fullAlbum")
+				if downloadArray.count == 0 {
+					
+					HUD.flash(.label("专辑已下载"), delay: 0.4)
 				
-				let userInfo = ["album": album, "tracks": tracks] as [String : Any]
+				} else {
+					
+					HUD.flash(.label("开始下载"), delay: 0.3)
+					
+					let name = Notification.Name("fullAlbum")
+					
+					let userInfo = ["album": album, "tracks": downloadArray] as [String : Any]
+					
+					let notify = Notification.init(name: name, object: nil, userInfo: userInfo)
+					
+					NotificationCenter.default.post(notify)
+					
+				}
 				
-				let notify = Notification.init(name: name, object: nil, userInfo: userInfo)
-				
-				NotificationCenter.default.post(notify)
 				
 			})
 		}

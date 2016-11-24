@@ -8,81 +8,94 @@
 
 import UIKit
 
-protocol DownloadControllerDelegate: class {
+protocol DownloadControllerDelegate: TrackListDelegate {
 	
 	func didDeletedTrack(track: Track)
 	
 }
 
-class DownloadController: UITableViewController {
+class DownloadController: TrackListController {
 	
-	var tracks: Array<Track> = []
 	
-	weak var delegate: DownloadControllerDelegate?
-	
-	var shareTable: UITableView?
-	
-	var coverView: UIView?
-	
-	var sharedTrack: Track?
 
 	override func viewDidLoad() {
 		
 		super.viewDidLoad()
 		
-		tableView.separatorStyle = .none
-		
-		tableView.backgroundColor = UIColor.white
-		
-		tableView.register(TrackCell.self, forCellReuseIdentifier: "track")
+//		tableView.separatorStyle = .none
+//		
+//		tableView.backgroundColor = UIColor.white
+//		
+//		tableView.register(TrackCell.self, forCellReuseIdentifier: "track")
 		
 	}
-
-	// MARK: - Table view data source
-
-	override func numberOfSections(in tableView: UITableView) -> Int {
-			// #warning Incomplete implementation, return the number of sections
-			return 1
+	
+	// Override to support conditional editing of the table view.
+	override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+		// Return false if you do not want the specified item to be editable.
+		return true
 	}
-
-	override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-			// #warning Incomplete implementation, return the number of rows
-		if tableView.tag == 2 {
-			
-			return 2
-			
-		} else {
-			
-			return tracks.count
+	
+	// Override to support editing the table view.
+	override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+		
+		if editingStyle == .delete {
+			// Delete the row from the data source
+			tableView.deleteRows(at: [indexPath], with: .fade)
 			
 		}
 	}
 	
-	
-	override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-		
-		return 66
-		
+	override func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
+		return "你真要删呐？"
 	}
-	
-	
-	override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-		
-		let cell: TrackCell = tableView.dequeueReusableCell(withIdentifier: "track", for: indexPath) as! TrackCell
-		
-		// Configure the cell...
-		let track: Track = self.tracks[indexPath.row]
-		
-		cell.textLabel?.text = track.name
-		
-		cell.detailTextLabel?.text = track.artist
-		
-		let url: URL = URL(string: track.cover + "!/fw/100")!
-		
-		cell.imageView?.sd_setImage(with: url, placeholderImage: UIImage(named:"noArtwork"))
-		
-		return cell
-	}
+
+
+//	// MARK: - Table view data source
+//
+//	override func numberOfSections(in tableView: UITableView) -> Int {
+//			// #warning Incomplete implementation, return the number of sections
+//			return 1
+//	}
+//
+//	override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+//			// #warning Incomplete implementation, return the number of rows
+//		if tableView.tag == 2 {
+//			
+//			return 2
+//			
+//		} else {
+//			
+//			return tracks.count
+//			
+//		}
+//	}
+//	
+//	
+//	override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+//		
+//		return 66
+//		
+//	}
+//	
+//	
+//	override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+//		
+//		let cell: TrackCell = tableView.dequeueReusableCell(withIdentifier: "track", for: indexPath) as! TrackCell
+//		
+//		// Configure the cell...
+//		let track: Track = self.tracks[indexPath.row]
+//		
+//		cell.textLabel?.text = track.name
+//		
+//		cell.detailTextLabel?.text = track.artist
+//		
+//		let url: URL = URL(string: track.cover + "!/fw/100")!
+//		
+//		cell.imageView?.sd_setImage(with: url, placeholderImage: UIImage(named:"noArtwork"))
+//		
+//		return cell
+//	}
 	
 
     /*

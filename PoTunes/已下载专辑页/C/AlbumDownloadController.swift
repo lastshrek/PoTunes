@@ -12,16 +12,8 @@ import FMDB
 import AFNetworking
 import PKHUD
 
-protocol AlbumDownloadedDelegate: class {
-	
-	func isDownloadingMusic(progress: Int)
-
-}
-
 class AlbumDownloadController: UITableViewController {
-	
-	weak var delegate: AlbumDownloadedDelegate?
-	
+		
 	lazy var db: FMDatabaseQueue = DBHelper.sharedInstance.queue!
 
 	lazy var downloadAlbums: Array<String> = {
@@ -95,298 +87,20 @@ class AlbumDownloadController: UITableViewController {
 		
 	}
 	
-	func getNotification() {
-		
-		let center = NotificationCenter.default
-		
-		center.addObserver(self, selector: #selector(fullAlbum(sender:)), name: Notification.Name("fullAlbum"), object: nil)
-		
-	}
-	
 	deinit {
 		
 		NotificationCenter.default.removeObserver(self, name: Notification.Name("fullAlbum"), object: nil)
 		
-	}
-	
-	func fullAlbum(sender: Notification) {
-		
-		let userInfo: Dictionary = sender.userInfo!
-		
-		let tracks = (userInfo["tracks"] as! Array<Track>?)!
-		
-		let title = userInfo["album"] as! String
-		
-		let a = downloadAlbums.index(of: title)
-		
-		if a == nil {
-			
-			downloadAlbums.append(title)
-			
-			self.tableView.reloadData()
-			
-		}
-		
-		for track in tracks {
-			
-			//eg. 20160601.mp3
-			let identifier: String = getIdentifier(urlStr: track.url)
-			
-			let newIdentifier = track.artist + " - " + track.name
-			
-			downloadingArray.append(newIdentifier)
-			
-			let artist = self.doubleQuotation(single: track.artist)
-			
-			let name = self.doubleQuotation(single: track.name)
-			
-			let album = self.doubleQuotation(single: title)
-			
-			let sql = "INSERT INTO t_downloading(author,title,sourceURL,indexPath,thumb,album,downloaded,identifier) VALUES('\(artist)','\(name)','\(track.url)','\(track.ID)','\(track.cover)','\(album)','0', '\(identifier)');"
-			
-			
-			DispatchQueue.global(qos: .background).async {
-				
-				self.db.inDeferredTransaction({ (database, roolback) in
-					
-					database?.executeUpdate(sql, withArgumentsIn: nil)
-					
-				})
-				
-				if self.op == nil || (self.op?.isCancelled)! || (self.op?.isFinished)! || (self.op?.isPaused())! {
-					
-					if track == tracks.first {
-						
-						self.beginDownloadMusic(urlStr: track.url, identifier: identifier, newIdentifier: newIdentifier)
-
-					}
-				}
-			}
-		}
-	}
-	
-	func beginDownloadMusic(urlStr: String, identifier: String, newIdentifier: String)  {
-		
-		// download loacation
-		
-		let filePath = self.dirDoc() + "/\(identifier)"
-		
-		// initialize download queue
-		
-		let queue = OperationQueue()
-		
-		let request = URLRequest(url: URL(string: urlStr)!)
-	
-		self.op = AFHTTPRequestOperation.init(request: request)
-		
-		self.op?.outputStream = OutputStream(toFileAtPath: filePath, append: false)
-		
-		let index = self.downloadingArray.index(of: newIdentifier)
-			
-		if index != nil {
-			
-			self.op?.setDownloadProgressBlock({ (bytesRead, totalBytesRead, totalBytesExpectedToRead) in
-				
-				let downloadProgress: Double = (Double)(totalBytesRead) / (Double)(totalBytesExpectedToRead)
-				
-				print(downloadProgress)
-				
-				let progress: Int = (Int)(downloadProgress * 100)
-				
-				if progress % 10 == 0 || (Int)(progress) == 1 {
-					
-					let userInfo = [
-													"index": index!,
-													"percent": downloadProgress
-													] as [String : Any]
-					
-					NotificationCenter.default.post(name: Notification.Name("percent"), object: nil, userInfo: userInfo)
-					
-				}
-			})
-				
-			self.op?.setCompletionBlockWithSuccess({ (operation, responseObject) in
-				
-				// change download Status
-				self.db.inTransaction({ (database, rollback) in
-					
-					database?.executeUpdate("UPDATE t_downloading SET downloaded = 1 WHERE identifier = '\(identifier)';", withArgumentsIn: nil)
-					
-				})
-				
-				// delete identifier and other infos
-				
-				let query = "SELECT * FROM t_downloading WHERE downloaded = 0;"
-				
-				var tempArray: Array<String> = []
-				
-				self.db.inDatabase({ (database) in
-					
-					let s = database?.executeQuery(query, withArgumentsIn: nil)
-					
-					while (s?.next())! {
-						
-						let identifier = (s?.string(forColumn: "author"))! + " - " + (s?.string(forColumn: "title"))!
-						
-						tempArray.append(identifier)
-						
-					}
-					
-					self.downloadingArray = tempArray
-				
-					// post download complete notification
-					
-					NotificationCenter.default.post(name: Notification.Name("downloadComplete"), object: nil, userInfo: nil)
-				
-					if self.downloadingArray.count > 0 {
-						
-						let newIdentifier = self.downloadingArray.first
-						
-						let splitArr = newIdentifier?.components(separatedBy: " - ")
-						
-						let author = self.doubleQuotation(single: (splitArr?.first)!)
-						
-						let title = self.doubleQuotation(single: (splitArr?.last)!)
-						
-						let query = "SELECT * FROM t_downloading WHERE author = '\(author)' and title = '\(title)';"
-						
-						
-							let s = database?.executeQuery(query, withArgumentsIn: nil)
-							
-							if (s?.next())! {
-								
-								let urlStr = s?.string(forColumn: "sourceURL")
-								
-								let identifier = s?.string(forColumn: "identifier")
-								
-								DispatchQueue.global(qos: .background).async {
-									
-									self.beginDownloadMusic(urlStr: urlStr!, identifier: identifier!, newIdentifier: newIdentifier!)
-									
-								}
-								
-							}
-							
-							s?.close()
-						}
-				
-				})
-				
-			}, failure: { (operation, error) in
-				
-				debugPrint(error)
-				
-			})
-			
-			queue.addOperation(self.op!)
-			
-		}
-			
-	}
-	
-	func repaireFormerTrackName() {
-		
-		let user = UserDefaults.standard
-		
-		let repaired = user.object(forKey: "repaired")
-		
-		if repaired == nil {
-			
-			let query = "SELECT * FROM t_downloading"
-			
-			self.db.inDatabase({ (database) in
-				
-				HUD.show(.label("数据升级中请稍候"))
-				
-				let s = database?.executeQuery(query, withArgumentsIn: nil)
-				
-				let manager = FileManager.default
-				
-				let rootPath = self.dirDoc()
-				
-				while (s?.next())! {
-					
-					let identy = s?.string(forColumn: "identifier")
-					
-					if identy == nil {
-						
-						// 修改数据库
-						
-						let urlStr: String = (s?.string(forColumn: "sourceURL"))!
-						
-						let identifier = self.getIdentifier(urlStr: urlStr)
-						
-						let identifierUpdate = "UPDATE t_downloading SET identifier = '\(identifier)' WHERE sourceURL = '\(urlStr)'"
-						
-						DispatchQueue.global(qos: .background).async {
-							
-							database?.executeUpdate(identifierUpdate, withArgumentsIn: nil)
-							
-						}
-						
-						let artist = s?.string(forColumn: "author")
-						
-						let title = s?.string(forColumn: "title")
-						
-						let filePath = rootPath + "/\(artist!)" + " - " + "\(title!).mp3"
-						
-						let realPath = filePath.replacingOccurrences(of: " / ", with: " ")
-						
-						do {
-							
-							if manager.fileExists(atPath: realPath) {
-								
-								let dstPath = rootPath + "/\(identifier)"
-								
-								try manager.moveItem(at: URL(string:realPath)! , to: URL(string:dstPath)!)
-								
-							}
-							
-						} catch {
-							
-							print("Could not clear temp folder: \(error)")
-							
-						}
-
-						
-					}
-					
-				}
-				
-				s?.close()
-				
-				DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-					
-					HUD.hide()
-					
-					HUD.flash(.success, delay: 0.6)
-				}
-				
-				user.set("repaired", forKey: "repaired")
-				
-			})
-		}
-	}
-	
-	func getIdentifier(urlStr: String) -> String {
-		
-		let urlComponent: Array = urlStr.components(separatedBy: "/")
-		
-		let count = urlComponent.count
-		
-		let identifier: String = (urlComponent[count - 3]) + (urlComponent[count - 2]) + (urlComponent[count - 1])
-		
-		return identifier
+		NotificationCenter.default.removeObserver(self, name: Notification.Name("download"), object: nil)
 		
 	}
+	
 	
 }
 
 extension AlbumDownloadController {
 	
-	
 	// MARK: - Table view data source
-	
 	override func numberOfSections(in tableView: UITableView) -> Int {
 		// #warning Incomplete implementation, return the number of sections
 		return 2
@@ -551,7 +265,7 @@ extension AlbumDownloadController {
 			
 			let query = "SELECT * FROM t_downloading WHERE album = '\(album)';"
 			
-			self.db.inDatabase({ (database) in
+			db.inDatabase({ (database) in
 				
 				let s = database?.executeQuery(query, withArgumentsIn: nil)
 				
@@ -601,9 +315,314 @@ extension AlbumDownloadController {
 	}
 }
 
-extension AlbumDownloadController: DownloadControllerDelegate {
+// MARK: Notifications
+extension AlbumDownloadController {
+	
+	func getNotification() {
+		
+		let center = NotificationCenter.default
+		
+		center.addObserver(self, selector: #selector(fullAlbum(sender:)), name: Notification.Name("fullAlbum"), object: nil)
+		
+		center.addObserver(self, selector: #selector(download(sender:)), name: Notification.Name("download"), object: nil)
+		
+	}
+	
+	func fullAlbum(sender: Notification) {
+		
+		let userInfo: Dictionary = sender.userInfo!
+		
+		let tracks = (userInfo["tracks"] as! Array<Track>?)!
+		
+		let title = userInfo["album"] as! String
+		
+		let a = downloadAlbums.index(of: title)
+		
+		if a == nil {
+			
+			downloadAlbums.append(title)
+			
+			self.tableView.reloadData()
+			
+		}
+		
+		for track in tracks {
+			
+			//eg. 20160601.mp3
+			let identifier: String = self.getIdentifier(urlStr: track.url)
+			
+			let newIdentifier = track.artist + " - " + track.name
+			
+			downloadingArray.append(newIdentifier)
+			
+			let artist = self.doubleQuotation(single: track.artist)
+			
+			let name = self.doubleQuotation(single: track.name)
+			
+			let album = self.doubleQuotation(single: title)
+			
+			let sql = "INSERT INTO t_downloading(author,title,sourceURL,indexPath,thumb,album,downloaded,identifier) VALUES('\(artist)','\(name)','\(track.url)','\(track.ID)','\(track.cover)','\(album)','0', '\(identifier)');"
+			
+			
+			DispatchQueue.global(qos: .background).async {
+				
+				self.db.inDeferredTransaction({ (database, roolback) in
+					
+					database?.executeUpdate(sql, withArgumentsIn: nil)
+					
+				})
+				
+				if self.op == nil || (self.op?.isCancelled)! || (self.op?.isFinished)! || (self.op?.isPaused())! {
+					
+					if track == tracks.first {
+						
+						self.beginDownloadMusic(urlStr: track.url, identifier: identifier, newIdentifier: newIdentifier)
+						
+					}
+				}
+			}
+		}
+	}
+	
+	func download(sender: Notification) {
+		
+		let userInfo: Dictionary = sender.userInfo!
+		
+		let track = userInfo["track"] as! Track
+		
+		let title = userInfo["title"] as! String
+		
+		let newIdentifier = track.artist + " - " + track.name
+		
+		let identifier = userInfo["identifier"] as! String
+		
+		downloadingArray.append(newIdentifier)
+		
+		if self.op == nil || (self.op?.isCancelled)! || (self.op?.isFinished)! || (self.op?.isPaused())! {
+			
+			self.beginDownloadMusic(urlStr: track.url, identifier: identifier, newIdentifier: newIdentifier)
+			
+		}
+		
+		let index = downloadAlbums.index(of: title)
+		
+		if index == nil { return }
+		
+		downloadAlbums.append(title)
+		
+		tableView.reloadData()
+	}
+	
+	func beginDownloadMusic(urlStr: String, identifier: String, newIdentifier: String)  {
+		
+		// download loacation
+		let filePath = self.dirDoc() + "/\(identifier)"
+		
+		// initialize download queue
+		
+		let queue = OperationQueue()
+		
+		let request = URLRequest(url: URL(string: urlStr)!)
+		
+		self.op = AFHTTPRequestOperation.init(request: request)
+		
+		self.op?.outputStream = OutputStream(toFileAtPath: filePath, append: false)
+		
+		let index = self.downloadingArray.index(of: newIdentifier)
+		
+		if index != nil {
+			
+			self.op?.setDownloadProgressBlock({ (bytesRead, totalBytesRead, totalBytesExpectedToRead) in
+				
+				let downloadProgress: Double = (Double)(totalBytesRead) / (Double)(totalBytesExpectedToRead)
+				
+				print(downloadProgress)
+				
+				let progress: Int = (Int)(downloadProgress * 100)
+				
+				if progress % 10 == 0 || (Int)(progress) == 1 {
+					
+					let userInfo = [
+						"index": index!,
+						"percent": downloadProgress
+						] as [String : Any]
+					
+					NotificationCenter.default.post(name: Notification.Name("percent"), object: nil, userInfo: userInfo)
+					
+				}
+			})
+			
+			self.op?.setCompletionBlockWithSuccess({ (operation, responseObject) in
+				
+				// change download Status
+				self.db.inDatabase({ (database) in
+					
+					database?.executeUpdate("UPDATE t_downloading SET downloaded = 1 WHERE identifier = '\(identifier)';", withArgumentsIn: nil)
+					
+					// delete identifier and other infos
+					
+					let query = "SELECT * FROM t_downloading WHERE downloaded = 0;"
+					
+					var tempArray: Array<String> = []
+					
+					let s = database?.executeQuery(query, withArgumentsIn: nil)
+					
+					while (s?.next())! {
+						
+						let identifier = (s?.string(forColumn: "author"))! + " - " + (s?.string(forColumn: "title"))!
+						
+						tempArray.append(identifier)
+						
+					}
+					
+					self.downloadingArray = tempArray
+					
+					// post download complete notification
+					
+					NotificationCenter.default.post(name: Notification.Name("downloadComplete"), object: nil, userInfo: nil)
+					
+					if self.downloadingArray.count > 0 {
+						
+						let newIdentifier = self.downloadingArray.first
+						
+						let splitArr = newIdentifier?.components(separatedBy: " - ")
+						
+						let author = self.doubleQuotation(single: (splitArr?.first)!)
+						
+						let title = self.doubleQuotation(single: (splitArr?.last)!)
+						
+						let query = "SELECT * FROM t_downloading WHERE author = '\(author)' and title = '\(title)';"
+						
+						
+						let s = database?.executeQuery(query, withArgumentsIn: nil)
+						
+						if (s?.next())! {
+							
+							let urlStr = s?.string(forColumn: "sourceURL")
+							
+							let identifier = s?.string(forColumn: "identifier")
+							
+							DispatchQueue.global(qos: .background).async {
+								
+								self.beginDownloadMusic(urlStr: urlStr!, identifier: identifier!, newIdentifier: newIdentifier!)
+								
+							}
+							
+						}
+						
+					}
+					
+					s?.close()
+
+				})
+	
+			}, failure: { (operation, error) in
+				
+				debugPrint(error)
+				
+			})
+			
+			queue.addOperation(self.op!)
+			
+		}
+		
+	}
+	
+	func repaireFormerTrackName() {
+		
+		let user = UserDefaults.standard
+		
+		let repaired = user.object(forKey: "repaired")
+		
+		if repaired == nil {
+			
+			let query = "SELECT * FROM t_downloading"
+			
+			self.db.inDatabase({ (database) in
+				
+				HUD.show(.label("数据升级中请稍候"))
+				
+				let s = database?.executeQuery(query, withArgumentsIn: nil)
+				
+				let manager = FileManager.default
+				
+				let rootPath = self.dirDoc()
+				
+				while (s?.next())! {
+					
+					let identy = s?.string(forColumn: "identifier")
+					
+					if identy == nil {
+						
+						// 修改数据库
+						
+						let urlStr: String = (s?.string(forColumn: "sourceURL"))!
+						
+						let identifier = self.getIdentifier(urlStr: urlStr)
+						
+						let identifierUpdate = "UPDATE t_downloading SET identifier = '\(identifier)' WHERE sourceURL = '\(urlStr)'"
+						
+						DispatchQueue.global(qos: .background).async {
+							
+							database?.executeUpdate(identifierUpdate, withArgumentsIn: nil)
+							
+						}
+						
+						let artist = s?.string(forColumn: "author")
+						
+						let title = s?.string(forColumn: "title")
+						
+						let filePath = rootPath + "/\(artist!)" + " - " + "\(title!).mp3"
+						
+						let realPath = filePath.replacingOccurrences(of: " / ", with: " ")
+						
+						do {
+							
+							if manager.fileExists(atPath: realPath) {
+								
+								let dstPath = rootPath + "/\(identifier)"
+								
+								try manager.moveItem(at: URL(string:realPath)! , to: URL(string:dstPath)!)
+								
+							}
+							
+						} catch {
+							
+							print("Could not clear temp folder: \(error)")
+							
+						}
+						
+						
+					}
+					
+				}
+				
+				s?.close()
+				
+				DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+					
+					HUD.hide()
+					
+					HUD.flash(.success, delay: 0.3)
+				}
+				
+				user.set("repaired", forKey: "repaired")
+				
+			})
+		}
+	}
+
+}
+
+extension AlbumDownloadController: TrackListDelegate {
 	
 	func didDeletedTrack(track: Track) {
+		
+		
+		
+	}
+	
+	func trackListControllerDidSelectRowAtIndexPath(indexPath: IndexPath) {
 		
 		
 		
