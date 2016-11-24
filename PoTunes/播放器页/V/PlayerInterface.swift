@@ -374,7 +374,7 @@ extension PlayerInterface {
 	// play tracks
 		func playTracks(tracks: Array<Any>, index: Int) {
 				
-				streamer.activeStream.stop()
+//				streamer.activeStream.stop()
 
 				self.paused = false
 

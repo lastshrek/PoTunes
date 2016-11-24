@@ -14,7 +14,18 @@ import PKHUD
 
 class AlbumDownloadController: UITableViewController {
 		
-	lazy var db: FMDatabaseQueue = DBHelper.sharedInstance.queue!
+	lazy var queue: FMDatabaseQueue = DBHelper.sharedInstance.queue!
+    
+    lazy var tracksDB: FMDatabase = {
+        
+        let path = self.dirDoc() + "/downloadingSong.db"
+        
+        let db: FMDatabase = FMDatabase(path: path)
+        
+        db.open()
+        
+        return db
+    }()
 
 	lazy var downloadAlbums: Array<String> = {
 		
@@ -22,22 +33,18 @@ class AlbumDownloadController: UITableViewController {
 		
 		let distinct = "SELECT distinct album FROM t_downloading;"
 		
-		self.db.inDatabase { (database) in
+        let s = self.tracksDB.executeQuery(distinct, withArgumentsIn: nil)
+        
+        while (s?.next())! {
+            
+            let album = s?.string(forColumn: "album")!
+            
+            temp.append(album!)
+            
+        }
+        
+        s?.close()
 			
-			let s = database?.executeQuery(distinct, withArgumentsIn: nil)
-			
-			while (s?.next())! {
-				
-				let album = s?.string(forColumn: "album")!
-				
-				temp.append(album!)
-				
-			}
-			
-			s?.close()
-			
-		}
-		
 		return temp
 		
 	}()
@@ -48,22 +55,18 @@ class AlbumDownloadController: UITableViewController {
 		
 		let query = "SELECT * FROM t_downloading WHERE downloaded = 0;"
 		
-		self.db.inDatabase { (database) in
+        let s = self.tracksDB.executeQuery(query, withArgumentsIn: nil)
+        
+        while (s?.next())! {
+            
+            let identifier = (s?.string(forColumn: "author")!)! + " - " + (s?.string(forColumn: "title")!)!
+            
+            temp.append(identifier)
+            
+        }
+        
+        s?.close()
 			
-			let s = database?.executeQuery(query, withArgumentsIn: nil)
-			
-			while (s?.next())! {
-				
-				let identifier = (s?.string(forColumn: "author")!)! + " - " + (s?.string(forColumn: "title")!)!
-				
-				temp.append(identifier)
-				
-			}
-			
-			s?.close()
-			
-		}
-		
 		return temp
 		
 	}()
@@ -84,6 +87,7 @@ class AlbumDownloadController: UITableViewController {
 		
 		// 修复之前的下载文件名称
 		repaireFormerTrackName()
+        
 		
 	}
 	
@@ -137,21 +141,18 @@ extension AlbumDownloadController {
 			
 			let query = "SELECT * FROM t_downloading WHERE album = '\(album)';"
 			
-			db.inDatabase({ (database) in
 				
-				let s = database?.executeQuery(query, withArgumentsIn: nil)
-				
-				if (s?.next())! {
-					
-					let url = URL(string: (s?.string(forColumn: "thumb"))! + "!/fw/100" )
-					
-					cell.imageView?.sd_setImage(with: url, placeholderImage: UIImage(named: "defaultCover"))
-					
-				}
-				
-				s?.close()
-				
-			})
+            let s = tracksDB.executeQuery(query, withArgumentsIn: nil)
+            
+            if (s?.next())! {
+                
+                let url = URL(string: (s?.string(forColumn: "thumb"))! + "!/fw/100" )
+                
+                cell.imageView?.sd_setImage(with: url, placeholderImage: UIImage(named: "defaultCover"))
+                
+            }
+            
+            s?.close()
 			
 		}
 	
@@ -178,41 +179,37 @@ extension AlbumDownloadController {
 			
 			let query = "SELECT * FROM t_downloading WHERE album = '\(title)' and downloaded = 1 order by indexPath;"
 			
-			self.db.inDatabase({ (database) in
 				
-				let s = database?.executeQuery(query, withArgumentsIn: nil)
-				
-				while (s?.next())! {
-					
-					let track = Track()
-					
-					track.artist = (s?.string(forColumn: "author"))!
-					
-					track.name = (s?.string(forColumn: "title"))!
-					
-					track.url = (s?.string(forColumn: "sourceURL"))!
-					
-					track.ID = (Int)((s?.int(forColumn: "indexPath"))!)
-					
-					track.cover = (s?.string(forColumn: "thumb"))!
-					
-					tracks.append(track)
-					
-				}
-				
-				s?.close()
-				
-				download.title = title.components(separatedBy: " - ").last
-				
-				download.tracks = tracks
-				
-				download.delegate = self
-				
-				self.navigationController?.pushViewController(download, animated: true)
+            let s = tracksDB.executeQuery(query, withArgumentsIn: nil)
+            
+            while (s?.next())! {
+                
+                let track = Track()
+                
+                track.artist = (s?.string(forColumn: "author"))!
+                
+                track.name = (s?.string(forColumn: "title"))!
+                
+                track.url = (s?.string(forColumn: "sourceURL"))!
+                
+                track.ID = (Int)((s?.int(forColumn: "indexPath"))!)
+                
+                track.cover = (s?.string(forColumn: "thumb"))!
+                
+                tracks.append(track)
+                
+            }
+            
+            s?.close()
+            
+            download.title = title.components(separatedBy: " - ").last
+            
+            download.tracks = tracks
+            
+            download.delegate = self
+            
+            self.navigationController?.pushViewController(download, animated: true)
 
-				
-			})
-			
 			
 		} else {
 			
@@ -265,9 +262,8 @@ extension AlbumDownloadController {
 			
 			let query = "SELECT * FROM t_downloading WHERE album = '\(album)';"
 			
-			db.inDatabase({ (database) in
 				
-				let s = database?.executeQuery(query, withArgumentsIn: nil)
+				let s = tracksDB.executeQuery(query, withArgumentsIn: nil)
 				
 				let path = self.dirDoc()
 				
@@ -298,11 +294,10 @@ extension AlbumDownloadController {
 				
 				let delete = "DELETE FROM t_downloading WHERE album = '\(album)';"
 				
-				database?.executeUpdate(delete, withArgumentsIn: nil)
+				tracksDB.executeUpdate(delete, withArgumentsIn: nil)
 				
 				s?.close()
 
-			})
 			
 			downloadAlbums.remove(at: indexPath.row)
 			
@@ -366,7 +361,7 @@ extension AlbumDownloadController {
 			
 			DispatchQueue.global(qos: .background).async {
 				
-				self.db.inDeferredTransaction({ (database, roolback) in
+				self.queue.inDeferredTransaction({ (database, roolback) in
 					
 					database?.executeUpdate(sql, withArgumentsIn: nil)
 					
@@ -406,7 +401,7 @@ extension AlbumDownloadController {
 		
 		let index = downloadAlbums.index(of: title)
 		
-		if index == nil { return }
+		if index != nil { return }
 		
 		downloadAlbums.append(title)
 		
@@ -455,7 +450,7 @@ extension AlbumDownloadController {
 			self.op?.setCompletionBlockWithSuccess({ (operation, responseObject) in
 				
 				// change download Status
-				self.db.inDatabase({ (database) in
+				self.queue.inDatabase({ (database) in
 					
 					database?.executeUpdate("UPDATE t_downloading SET downloaded = 1 WHERE identifier = '\(identifier)';", withArgumentsIn: nil)
 					
@@ -507,6 +502,8 @@ extension AlbumDownloadController {
 								self.beginDownloadMusic(urlStr: urlStr!, identifier: identifier!, newIdentifier: newIdentifier!)
 								
 							}
+                            
+                            s?.close()
 							
 						}
 						
@@ -538,7 +535,7 @@ extension AlbumDownloadController {
 			
 			let query = "SELECT * FROM t_downloading"
 			
-			self.db.inDatabase({ (database) in
+			queue.inDatabase({ (database) in
 				
 				HUD.show(.label("数据升级中请稍候"))
 				

@@ -30,7 +30,18 @@ class TrackListController: UITableViewController {
     
 	var selectedCell: TrackCell?
 	
-	lazy var db: FMDatabaseQueue = DBHelper.sharedInstance.queue!
+    lazy var queue: FMDatabaseQueue = DBHelper.sharedInstance.queue!
+    
+    lazy var tracksDB: FMDatabase = {
+        
+        let path = self.dirDoc() + "/downloadingSong.db"
+        
+        let db: FMDatabase = FMDatabase(path: path)
+        
+        db.open()
+        
+        return db
+    }()
 	
 	override func viewDidLoad() {
 		
@@ -39,6 +50,7 @@ class TrackListController: UITableViewController {
 		tableView.register(TrackCell.self, forCellReuseIdentifier: "track")
         
 		tableView.separatorStyle = .none
+        
 	}
 	
 }
@@ -343,45 +355,50 @@ extension TrackListController {
 		let title = self.doubleQuotation(single: track.name)
 		
 		let query = "SELECT * FROM t_downloading WHERE author = ? and title = ? and album = ?;"
-		
-		db.inDatabase { (database) in
-			
-			let s = database?.executeQuery(query, withArgumentsIn: [artist, title, self.title!])
-			
-			if (s?.next())! {
-				
-				let downloaded = s?.bool(forColumn: "downloaded")
-				
-				if downloaded == true {
-					
-					HUD.flash(.label("歌曲已下载"), delay: 0.3)
-					
-					return
-					
-				} else {
-					
-					HUD.flash(.label("歌曲正在下载中"), delay: 0.3)
-					
-				}
-				
-			} else {
-				
-				let identifier = self.getIdentifier(urlStr: track.url)
-				
-				let sql = "INSERT INTO t_downloading(author,title,sourceURL,indexPath,thumb,album,downloaded,identifier) VALUES(?,?,?,?,?,?,'0',?)"
-				
-				database?.executeUpdate(sql, withArgumentsIn: [artist, title, track.url, track.ID, track.cover, self.title!,identifier])
-				
-				
-				let userInfo = ["title": self.title!, "identifier": identifier, "track": track] as [String : Any]
-				
-				NotificationCenter.default.post(name: Notification.Name("download"), object: nil, userInfo: userInfo)
-				
-				HUD.flash(.label("开始下载"), delay: 0.3)
+        
+        let s = tracksDB.executeQuery(query, withArgumentsIn: [artist, title, self.title!])
+        
+        if (s?.next())! {
+            
+            let downloaded = s?.bool(forColumn: "downloaded")
+            
+            if downloaded == true {
+                
+                HUD.flash(.label("歌曲已下载"), delay: 0.3)
+                
+                return
+                
+            } else {
+                
+                HUD.flash(.label("歌曲正在下载中"), delay: 0.3)
+                
+            }
+            
+            s?.close()
+            
+            
+            return
+            
+        }
+        
+        let identifier = self.getIdentifier(urlStr: track.url)
+        
+        let sql = "INSERT INTO t_downloading(author,title,sourceURL,indexPath,thumb,album,downloaded,identifier) VALUES(?,?,?,?,?,?,'0',?)"
+        
+        tracksDB.executeUpdate(sql, withArgumentsIn: [artist, title, track.url, track.ID, track.cover, self.title!,identifier])
+        
+        
+        let userInfo = ["title": self.title!, "identifier": identifier, "track": track] as [String : Any]
+        
+        NotificationCenter.default.post(name: Notification.Name("download"), object: nil, userInfo: userInfo)
+        
+        HUD.flash(.label("开始下载"), delay: 0.3)
+        
+        
+        s?.close()
+        
 
-			}
-			
-			s?.close()
-		}
-	}
+            
+        
+    }
 }

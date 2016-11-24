@@ -217,9 +217,7 @@ class PlaylistController: UITableViewController {
 	}
 	// MARK: - 下载每月歌曲 - TODO
 	func download(recognizer: UIGestureRecognizer) {
-		
-		// FIXME: - 缺少下载歌词环节
-		
+				
 		let position = recognizer.location(in: self.tableView)
 		
 		let indexPath: IndexPath = self.tableView.indexPathForRow(at: position)!
@@ -251,8 +249,9 @@ class PlaylistController: UITableViewController {
 					self.db.inDatabase({ (database) in
 						
 						let s = database?.executeQuery(query, withArgumentsIn: [artist, title, album])
+                        
 						
-						if s?.next() == nil {
+						if s?.next() == false {
 							
 							downloadArray.append(track)
 							
