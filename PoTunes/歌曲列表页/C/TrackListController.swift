@@ -7,15 +7,16 @@
 //
 
 import UIKit
+import PKHUD
+import FMDB
 
-
-protocol SongListDelegate: class {
+protocol TrackListDelegate: class {
 	
-	func songListControllerDidSelectRowAtIndexPath(indexPath: IndexPath)
+	func trackListControllerDidSelectRowAtIndexPath(indexPath: IndexPath)
 
 }
 
-class SongListController: UITableViewController {
+class TrackListController: UITableViewController {
 	
 	var tracks: Array<Track> = []
 	
@@ -25,9 +26,11 @@ class SongListController: UITableViewController {
 	
 	var sharedTrack: Track?
 	
-	weak var delegate: SongListDelegate?
+	weak var delegate: TrackListDelegate?
     
-    var selectedCell: TrackCell?
+	var selectedCell: TrackCell?
+	
+	lazy var db: FMDatabaseQueue = DBHelper.sharedInstance.queue!
 	
 	override func viewDidLoad() {
 		
@@ -38,25 +41,27 @@ class SongListController: UITableViewController {
 		tableView.separatorStyle = .none
 	}
 	
-
 }
 // MARK: - UITableViewDataSource
-extension SongListController {
+extension TrackListController {
+	
 	override func numberOfSections(in tableView: UITableView) -> Int {
 		// #warning Incomplete implementation, return the number of sections
 		return 1
+		
 	}
 	
 	override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 		// #warning Incomplete implementation, return the number of rows
 		if tableView.tag == 2 { return 2 }
 		
-		return self.tracks.count
+		return tracks.count
+		
 	}
 }
 
 // MARK: - UITableViewDelegate
-extension SongListController {
+extension TrackListController {
 	
 	override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
@@ -76,6 +81,13 @@ extension SongListController {
             cell.imageView?.sd_setImage(with: url, placeholderImage: UIImage(named:"noArtwork"))
             
             // Add download gesture recognizer
+			let downloadSwipe = UISwipeGestureRecognizer.init(target: self, action: #selector(downloadSingle(recognizer:)))
+			
+			downloadSwipe.direction = .right
+			
+			downloadSwipe.numberOfTouchesRequired = 1
+			
+			cell.addGestureRecognizer(downloadSwipe)
             
             // Add share to wechat gesture recognizer
             
@@ -88,13 +100,7 @@ extension SongListController {
         }
         
         let cell: UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "wechat", for: indexPath)
-//
-//        if cell == nil {
-        
-//            let cell = UITableViewCell.init(style: .default, reuseIdentifier: "wechat")
-        
-//        }
-        
+		
         if indexPath.row == 0 {
             
             cell.textLabel?.text = "分享给微信好友"
@@ -111,47 +117,48 @@ extension SongListController {
         
         return cell
 		
-		
 	}
 	
 	override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         if tableView.tag == 2 {
             
-            let message = WXMediaMessage()
-            
-            message.title = sharedTrack?.name
-            
-            message.description = sharedTrack?.artist
-            
-            message.setThumbImage(self.selectedCell?.imageView?.image)
-            
-            let ext = WXMusicObject()
-            
-            ext.musicUrl = "https://poche.fm"
-            
-            ext.musicDataUrl = self.sharedTrack?.url
-            
-            message.mediaObject = ext
-            
-            let req = SendMessageToWXReq.init()
-            
-            req.bText = false
-            
-            req.message = message
-            
-            if indexPath.row == 0 {
-                
-                req.scene = Int32(WXSceneSession.rawValue)
-                
-            } else {
-                
-                req.scene = Int32(WXSceneTimeline.rawValue)
-                
-            }
-            
-            
-            WXApi.send(req)
+			let message = WXMediaMessage()
+
+			message.title = sharedTrack?.name
+
+			message.description = sharedTrack?.artist
+
+			message.setThumbImage(self.selectedCell?.imageView?.image)
+
+			let ext = WXMusicObject()
+
+			ext.musicUrl = "https://poche.fm"
+
+			ext.musicDataUrl = self.sharedTrack?.url
+
+			message.mediaObject = ext
+
+			let req = SendMessageToWXReq.init()
+
+			req.bText = false
+
+			req.message = message
+
+			if indexPath.row == 0 {
+
+				req.scene = Int32(WXSceneSession.rawValue)
+
+			} else {
+
+				req.scene = Int32(WXSceneTimeline.rawValue)
+
+			}
+
+
+			WXApi.send(req)
+			
+			dismissHover()
             
             
         } else {
@@ -182,25 +189,6 @@ extension SongListController {
         }
         
 	}
-	// Override to support conditional editing of the table view.
-	override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-		// Return false if you do not want the specified item to be editable.
-		return true
-	}
-	
-//	// Override to support editing the table view.
-//	override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-//		
-//		if editingStyle == .delete {
-//			// Delete the row from the data source
-//			tableView.deleteRows(at: [indexPath], with: .fade)
-//		
-//		}
-//	}
-//	
-//	override func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
-//		return "你真要删呐？"
-//	}
 	
 	override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
 		
@@ -211,6 +199,7 @@ extension SongListController {
 		}
 		
 		return 44
+		
 	}
     
 	// MARK: SET Display style
@@ -245,7 +234,8 @@ extension SongListController {
 			})
 		}
 	}
-    
+	
+    // FIXME: Hover position
     func shareToWechat(recognizer: UIGestureRecognizer) {
         
         if recognizer.state.rawValue == 1 {
@@ -274,7 +264,7 @@ extension SongListController {
             
             // Add Gesture
             
-            let tap = UITapGestureRecognizer.init(target: self, action: #selector(dismissHover(recognizer:)))
+            let tap = UITapGestureRecognizer.init(target: self, action: #selector(dismissHover))
             
             hover?.addGestureRecognizer(tap)
             
@@ -293,7 +283,7 @@ extension SongListController {
             self.tableView.superview?.addSubview(shareTable!)
             
             UIView.animate(withDuration: 0.2, animations: { 
-                
+				
                 self.shareTable?.frame = CGRect(x: 0, y: height - 200, width: width, height: 88)
                 
                 self.hover?.alpha = 0.5
@@ -319,7 +309,7 @@ extension SongListController {
         
     }
     
-    func dismissHover(recognizer: UIGestureRecognizer) {
+    func dismissHover() {
         
         hover?.removeFromSuperview()
         
@@ -329,4 +319,69 @@ extension SongListController {
         
     }
 	
+	func downloadSingle(recognizer: UIGestureRecognizer) {
+		
+		// check user network and whether allow to play
+		let user = UserDefaults.standard
+		
+		let online = user.object(forKey: "online")
+		
+		if online == nil { return }
+		
+		
+		
+		let position = recognizer.location(in: tableView)
+		
+		let indexPath = tableView.indexPathForRow(at: position)
+		
+		// FIXME: 检查网络状况是否允许播放
+		
+		let track = tracks[(indexPath?.row)!]
+		
+		let artist = self.doubleQuotation(single: track.artist)
+		
+		let title = self.doubleQuotation(single: track.name)
+		
+		let query = "SELECT * FROM t_downloading WHERE author = ? and title = ?;"
+		
+		db.inDatabase { (database) in
+			
+			let s = database?.executeQuery(query, withArgumentsIn: [artist, title])
+			
+			if (s?.next())! {
+				
+				let downloaded = s?.bool(forColumn: "downloaded")
+				
+				if downloaded == true {
+					
+					HUD.flash(.label("歌曲已下载"), delay: 0.3)
+					
+					return
+					
+				} else {
+					
+					HUD.flash(.label("歌曲正在下载中"), delay: 0.3)
+					
+				}
+				
+			} else {
+				
+				let identifier = self.getIdentifier(urlStr: track.url)
+				
+				let sql = "INSERT INTO t_downloading(author,title,sourceURL,indexPath,thumb,album,downloaded,identifier) VALUES(?,?,?,?,?,?,'0',?)"
+				
+				database?.executeUpdate(sql, withArgumentsIn: [artist, title, track.url, track.ID, track.cover, self.title!,identifier])
+				
+				
+				let userInfo = ["title": self.title!, "identifier": identifier, "track": track] as [String : Any]
+				
+				NotificationCenter.default.post(name: Notification.Name("download"), object: nil, userInfo: userInfo)
+				
+				HUD.flash(.label("开始下载"), delay: 0.3)
+
+			}
+			
+			s?.close()
+		}
+	}
 }

@@ -293,7 +293,7 @@ extension PlayerInterface {
 		
 		self.addSubview(lrcView)
 		
-		self.lrcView.renderStatic = true
+		self.lrcView.renderStatic = false
 
 	}
 }
@@ -372,39 +372,31 @@ extension PlayerInterface {
 // MARK: - play from tracks
 extension PlayerInterface {
 	// play tracks
-	func playTracks(tracks: Array<Any>, index: Int) {
-        
-        streamer.activeStream.stop()
-		
-		self.paused = false
-		
-		let track: Track = tracks[index] as! Track
-		
-		streamer.activeStream.play(from: URL(string: track.url))
-		
-		addCurrentTimeTimer()
-		
-	}
-	
-	func changeInterface(_ index: Int) {
-		
-		DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-			
-			self.lrcView.renderStatic = false
+		func playTracks(tracks: Array<Any>, index: Int) {
+				
+				streamer.activeStream.stop()
+
+				self.paused = false
+
+				let track: Track = tracks[index] as! Track
+
+				streamer.activeStream.play(from: URL(string: track.url))
+
+				addCurrentTimeTimer()
 
 		}
-				
-		DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            
-            self.progress?.progress = 0
-            
-            self.bufferingIndicator?.progress = 0
-            
-            self.currentTime.text = "0:00"
-            
-            self.leftTime.text = "0:00"
+	
+		func changeInterface(_ index: Int) {
+		
+			self.lrcView.renderStatic = false
+
+			self.progress?.progress = 0
 			
-			self.lrcView.renderStatic = true
+			self.bufferingIndicator?.progress = 0
+			
+			self.currentTime.text = "0:00"
+			
+			self.leftTime.text = "0:00"
 			
 			let track: Track = self.tracks[self.index!] as! Track
 			
@@ -421,25 +413,25 @@ extension PlayerInterface {
 			cover.sd_setImage(with: URL(string: track.cover + "!/fw/600")) { (image, _, _, _) in
 				
 				self.reflection.image = image?.reflection(withAlpha: 0.4)
-				
+
 				let colorPicker: LEColorPicker = LEColorPicker()
-				
+
 				let colorScheme = colorPicker.colorScheme(from: cover.image)
-				
+
 				self.progress?.color = colorScheme?.backgroundColor
-				
+
 				self.name?.textColor = colorScheme?.backgroundColor
-				
+
 				self.artist?.textColor = colorScheme?.backgroundColor
-				
+
 				self.album?.textColor = colorScheme?.backgroundColor
-				
+
 				// 设置锁屏信息
 				let artwork: MPMediaItemArtwork = MPMediaItemArtwork.init(image: cover.image!)
-				
+
 				let duration: TimeInterval = Double((self.streamer.activeStream.duration.minute)) * 60 + Double((self.streamer.activeStream.duration.second))
-				
-				
+
+
 				let info : [String:AnyObject] = [
 					
 					MPMediaItemPropertyArtist : track.artist as AnyObject,
@@ -453,11 +445,14 @@ extension PlayerInterface {
 					MPMediaItemPropertyPlaybackDuration: duration as AnyObject
 					
 				]
-				
+
 				MPNowPlayingInfoCenter.default().nowPlayingInfo = info
 				
+				self.lrcView.renderStatic = true
+
+				
 			}
-		}
+		
 		// 记录最后一次播放的歌曲和以及播放模式
 		UserDefaults.standard.set(self.repeatMode?.rawValue, forKey: "repeatMode")
 		
@@ -643,7 +638,7 @@ extension PlayerInterface {
 		
 		if self.tracks.count == 0 {
 			
-			HUD.flash(.label("向上滑动，更多精彩"), delay: 0.6)
+			HUD.flash(.label("向上滑动，更多精彩"), delay: 0.3)
 			
 			return
 			
@@ -651,11 +646,11 @@ extension PlayerInterface {
 		
 		if self.paused == true {
 			
-			HUD.flash(.image(UIImage(named: "playB")), delay: 0.6)
+			HUD.flash(.image(UIImage(named: "playB")), delay: 0.3)
 			
 		} else {
 			
-			HUD.flash(.image(UIImage(named: "pauseB")), delay: 0.6)
+			HUD.flash(.image(UIImage(named: "pauseB")), delay: 0.3)
 
 		}
 		
@@ -677,7 +672,7 @@ extension PlayerInterface {
 		
 		if self.tracks.count == 0 {
 			
-			HUD.flash(.label("向上滑动，更多精彩"), delay: 0.6)
+			HUD.flash(.label("向上滑动，更多精彩"), delay: 0.3)
 			
 			return
 			
@@ -717,7 +712,7 @@ extension PlayerInterface {
 		
 		changeInterface(self.index!)
 		
-		HUD.flash(.image(UIImage(named: "prevB")), delay: 0.6)
+		HUD.flash(.image(UIImage(named: "prevB")), delay: 0.3)
 		
 		
 	}
@@ -726,7 +721,7 @@ extension PlayerInterface {
 		
 		if self.tracks.count == 0 {
 			
-			HUD.flash(.label("向上滑动，更多精彩"), delay: 0.6)
+			HUD.flash(.label("向上滑动，更多精彩"), delay: 0.3)
 			
 			return
 			
@@ -761,14 +756,14 @@ extension PlayerInterface {
 		
 		changeInterface(self.index!)
 		
-		HUD.flash(.image(UIImage(named: "nextB")), delay: 0.6)
+		HUD.flash(.image(UIImage(named: "nextB")), delay: 0.3)
 	}
 	
 	func doSeeking(recognizer: UILongPressGestureRecognizer) {
 		
 		if self.tracks.count == 0 {
 			
-			HUD.flash(.label("向上滑动，更多精彩"), delay: 0.6)
+			HUD.flash(.label("向上滑动，更多精彩"), delay: 0.3)
 			
 			return
 			
@@ -823,8 +818,6 @@ extension PlayerInterface {
 			
 			seek.position = Float((self.progress?.progress)!)
 			
-			print(seek.position)
-			
 			self.streamer.activeStream.seek(to: seek)
 		}
 	}
@@ -837,7 +830,7 @@ extension PlayerInterface {
 			
 			self.playModeView.image = UIImage(named: "shuffleOnB")
 			
-			HUD.flash(.image(UIImage(named: "shuffleOnB")), delay: 0.6)
+			HUD.flash(.image(UIImage(named: "shuffleOnB")), delay: 0.3)
 		
 		} else {
 		
@@ -845,7 +838,7 @@ extension PlayerInterface {
 			
 			self.playModeView.image = UIImage(named: "repeatOnB")
 			
-			HUD.flash(.image(UIImage(named: "repeatOnB")), delay: 0.6)
+			HUD.flash(.image(UIImage(named: "repeatOnB")), delay: 0.3)
 	
 		}
 		
@@ -859,7 +852,7 @@ extension PlayerInterface {
 		
 		if self.repeatMode == AudioRepeatMode.single {
 			
-			HUD.flash(.image(UIImage(named: "repeatOnB")), delay: 0.6)
+			HUD.flash(.image(UIImage(named: "repeatOnB")), delay: 0.3)
 			
 			self.repeatMode = AudioRepeatMode.towards
 			
@@ -867,7 +860,7 @@ extension PlayerInterface {
 			
 		} else {
 			
-			HUD.flash(.image(UIImage(named: "repeatOneB")), delay: 0.6)
+			HUD.flash(.image(UIImage(named: "repeatOneB")), delay: 0.3)
 			
 			self.repeatMode = AudioRepeatMode.single
 			
@@ -885,7 +878,7 @@ extension PlayerInterface {
 		
 		if self.tracks.count == 0 {
 			
-			HUD.flash(.label("向上滑动，更多精彩"), delay: 0.6)
+			HUD.flash(.label("向上滑动，更多精彩"), delay: 0.3)
 			
 			return
 			
@@ -992,7 +985,7 @@ extension PlayerInterface: LTInfiniteScrollViewDataSource {
 	func viewAtIndex(_ index: Int, reusingView view: UIView?) -> UIView {
 		
 		let size = self.bounds.size.width / CGFloat(numberOfVisibleViews())
-
+		
 		let cover: UIImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: size, height: size))
 
 		if self.tracks.count > 0 {
@@ -1008,7 +1001,7 @@ extension PlayerInterface: LTInfiniteScrollViewDataSource {
 				if index == self.index {
 					
 					self.reflection.image = cover.image?.reflection(withAlpha: 0.4)
-
+					
 				}
 
 			})

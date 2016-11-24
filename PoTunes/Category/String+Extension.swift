@@ -34,4 +34,16 @@ extension NSObject {
 		
 	}
 	
+	func getIdentifier(urlStr: String) -> String {
+		
+		let urlComponent: Array = urlStr.components(separatedBy: "/")
+		
+		let count = urlComponent.count
+		
+		let identifier: String = (urlComponent[count - 3]) + (urlComponent[count - 2]) + (urlComponent[count - 1])
+		
+		return identifier
+		
+	}
+	
 }
