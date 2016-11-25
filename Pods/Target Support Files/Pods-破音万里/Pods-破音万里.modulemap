@@ -1,0 +1,6 @@
+framework module Pods_____ {
+  umbrella header "Pods-破音万里-umbrella.h"
+
+  export *
+  module * { export * }
+}

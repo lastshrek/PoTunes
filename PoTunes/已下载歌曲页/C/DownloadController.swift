@@ -8,16 +8,9 @@
 
 import UIKit
 
-protocol DownloadControllerDelegate: TrackListDelegate {
-	
-	func didDeletedTrack(track: Track)
-	
-}
 
 class DownloadController: TrackListController {
 	
-	
-
 	override func viewDidLoad() {
 		
 		super.viewDidLoad()
@@ -41,12 +34,26 @@ class DownloadController: TrackListController {
 		
 		if editingStyle == .delete {
 			// Delete the row from the data source
-			tableView.deleteRows(at: [indexPath], with: .fade)
+			let track = tracks[indexPath.row]
+						
+			// Send Message to Delegate
+			self.delegate?.didDeletedTrack!(track: track, title: self.title!)
 			
+			// delete TableView Data
+			tracks.remove(at: indexPath.row)
+			
+			tableView.deleteRows(at: [indexPath], with: .top)
+			
+			if tracks.count == 0 {
+				
+				self.navigationController!.popToRootViewController(animated: true)
+				
+			}
 		}
 	}
 	
 	override func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
+		
 		return "你真要删呐？"
 	}
 

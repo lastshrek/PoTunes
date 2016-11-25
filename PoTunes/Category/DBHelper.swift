@@ -29,7 +29,7 @@ class DBHelper: NSObject {
 	
 	func inDatabase(complete : @escaping (FMDatabase) -> ()) {
 		
-		queue?.inDatabase({ (db) in
+		self.queue!.inDatabase({ (db) in
 			
 			complete(db!)
 		
@@ -37,12 +37,4 @@ class DBHelper: NSObject {
 		
 	}
 	
-//	override init() {
-//		super.init()
-//		
-//		let path = self.dirDoc() + "downloadingSong.db"
-//		
-//		queue = FMDatabaseQueue(path: path)
-//	}
-
 }
