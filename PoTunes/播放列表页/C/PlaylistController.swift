@@ -13,7 +13,9 @@ import PKHUD
 import FMDB
 
 protocol PlaylistDelegate: class {
+	
 	func tabBarCount(count: Int)
+
 }
 
 let P_URL = "https://poche.fm/api/app/playlists/"
@@ -22,11 +24,20 @@ class PlaylistController: UITableViewController {
 	
 	var playlists: Array<Playlist> = []
 	
-	lazy var db: FMDatabaseQueue = DBHelper.sharedInstance.queue!
+	lazy var queue: FMDatabaseQueue = DBHelper.sharedInstance.queue!
 
-	
-	
 	weak var delegate: PlaylistDelegate?
+	
+	lazy var playlistsDB: FMDatabase = {
+		
+		let path = self.dirDoc() + "/downloadingSong.db"
+		
+		let db: FMDatabase = FMDatabase(path: path)
+		
+		db.open()
+		
+		return db
+	}()
 	
 	var recognizer: UIGestureRecognizer?
 	
@@ -58,30 +69,45 @@ class PlaylistController: UITableViewController {
 	}
 	
 	func checkLocalPlaylists() {
-		// MARK: - 获取数据 - 未测试
-		if self.playlists.count == 0 {
+		
+		let query = "select * from t_playlists"
+		
+		let s = playlistsDB.executeQuery(query, withArgumentsIn: nil)
+		
+		if s?.next() == false {
 			
-			let rootPath: String = self.dirDoc() as String
+			loadNewPlaylist()
 			
-			let filePath: String = rootPath + "/article.plist"
+		} else {
 			
-			if let dictArr: NSArray  = NSArray(contentsOfFile: filePath) {
-//				// MARK: - 本地存有article.plist时需测试
-//				var contentArray = Array<Playlist>()
-//			
-//				for dict in dictArr {
-//				
-//					contentArray.append(dict)
-//				
-//				}
-//				self.playlists = contentArray
+			let sql = "select * from t_playlists order by p_id desc"
+			
+			let s = playlistsDB.executeQuery(sql, withArgumentsIn: nil)
+			
+			while s?.next() == true {
 				
-			} else {
-				
-				loadNewPlaylist()
+				let playlist = Playlist()
 			
+				playlist.ID = (Int)((s?.int(forColumn: "id"))!)
+				
+				playlist.title = (s?.string(forColumn: "title"))!
+				
+				playlist.cover = (s?.string(forColumn: "cover"))!
+				
+				playlists.append(playlist)
+				
 			}
+			
+			s?.close()
+			
+			self.delegate?.tabBarCount(count: 4)
+			
+			tableView.reloadData()
+			
 		}
+		
+		s?.close()
+		
 	}
 	
 	func addPullToRefresh() {
@@ -100,25 +126,58 @@ class PlaylistController: UITableViewController {
 	}
 	
 	func loadNewPlaylist() {
+		// FIXME: 版本号
+		
 		// 请求接口
 		Alamofire.request(P_URL).response(completionHandler: { (response) in
-		
-			let playlists: Array = Reflect<Playlist>.mapObjects(data: response.data)
 			
-			if playlists.count == 0 {
-			
-				HUD.flash(.error, delay: 1.0)
+			if response.error != nil {
+				
+				HUD.flash(.labeledError(title: "请检查网络", subtitle: nil), delay: 0.4)
 				
 				self.tableView.dg_stopLoading()
 				
 				self.delegate?.tabBarCount(count: 3)
 				
 				return
+				
 			}
-						
-			self.playlists = playlists//重设tabBar个数
 			
 			self.tableView.dg_stopLoading()
+
+			let playlists: Array = Reflect<Playlist>.mapObjects(data: response.data)
+			
+			let query = "select * from t_playlists where p_id=(select max(p_id)from t_playlists);"
+			
+			let s = self.playlistsDB.executeQuery(query, withArgumentsIn: nil)
+			
+			if s?.next() == true {
+				
+				let maxID = (Int)((s?.int(forColumn: "p_id"))!)
+				
+				var temp: Array<Playlist> = []
+				
+				for playlist in playlists {
+					
+					if playlist.ID > maxID {
+						
+						temp.append(playlist)
+						
+					}
+					
+				}
+				
+				self.playlists = temp + self.playlists
+				
+				self.dumpPlaylist(playlists: temp)
+				
+			} else {
+				
+				self.playlists = playlists
+				
+				self.dumpPlaylist(playlists: playlists)
+				
+			}
 			
 			self.tableView.reloadData()
 			
@@ -132,6 +191,7 @@ class PlaylistController: UITableViewController {
 			
 			}
 			
+			
 			let user = UserDefaults.standard
 			
 			user.set("online", forKey: "online")
@@ -139,6 +199,29 @@ class PlaylistController: UITableViewController {
 			user.synchronize()
 			
 		})
+	}
+	
+	// store playlists
+	func dumpPlaylist(playlists: Array<Playlist>) {
+		
+		let sql = "INSERT INTO t_playlists(p_id, title, cover) VALUES(?, ?, ?);"
+
+		
+		for playlist in playlists {
+			
+			DispatchQueue.global(qos: .background).async {
+				
+				let title = self.doubleQuotation(single: playlist.title)
+				
+				self.queue.inDeferredTransaction({ (database, roolback) in
+					
+					database?.executeUpdate(sql, withArgumentsIn: [playlist.ID, title, playlist.cover])
+					
+				})
+			}
+			
+		}
+		
 	}
 	
 	// MARK: - Table view data source
@@ -246,7 +329,7 @@ class PlaylistController: UITableViewController {
 					
 					let query = "SELECT * FROM t_downloading WHERE author = ? and title = ? and album = ?;"
 					
-					self.db.inDatabase({ (database) in
+					self.queue.inDatabase({ (database) in
 						
 						let s = database?.executeQuery(query, withArgumentsIn: [artist, title, album])
                         

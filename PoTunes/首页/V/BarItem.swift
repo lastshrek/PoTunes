@@ -27,7 +27,7 @@ class BarItem: UIButton {
 		
 		self.setTitleColor(UIColor.colorByRGB(red: 17, green: 133, blue: 117, alpha: 0.8), for: .normal)
 		
-		self.setTitleColor(UIColor.colorByRGB(red: 224, green: 0, blue: 81, alpha: 0.8), for: .selected)
+		self.setTitleColor(UIColor.colorByRGB(red: 225, green: 49, blue: 114, alpha: 1), for: .selected)
 
 	}
 	
@@ -38,6 +38,7 @@ class BarItem: UIButton {
 		let imageH = contentRect.size.height * 0.1
 		
 		return CGRect(x: 0, y: 0, width: imageW, height: imageH)
+		
 	}
 
 	// MARK: - 点击

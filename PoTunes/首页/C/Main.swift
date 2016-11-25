@@ -97,7 +97,7 @@ class Main: UIViewController, UIGestureRecognizerDelegate, UIAlertViewDelegate {
 		
 		db?.open()
 		
-		let createStr = "CREATE TABLE IF NOT EXISTS t_downloading (id integer PRIMARY KEY, author text, title text, sourceURL text,indexPath integer,thumb text,album text,downloaded bool, identifier text);"
+		let createStr = "CREATE TABLE IF NOT EXISTS t_downloading (id integer PRIMARY KEY, author text, title text, sourceURL text,indexPath integer,thumb text,album text,downloaded bool, identifier text);CREATE TABLE IF NOT EXISTS t_playlists (id integer PRIMARY KEY, title text, cover text, p_id integer);"
 		
 		db?.executeStatements(createStr)
 		

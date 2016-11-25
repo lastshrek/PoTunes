@@ -636,12 +636,10 @@ extension AlbumDownloadController: TrackListDelegate {
 					
 					self.tableView.reloadData()
 					
-					print(self.downloadAlbums)
-					
 				}
 				
 			}
-						
+			
 		}
 		
 		// delete local files
@@ -662,11 +660,7 @@ extension AlbumDownloadController: TrackListDelegate {
 			debugPrint("Could not clear temp folder: \(error)")
 			
 		}
-		
-		
 	}
-	
-	
 }
 
 extension AlbumDownloadController: DownloadingControllerDelegate {
