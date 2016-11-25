@@ -45,7 +45,7 @@ class BarItem: UIButton {
 	override var isHighlighted: Bool {
 	
 		didSet {
-			
+						
 		}
 	
 	}

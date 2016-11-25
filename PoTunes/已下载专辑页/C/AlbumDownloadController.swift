@@ -213,6 +213,14 @@ extension AlbumDownloadController {
 			
 		} else {
 			
+			if downloadingArray.count == 0 {
+				
+				HUD.flash(.labeledError(title: "当前并无正在缓存歌曲", subtitle: nil), delay: 0.6)
+				
+				return
+				
+			}
+			
 			let downloading = DownloadingController()
 			
 			if op == nil || op?.isPaused() == true {
