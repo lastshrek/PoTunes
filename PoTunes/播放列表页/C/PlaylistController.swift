@@ -88,7 +88,7 @@ class PlaylistController: UITableViewController {
 				
 				let playlist = Playlist()
 			
-				playlist.ID = (Int)((s?.int(forColumn: "id"))!)
+				playlist.ID = (Int)((s?.int(forColumn: "p_id"))!)
 				
 				playlist.title = (s?.string(forColumn: "title"))!
 				

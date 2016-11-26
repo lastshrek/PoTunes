@@ -9,7 +9,6 @@
 import UIKit
 
 class BarItem: UIButton {
-//	var normalImage: UIImageView?
 	
 	override init(frame: CGRect) {
 		
@@ -40,17 +39,22 @@ class BarItem: UIButton {
 		return CGRect(x: 0, y: 0, width: imageW, height: imageH)
 		
 	}
-
-	// MARK: - 点击
+	
 	override var isHighlighted: Bool {
-	
+		
 		didSet {
-						
+			
+			super.isSelected = true
+			super.isHighlighted = false
+
 		}
-	
+		
 	}
-	
+
+
 	required init?(coder aDecoder: NSCoder) {
+		
 		fatalError("init(coder:) has not been implemented")
+	
 	}
 }

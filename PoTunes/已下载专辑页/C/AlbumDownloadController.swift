@@ -675,10 +675,97 @@ extension AlbumDownloadController: DownloadingControllerDelegate {
 	
 	func didClickThePauseButton(button: UIButton) {
 		
+		if self.op == nil {
+			
+			let newIdentifier = self.downloadingArray.first
+			
+			let splitArr = newIdentifier?.components(separatedBy: " - ")
+			
+			let artist = self.doubleQuotation(single: (splitArr?.first)!)
+			
+			let title = self.doubleQuotation(single: (splitArr?.last)!)
+			
+			let query = "SELECT * FROM t_downloading WHERE author = '%@' and title = '%@';"
+			
+			let s = tracksDB.executeQuery(query, withArgumentsIn: [artist, title])
+			
+			if s?.next() == true {
+				
+				let url = s?.string(forColumn: "sourceURL")
+				
+				let identifier = s?.string(forColumn: "identifier")
+				
+				self.beginDownloadMusic(urlStr: url!, identifier: identifier!, newIdentifier: newIdentifier!)
+				
+			}
+			
+			s?.close()
+			
+		}
+		
+		if (self.op?.isPaused())! {
+			
+			self.op?.resume()
+			
+		} else {
+			
+			self.op?.pause()
+			
+		}
+		
 	}
 	
 	func didClickTheDeleteButton(button: UIButton) {
 		
+		self.op?.cancel()
+		
+		// 删除本地文件
+		
+		let select = "SELECT * FROM t_downloading WHERE downloaded = 0;"
+		
+		let s = tracksDB.executeQuery(select, withArgumentsIn: nil)
+		
+		let manager = FileManager.default
+		
+		while s?.next() == true {
+			
+			let identifier = s?.string(forColumn: "identifier")
+			
+			let filepath = self.dirDoc() + "/\(identifier).mp3"
+			
+			do {
+				
+				if manager.fileExists(atPath: filepath) {
+					
+					try manager.removeItem(atPath: filepath)
+					
+				}
+				
+			} catch {
+				
+				print("删除文件失败: \(error)")
+				
+			}
+			
+		}
+		
+		s?.close()
+		
+		//delete the not downloaded datas
+		
+		let delete = "DELETE FROM t_downloading WHERE downloaded = 0;"
+		
+		queue.inTransaction { (database, _) in
+			
+			database?.executeUpdate(delete, withArgumentsIn: nil)
+			
+			// query dinstint albums
+			
+			self.downloadingArray.removeAll()
+			
+			self.tableView.reloadData()
+
+			
+		}
 	}
-	
 }
