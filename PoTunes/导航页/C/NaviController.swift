@@ -8,28 +8,30 @@
 
 import UIKit
 
-class NaviController: UIViewController {
+
+class NaviController: UIViewController, MAMapViewDelegate, AMapSearchDelegate {
+	
+	enum TravelTypes: Int {
+		case car = 0
+		case walk
+	}
+	
+	let backgroundView = UIImageView(image: UIImage(named: "outtake_mid"))
+	
+	var mapView: MAMapView?
+	
 
     override func viewDidLoad() {
+		
         super.viewDidLoad()
-
+		
+		backgroundView.frame = self.view.bounds
+		
+		self.view.addSubview(backgroundView)
+		
+		AMapServices.shared().apiKey = "62443358a250ee522aba69dfa3c1d247"
         // Do any additional setup after loading the view.
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
+	
 }

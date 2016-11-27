@@ -12,7 +12,7 @@ import LDProgressView
 import LTInfiniteScrollViewSwift
 import PKHUD
 import FMDB
-
+import LEColorPicker
 
 class PlayerInterface: UIView, UIApplicationDelegate {
     
@@ -1088,7 +1088,9 @@ extension PlayerInterface: LTInfiniteScrollViewDataSource {
 	}
 	
 	func numberOfVisibleViews() -> Int {
+		
 		return 1
+		
 	}
 	
 	func viewAtIndex(_ index: Int, reusingView view: UIView?) -> UIView {

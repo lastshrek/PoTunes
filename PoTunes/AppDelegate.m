@@ -10,7 +10,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import "BPush.h"
 #import "WXApi.h"
-#import "PotunesRemix-swift.h"
+#import <MAMapKit/MAMapKit.h>
 //#import "MBProgressHUD+MJ.h"
 @interface AppDelegate ()<WXApiDelegate>
 
@@ -30,6 +30,7 @@
     // 接受远程事件
     [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
     [self becomeFirstResponder];
+	
 
 
     //注册通知·
@@ -45,7 +46,6 @@
     // App 是用户点击推送消息启动
     NSDictionary *userInfo = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
     if (userInfo) {
-//        NSLog(@"从消息启动:%@",userInfo);
         [BPush handleNotification:userInfo];
     }
     //角标清0

@@ -13,9 +13,12 @@
 #import "AppDelegate.h"
 #import <AVFoundation/AVFoundation.h>
 #import "Reachability.h"
-#import "LEColorPicker.h"
 #import "DRNRealTimeBlurView.h"
 #import <AFNetworking/AFNetworking.h>
 #import "WXApiObject.h"
 #import "WXApi.h"
 #import "M13ProgressViewBar.h"
+#import <AMapSearchKit/AMapSearchKit.h>
+#import <MAMapKit/MAMapKit.h>
+#import <AMapFoundationKit/AMapFoundationKit.h>
+

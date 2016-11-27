@@ -12,4 +12,8 @@ target '破音万里' do
 	pod 'FMDB'
 	pod 'Masonry'
 	pod 'LTInfiniteScrollViewSwift'
+	pod 'LEColorPicker'
+	pod 'AMapNavi'  #导航 SDK
+	pod 'AMapLocation' #定位SDK
+	pod 'AMapSearch' #搜索服务SDK
 end
