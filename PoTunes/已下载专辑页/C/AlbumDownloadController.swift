@@ -268,7 +268,7 @@ extension AlbumDownloadController {
 			
 			let album = self.downloadAlbums[indexPath.row]
 			
-			let query = "SELECT * FROM t_downloading WHERE album = '\(album)';"
+			let query = "SELECT * FROM t_downloading WHERE album = '\(album)' and downloaded = 1;"
 			
 				
 			let s = tracksDB.executeQuery(query, withArgumentsIn: nil)
@@ -300,7 +300,7 @@ extension AlbumDownloadController {
 				}
 			}
 			
-			let delete = "DELETE FROM t_downloading WHERE album = '\(album)';"
+			let delete = "DELETE FROM t_downloading WHERE album = '\(album)' and downloaded = 1;"
 			
 			tracksDB.executeUpdate(delete, withArgumentsIn: nil)
 			
@@ -375,6 +375,8 @@ extension AlbumDownloadController {
 					
 				})
 				
+				print(self.op)
+				
 				if self.op == nil || (self.op?.isCancelled)! || (self.op?.isFinished)! || (self.op?.isPaused())! {
 					
 					if track == tracks.first {
@@ -439,11 +441,11 @@ extension AlbumDownloadController {
 				
 				let downloadProgress: Double = (Double)(totalBytesRead) / (Double)(totalBytesExpectedToRead)
 				
-				print(downloadProgress)
-				
 				let progress: Int = (Int)(downloadProgress * 100)
 				
-				if progress % 10 == 0 || (Int)(progress) == 1 {
+				if (progress % 10 == 0 || (Int)(progress) == 1) && downloadProgress <= 1 && downloadProgress >= 0.01 {
+					
+					print(downloadProgress)
 					
 					let userInfo = [
 						"index": index!,
@@ -685,7 +687,7 @@ extension AlbumDownloadController: DownloadingControllerDelegate {
 			
 			let title = self.doubleQuotation(single: (splitArr?.last)!)
 			
-			let query = "SELECT * FROM t_downloading WHERE author = '%@' and title = '%@';"
+			let query = "SELECT * FROM t_downloading WHERE author = ? and title = ?;"
 			
 			let s = tracksDB.executeQuery(query, withArgumentsIn: [artist, title])
 			
@@ -700,6 +702,8 @@ extension AlbumDownloadController: DownloadingControllerDelegate {
 			}
 			
 			s?.close()
+			
+			return
 			
 		}
 		

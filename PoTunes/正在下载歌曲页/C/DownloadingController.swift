@@ -30,16 +30,32 @@ class DownloadingController: UITableViewController {
 	var start: OperationButton?
 	
 	var delete: OperationButton?
+	
+	var index: Int?
 
 	override func viewDidLoad() {
 		
 		super.viewDidLoad()
 		
-		tableView.register(UITableViewCell.self, forCellReuseIdentifier: "identifier")
+		tableView.register(DownloadingCell.self, forCellReuseIdentifier: "Track")
+		
+		tableView.separatorStyle = .none
+		
+		tableView.contentInset = UIEdgeInsetsMake(0, 0, 64, 0)
+		
+		tableView.contentOffset = CGPoint(x: 0, y: 0)
+
+		
+		getNotification()
 		
 	}
 	
 	deinit {
+		
+		NotificationCenter.default.removeObserver(self, name: Notification.Name("percent"), object: nil)
+		
+		NotificationCenter.default.removeObserver(self, name: Notification.Name("downloadComplete"), object: nil)
+
 		
 	}
 }
@@ -59,12 +75,14 @@ extension DownloadingController {
 extension DownloadingController {
 	
 	override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-		let cell = tableView.dequeueReusableCell(withIdentifier: "identifier", for: indexPath)
+		
+		let cell = tableView.dequeueReusableCell(withIdentifier: "Track") as! DownloadingCell
 		
 		// Configure the cell...
 		cell.textLabel?.text = downloadingArray?[indexPath.row]
 		
 		return cell
+		
 	}
 	
 	override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -116,6 +134,12 @@ extension DownloadingController {
 	override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
 		
 		return 40
+		
+	}
+	
+	override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+		
+		tableView.deselectRow(at: indexPath, animated: false)
 		
 	}
 	
@@ -187,5 +211,62 @@ extension DownloadingController {
 		button.setTitle("全部暂停", for: .normal)
 		
 	}
+	
+}
+
+extension DownloadingController {
+	
+	func getNotification() {
+		
+		let center = NotificationCenter.default
+		
+		center.addObserver(self, selector: #selector(percentChange(sender:)), name: Notification.Name("percent"), object: nil)
+		
+		center.addObserver(self, selector: #selector(downloadComplete), name: Notification.Name("downloadComplete"), object: nil)
+
+		
+	}
+	
+	func percentChange(sender: Notification) {
+		
+		let userInfo = sender.userInfo!
+		
+		let index = userInfo["index"] as! Int
+		
+		self.index = index
+		
+		let indexPath = IndexPath(row: index, section: 0)
+		
+		let cell = tableView.cellForRow(at: indexPath) as! DownloadingCell
+		
+		let progress = userInfo["percent"] as! Double
+		
+		cell.progressView.isHidden = false
+		
+		cell.progressView.setProgress(CGFloat(progress), animated: true)
+		
+	}
+	
+	
+	func downloadComplete() {
+		
+		downloadingArray?.remove(at: index!)
+		
+		DispatchQueue.main.async {
+			
+			self.tableView.reloadData()
+			
+			if self.downloadingArray?.count == 0 {
+				
+				self.setStart(button: self.start!)
+				
+				self.navigationController!.popToRootViewController(animated: true)
+				
+			}
+			
+		}
+		
+	}
+	
 	
 }

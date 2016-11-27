@@ -28,6 +28,8 @@
 		3C2EA2BF1DE5A8F2004AE511 /* DownloadingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C2EA2BE1DE5A8F2004AE511 /* DownloadingController.swift */; };
 		3C2EA2C51DE80AF8004AE511 /* OperationButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C2EA2C41DE80AF8004AE511 /* OperationButton.swift */; };
 		3C2EA2C71DE9B7DD004AE511 /* DownloadingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C2EA2C61DE9B7DD004AE511 /* DownloadingCell.swift */; };
+		3C2EA2CB1DE9CA7C004AE511 /* M13ProgressViewBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C2EA2CA1DE9CA7C004AE511 /* M13ProgressViewBar.m */; };
+		3C2EA2CE1DE9CAA8004AE511 /* M13ProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C2EA2CD1DE9CAA8004AE511 /* M13ProgressView.m */; };
 		3C3BD3181DDDA264007545DC /* DRNRealTimeBlurView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3BD3141DDDA264007545DC /* DRNRealTimeBlurView.m */; };
 		3C3BD3191DDDA264007545DC /* UIImage+BoxBlur.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3BD3161DDDA264007545DC /* UIImage+BoxBlur.m */; };
 		3C4A41B91DD9A508008CE37F /* PlayerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C4A41B81DD9A508008CE37F /* PlayerController.swift */; };
@@ -152,7 +154,11 @@
 		3C24CEEA1DD32038007C862C /* Reflect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reflect.swift; sourceTree = "<group>"; };
 		3C2EA2BE1DE5A8F2004AE511 /* DownloadingController.swift */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.swift; path = DownloadingController.swift; sourceTree = "<group>"; tabWidth = 4; };
 		3C2EA2C41DE80AF8004AE511 /* OperationButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.swift; path = OperationButton.swift; sourceTree = "<group>"; tabWidth = 4; };
-		3C2EA2C61DE9B7DD004AE511 /* DownloadingCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadingCell.swift; sourceTree = "<group>"; };
+		3C2EA2C61DE9B7DD004AE511 /* DownloadingCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.swift; path = DownloadingCell.swift; sourceTree = "<group>"; tabWidth = 4; };
+		3C2EA2C91DE9CA7C004AE511 /* M13ProgressViewBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = M13ProgressViewBar.h; sourceTree = "<group>"; };
+		3C2EA2CA1DE9CA7C004AE511 /* M13ProgressViewBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = M13ProgressViewBar.m; sourceTree = "<group>"; };
+		3C2EA2CC1DE9CAA8004AE511 /* M13ProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = M13ProgressView.h; sourceTree = "<group>"; };
+		3C2EA2CD1DE9CAA8004AE511 /* M13ProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = M13ProgressView.m; sourceTree = "<group>"; };
 		3C3BD3131DDDA264007545DC /* DRNRealTimeBlurView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DRNRealTimeBlurView.h; sourceTree = "<group>"; };
 		3C3BD3141DDDA264007545DC /* DRNRealTimeBlurView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DRNRealTimeBlurView.m; sourceTree = "<group>"; };
 		3C3BD3151DDDA264007545DC /* UIImage+BoxBlur.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+BoxBlur.h"; sourceTree = "<group>"; };
@@ -494,6 +500,17 @@
 			path = V;
 			sourceTree = "<group>";
 		};
+		3C2EA2C81DE9CA7C004AE511 /* ProgressViewBar */ = {
+			isa = PBXGroup;
+			children = (
+				3C2EA2CC1DE9CAA8004AE511 /* M13ProgressView.h */,
+				3C2EA2CD1DE9CAA8004AE511 /* M13ProgressView.m */,
+				3C2EA2C91DE9CA7C004AE511 /* M13ProgressViewBar.h */,
+				3C2EA2CA1DE9CA7C004AE511 /* M13ProgressViewBar.m */,
+			);
+			path = ProgressViewBar;
+			sourceTree = "<group>";
+		};
 		3C3BD3111DDDA264007545DC /* DRNRealTimeBlurView */ = {
 			isa = PBXGroup;
 			children = (
@@ -790,6 +807,7 @@
 		3CFA580F1D6706D700341763 /* 3rdParty */ = {
 			isa = PBXGroup;
 			children = (
+				3C2EA2C81DE9CA7C004AE511 /* ProgressViewBar */,
 				3C3BD3111DDDA264007545DC /* DRNRealTimeBlurView */,
 				3C1ADF011DDC12FC00B1CE5D /* LEColorPicker */,
 				3C9642031D67184F00386ABB /* EVCircularProgressView */,
@@ -1082,6 +1100,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3C2EA2CE1DE9CAA8004AE511 /* M13ProgressView.m in Sources */,
 				3C155EDE1DD44A6400375469 /* SettingController.swift in Sources */,
 				3CCFBF411DD41E6800514873 /* LrcLine.swift in Sources */,
 				3CCFBF3B1DD41E0300514873 /* LrcView.swift in Sources */,
@@ -1127,6 +1146,7 @@
 				3C1ADF071DDC12FC00B1CE5D /* UIColor+YUVSpace.m in Sources */,
 				3C155EAE1DD4284000375469 /* PlaylistController.swift in Sources */,
 				3CFA58C51D6706D700341763 /* stream_configuration.cpp in Sources */,
+				3C2EA2CB1DE9CA7C004AE511 /* M13ProgressViewBar.m in Sources */,
 				3CFA58CB1D6706D700341763 /* FSPlaylistItem.m in Sources */,
 				3CCFBF4E1DD41F1C00514873 /* UIColor+RGBValues.m in Sources */,
 				3CA3E5D11DE2AB5300CB36ED /* DBHelper.swift in Sources */,

@@ -53,6 +53,11 @@ class TrackListController: UITableViewController {
 		tableView.register(TrackCell.self, forCellReuseIdentifier: "track")
         
 		tableView.separatorStyle = .none
+		
+		tableView.contentInset = UIEdgeInsetsMake(0, 0, 64, 0)
+		
+		tableView.contentOffset = CGPoint(x: 0, y: 0)
+
         
 	}
 	
