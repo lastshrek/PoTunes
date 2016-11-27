@@ -211,7 +211,7 @@
 		3CB2E4591BA7D4FA00805D4F /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		3CCA14EE1BA8080700D45C52 /* SharedMapView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SharedMapView.h; sourceTree = "<group>"; };
 		3CCA14EF1BA8080700D45C52 /* SharedMapView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SharedMapView.m; sourceTree = "<group>"; };
-		3CCFBF2E1DD41DAD00514873 /* PlayerInterface.swift */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.swift; path = PlayerInterface.swift; sourceTree = "<group>"; tabWidth = 2; };
+		3CCFBF2E1DD41DAD00514873 /* PlayerInterface.swift */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.swift; path = PlayerInterface.swift; sourceTree = "<group>"; tabWidth = 4; };
 		3CCFBF321DD41E0300514873 /* LrcCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LrcCell.swift; sourceTree = "<group>"; };
 		3CCFBF361DD41E0300514873 /* LrcView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LrcView.swift; sourceTree = "<group>"; };
 		3CCFBF3F1DD41E6800514873 /* LrcLine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LrcLine.swift; sourceTree = "<group>"; };

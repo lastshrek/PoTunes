@@ -75,14 +75,6 @@ extension PlayerController {
 		
 		let interruptReason = notification.userInfo![AVAudioSessionRouteChangeReasonKey] as! UInt
 		
-//		dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-//			
-//			dispatch_sync(dispatch_get_main_queue(), ^{
-//				
-//				[self.audioController pause];
-//				});
-//			});
-		
 		if interruptReason == 2 {
 			
 			self.player?.streamer.pause()

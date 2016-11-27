@@ -735,7 +735,7 @@ extension AlbumDownloadController: DownloadingControllerDelegate {
 			
 			let identifier = s?.string(forColumn: "identifier")
 			
-			let filepath = self.dirDoc() + "/\(identifier).mp3"
+			let filepath = self.dirDoc() + "/\(identifier)"
 			
 			do {
 				

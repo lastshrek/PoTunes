@@ -11,7 +11,7 @@ import UIKit
 import LDProgressView
 import LTInfiniteScrollViewSwift
 import PKHUD
-
+import FMDB
 
 
 class PlayerInterface: UIView, UIApplicationDelegate {
@@ -53,6 +53,17 @@ class PlayerInterface: UIView, UIApplicationDelegate {
 	var currentTimeTimer: Timer?
 	var playbackTimer: Timer?
 	var lrcTimer: CADisplayLink?
+	// MARK: - trackDB
+	lazy var tracksDB: FMDatabase = {
+		
+		let path = self.dirDoc() + "/downloadingSong.db"
+		
+		let db: FMDatabase = FMDatabase(path: path)
+		
+		db.open()
+		
+		return db
+	}()
 	
 
 	// MARK: - 播放模式
@@ -373,16 +384,45 @@ extension PlayerInterface {
 extension PlayerInterface {
 	// play tracks
 		func playTracks(tracks: Array<Any>, index: Int) {
+			
+			self.paused = false
+	
+			// check local files
+			
+			let track: Track = tracks[index] as! Track
+
+			
+			let rootPath = self.dirDoc()
+			
+			let query = "SELECT * FROM t_downloading WHERE sourceURL = ?;"
+			
+			let s = tracksDB.executeQuery(query, withArgumentsIn: [track.url])
+			
+			if s?.next() == true {
 				
-//				streamer.activeStream.stop()
+				let isDownloaded = s?.bool(forColumn: "downloaded")
+				
+				if isDownloaded == true {
+					
+					let identifier = self.getIdentifier(urlStr: track.url)
+					
+					let filePath = rootPath + "/\(identifier)"
+					
+					print(filePath)
+					
+					streamer.activeStream.play(from: URL(fileURLWithPath: filePath))
 
-				self.paused = false
+					
+				} else {
+					
+					streamer.activeStream.play(from: URL(string: track.url))
 
-				let track: Track = tracks[index] as! Track
+					
+				}
+			
+			}
 
-				streamer.activeStream.play(from: URL(string: track.url))
-
-				addCurrentTimeTimer()
+			addCurrentTimeTimer()
 
 		}
 	

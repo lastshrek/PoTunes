@@ -16,7 +16,6 @@ import FMDB
 	
 	@objc optional func didDeletedTrack(track: Track, title: String)
 
-
 }
 
 class TrackListController: UITableViewController {
@@ -349,7 +348,6 @@ extension TrackListController {
 		if online == nil { return }
 		
 
-		
 		let position = recognizer.location(in: tableView)
 		
 		let indexPath = tableView.indexPathForRow(at: position)
