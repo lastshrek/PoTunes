@@ -14,19 +14,19 @@ import FMDB
 	
 	@objc optional func trackListControllerDidSelectRowAtIndexPath(indexPath: IndexPath)
 	
-	@objc optional func didDeletedTrack(track: Track, title: String)
+	@objc optional func didDeletedTrack(track: TrackEncoding, title: String)
 
 }
 
 class TrackListController: UITableViewController {
 	
-	var tracks: Array<Track> = []
+	var tracks: Array<TrackEncoding> = []
 	
 	var shareTable: UITableView?
 	
 	var hover: UIView?
 	
-	var sharedTrack: Track?
+	var sharedTrack: TrackEncoding?
 	
 	weak var delegate: TrackListDelegate?
     
@@ -89,7 +89,7 @@ extension TrackListController {
             let cell: TrackCell = tableView.dequeueReusableCell(withIdentifier: "track", for: indexPath) as! TrackCell
             
             // Configure the cell...
-            let track: Track = self.tracks[indexPath.row]
+            let track: TrackEncoding = self.tracks[indexPath.row]
             
             cell.textLabel?.text = track.name
             
@@ -322,7 +322,7 @@ extension TrackListController {
             
             let track = self.tracks[(indexPath?.row)!]
             
-            self.sharedTrack = track
+            sharedTrack = track
             
         }
         

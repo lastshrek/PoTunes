@@ -39,6 +39,7 @@
 		3C77D24D1BE3D0F00029AB70 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C77D2421BE3BD8C0029AB70 /* CoreTelephony.framework */; };
 		3C77D24E1BE3D1110029AB70 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C77D2441BE3BD940029AB70 /* SystemConfiguration.framework */; };
 		3C84DCCB1DD4909E0029D2E6 /* Track.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C84DCCA1DD4909E0029D2E6 /* Track.swift */; };
+		3C8E35281DEAD3DC002D3AC7 /* TrackEncoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C8E35271DEAD3DC002D3AC7 /* TrackEncoding.swift */; };
 		3C9641E41D670DCE00386ABB /* DarwinNotificationHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C9641E31D670DCE00386ABB /* DarwinNotificationHelper.m */; };
 		3C9641E91D670E2200386ABB /* libWeChatSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C9641E61D670E2200386ABB /* libWeChatSDK.a */; };
 		3C9641F81D670FB800386ABB /* AMapNaviKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C9641F41D670FB800386ABB /* AMapNaviKit.framework */; };
@@ -172,6 +173,7 @@
 		3C77D2461BE3BDAF0029AB70 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		3C77D2481BE3BDBC0029AB70 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		3C84DCCA1DD4909E0029D2E6 /* Track.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Track.swift; sourceTree = "<group>"; };
+		3C8E35271DEAD3DC002D3AC7 /* TrackEncoding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackEncoding.swift; sourceTree = "<group>"; };
 		3C9641E21D670DCE00386ABB /* DarwinNotificationHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DarwinNotificationHelper.h; sourceTree = "<group>"; };
 		3C9641E31D670DCE00386ABB /* DarwinNotificationHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DarwinNotificationHelper.m; sourceTree = "<group>"; };
 		3C9641E61D670E2200386ABB /* libWeChatSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libWeChatSDK.a; sourceTree = "<group>"; };
@@ -374,6 +376,7 @@
 			children = (
 				3C155EAA1DD4284000375469 /* Playlist.swift */,
 				3C84DCCA1DD4909E0029D2E6 /* Track.swift */,
+				3C8E35271DEAD3DC002D3AC7 /* TrackEncoding.swift */,
 			);
 			path = M;
 			sourceTree = "<group>";
@@ -1160,6 +1163,7 @@
 				3CF7AFC21BAAA19500F764BD /* LineDashPolyline.m in Sources */,
 				3C24CEEB1DD32038007C862C /* Reflect.swift in Sources */,
 				3CFA58C71D6706D700341763 /* FSAudioStream.mm in Sources */,
+				3C8E35281DEAD3DC002D3AC7 /* TrackEncoding.swift in Sources */,
 				3CCFBF501DD41F1C00514873 /* UIImage+Reflection.m in Sources */,
 				3C84DCCB1DD4909E0029D2E6 /* Track.swift in Sources */,
 				3CFA58BE1D6706D700341763 /* audio_stream.cpp in Sources */,

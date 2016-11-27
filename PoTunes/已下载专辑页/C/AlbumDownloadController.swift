@@ -87,6 +87,8 @@ class AlbumDownloadController: UITableViewController {
 		
 		// 修复之前的下载文件名称
 		repaireFormerTrackName()
+		
+		
         
 		
 	}
@@ -173,7 +175,7 @@ extension AlbumDownloadController {
 			
 			let download = DownloadController()
 			
-			var tracks: Array<Track> = []
+			var tracks: Array<TrackEncoding> = []
 			
 			let title = downloadAlbums[indexPath.row]
 			
@@ -183,19 +185,19 @@ extension AlbumDownloadController {
             let s = tracksDB.executeQuery(query, withArgumentsIn: nil)
             
             while (s?.next())! {
+				
+                let artist = (s?.string(forColumn: "author"))!
                 
-                let track = Track()
+                let name = (s?.string(forColumn: "title"))!
                 
-                track.artist = (s?.string(forColumn: "author"))!
+                let url = (s?.string(forColumn: "sourceURL"))!
                 
-                track.name = (s?.string(forColumn: "title"))!
+                let ID = (Int)((s?.int(forColumn: "indexPath"))!)
                 
-                track.url = (s?.string(forColumn: "sourceURL"))!
-                
-                track.ID = (Int)((s?.int(forColumn: "indexPath"))!)
-                
-                track.cover = (s?.string(forColumn: "thumb"))!
-                
+                let cover = (s?.string(forColumn: "thumb"))!
+				
+				let track = TrackEncoding(ID: ID, name: name, artist: artist, cover: cover, url: url)
+
                 tracks.append(track)
                 
             }
@@ -375,8 +377,6 @@ extension AlbumDownloadController {
 					
 				})
 				
-				print(self.op)
-				
 				if self.op == nil || (self.op?.isCancelled)! || (self.op?.isFinished)! || (self.op?.isPaused())! {
 					
 					if track == tracks.first {
@@ -393,7 +393,7 @@ extension AlbumDownloadController {
 		
 		let userInfo: Dictionary = sender.userInfo!
 		
-		let track = userInfo["track"] as! Track
+		let track = userInfo["track"] as! TrackEncoding
 		
 		let title = userInfo["title"] as! String
 		
@@ -623,7 +623,7 @@ extension AlbumDownloadController {
 
 extension AlbumDownloadController: TrackListDelegate {
 	
-	func didDeletedTrack(track: Track, title: String) {
+	func didDeletedTrack(track: TrackEncoding, title: String) {
 		
 		let identifier = self.getIdentifier(urlStr: track.url)
 		

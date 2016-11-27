@@ -39,7 +39,7 @@ class PlayerInterface: UIView, UIApplicationDelegate {
 	var album: TrackLabel?
 	var playModeView = UIImageView()
 	var lrcView = LrcView()
-	var tracks: Array<Any> = []
+	var tracks: Array<TrackEncoding> = []
 	var index: Int?
 	var progressOriginal: Float?
 	var originalPoint: CGPoint?
@@ -69,7 +69,6 @@ class PlayerInterface: UIView, UIApplicationDelegate {
 	// MARK: - 播放模式
 	enum AudioRepeatMode: Int {
 		case single = 0
-//		case playlistOnce
 		case playlist
 		case towards
 		case shuffle
@@ -97,7 +96,12 @@ class PlayerInterface: UIView, UIApplicationDelegate {
         UIApplication.shared.beginReceivingRemoteControlEvents()
         
         self.becomeFirstResponder()
-        
+		
+		// get last played
+		getLastPlaySongAndPlayState()
+		
+		
+		
 	}
     
     override var canBecomeFirstResponder: Bool {
@@ -111,7 +115,6 @@ class PlayerInterface: UIView, UIApplicationDelegate {
 		fatalError("init(coder:) has not been implemented")
 	
 	}
-    
 	
 	override func layoutSubviews() {
 		
@@ -144,8 +147,7 @@ class PlayerInterface: UIView, UIApplicationDelegate {
 		
 		leftTime.frame = CGRect(x: width / 2 - 2, y: 0, width: width / 2, height: (self.timeView.bounds.size.height))
 	}
-    
-    
+	
     override func remoteControlReceived(with event: UIEvent?) {
         
         let remoteControl = event!.subtype
@@ -169,10 +171,69 @@ class PlayerInterface: UIView, UIApplicationDelegate {
         default: break
         }
     }
+	
+	func getLastPlaySongAndPlayState() {
+		
+		let user = UserDefaults.standard
+		
+		let tracksData = user.data(forKey: "tracksData")
+		
+		if tracksData == nil {
+			
+			self.repeatMode = AudioRepeatMode.towards
+			
+			return
+			
+		}
+		
+		let tracks = NSKeyedUnarchiver.unarchiveObject(with: tracksData!) as! Array<TrackEncoding>
+		
+		let index = user.integer(forKey: "index")
+		
+		let album = user.string(forKey: "album")
+		
+		let repeatMode = user.integer(forKey: "repeatMode")
+		
+		self.tracks = tracks
+		
+		self.index = index
+		
+		coverScroll.reloadData(initialIndex: index)
+		
+		
+		changeInterface(index)
+		
+		self.album?.text = album
+		
+		if repeatMode == AudioRepeatMode.shuffle.rawValue {
+			
+			playModeView.image = UIImage(named: "shuffleOnB")
+			
+			self.repeatMode = AudioRepeatMode.shuffle
+			
+		} else if repeatMode == AudioRepeatMode.towards.rawValue {
+			
+			playModeView.image = UIImage(named: "repeatOnB")
+			
+			self.repeatMode = AudioRepeatMode.towards
+
+
+			
+		} else {
+			
+			playModeView.image = UIImage(named: "repeatOneB")
+			
+			self.repeatMode = AudioRepeatMode.single
+			
+		}
+		
+		
+	}
 
 }
 // MARK: - initial subviews
 extension PlayerInterface {
+	
 	func initialSubviews() {
 		// backgourndView
 		backgroundView.backgroundColor = UIColor.black
@@ -380,127 +441,133 @@ extension PlayerInterface {
 		return label
 	}
 }
+
 // MARK: - play from tracks
 extension PlayerInterface {
 	// play tracks
-		func playTracks(tracks: Array<Any>, index: Int) {
-			
-			self.paused = false
-	
-			// check local files
-			
-			let track: Track = tracks[index] as! Track
-
-			
-			let rootPath = self.dirDoc()
-			
-			let query = "SELECT * FROM t_downloading WHERE sourceURL = ?;"
-			
-			let s = tracksDB.executeQuery(query, withArgumentsIn: [track.url])
-			
-			if s?.next() == true {
-				
-				let isDownloaded = s?.bool(forColumn: "downloaded")
-				
-				if isDownloaded == true {
-					
-					let identifier = self.getIdentifier(urlStr: track.url)
-					
-					let filePath = rootPath + "/\(identifier)"
-					
-					print(filePath)
-					
-					streamer.activeStream.play(from: URL(fileURLWithPath: filePath))
-
-					
-				} else {
-					
-					streamer.activeStream.play(from: URL(string: track.url))
-
-					
-				}
-			
-			}
-
-			addCurrentTimeTimer()
-
-		}
-	
-		func changeInterface(_ index: Int) {
+	func playTracks(tracks: Array<TrackEncoding>, index: Int) {
 		
-			self.lrcView.renderStatic = false
+		self.paused = false
 
-			self.progress?.progress = 0
+		// check local files
+		
+		let track = tracks[index]
+		
+		let rootPath = self.dirDoc()
+		
+		let query = "SELECT * FROM t_downloading WHERE sourceURL = ?;"
+		
+		let s = tracksDB.executeQuery(query, withArgumentsIn: [track.url])
+		
+		if s?.next() == true {
 			
-			self.bufferingIndicator?.progress = 0
+			let isDownloaded = s?.bool(forColumn: "downloaded")
 			
-			self.currentTime.text = "0:00"
-			
-			self.leftTime.text = "0:00"
-			
-			let track: Track = self.tracks[self.index!] as! Track
-			
-			self.name?.text = track.name
-			
-			self.artist?.text = track.artist
-			
-			self.lrcView.parseLyrics(lyrics: "[00:00.00] [00:03.82]Standing in a crowded room and I can't see your face [00:11.47]Put your arms around me, tell me everything's OK [00:19.29]In my mind, I'm running round a cold and empty space [00:27.00]Just put your arms around me, tell me everything's OK [00:31.02] [00:34.94]Break my bones but you won't see me fall, oh [00:42.64]The rising tide will rise against them all, oh [00:49.41] [00:49.60]Darling, hold my hand [00:53.38]Oh, won't you hold my hand? [00:57.29]Cause I don't wanna walk on my own anymore [01:00.91]Won't you understand? [01:03.97]Cause I don't wanna walk alone [01:06.24] [01:06.58]I'm ready for this, there's no denying [01:10.40]I'm ready for this, you stop me falling [01:14.32]I'm ready for this, I need you all in [01:18.11]I'm ready for this, so darling, hold my hand [01:21.64] [01:21.80]Soul is like a melting pot when you're not next to me [01:29.57]Tell me that you've got me and you're never gonna leave [01:37.33]Tryna find a moment where I can find release [01:44.66]Please tell me that you've got me [01:46.53]and you're never gonna leave [01:48.62] [01:52.92]Break my bones but you won't see me fall, oh [02:00.54]The rising tide will rise against them all, oh [02:07.43] [02:07.65]Darling, hold my hand [02:11.24]Oh, won't you hold my hand? [02:15.21]Cause I don't wanna walk on my own anymore [02:18.72]Won't you understand? [02:22.05]Cause I don't wanna walk alone [02:24.05] [02:24.46]I'm ready for this, there's no denying [02:28.37]I'm ready for this, you stop me falling [02:32.38]I'm ready for this, I need you all in [02:36.13]I'm ready for this, so darling, hold my hand [02:39.45] [02:39.69]Don't wanna know [02:42.68]That feeling when I'm all alone [02:46.50]So please don't make me wait, [02:48.43]cause I don't wanna break [02:50.39]And I don't wanna fall [02:52.75] [02:55.07]When you're next to me [02:58.24]Can tell I'm not afraid to be [03:02.18]That you don't make me wait, [03:03.93]and never let me break [03:05.94]You never let me fall [03:08.56] [03:10.17]Darling, hold my hand [03:17.67]Cause I don't wanna walk on my own anymore [03:21.26]Won't you understand? [03:24.55]Cause I don't wanna walk alone [03:26.40] [03:26.87]I'm ready for this, there's no denying [03:30.78]I'm ready for this, you stop me falling [03:34.70]I'm ready for this, I need you all in [03:38.58]I'm ready for this, so darling, hold my hand [03:42.62] ")
-			
-			self.lrcView.noLrcLabel.isHidden = true
-			
-			let cover: UIImageView = UIImageView()
-			
-			cover.sd_setImage(with: URL(string: track.cover + "!/fw/600")) { (image, _, _, _) in
+			if isDownloaded == true {
 				
-				self.reflection.image = image?.reflection(withAlpha: 0.4)
-
-				let colorPicker: LEColorPicker = LEColorPicker()
-
-				let colorScheme = colorPicker.colorScheme(from: cover.image)
-
-				self.progress?.color = colorScheme?.backgroundColor
-
-				self.name?.textColor = colorScheme?.backgroundColor
-
-				self.artist?.textColor = colorScheme?.backgroundColor
-
-				self.album?.textColor = colorScheme?.backgroundColor
-
-				// 设置锁屏信息
-				let artwork: MPMediaItemArtwork = MPMediaItemArtwork.init(image: cover.image!)
-
-				let duration: TimeInterval = Double((self.streamer.activeStream.duration.minute)) * 60 + Double((self.streamer.activeStream.duration.second))
-
-
-				let info : [String:AnyObject] = [
-					
-					MPMediaItemPropertyArtist : track.artist as AnyObject,
-					
-					MPMediaItemPropertyAlbumTitle : self.album!.text as AnyObject,
-					
-					MPMediaItemPropertyTitle: track.name as AnyObject,
-					
-					MPMediaItemPropertyArtwork: artwork,
-					
-					MPMediaItemPropertyPlaybackDuration: duration as AnyObject
-					
-				]
-
-				MPNowPlayingInfoCenter.default().nowPlayingInfo = info
+				let identifier = self.getIdentifier(urlStr: track.url)
 				
-				self.lrcView.renderStatic = true
+				let filePath = rootPath + "/\(identifier)"
+								
+				streamer.activeStream.play(from: URL(fileURLWithPath: filePath))
 
 				
+			} else {
+				
+				streamer.activeStream.play(from: URL(string: track.url))
+
 			}
+		
+		} else {
+			
+			streamer.activeStream.play(from: URL(string: track.url))
+			
+		}
+
+		addCurrentTimeTimer()
 		
 		// 记录最后一次播放的歌曲和以及播放模式
-		UserDefaults.standard.set(self.repeatMode?.rawValue, forKey: "repeatMode")
+		let user = UserDefaults.standard
 		
-//		let tracksData: Data = NSKeyedArchiver.archivedData(withRootObject: self.tracks)
+		user.set(self.repeatMode?.rawValue, forKey: "repeatMode")
 		
-//		UserDefaults.standard.set(tracksData, forKey: "tracksData")
+		let tracksData = NSKeyedArchiver.archivedData(withRootObject: tracks)
 		
-		UserDefaults.standard.set(self.index!, forKey: "index")
+		user.set(self.album?.text, forKey: "album")
+		
+		user.set(tracksData, forKey: "tracksData")
+		
+		user.set(self.index!, forKey: "index")
+
+	}
+	
+	func changeInterface(_ index: Int) {
+	
+		self.lrcView.renderStatic = false
+
+		self.progress?.progress = 0
+		
+		self.bufferingIndicator?.progress = 0
+		
+		self.currentTime.text = "0:00"
+		
+		self.leftTime.text = "0:00"
+		
+		let track = self.tracks[self.index!] 
+		
+		self.name?.text = track.name
+		
+		self.artist?.text = track.artist
+		
+		self.lrcView.parseLyrics(lyrics: "[00:00.00] [00:03.82]Standing in a crowded room and I can't see your face [00:11.47]Put your arms around me, tell me everything's OK [00:19.29]In my mind, I'm running round a cold and empty space [00:27.00]Just put your arms around me, tell me everything's OK [00:31.02] [00:34.94]Break my bones but you won't see me fall, oh [00:42.64]The rising tide will rise against them all, oh [00:49.41] [00:49.60]Darling, hold my hand [00:53.38]Oh, won't you hold my hand? [00:57.29]Cause I don't wanna walk on my own anymore [01:00.91]Won't you understand? [01:03.97]Cause I don't wanna walk alone [01:06.24] [01:06.58]I'm ready for this, there's no denying [01:10.40]I'm ready for this, you stop me falling [01:14.32]I'm ready for this, I need you all in [01:18.11]I'm ready for this, so darling, hold my hand [01:21.64] [01:21.80]Soul is like a melting pot when you're not next to me [01:29.57]Tell me that you've got me and you're never gonna leave [01:37.33]Tryna find a moment where I can find release [01:44.66]Please tell me that you've got me [01:46.53]and you're never gonna leave [01:48.62] [01:52.92]Break my bones but you won't see me fall, oh [02:00.54]The rising tide will rise against them all, oh [02:07.43] [02:07.65]Darling, hold my hand [02:11.24]Oh, won't you hold my hand? [02:15.21]Cause I don't wanna walk on my own anymore [02:18.72]Won't you understand? [02:22.05]Cause I don't wanna walk alone [02:24.05] [02:24.46]I'm ready for this, there's no denying [02:28.37]I'm ready for this, you stop me falling [02:32.38]I'm ready for this, I need you all in [02:36.13]I'm ready for this, so darling, hold my hand [02:39.45] [02:39.69]Don't wanna know [02:42.68]That feeling when I'm all alone [02:46.50]So please don't make me wait, [02:48.43]cause I don't wanna break [02:50.39]And I don't wanna fall [02:52.75] [02:55.07]When you're next to me [02:58.24]Can tell I'm not afraid to be [03:02.18]That you don't make me wait, [03:03.93]and never let me break [03:05.94]You never let me fall [03:08.56] [03:10.17]Darling, hold my hand [03:17.67]Cause I don't wanna walk on my own anymore [03:21.26]Won't you understand? [03:24.55]Cause I don't wanna walk alone [03:26.40] [03:26.87]I'm ready for this, there's no denying [03:30.78]I'm ready for this, you stop me falling [03:34.70]I'm ready for this, I need you all in [03:38.58]I'm ready for this, so darling, hold my hand [03:42.62] ")
+		
+		self.lrcView.noLrcLabel.isHidden = true
+		
+		let cover: UIImageView = UIImageView()
+		
+		cover.sd_setImage(with: URL(string: track.cover + "!/fw/600")) { (image, _, _, _) in
+			
+			self.reflection.image = image?.reflection(withAlpha: 0.4)
+
+			let colorPicker: LEColorPicker = LEColorPicker()
+
+			let colorScheme = colorPicker.colorScheme(from: cover.image)
+
+			self.progress?.color = colorScheme?.backgroundColor
+
+			self.name?.textColor = colorScheme?.backgroundColor
+
+			self.artist?.textColor = colorScheme?.backgroundColor
+
+			self.album?.textColor = colorScheme?.backgroundColor
+
+			// 设置锁屏信息
+			let artwork: MPMediaItemArtwork = MPMediaItemArtwork.init(image: cover.image!)
+
+			let duration: TimeInterval = Double((self.streamer.activeStream.duration.minute)) * 60 + Double((self.streamer.activeStream.duration.second))
+
+
+			let info : [String:AnyObject] = [
+				
+				MPMediaItemPropertyArtist : track.artist as AnyObject,
+				
+				MPMediaItemPropertyAlbumTitle : self.album!.text as AnyObject,
+				
+				MPMediaItemPropertyTitle: track.name as AnyObject,
+				
+				MPMediaItemPropertyArtwork: artwork,
+				
+				MPMediaItemPropertyPlaybackDuration: duration as AnyObject
+				
+			]
+
+			MPNowPlayingInfoCenter.default().nowPlayingInfo = info
+			
+			self.lrcView.renderStatic = true
+
+			
+		}
+		
 	}
 
 	func addCurrentTimeTimer() {
@@ -618,6 +685,7 @@ extension PlayerInterface {
 		}
 		
 	}
+	
 }
 // MARK: - addGestureRecognizers
 extension PlayerInterface {
@@ -696,7 +764,8 @@ extension PlayerInterface {
 		
 		self.paused = !(self.paused)
 		
-		if streamer.activeStream == nil {
+		
+		if streamer.activeStream.url == nil {
 			
 			playTracks(tracks: self.tracks, index: self.index!)
 			
@@ -1030,7 +1099,7 @@ extension PlayerInterface: LTInfiniteScrollViewDataSource {
 
 		if self.tracks.count > 0 {
 			
-			let track: Track = (self.tracks[index] as? Track)!
+			let track: TrackEncoding = self.tracks[index]
 			
 			let urlStr: String = track.cover + "!/fw/600"
 			
@@ -1051,6 +1120,7 @@ extension PlayerInterface: LTInfiniteScrollViewDataSource {
 			cover.image = UIImage(named: "noArtwork")
 		
 		}
+		
 		return cover
 	}
 }

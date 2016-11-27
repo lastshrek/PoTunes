@@ -27,7 +27,9 @@ class PlayerController: UIViewController {
 		
 		// 注册通知
 		getNotification()
+
 	}
+
 }
 
 
@@ -48,7 +50,7 @@ extension PlayerController {
 				
 		let userInfo: Dictionary = notification.userInfo!
 		
-		let tracks = (userInfo["tracks"] as! Array<Any>?)!
+		let tracks = (userInfo["tracks"] as! Array<TrackEncoding>?)!
 		
 		let index = userInfo["indexPath"] as? Int
 		
@@ -68,7 +70,6 @@ extension PlayerController {
 		
 		self.player?.album?.text = title?.components(separatedBy: " - ").last
 	
-//		let type: String = userInfo["type"] as! String
 	}
 	
 	func audioSessionDidChangeInterruptionType(notification: NSNotification) {

@@ -285,12 +285,22 @@ class PlaylistController: UITableViewController {
 				return
 			}
 			
+			var temp: Array<TrackEncoding> = []
+			
+			for track in tracks {
+				
+				let trackEncoding = TrackEncoding(ID: track.ID, name: track.name, artist: track.artist, cover: track.cover, url: track.url)
+				
+				temp.append(trackEncoding)
+				
+			}
+			
 			HUD.hide()
 			
 			// MARK: - Push Controller - TODO
 			let trackList: TrackListController = TrackListController()
 			
-			trackList.tracks = tracks
+			trackList.tracks = temp
 			
 			trackList.title = playlist.title
 			
