@@ -12,14 +12,16 @@ import UIKit
 class NaviController: UIViewController, MAMapViewDelegate, AMapSearchDelegate {
 	
 	enum TravelTypes: Int {
+		
 		case car = 0
+		
 		case walk
+	
 	}
 	
 	let backgroundView = UIImageView(image: UIImage(named: "outtake_mid"))
 	
 	var mapView: MAMapView?
-	
 
     override func viewDidLoad() {
 		
@@ -30,8 +32,31 @@ class NaviController: UIViewController, MAMapViewDelegate, AMapSearchDelegate {
 		self.view.addSubview(backgroundView)
 		
 		AMapServices.shared().apiKey = "62443358a250ee522aba69dfa3c1d247"
+		
+		
         // Do any additional setup after loading the view.
     }
+	
+	override func viewWillDisappear(_ animated: Bool) {
+		
+		super.viewWillDisappear(animated)
+		
+		self.clearMapView()
+		
+	}
+	
+	
+	func initialSubviews() {
+		
+		
+		
+	}
+	
+	func clearMapView() {
+		
+		
+		
+	}
 
 	
 }
