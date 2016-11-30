@@ -30,6 +30,7 @@
 		3C2EA2CE1DE9CAA8004AE511 /* M13ProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C2EA2CD1DE9CAA8004AE511 /* M13ProgressView.m */; };
 		3C3BD3181DDDA264007545DC /* DRNRealTimeBlurView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3BD3141DDDA264007545DC /* DRNRealTimeBlurView.m */; };
 		3C3BD3191DDDA264007545DC /* UIImage+BoxBlur.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3BD3161DDDA264007545DC /* UIImage+BoxBlur.m */; };
+		3C434E841DEEAFDC00D4D076 /* LrcString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C434E831DEEAFDC00D4D076 /* LrcString.swift */; };
 		3C4A41B91DD9A508008CE37F /* PlayerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C4A41B81DD9A508008CE37F /* PlayerController.swift */; };
 		3C4A41BB1DD9D350008CE37F /* TrackLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C4A41BA1DD9D350008CE37F /* TrackLabel.swift */; };
 		3C57B76A1DE448F200306ACB /* DownloadController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C57B7691DE448F200306ACB /* DownloadController.swift */; };
@@ -153,6 +154,7 @@
 		3C3BD3141DDDA264007545DC /* DRNRealTimeBlurView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DRNRealTimeBlurView.m; sourceTree = "<group>"; };
 		3C3BD3151DDDA264007545DC /* UIImage+BoxBlur.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+BoxBlur.h"; sourceTree = "<group>"; };
 		3C3BD3161DDDA264007545DC /* UIImage+BoxBlur.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+BoxBlur.m"; sourceTree = "<group>"; };
+		3C434E831DEEAFDC00D4D076 /* LrcString.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LrcString.swift; sourceTree = "<group>"; };
 		3C4A41B81DD9A508008CE37F /* PlayerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerController.swift; sourceTree = "<group>"; };
 		3C4A41BA1DD9D350008CE37F /* TrackLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackLabel.swift; sourceTree = "<group>"; };
 		3C57B7691DE448F200306ACB /* DownloadController.swift */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.swift; path = DownloadController.swift; sourceTree = "<group>"; tabWidth = 4; };
@@ -687,6 +689,7 @@
 			isa = PBXGroup;
 			children = (
 				3CCFBF3F1DD41E6800514873 /* LrcLine.swift */,
+				3C434E831DEEAFDC00D4D076 /* LrcString.swift */,
 			);
 			path = M;
 			sourceTree = "<group>";
@@ -1035,6 +1038,7 @@
 				3C155EDE1DD44A6400375469 /* SettingController.swift in Sources */,
 				3CCFBF411DD41E6800514873 /* LrcLine.swift in Sources */,
 				3CCFBF3B1DD41E0300514873 /* LrcView.swift in Sources */,
+				3C434E841DEEAFDC00D4D076 /* LrcString.swift in Sources */,
 				3C4A41B91DD9A508008CE37F /* PlayerController.swift in Sources */,
 				3CCFBF4D1DD41F1C00514873 /* String+Extension.swift in Sources */,
 				3C4A41BB1DD9D350008CE37F /* TrackLabel.swift in Sources */,

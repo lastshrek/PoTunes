@@ -13,6 +13,7 @@ import LTInfiniteScrollViewSwift
 import PKHUD
 import FMDB
 import LEColorPicker
+import Alamofire
 
 class PlayerInterface: UIView, UIApplicationDelegate {
     
@@ -23,6 +24,7 @@ class PlayerInterface: UIView, UIApplicationDelegate {
         return instance
         
     }()
+	
 	// MARK: - basic components
 	let width = UIScreen.main.bounds.size.width
 	let height = UIScreen.main.bounds.size.height
@@ -80,6 +82,8 @@ class PlayerInterface: UIView, UIApplicationDelegate {
 		case next
 		case previous
 	}
+	
+	let lrcUrl = "https://poche.fm/api/app/lyrics/"
 	
 	override init(frame: CGRect) {
 		
@@ -519,7 +523,31 @@ extension PlayerInterface {
 		
 		self.artist?.text = track.artist
 		
-		self.lrcView.parseLyrics(lyrics: "[00:00.00] [00:03.82]Standing in a crowded room and I can't see your face [00:11.47]Put your arms around me, tell me everything's OK [00:19.29]In my mind, I'm running round a cold and empty space [00:27.00]Just put your arms around me, tell me everything's OK [00:31.02] [00:34.94]Break my bones but you won't see me fall, oh [00:42.64]The rising tide will rise against them all, oh [00:49.41] [00:49.60]Darling, hold my hand [00:53.38]Oh, won't you hold my hand? [00:57.29]Cause I don't wanna walk on my own anymore [01:00.91]Won't you understand? [01:03.97]Cause I don't wanna walk alone [01:06.24] [01:06.58]I'm ready for this, there's no denying [01:10.40]I'm ready for this, you stop me falling [01:14.32]I'm ready for this, I need you all in [01:18.11]I'm ready for this, so darling, hold my hand [01:21.64] [01:21.80]Soul is like a melting pot when you're not next to me [01:29.57]Tell me that you've got me and you're never gonna leave [01:37.33]Tryna find a moment where I can find release [01:44.66]Please tell me that you've got me [01:46.53]and you're never gonna leave [01:48.62] [01:52.92]Break my bones but you won't see me fall, oh [02:00.54]The rising tide will rise against them all, oh [02:07.43] [02:07.65]Darling, hold my hand [02:11.24]Oh, won't you hold my hand? [02:15.21]Cause I don't wanna walk on my own anymore [02:18.72]Won't you understand? [02:22.05]Cause I don't wanna walk alone [02:24.05] [02:24.46]I'm ready for this, there's no denying [02:28.37]I'm ready for this, you stop me falling [02:32.38]I'm ready for this, I need you all in [02:36.13]I'm ready for this, so darling, hold my hand [02:39.45] [02:39.69]Don't wanna know [02:42.68]That feeling when I'm all alone [02:46.50]So please don't make me wait, [02:48.43]cause I don't wanna break [02:50.39]And I don't wanna fall [02:52.75] [02:55.07]When you're next to me [02:58.24]Can tell I'm not afraid to be [03:02.18]That you don't make me wait, [03:03.93]and never let me break [03:05.94]You never let me fall [03:08.56] [03:10.17]Darling, hold my hand [03:17.67]Cause I don't wanna walk on my own anymore [03:21.26]Won't you understand? [03:24.55]Cause I don't wanna walk alone [03:26.40] [03:26.87]I'm ready for this, there's no denying [03:30.78]I'm ready for this, you stop me falling [03:34.70]I'm ready for this, I need you all in [03:38.58]I'm ready for this, so darling, hold my hand [03:42.62] ")
+		if self.lrcView.isHidden == false {
+			
+			self.lrcView.noLrcLabel.text = "正在加载歌词"
+			
+			self.lrcView.noLrcLabel.isHidden = false
+			
+			let url = URL(string: lrcUrl + "\(track.ID)")
+			
+			Alamofire.request(url!).response(completionHandler: { (response) in
+				
+				let lrcString: LrcString = Reflect<LrcString>.mapObject(data: response.data)
+				
+				self.lrcView.parseLyrics(lyrics: lrcString.lrc.replacingOccurrences(of: "\\n", with: " "))
+				
+				self.lrcView.parseChLyrics(lyrics: lrcString.lrc_cn.replacingOccurrences(of: "\\n", with: " "))
+				
+			})
+		
+		}
+		
+//		let s = "[00:00.00] 作曲 : Andrew 崔/LDN NOISE/Adrian Mckinnon\n[00:01.00] 作词 : JQ/서림/최진선 (Jam Factory)/장여진\n[00:08.13]Oh 태양이 뜬다\n[00:11.33]널 찾아줄 지도를 들고\n[00:14.27]좌표를 따라 나서는 항로\n[00:17.60]No matter 저 은빛 나침반은\n[00:21.60]너를 향할 테니\n[00:23.59]너를 닮은 하늘은 아름다워\n[00:29.42]오늘도 오늘도 이대로 넌 눈부셔\n[00:32.19]익숙한 듯 낯선 길 휘어버릴게\n[00:37.73]너와 나의 평행선 너머 너머\n[00:43.89]I don’t mind\n[00:46.98]큰 파도에 밀려 이 항해의 끝에 내가\n[00:55.10]휘몰아치는 순간 내 세상에 멈춰선\n[01:00.65]넌 나의 Only one\n[01:02.66]너를 발견한 순간 더 찬란히 빛나는\n[01:08.52]I’ll be the lucky one\n[01:11.81]너와 나 Living it up\n[01:13.84]이곳에 Just living it up\n[01:15.78]Keep on coming Wow wow wow wow\n[01:19.38]같은 시간 속에 Oh 하나된 그 순간\n[01:24.42]We’ll be the lucky ones\n[01:27.80]Girl Oh girl\n[01:29.39]비밀스럽게 숨겨둔 너의 고백\n[01:33.78]Just tell me right now\n[01:35.86]다가갈게 한 걸음 한 걸음 네 곁에 baby\n[01:41.48]오늘도 오늘도 절대로 Never go back\n[01:43.64]오직 나만 아는 Rule 바꿔버릴게\n[01:48.86]너와 나의 평행선 너머 너머\n[01:55.18]I don’t mind\n[01:58.18]큰 파도에 밀려 이 항해의 끝에 내가\n[02:06.44]휘몰아치는 순간 내 세상에 멈춰선\n[02:11.86]넌 나의 Only one\n[02:13.90]너를 발견한 순간 더 찬란히 빛나는\n[02:19.83]I’ll be the lucky one\n[02:22.34]너와 나 Living it up\n[02:25.52]이곳에 Just living it up\n[02:27.17]Keep on coming Wow wow wow wow\n[02:30.77]같은 시간 속에 Oh 하나된 그 순간\n[02:35.63]We’ll be the lucky ones\n[02:38.20]수많은 사람 속 나의 Lover\n[02:40.50]운이 좋게 찾은 네 잎 Clover\n[02:42.40]올 것 같아 내게로 너란 행운도 멋지지\n[02:45.43]누가 뭐라해도\n[02:46.81]널 알아갈수록 yeah let’s go\n[02:48.52]공존할 수 없는 곳은 없어\n[02:50.36]넌 나의 only one\n[02:51.64]난 너의 lucky one cause I I I\n[02:54.38]휘몰아치는 순간 내 세상에 멈춰선\n[02:59.49]넌 나의 Only one\n[03:01.50]너를 발견한 순간 더 찬란히 빛나는\n[03:07.35]I’ll be the lucky one\n[03:10.69]너와 나 Living it up\n[03:13.14]이곳에 Just living it up\n[03:14.88]Keep on coming Wow wow wow wow\n[03:18.31]같은 시간 속에 Oh 하나된 그 순간\n[03:23.27]We’ll be the lucky ones\n[03:25.52]I am the lucky one\n[03:42.49]I am the lucky one\n[03:44.58]\n"
+//		
+//		let ss = s.replacingOccurrences(of: "\n", with: " ")
+//		
+//		self.lrcView.parseLyrics(lyrics: ss)
 		
 		self.lrcView.noLrcLabel.isHidden = true
 		
@@ -1006,6 +1034,8 @@ extension PlayerInterface {
 			})
 			
 			UIView.commitAnimations()
+			
+			self.lrcView.noLrcLabel.isHidden = false
 			
 			addLrcTimer()
 			

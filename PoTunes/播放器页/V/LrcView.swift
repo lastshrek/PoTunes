@@ -13,13 +13,13 @@ class LrcView: DRNRealTimeBlurView {
 	
 	var noLrcLabel = UILabel()
 	
-	lazy var chLrcArray: NSMutableArray = {[]}()
+	lazy var chLrcArray: Array<LrcLine> = {[]}()
 	
 	fileprivate var tableView = UITableView()
 	
 	fileprivate var currentIndex: Int?
 	
-	fileprivate lazy var lyricsLines: NSMutableArray = {[]}()
+	fileprivate lazy var lyricsLines: Array<LrcLine> = {[]}()
 	
 	var currentTime: TimeInterval? {
 		
@@ -45,7 +45,7 @@ class LrcView: DRNRealTimeBlurView {
 			
 			for idx in 0..<count {
 				
-				let lyric = self.lyricsLines[idx] as! LrcLine
+				let lyric = self.lyricsLines[idx]
 				
 				
 				// 当前模型时间
@@ -58,7 +58,7 @@ class LrcView: DRNRealTimeBlurView {
 				
 				if nextIdx < lyricsLines.count {
 					
-					let nextLyric = lyricsLines[nextIdx] as! LrcLine
+					let nextLyric = lyricsLines[nextIdx]
 					
 					nextLyricTime = nextLyric.time!
 					
@@ -94,7 +94,9 @@ class LrcView: DRNRealTimeBlurView {
 	}
 
 	required init?(coder aDecoder: NSCoder) {
+		
 		fatalError("init(coder:) has not been implemented")
+	
 	}
 	
 	func setup() {
@@ -147,6 +149,8 @@ extension LrcView {
 		
 		let sepArr = lyrics.components(separatedBy: "[")
 		
+		if sepArr.count <= 1 { return }
+		
 		for lyric in sepArr {
 			
 			let lrc = LrcLine()
@@ -158,12 +162,58 @@ extension LrcView {
 			
 			lrc.lyrics = array.last
 			
-			self.lyricsLines.add(lrc)
+			self.lyricsLines.append(lrc)
+			
 			
 		}
 		
 		self.tableView.reloadData()
 		
+	}
+	
+	func parseChLyrics(lyrics: String) {
+		
+		let sepArr = lyrics.components(separatedBy: "[")
+		
+		if sepArr.count <= 1 { return }
+		
+		for lyric in sepArr {
+			
+			let lrc = LrcLine()
+			
+			//如果是歌名的头部信息
+			let array = lyric.components(separatedBy: "]")
+			
+			lrc.time = array.first?.replacingOccurrences(of: "[", with: "")
+			
+			lrc.lyrics = array.last
+			
+			self.chLrcArray.append(lrc)
+			
+		}
+		
+		for lrc in self.lyricsLines {
+			
+			let lrcTime = lrc.time
+			
+			for chlrc in self.chLrcArray {
+				
+				let chTime = chlrc.time
+				
+				if chTime == lrcTime {
+					
+					lrc.lyrics = lrc.lyrics! + "\r" + chlrc.lyrics!
+					
+				}
+				
+				continue
+			}
+		
+			
+		}
+		
+		self.tableView.reloadData()
+
 	}
 	
 }
@@ -190,8 +240,8 @@ extension LrcView: UITableViewDelegate {
 		
 		let cell = tableView.dequeueReusableCell(withIdentifier: "lrc", for: indexPath) as! LrcCell
 		
-		cell.lrcLine = self.lyricsLines[indexPath.row] as? LrcLine
-		
+		cell.lrcLine = self.lyricsLines[indexPath.row]
+				
 		if self.currentIndex == indexPath.row {
 			
 			cell.textLabel?.textColor = UIColor.white
@@ -201,6 +251,7 @@ extension LrcView: UITableViewDelegate {
 			cell.textLabel?.textColor = UIColor.gray
 			
 		}
+
 		
 		return cell
 	}

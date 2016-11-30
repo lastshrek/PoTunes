@@ -33,9 +33,7 @@ class NaviController: UIViewController, MAMapViewDelegate, AMapSearchDelegate {
 		
 		AMapServices.shared().apiKey = "62443358a250ee522aba69dfa3c1d247"
 		
-		
-        // Do any additional setup after loading the view.
-    }
+	}
 	
 	override func viewWillDisappear(_ animated: Bool) {
 		
