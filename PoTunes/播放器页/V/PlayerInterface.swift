@@ -543,12 +543,6 @@ extension PlayerInterface {
 		
 		}
 		
-//		let s = "[00:00.00] 作曲 : Andrew 崔/LDN NOISE/Adrian Mckinnon\n[00:01.00] 作词 : JQ/서림/최진선 (Jam Factory)/장여진\n[00:08.13]Oh 태양이 뜬다\n[00:11.33]널 찾아줄 지도를 들고\n[00:14.27]좌표를 따라 나서는 항로\n[00:17.60]No matter 저 은빛 나침반은\n[00:21.60]너를 향할 테니\n[00:23.59]너를 닮은 하늘은 아름다워\n[00:29.42]오늘도 오늘도 이대로 넌 눈부셔\n[00:32.19]익숙한 듯 낯선 길 휘어버릴게\n[00:37.73]너와 나의 평행선 너머 너머\n[00:43.89]I don’t mind\n[00:46.98]큰 파도에 밀려 이 항해의 끝에 내가\n[00:55.10]휘몰아치는 순간 내 세상에 멈춰선\n[01:00.65]넌 나의 Only one\n[01:02.66]너를 발견한 순간 더 찬란히 빛나는\n[01:08.52]I’ll be the lucky one\n[01:11.81]너와 나 Living it up\n[01:13.84]이곳에 Just living it up\n[01:15.78]Keep on coming Wow wow wow wow\n[01:19.38]같은 시간 속에 Oh 하나된 그 순간\n[01:24.42]We’ll be the lucky ones\n[01:27.80]Girl Oh girl\n[01:29.39]비밀스럽게 숨겨둔 너의 고백\n[01:33.78]Just tell me right now\n[01:35.86]다가갈게 한 걸음 한 걸음 네 곁에 baby\n[01:41.48]오늘도 오늘도 절대로 Never go back\n[01:43.64]오직 나만 아는 Rule 바꿔버릴게\n[01:48.86]너와 나의 평행선 너머 너머\n[01:55.18]I don’t mind\n[01:58.18]큰 파도에 밀려 이 항해의 끝에 내가\n[02:06.44]휘몰아치는 순간 내 세상에 멈춰선\n[02:11.86]넌 나의 Only one\n[02:13.90]너를 발견한 순간 더 찬란히 빛나는\n[02:19.83]I’ll be the lucky one\n[02:22.34]너와 나 Living it up\n[02:25.52]이곳에 Just living it up\n[02:27.17]Keep on coming Wow wow wow wow\n[02:30.77]같은 시간 속에 Oh 하나된 그 순간\n[02:35.63]We’ll be the lucky ones\n[02:38.20]수많은 사람 속 나의 Lover\n[02:40.50]운이 좋게 찾은 네 잎 Clover\n[02:42.40]올 것 같아 내게로 너란 행운도 멋지지\n[02:45.43]누가 뭐라해도\n[02:46.81]널 알아갈수록 yeah let’s go\n[02:48.52]공존할 수 없는 곳은 없어\n[02:50.36]넌 나의 only one\n[02:51.64]난 너의 lucky one cause I I I\n[02:54.38]휘몰아치는 순간 내 세상에 멈춰선\n[02:59.49]넌 나의 Only one\n[03:01.50]너를 발견한 순간 더 찬란히 빛나는\n[03:07.35]I’ll be the lucky one\n[03:10.69]너와 나 Living it up\n[03:13.14]이곳에 Just living it up\n[03:14.88]Keep on coming Wow wow wow wow\n[03:18.31]같은 시간 속에 Oh 하나된 그 순간\n[03:23.27]We’ll be the lucky ones\n[03:25.52]I am the lucky one\n[03:42.49]I am the lucky one\n[03:44.58]\n"
-//		
-//		let ss = s.replacingOccurrences(of: "\n", with: " ")
-//		
-//		self.lrcView.parseLyrics(lyrics: ss)
-		
 		self.lrcView.noLrcLabel.isHidden = true
 		
 		let cover: UIImageView = UIImageView()
@@ -644,6 +638,8 @@ extension PlayerInterface {
 		// set play progress
 		let progress: Double = (Double)(cur.minute * 60 + cur.second) / (Double)(total.minute * 60 + total.second)
 		
+		if progress > 1 { return }
+		
 		self.progress?.progress = CGFloat(progress)
 		
 		// set current time and time remaining
@@ -676,7 +672,7 @@ extension PlayerInterface {
 //		self.streamer?.onStateChange = { (streamState) -> Void in
 //			print("播放下一首")
 //		}
-		self.streamer.activeStream.onCompletion = { () ->Void in
+		self.streamer.activeStream.onCompletion = { () -> Void in
 			
 //			self.progress?.progress = 0
 

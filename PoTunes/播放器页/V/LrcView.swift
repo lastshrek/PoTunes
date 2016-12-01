@@ -142,14 +142,20 @@ class LrcView: DRNRealTimeBlurView {
 }
 
 extension LrcView {
-	
+	// FIXME: - 重构
 	func parseLyrics(lyrics: String) {
 		
-		lyricsLines = []
+		self.lyricsLines = []
 		
 		let sepArr = lyrics.components(separatedBy: "[")
 		
-		if sepArr.count <= 1 { return }
+		if sepArr.count <= 1 {
+			
+			self.tableView.reloadData()
+
+			return
+		
+		}
 		
 		for lyric in sepArr {
 			
@@ -172,6 +178,8 @@ extension LrcView {
 	}
 	
 	func parseChLyrics(lyrics: String) {
+		
+		self.chLrcArray = []
 		
 		let sepArr = lyrics.components(separatedBy: "[")
 		
@@ -196,11 +204,23 @@ extension LrcView {
 			
 			let lrcTime = lrc.time
 			
+			if lrcTime?.characters.count == 0 { continue }
+			
+			let index = lrcTime?.index((lrcTime?.startIndex)!, offsetBy: 5)
+			
+			let suffix = lrcTime?.substring(to: index!)
+						
 			for chlrc in self.chLrcArray {
 				
-				let chTime = chlrc.time
+				let chlrcTime = chlrc.time
 				
-				if chTime == lrcTime {
+				if chlrcTime?.characters.count == 0 { continue }
+				
+				let chindex = chlrcTime?.index(chlrcTime!.startIndex, offsetBy: 5)
+				
+				let chTime = chlrcTime?.substring(to: chindex!)
+				
+				if chTime == suffix {
 					
 					lrc.lyrics = lrc.lyrics! + "\r" + chlrc.lyrics!
 					
@@ -241,7 +261,7 @@ extension LrcView: UITableViewDelegate {
 		let cell = tableView.dequeueReusableCell(withIdentifier: "lrc", for: indexPath) as! LrcCell
 		
 		cell.lrcLine = self.lyricsLines[indexPath.row]
-				
+		
 		if self.currentIndex == indexPath.row {
 			
 			cell.textLabel?.textColor = UIColor.white
