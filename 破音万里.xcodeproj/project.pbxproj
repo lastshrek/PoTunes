@@ -28,6 +28,7 @@
 		3C2EA2C71DE9B7DD004AE511 /* DownloadingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C2EA2C61DE9B7DD004AE511 /* DownloadingCell.swift */; };
 		3C2EA2CB1DE9CA7C004AE511 /* M13ProgressViewBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C2EA2CA1DE9CA7C004AE511 /* M13ProgressViewBar.m */; };
 		3C2EA2CE1DE9CAA8004AE511 /* M13ProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C2EA2CD1DE9CAA8004AE511 /* M13ProgressView.m */; };
+		3C329A371DF2D7F7001EC10B /* SingleRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C329A361DF2D7F7001EC10B /* SingleRoute.swift */; };
 		3C3BD3181DDDA264007545DC /* DRNRealTimeBlurView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3BD3141DDDA264007545DC /* DRNRealTimeBlurView.m */; };
 		3C3BD3191DDDA264007545DC /* UIImage+BoxBlur.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3BD3161DDDA264007545DC /* UIImage+BoxBlur.m */; };
 		3C434E841DEEAFDC00D4D076 /* LrcString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C434E831DEEAFDC00D4D076 /* LrcString.swift */; };
@@ -68,6 +69,7 @@
 		3CDFB3981DD776D8006C0975 /* TrackCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CDFB3971DD776D8006C0975 /* TrackCell.swift */; };
 		3CDFB39A1DD77CD5006C0975 /* UIColor+RGB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CDFB3991DD77CD5006C0975 /* UIColor+RGB.swift */; };
 		3CDFB39C1DD83F48006C0975 /* BarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CDFB39B1DD83F48006C0975 /* BarItem.swift */; };
+		3CE3455B1DF2CB15007EDE5E /* Routes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CE3455A1DF2CB15007EDE5E /* Routes.swift */; };
 		3CF1E2A61DEB031200DD48DC /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CF1E2A51DEB031200DD48DC /* libz.tbd */; };
 		3CF1E2A81DEB032400DD48DC /* libstdc++.6.0.9.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CF1E2A71DEB032400DD48DC /* libstdc++.6.0.9.tbd */; };
 		3CF1E2AF1DEB068500DD48DC /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CF1E2AE1DEB068500DD48DC /* libsqlite3.tbd */; };
@@ -150,6 +152,7 @@
 		3C2EA2CA1DE9CA7C004AE511 /* M13ProgressViewBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = M13ProgressViewBar.m; sourceTree = "<group>"; };
 		3C2EA2CC1DE9CAA8004AE511 /* M13ProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = M13ProgressView.h; sourceTree = "<group>"; };
 		3C2EA2CD1DE9CAA8004AE511 /* M13ProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = M13ProgressView.m; sourceTree = "<group>"; };
+		3C329A361DF2D7F7001EC10B /* SingleRoute.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SingleRoute.swift; sourceTree = "<group>"; };
 		3C3BD3131DDDA264007545DC /* DRNRealTimeBlurView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DRNRealTimeBlurView.h; sourceTree = "<group>"; };
 		3C3BD3141DDDA264007545DC /* DRNRealTimeBlurView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DRNRealTimeBlurView.m; sourceTree = "<group>"; };
 		3C3BD3151DDDA264007545DC /* UIImage+BoxBlur.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+BoxBlur.h"; sourceTree = "<group>"; };
@@ -211,6 +214,7 @@
 		3CDFB3971DD776D8006C0975 /* TrackCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackCell.swift; sourceTree = "<group>"; };
 		3CDFB3991DD77CD5006C0975 /* UIColor+RGB.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+RGB.swift"; sourceTree = "<group>"; };
 		3CDFB39B1DD83F48006C0975 /* BarItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BarItem.swift; sourceTree = "<group>"; };
+		3CE3455A1DF2CB15007EDE5E /* Routes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Routes.swift; sourceTree = "<group>"; };
 		3CF1E2A51DEB031200DD48DC /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		3CF1E2A71DEB032400DD48DC /* libstdc++.6.0.9.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.6.0.9.tbd"; path = "usr/lib/libstdc++.6.0.9.tbd"; sourceTree = SDKROOT; };
 		3CF1E2AC1DEB047700DD48DC /* MAMapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MAMapKit.framework; path = Pods/AMap3DMap/MAMapKit.framework; sourceTree = "<group>"; };
@@ -391,6 +395,7 @@
 		3C155EC71DD4437C00375469 /* 导航页 */ = {
 			isa = PBXGroup;
 			children = (
+				3CE345591DF2CAFD007EDE5E /* V */,
 				3C155EC81DD4437C00375469 /* C */,
 			);
 			path = "导航页";
@@ -747,6 +752,15 @@
 			path = V;
 			sourceTree = "<group>";
 		};
+		3CE345591DF2CAFD007EDE5E /* V */ = {
+			isa = PBXGroup;
+			children = (
+				3CE3455A1DF2CB15007EDE5E /* Routes.swift */,
+				3C329A361DF2D7F7001EC10B /* SingleRoute.swift */,
+			);
+			path = V;
+			sourceTree = "<group>";
+		};
 		3CF1E2CE1DEC12DC00DD48DC /* SharedMapView */ = {
 			isa = PBXGroup;
 			children = (
@@ -1075,11 +1089,13 @@
 				3CFA58CB1D6706D700341763 /* FSPlaylistItem.m in Sources */,
 				3CCFBF4E1DD41F1C00514873 /* UIColor+RGBValues.m in Sources */,
 				3CA3E5D11DE2AB5300CB36ED /* DBHelper.swift in Sources */,
+				3CE3455B1DF2CB15007EDE5E /* Routes.swift in Sources */,
 				3CFA58C41D6706D700341763 /* input_stream.cpp in Sources */,
 				3CDFB3931DD76E5D006C0975 /* TrackListController.swift in Sources */,
 				3C2EA2C51DE80AF8004AE511 /* OperationButton.swift in Sources */,
 				3C3BD3181DDDA264007545DC /* DRNRealTimeBlurView.m in Sources */,
 				3C0A1A9A1DD5B72000E90306 /* MainControllers.swift in Sources */,
+				3C329A371DF2D7F7001EC10B /* SingleRoute.swift in Sources */,
 				3CFA58BF1D6706D700341763 /* caching_stream.cpp in Sources */,
 				3C24CEEB1DD32038007C862C /* Reflect.swift in Sources */,
 				3CFA58C71D6706D700341763 /* FSAudioStream.mm in Sources */,

@@ -104,8 +104,6 @@ class PlayerInterface: UIView, UIApplicationDelegate {
 		// get last played
 		getLastPlaySongAndPlayState()
 		
-		
-		
 	}
     
     override var canBecomeFirstResponder: Bool {

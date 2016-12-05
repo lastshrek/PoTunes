@@ -21,6 +21,10 @@ class NaviController: UIViewController, MAMapViewDelegate, AMapSearchDelegate {
 	
 	let backgroundView = UIImageView(image: UIImage(named: "outtake_mid"))
 	
+	let routeSeletcion = Routes()
+	
+	let width = UIScreen.main.bounds.size.width
+	
 	var mapView: MAMapView?
 
     override func viewDidLoad() {
@@ -33,6 +37,8 @@ class NaviController: UIViewController, MAMapViewDelegate, AMapSearchDelegate {
 		
 		AMapServices.shared().apiKey = "62443358a250ee522aba69dfa3c1d247"
 		
+		initRoutesSelection()
+		
 	}
 	
 	override func viewWillDisappear(_ animated: Bool) {
@@ -40,6 +46,18 @@ class NaviController: UIViewController, MAMapViewDelegate, AMapSearchDelegate {
 		super.viewWillDisappear(animated)
 		
 		self.clearMapView()
+		
+	}
+	
+	func initRoutesSelection() {
+		
+		routeSeletcion.frame = CGRect(x: 10, y: 200, width: width - 20, height: 130)
+		
+		routeSeletcion.start.text.delegate = self
+		
+		routeSeletcion.end.text.delegate = self
+		
+		self.view.addSubview(routeSeletcion)
 		
 	}
 	
@@ -55,6 +73,13 @@ class NaviController: UIViewController, MAMapViewDelegate, AMapSearchDelegate {
 		
 		
 	}
+	
+}
 
+extension NaviController: UITextFieldDelegate {
+	
+	func textFieldDidBeginEditing(_ textField: UITextField) {
+		debugPrint("123")
+	}
 	
 }

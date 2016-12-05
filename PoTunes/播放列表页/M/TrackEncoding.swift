@@ -8,7 +8,7 @@
 
 import UIKit
 
-class TrackEncoding: NSObject, NSCoding{
+class TrackEncoding: NSObject, NSCoding {
 	
 	let ID: Int
 	
