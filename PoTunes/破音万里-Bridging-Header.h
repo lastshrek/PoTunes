@@ -21,4 +21,5 @@
 #import <AMapSearchKit/AMapSearchKit.h>
 #import <MAMapKit/MAMapKit.h>
 #import <AMapFoundationKit/AMapFoundationKit.h>
-
+#import "SharedMapView.h"
+#import "GeocodeAnnotation.h"

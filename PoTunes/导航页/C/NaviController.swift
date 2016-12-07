@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+import PKHUD
 
 class NaviController: UIViewController, MAMapViewDelegate, AMapSearchDelegate {
 	
@@ -57,7 +57,19 @@ class NaviController: UIViewController, MAMapViewDelegate, AMapSearchDelegate {
 		
 		routeSeletcion.end.text.delegate = self
 		
+		routeSeletcion.switcher.addTarget(self, action: #selector(switchRoutes), for: .touchUpInside)
+		
 		self.view.addSubview(routeSeletcion)
+		
+	}
+	
+	func switchRoutes() {
+		
+		if routeSeletcion.start.text.text?.characters.count == 0 || routeSeletcion.end.text.text?.characters.count == 0 {
+			
+			HUD.flash(.labeledError(title: "请选择线路", subtitle: nil), delay: 0.7)
+			
+		}
 		
 	}
 	
@@ -79,7 +91,12 @@ class NaviController: UIViewController, MAMapViewDelegate, AMapSearchDelegate {
 extension NaviController: UITextFieldDelegate {
 	
 	func textFieldDidBeginEditing(_ textField: UITextField) {
-		debugPrint("123")
+		
+		textField.endEditing(true)
+		
+		let mapController = MapController()
+		
+		self.navigationController?.pushViewController(mapController, animated: true)
 	}
 	
 }

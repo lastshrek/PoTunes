@@ -7,12 +7,15 @@
 //
 
 import UIKit
+import PKHUD
 
 class Routes: UIView {
 	
 	var start: SingleRoute = SingleRoute()
 	
 	var end: SingleRoute = SingleRoute()
+	
+	let switcher = UIButton()
 	
 	override init(frame: CGRect) {
 		
@@ -31,10 +34,24 @@ class Routes: UIView {
 		end.icon.image = UIImage.fontAwesomeIcon(name: .arrowCircleOLeft, textColor: UIColor.black, size: CGSize(width: 20, height: 20))
 		
 		end.text.placeholder = "目的位置"
-				
+		
+		switcher.backgroundColor = UIColor.white
+		
+		switcher.layer.borderColor = UIColor.black.cgColor
+		
+		switcher.layer.borderWidth = 2
+		
+		switcher.titleLabel?.font = UIFont.fontAwesome(ofSize: 30)
+		
+		switcher.setTitle(String.fontAwesomeIcon(name: .refresh), for: .normal)
+		
+		switcher.setTitleColor(UIColor.black, for: .normal)
+		
 		self.addSubview(start)
 		
 		self.addSubview(end)
+		
+		self.addSubview(switcher)
 		
 	}
 	
@@ -64,9 +81,12 @@ class Routes: UIView {
 		
 		end.frame = CGRect(x: 5, y: height / 2 + 2, width: width - 10, height: height / 2 - 2)
 
+		switcher.frame = CGRect(x: width - 20 - height * 0.4, y: height * 0.3, width: height * 0.4, height: height * 0.4)
+		
+		switcher.layer.cornerRadius = height * 0.2
 	
 	}
-
+	
 }
 
 

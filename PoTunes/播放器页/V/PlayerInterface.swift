@@ -416,6 +416,7 @@ extension PlayerInterface {
 			buffer.autoresizingMask = autoresizingMask
 		
 			return buffer
+			
 	}
 	
 	func createLabel(_ autoresizingMask: UIViewAutoresizing, shadowOffset: CGSize?, textColor: UIColor, text: String?, textAlignment: NSTextAlignment) -> UILabel {
@@ -562,26 +563,26 @@ extension PlayerInterface {
 			self.album?.textColor = colorScheme?.backgroundColor
 
 			// 设置锁屏信息
-			let artwork: MPMediaItemArtwork = MPMediaItemArtwork.init(image: cover.image!)
-
-			let duration: TimeInterval = Double((self.streamer.activeStream.duration.minute)) * 60 + Double((self.streamer.activeStream.duration.second))
-
-
-			let info : [String:AnyObject] = [
-				
-				MPMediaItemPropertyArtist : track.artist as AnyObject,
-				
-				MPMediaItemPropertyAlbumTitle : self.album!.text as AnyObject,
-				
-				MPMediaItemPropertyTitle: track.name as AnyObject,
-				
-				MPMediaItemPropertyArtwork: artwork,
-				
-				MPMediaItemPropertyPlaybackDuration: duration as AnyObject
-				
-			]
-
-			MPNowPlayingInfoCenter.default().nowPlayingInfo = info
+//			let artwork: MPMediaItemArtwork = MPMediaItemArtwork.init(image: image!)
+//
+//			let duration: TimeInterval = Double((self.streamer.activeStream.duration.minute)) * 60 + Double((self.streamer.activeStream.duration.second))
+//
+//
+//			let info : [String:AnyObject] = [
+//				
+//				MPMediaItemPropertyArtist : track.artist as AnyObject,
+//				
+//				MPMediaItemPropertyAlbumTitle : self.album!.text as AnyObject,
+//				
+//				MPMediaItemPropertyTitle: track.name as AnyObject,
+//				
+//				MPMediaItemPropertyArtwork: artwork,
+//				
+//				MPMediaItemPropertyPlaybackDuration: duration as AnyObject
+//				
+//			]
+//
+//			MPNowPlayingInfoCenter.default().nowPlayingInfo = info
 			
 			self.lrcView.renderStatic = true
 
