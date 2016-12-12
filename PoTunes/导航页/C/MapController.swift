@@ -10,14 +10,16 @@ import UIKit
 import PKHUD
 
 protocol MapControllerDelegate: class {
-	func mapController(didClickTheAnnotationAccessoryControlBySendingUserLocation userlocation:  CLLocationCoordinate2D, andDestinationLocation destinationLocation: CLLocationCoordinate2D, mapView: MAMapView, title: String, destinationTitle: String)
+	func mapController(didClickTheAnnotationBySending destinationLocation: CLLocationCoordinate2D, destinationTitle: String, userlocation: CLLocationCoordinate2D)
+	
+	func mapController(didClickTheAnnotationBySendingCustomUserLocation userlocation:  CLLocationCoordinate2D, title: String)
 }
 
 class MapController: UIViewController {
 	
 	weak var delegate: MapControllerDelegate?
 	
-	var mapView = MAMapView()
+	var mapView: MAMapView = SharedMapView.sharedInstance().mapView
 	
 	
 	var searchBar: UISearchBar?
@@ -33,11 +35,11 @@ class MapController: UIViewController {
 	// user location
 	var userLocation: CLLocationCoordinate2D?
 	
-	// 目的地
+	// 用户选择的起始位置
 	var selectedstartLocation: CLLocationCoordinate2D?
 	
 	var isSelected: Bool?
-	
+	// 目的位置
 	var destinationLocation: CLLocationCoordinate2D?
 	
 	var destinationTitle: String?
@@ -63,9 +65,13 @@ class MapController: UIViewController {
 				
 		mapView.delegate = self
 		
-		mapView.userTrackingMode = .none
+		mapView.userTrackingMode = .follow
+		
+		mapView.showsUserLocation = true
 		
 		self.view.addSubview(mapView)
+		
+		SharedMapView.sharedInstance().stashMapViewStatus()
 		
 		// initialize searchapi
 		
@@ -76,14 +82,6 @@ class MapController: UIViewController {
 		
 	}
 
-	
-	override func viewDidAppear(_ animated: Bool) {
-		
-		super.viewDidAppear(animated)
-		
-		mapView.showsUserLocation = true
-	}
-	
 	override func viewWillDisappear(_ animated: Bool) {
 		
 		super.viewWillDisappear(animated)
@@ -135,6 +133,8 @@ class MapController: UIViewController {
 		mapView.removeOverlays(mapView.overlays)
 		
 		mapView.delegate = nil
+		
+		SharedMapView.sharedInstance().popStatus()
 				
 	}
 	
@@ -195,6 +195,8 @@ extension MapController: UITableViewDelegate {
 		
 		annotation.subtitle = tip.address
 		
+		annotations.removeAll()
+		
 		annotations.append(annotation)
 		
 		showPOIAnnotations()
@@ -202,6 +204,14 @@ extension MapController: UITableViewDelegate {
 		tableView.isHidden = true
 		
 		searchBar?.endEditing(true)
+		
+	}
+	
+	func showPOIAnnotations() {
+		
+		mapView.addAnnotations(annotations)
+		
+		mapView.centerCoordinate = (annotations.first?.coordinate)!
 		
 	}
 	
@@ -216,10 +226,6 @@ extension MapController: MAMapViewDelegate {
 			
 			self.userLocation = CLLocationCoordinate2DMake(userLocation.location.coordinate.latitude, userLocation.location.coordinate.longitude)
 			
-			mapView.centerCoordinate = self.userLocation!
-			
-			mapView.setZoomLevel(16.1, animated: true)
-			
 		}
 		
 	}
@@ -230,13 +236,21 @@ extension MapController: MAMapViewDelegate {
 			
 			let annotation = view.annotation
 			
-			if self.view.tag == 1 && self.isSelected == true {
+			if self.view.tag == 1 {
 				
-				self.userLocation = CLLocationCoordinate2DMake((annotation?.coordinate.latitude)!, (annotation?.coordinate.longitude)!)
+				userLocation = CLLocationCoordinate2DMake((annotation?.coordinate.latitude)!, (annotation?.coordinate.longitude)!)
+				
+				self.delegate?.mapController(didClickTheAnnotationBySendingCustomUserLocation: userLocation!, title: (annotation?.title)!)
+				
+			} else {
+				
+				destinationLocation = CLLocationCoordinate2DMake((annotation?.coordinate.latitude)!, (annotation?.coordinate.longitude)!)
+				
+				self.delegate?.mapController(didClickTheAnnotationBySending: destinationLocation!, destinationTitle: (annotation?.title)!, userlocation: userLocation!)
 				
 			}
 			
-			self.delegate?.mapController(didClickTheAnnotationAccessoryControlBySendingUserLocation: self.userLocation!, andDestinationLocation: self.destinationLocation!, mapView: self.mapView, title: self.title!, destinationTitle: self.destinationTitle!)
+			destinationTitle = annotation?.title
 			
 			self.navigationController!.popToRootViewController(animated: true)
 			
@@ -280,23 +294,6 @@ extension MapController: AMapSearchDelegate {
 		let error = error as NSError
 		
 		debugPrint(error.localizedDescription)
-		
-	}
-	
-	
-	func showPOIAnnotations() {
-		
-		mapView.addAnnotations(annotations)
-		
-		if annotations.count == 1 {
-			
-			mapView.centerCoordinate = (annotations.first?.coordinate)!
-			
-		} else {
-			
-			mapView.showAnnotations(annotations, animated: true)
-			
-		}
 		
 	}
 	
@@ -360,24 +357,6 @@ extension MapController: UISearchBarDelegate {
 		tip.keywords = key
 		
 		search?.aMapInputTipsSearch(tip)
-		
-//		let request = AMapPOIAroundSearchRequest()
-//		
-//		if let userLocation = userLocation {
-//			
-//			request.location = AMapGeoPoint.location(withLatitude: CGFloat(userLocation.latitude), longitude: CGFloat(userLocation.longitude))
-//		
-//		} else {
-//		
-//			request.location = AMapGeoPoint.location(withLatitude: 39.990459, longitude: 116.471476)
-//		
-//		}
-//		
-//		request.keywords = key
-//		request.sortrule = 1
-//		request.requireExtension = false
-//		
-//		search?.aMapPOIAroundSearch(request)
 		
 	}
 	

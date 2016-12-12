@@ -25,7 +25,12 @@ class NaviController: UIViewController, MAMapViewDelegate, AMapSearchDelegate {
 	
 	let width = UIScreen.main.bounds.size.width
 	
-	var mapView: MAMapView?
+	var mapView = MAMapView()
+	
+	var annotations = [MAPointAnnotation]()
+	
+	var driveManager: AMapNaviDriveManager!
+
 
     override func viewDidLoad() {
 		
@@ -45,7 +50,7 @@ class NaviController: UIViewController, MAMapViewDelegate, AMapSearchDelegate {
 		
 		super.viewWillDisappear(animated)
 		
-		self.clearMapView()
+		clearMapView()
 		
 	}
 	
@@ -69,6 +74,8 @@ class NaviController: UIViewController, MAMapViewDelegate, AMapSearchDelegate {
 			
 			HUD.flash(.labeledError(title: "请选择线路", subtitle: nil), delay: 0.7)
 			
+			return
+			
 		}
 		
 	}
@@ -80,15 +87,41 @@ class NaviController: UIViewController, MAMapViewDelegate, AMapSearchDelegate {
 		
 	}
 	
+	func initMapView() {
+		
+		mapView.frame = view.bounds
+		
+		mapView.delegate = self
+		
+		view.addSubview(mapView)
+		
+	}
+	
 	func clearMapView() {
 		
+		mapView.showsUserLocation = false
 		
+		mapView.removeAnnotations(annotations)
 		
+		mapView.removeOverlays(mapView.overlays)
+		
+		mapView.delegate = nil
+		
+		mapView.showsUserLocation = true
+		
+	}
+	
+	func initDriveManager() {
+		
+		driveManager = AMapNaviDriveManager()
+		
+		driveManager.delegate = self
+	
 	}
 	
 }
 
-extension NaviController: UITextFieldDelegate {
+extension NaviController: UITextFieldDelegate, MapControllerDelegate {
 	
 	func textFieldDidBeginEditing(_ textField: UITextField) {
 		
@@ -96,7 +129,116 @@ extension NaviController: UITextFieldDelegate {
 		
 		let mapController = MapController()
 		
+		mapController.delegate = self
+		
+		mapController.title = textField.text
+		
+		mapController.view.tag = textField.tag
+		
 		self.navigationController?.pushViewController(mapController, animated: true)
+		
 	}
 	
+	func mapController(didClickTheAnnotationBySending destinationLocation: CLLocationCoordinate2D, destinationTitle: String, userlocation: CLLocationCoordinate2D) {
+		
+		debugPrint(destinationTitle)
+		
+		routeSeletcion.end.text.text = destinationTitle
+	}
+	
+	func mapController(didClickTheAnnotationBySendingCustomUserLocation userlocation: CLLocationCoordinate2D, title: String) {
+		debugPrint(title)
+		
+		routeSeletcion.start.text.text = title
+	}
+	
+}
+
+extension NaviController: AMapNaviDriveManagerDelegate {
+	
+	func driveManager(_ driveManager: AMapNaviDriveManager, error: Error) {
+		let error = error as NSError
+		NSLog("error:{%d - %@}", error.code, error.localizedDescription)
+	}
+	
+	func driveManager(onCalculateRouteSuccess driveManager: AMapNaviDriveManager) {
+		NSLog("CalculateRouteSuccess")
+		
+		//算路成功后显示路径
+		showNaviRoutes()
+	}
+	
+	func showNaviRoutes() {
+		
+//		guard let allRoutes = driveManager.naviRoutes else {
+//			return
+//		}
+		
+//		mapView.removeOverlays(mapView.overlays)
+//		routeIndicatorInfoArray.removeAll()
+//		
+//		//将路径显示到地图上
+//		for (aNumber, aRoute) in allRoutes {
+//			
+//			//添加路径Polyline
+//			var coords = [CLLocationCoordinate2D]()
+//			for coordinate in aRoute.routeCoordinates {
+//				coords.append(CLLocationCoordinate2D(latitude: Double(coordinate.latitude), longitude: Double(coordinate.longitude)))
+//			}
+//			
+//			let polyline = MAPolyline(coordinates: &coords, count: UInt(aRoute.routeCoordinates.count))!
+//			let selectablePolyline = SelectableOverlay(aOverlay: polyline)
+//			selectablePolyline.routeID = Int(aNumber)
+//			
+//			mapView.add(selectablePolyline)
+//			
+//			//更新CollectonView的信息
+//			let title = String(format: "路径ID:%d | 路径计算策略:%d", Int(aNumber), preferenceView.strategy(isMultiple: isMultipleRoutePlan).rawValue)
+//			let subtitle = String(format: "长度:%d米 | 预估时间:%d秒 | 分段数:%d", aRoute.routeLength, aRoute.routeTime, aRoute.routeSegments.count)
+//			let info = RouteCollectionViewInfo(routeID: Int(aNumber), title: title, subTitle: subtitle)
+//			
+//			routeIndicatorInfoArray.append(info)
+//		}
+//		
+//		mapView.showAnnotations(mapView.annotations, animated: false)
+//		routeIndicatorView.reloadData()
+//		
+//		if let first = routeIndicatorInfoArray.first {
+//			selectNaviRouteWithID(routeID: first.routeID)
+//		}
+	}
+	
+	func driveManager(_ driveManager: AMapNaviDriveManager, onCalculateRouteFailure error: Error) {
+		let error = error as NSError
+		NSLog("CalculateRouteFailure:{%d - %@}", error.code, error.localizedDescription)
+	}
+	
+	func driveManager(_ driveManager: AMapNaviDriveManager, didStartNavi naviMode: AMapNaviMode) {
+		NSLog("didStartNavi");
+	}
+	
+	func driveManagerNeedRecalculateRoute(forYaw driveManager: AMapNaviDriveManager) {
+		NSLog("needRecalculateRouteForYaw");
+	}
+	
+	func driveManagerNeedRecalculateRoute(forTrafficJam driveManager: AMapNaviDriveManager) {
+		NSLog("needRecalculateRouteForTrafficJam");
+	}
+	
+	func driveManager(_ driveManager: AMapNaviDriveManager, onArrivedWayPoint wayPointIndex: Int32) {
+		NSLog("ArrivedWayPoint:\(wayPointIndex)");
+	}
+	
+	func driveManager(_ driveManager: AMapNaviDriveManager, playNaviSound soundString: String, soundStringType: AMapNaviSoundType) {
+		NSLog("playNaviSoundString:{%d:%@}", soundStringType.rawValue, soundString);
+	}
+	
+	func driveManagerDidEndEmulatorNavi(_ driveManager: AMapNaviDriveManager) {
+		NSLog("didEndEmulatorNavi");
+	}
+	
+	func driveManager(onArrivedDestination driveManager: AMapNaviDriveManager) {
+		NSLog("onArrivedDestination");
+	}
+
 }
