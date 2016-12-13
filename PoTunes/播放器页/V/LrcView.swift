@@ -145,7 +145,7 @@ extension LrcView {
 	// FIXME: - 重构
 	func parseLyrics(lyrics: String) {
 		
-		self.lyricsLines = []
+		self.lyricsLines.removeAll()
 		
 		let sepArr = lyrics.components(separatedBy: "[")
 		
@@ -179,7 +179,7 @@ extension LrcView {
 	
 	func parseChLyrics(lyrics: String) {
 		
-		self.chLrcArray = []
+		self.chLrcArray.removeAll()
 		
 		let sepArr = lyrics.components(separatedBy: "[")
 		

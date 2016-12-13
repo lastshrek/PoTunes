@@ -450,6 +450,8 @@ extension PlayerInterface {
 	// play tracks
 	func playTracks(tracks: Array<TrackEncoding>, index: Int) {
 		
+		streamer.activeStream.stop()
+		
 		self.paused = false
 
 		// check local files
@@ -506,8 +508,6 @@ extension PlayerInterface {
 	
 	func changeInterface(_ index: Int) {
 	
-		self.lrcView.renderStatic = false
-
 		self.progress?.progress = 0
 		
 		self.bufferingIndicator?.progress = 0
@@ -548,20 +548,37 @@ extension PlayerInterface {
 		
 		cover.sd_setImage(with: URL(string: track.cover + "!/fw/600")) { (image, _, _, _) in
 			
-			self.reflection.image = image?.reflection(withAlpha: 0.4)
-
-			let colorPicker: LEColorPicker = LEColorPicker()
-
-			let colorScheme = colorPicker.colorScheme(from: cover.image)
-
-			self.progress?.color = colorScheme?.backgroundColor
-
-			self.name?.textColor = colorScheme?.backgroundColor
-
-			self.artist?.textColor = colorScheme?.backgroundColor
-
-			self.album?.textColor = colorScheme?.backgroundColor
-
+			
+			
+			DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
+				
+				self.lrcView.renderStatic = false
+				
+			}
+			
+			
+			
+			DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
+				
+				self.lrcView.renderStatic = true
+				
+				self.reflection.image = image?.reflection(withAlpha: 0.4)
+				
+				let colorPicker: LEColorPicker = LEColorPicker()
+				
+				let colorScheme = colorPicker.colorScheme(from: cover.image)
+				
+				self.progress?.color = colorScheme?.backgroundColor
+				
+				self.name?.textColor = colorScheme?.backgroundColor
+				
+				self.artist?.textColor = colorScheme?.backgroundColor
+				
+				self.album?.textColor = colorScheme?.backgroundColor
+				
+			}
+			
+			
 			// 设置锁屏信息
 //			let artwork: MPMediaItemArtwork = MPMediaItemArtwork.init(image: image!)
 //
@@ -584,7 +601,6 @@ extension PlayerInterface {
 //
 //			MPNowPlayingInfoCenter.default().nowPlayingInfo = info
 			
-			self.lrcView.renderStatic = true
 
 			
 		}
@@ -636,6 +652,8 @@ extension PlayerInterface {
 		let total: FSStreamPosition = (streamer.activeStream.duration)
 		// set play progress
 		let progress: Double = (Double)(cur.minute * 60 + cur.second) / (Double)(total.minute * 60 + total.second)
+		
+		debugPrint((Double)(cur.minute * 60 + cur.second))
 		
 		if progress > 1 { return }
 		
@@ -902,6 +920,7 @@ extension PlayerInterface {
 		}
 		
 		var seek: FSStreamPosition = FSStreamPosition()
+		
 		var lastPoint: CGPoint?
 		
 		
@@ -1034,6 +1053,11 @@ extension PlayerInterface {
 			
 			addLrcTimer()
 			
+			self.lrcView.renderStatic = false
+
+			self.lrcView.renderStatic = true
+
+			
 		} else {
 			
 			self.lrcView.alpha = 1
@@ -1160,17 +1184,23 @@ extension PlayerInterface: LTInfiniteScrollViewDelegate {
 	
 	func scrollViewDidScrollToIndex(_ scrollView: LTInfiniteScrollView, index: Int) {
 		
+		
 		if self.tracks.count == 0 {
 		
 			return
 		
 		}
+
 		
 		self.index = index
 		
 		playTracks(tracks: self.tracks, index: index)
 		
 		changeInterface(index)
+		
+		
+		
+
 		
 	}
 }
