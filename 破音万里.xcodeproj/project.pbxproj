@@ -70,6 +70,8 @@
 		3CDFB3981DD776D8006C0975 /* TrackCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CDFB3971DD776D8006C0975 /* TrackCell.swift */; };
 		3CDFB39A1DD77CD5006C0975 /* UIColor+RGB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CDFB3991DD77CD5006C0975 /* UIColor+RGB.swift */; };
 		3CDFB39C1DD83F48006C0975 /* BarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CDFB39B1DD83F48006C0975 /* BarItem.swift */; };
+		3CE18E341E03BF500018AED0 /* SegmentControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CE18E331E03BF500018AED0 /* SegmentControl.swift */; };
+		3CE18E361E03C7420018AED0 /* NavButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CE18E351E03C7420018AED0 /* NavButton.swift */; };
 		3CE3455B1DF2CB15007EDE5E /* Routes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CE3455A1DF2CB15007EDE5E /* Routes.swift */; };
 		3CF1E2A61DEB031200DD48DC /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CF1E2A51DEB031200DD48DC /* libz.tbd */; };
 		3CF1E2A81DEB032400DD48DC /* libstdc++.6.0.9.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CF1E2A71DEB032400DD48DC /* libstdc++.6.0.9.tbd */; };
@@ -216,6 +218,8 @@
 		3CDFB3971DD776D8006C0975 /* TrackCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackCell.swift; sourceTree = "<group>"; };
 		3CDFB3991DD77CD5006C0975 /* UIColor+RGB.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+RGB.swift"; sourceTree = "<group>"; };
 		3CDFB39B1DD83F48006C0975 /* BarItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BarItem.swift; sourceTree = "<group>"; };
+		3CE18E331E03BF500018AED0 /* SegmentControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SegmentControl.swift; sourceTree = "<group>"; };
+		3CE18E351E03C7420018AED0 /* NavButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavButton.swift; sourceTree = "<group>"; };
 		3CE3455A1DF2CB15007EDE5E /* Routes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Routes.swift; sourceTree = "<group>"; };
 		3CF1E2A51DEB031200DD48DC /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		3CF1E2A71DEB032400DD48DC /* libstdc++.6.0.9.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.6.0.9.tbd"; path = "usr/lib/libstdc++.6.0.9.tbd"; sourceTree = SDKROOT; };
@@ -760,6 +764,8 @@
 			children = (
 				3CE3455A1DF2CB15007EDE5E /* Routes.swift */,
 				3C329A361DF2D7F7001EC10B /* SingleRoute.swift */,
+				3CE18E331E03BF500018AED0 /* SegmentControl.swift */,
+				3CE18E351E03C7420018AED0 /* NavButton.swift */,
 			);
 			path = V;
 			sourceTree = "<group>";
@@ -1092,6 +1098,7 @@
 				3CFA58CB1D6706D700341763 /* FSPlaylistItem.m in Sources */,
 				3CCFBF4E1DD41F1C00514873 /* UIColor+RGBValues.m in Sources */,
 				3CA3E5D11DE2AB5300CB36ED /* DBHelper.swift in Sources */,
+				3CE18E341E03BF500018AED0 /* SegmentControl.swift in Sources */,
 				3CE3455B1DF2CB15007EDE5E /* Routes.swift in Sources */,
 				3CFA58C41D6706D700341763 /* input_stream.cpp in Sources */,
 				3CDFB3931DD76E5D006C0975 /* TrackListController.swift in Sources */,
@@ -1113,6 +1120,7 @@
 				3CFA58CD1D6706D700341763 /* Reachability.m in Sources */,
 				3CF1E2D11DEC12DC00DD48DC /* SharedMapView.m in Sources */,
 				3C2EA2BF1DE5A8F2004AE511 /* DownloadingController.swift in Sources */,
+				3CE18E361E03C7420018AED0 /* NavButton.swift in Sources */,
 				3CCFBF4F1DD41F1C00514873 /* UIImage+BoxBlur.m in Sources */,
 				3C2EA2C71DE9B7DD004AE511 /* DownloadingCell.swift in Sources */,
 				3C0A1A961DD5B35400E90306 /* MainScrollview.swift in Sources */,

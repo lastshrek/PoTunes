@@ -15,75 +15,11 @@ class LrcView: DRNRealTimeBlurView {
 	
 	lazy var chLrcArray: Array<LrcLine> = {[]}()
 	
-	fileprivate var tableView = UITableView()
+	var tableView = UITableView()
 	
-	fileprivate var currentIndex: Int?
+	fileprivate var currentIndex: Int = -1
 	
-	fileprivate lazy var lyricsLines: Array<LrcLine> = {[]}()
-	
-	var currentTime: TimeInterval? {
-		
-		didSet {
-
-			guard let `currentTime` = currentTime else { return }
-			
-			if (oldValue == nil) {
-			
-				currentIndex = -1
-				
-			}
-			
-			let minute: Int = (Int)(currentTime / 60)
-			
-			let second: Int = (Int)(currentTime) % 60
-			
-			let currentTimeStr = String(format: "%02d:%02d", minute, second)
-			
-			let count = self.lyricsLines.count
-			
-			let idx = currentIndex! + 1
-			
-			for idx in 0..<count {
-				
-				let lyric = self.lyricsLines[idx]
-				
-				
-				// 当前模型时间
-				let lyricTime = lyric.time!
-				
-				// 下一个模型的时间
-				var nextLyricTime = ""
-				
-				let nextIdx = idx + 1
-				
-				if nextIdx < lyricsLines.count {
-					
-					let nextLyric = lyricsLines[nextIdx]
-					
-					nextLyricTime = nextLyric.time!
-					
-				}
-				
-				// 判断是否为正在播放的歌词
-				if currentTimeStr.compare(lyricTime) != .orderedAscending
-						&& currentTimeStr.compare(nextLyricTime) == .orderedAscending
-						&& currentIndex != idx {
-					//刷新tableView
-					let reloadRows: Array = [IndexPath(row: currentIndex!, section: 0), IndexPath(row: idx	, section: 0)]
-
-					self.currentIndex = idx
-
-					self.tableView.reloadRows(at: reloadRows, with: .none)
-					//滚动到对应的
-					let indexPath = IndexPath(row: idx, section: 0)
-
-					tableView.scrollToRow(at: indexPath, at: .top, animated: true)
-
-				}
-			}
-		}
-	}
-	
+	lazy var lyricsLines: Array<LrcLine> = {[]}()
 	
 	override init(frame: CGRect) {
 		
@@ -145,17 +81,26 @@ extension LrcView {
 	// FIXME: - 重构
 	func parseLyrics(lyrics: String) {
 		
-		self.lyricsLines.removeAll()
+		if lyricsLines.count != 0 {
+			
+			self.lyricsLines.removeAll()
+
+		}
 		
+		
+		currentIndex = 0
+				
 		let sepArr = lyrics.components(separatedBy: "[")
 		
 		if sepArr.count <= 1 {
 			
 			self.tableView.reloadData()
-
+			
 			return
 		
 		}
+		
+		self.noLrcLabel.isHidden = true
 		
 		for lyric in sepArr {
 			
@@ -166,10 +111,19 @@ extension LrcView {
 			
 			lrc.time = array.first?.replacingOccurrences(of: "[", with: "")
 			
+			if lrc.time?.characters.count == 0 {
+				
+				continue
+				
+			}
+			
+			let index = lrc.time?.index((lrc.time?.startIndex)!, offsetBy: 8)
+			
+			lrc.time = lrc.time?.substring(to: index!)
+			
 			lrc.lyrics = array.last
 			
-			self.lyricsLines.append(lrc)
-			
+			lyricsLines.append(lrc)
 			
 		}
 		
@@ -183,7 +137,13 @@ extension LrcView {
 		
 		let sepArr = lyrics.components(separatedBy: "[")
 		
-		if sepArr.count <= 1 { return }
+		if sepArr.count <= 1 {
+						
+			return
+		
+		}
+		
+		self.noLrcLabel.isHidden = true
 		
 		for lyric in sepArr {
 			
@@ -193,6 +153,13 @@ extension LrcView {
 			let array = lyric.components(separatedBy: "]")
 			
 			lrc.time = array.first?.replacingOccurrences(of: "[", with: "")
+			
+			if lrc.time?.characters.count == 0 {
+				
+				continue
+			
+			}
+			
 			
 			lrc.lyrics = array.last
 			
@@ -206,7 +173,7 @@ extension LrcView {
 			
 			if lrcTime?.characters.count == 0 { continue }
 			
-			let index = lrcTime?.index((lrcTime?.startIndex)!, offsetBy: 5)
+			let index = lrcTime?.index((lrcTime?.startIndex)!, offsetBy: 8)
 			
 			let suffix = lrcTime?.substring(to: index!)
 						
@@ -216,11 +183,17 @@ extension LrcView {
 				
 				if chlrcTime?.characters.count == 0 { continue }
 				
-				let chindex = chlrcTime?.index(chlrcTime!.startIndex, offsetBy: 5)
+				let chindex = chlrcTime?.index(chlrcTime!.startIndex, offsetBy: 8)
 				
 				let chTime = chlrcTime?.substring(to: chindex!)
 				
 				if chTime == suffix {
+					
+					if lrc.lyrics?.characters.count == 0 {
+						
+						continue
+						
+					}
 					
 					lrc.lyrics = lrc.lyrics! + "\r" + chlrc.lyrics!
 					
@@ -236,6 +209,71 @@ extension LrcView {
 
 	}
 	
+	func currentTime(time:TimeInterval) {
+		
+		let minute: Int = (Int)(time / 60)
+		
+		let second: Int = (Int)(time) % 60
+		
+		let currentTimeStr = String(format: "%02d:%02d", minute, second)
+		
+		let count = lyricsLines.count
+		
+		if count == 0 { return }
+		
+		for index in 0...count-1 {
+			
+			let lyric = lyricsLines[index]
+			
+			// 当前模型时间
+			let lyricTime = lyric.time!
+			
+			let nextIdx = index + 1
+			
+			var nextLine: LrcLine?
+			
+			if nextIdx < count {
+				
+				nextLine = lyricsLines[nextIdx]
+				
+				if (currentTimeStr > lyricTime && currentTimeStr < (nextLine?.time)! && (index != currentIndex || currentIndex == count - 2)) {
+					
+					//刷新tableView
+					let reloadRows: Array = [IndexPath(row: index, section: 0), IndexPath(row: currentIndex, section: 0)]
+					
+					currentIndex = index
+					
+					self.tableView.reloadRows(at: reloadRows, with: .none)
+					//滚动到对应的
+					let indexPath = IndexPath(row: index, section: 0)
+					
+					tableView.scrollToRow(at: indexPath, at: .top, animated: true)
+					
+				}
+			
+			}
+			
+			if nextIdx == count && index != currentIndex {
+				
+				if (currentTimeStr > lyricTime && (index != currentIndex || currentIndex == count - 2)) {
+					
+					//刷新tableView
+					let reloadRows: Array = [IndexPath(row: index, section: 0), IndexPath(row: currentIndex, section: 0)]
+					
+					currentIndex = index
+					
+					self.tableView.reloadRows(at: reloadRows, with: .none)
+					//滚动到对应的
+					let indexPath = IndexPath(row: index, section: 0)
+					
+					tableView.scrollToRow(at: indexPath, at: .top, animated: true)
+					
+				}
+
+				
+			}
+		}
+	}
 }
 
 extension LrcView: UITableViewDataSource {
@@ -261,6 +299,7 @@ extension LrcView: UITableViewDelegate {
 		let cell = tableView.dequeueReusableCell(withIdentifier: "lrc", for: indexPath) as! LrcCell
 		
 		cell.lrcLine = self.lyricsLines[indexPath.row]
+
 		
 		if self.currentIndex == indexPath.row {
 			

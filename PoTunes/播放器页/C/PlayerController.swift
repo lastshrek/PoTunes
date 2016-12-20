@@ -78,7 +78,7 @@ extension PlayerController {
 		
 		if interruptReason == 2 {
 			
-			self.player?.streamer.pause()
+			self.player?.streamer?.pause()
 			
 		}
 		

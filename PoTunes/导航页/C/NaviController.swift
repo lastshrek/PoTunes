@@ -16,6 +16,8 @@ class NaviController: UIViewController, MAMapViewDelegate, AMapSearchDelegate {
 		case car = 0
 		
 		case walk
+		
+		case ride
 	
 	}
 	
@@ -27,9 +29,17 @@ class NaviController: UIViewController, MAMapViewDelegate, AMapSearchDelegate {
 	
 	var mapView = MAMapView()
 	
+	var travelSeg: SegmentControl?
+	
+	var travelType: TravelTypes?
+	
 	var annotations = [MAPointAnnotation]()
 	
 	var driveManager: AMapNaviDriveManager!
+	
+	var segmentedDrivingStrategy: SegmentControl?
+	
+	var navBtn: NavButton?
 
 
     override func viewDidLoad() {
@@ -56,7 +66,7 @@ class NaviController: UIViewController, MAMapViewDelegate, AMapSearchDelegate {
 	
 	func initRoutesSelection() {
 		
-		routeSeletcion.frame = CGRect(x: 10, y: 200, width: width - 20, height: 130)
+		routeSeletcion.frame = CGRect(x: 10, y: 20, width: width - 20, height: 130)
 		
 		routeSeletcion.start.text.delegate = self
 		
@@ -65,6 +75,65 @@ class NaviController: UIViewController, MAMapViewDelegate, AMapSearchDelegate {
 		routeSeletcion.switcher.addTarget(self, action: #selector(switchRoutes), for: .touchUpInside)
 		
 		self.view.addSubview(routeSeletcion)
+		
+		// Segment
+		travelSeg = SegmentControl.init(items: ["驾车", "步行", "骑行"])
+		
+		travelSeg?.frame = CGRect(x: 15, y: 160, width: width - 30, height: 30)
+		
+		travelSeg?.addTarget(self, action: #selector(travelTypeChanged(seg:)), for: .valueChanged)
+		
+		self.view.addSubview(travelSeg!)
+		
+		segmentedDrivingStrategy = SegmentControl.init(items: ["速度优先", "路况优先"])
+		
+		segmentedDrivingStrategy?.frame = CGRect(x: 15, y: 200, width: width - 30, height: 30)
+		
+		segmentedDrivingStrategy?.addTarget(self, action: #selector(drivingStrategyChanged(seg:)), for: .valueChanged)
+		
+		self.view.addSubview(segmentedDrivingStrategy!)
+		
+		// button
+		
+		navBtn = NavButton(type: .custom)
+		
+		navBtn?.frame = CGRect(x: 20, y: self.view.bounds.size.height - 180, width: width - 40, height: 50)
+		
+		navBtn?.addTarget(self, action: #selector(startGPSNavi(button:)), for: .touchUpInside)
+				
+		self.view.addSubview(navBtn!)
+		
+		
+		
+	}
+	
+	func travelTypeChanged(seg: UISegmentedControl) {
+		
+		let index = seg.selectedSegmentIndex
+		
+		if index != travelType?.rawValue {
+			
+			travelType = TravelTypes(rawValue: index)!
+			
+		}
+		
+		if seg.selectedSegmentIndex != 0 {
+			
+			segmentedDrivingStrategy?.isHidden = true
+			
+		} else {
+			
+			segmentedDrivingStrategy?.isHidden = false
+			
+		}
+		
+	}
+	
+	func drivingStrategyChanged(seg: UISegmentedControl) {
+		
+	}
+	
+	func startGPSNavi(button: NavButton) {
 		
 	}
 	
@@ -147,9 +216,11 @@ extension NaviController: UITextFieldDelegate, MapControllerDelegate {
 	}
 	
 	func mapController(didClickTheAnnotationBySendingCustomUserLocation userlocation: CLLocationCoordinate2D, title: String) {
+		
 		debugPrint(title)
 		
 		routeSeletcion.start.text.text = title
+		
 	}
 	
 }
@@ -157,11 +228,15 @@ extension NaviController: UITextFieldDelegate, MapControllerDelegate {
 extension NaviController: AMapNaviDriveManagerDelegate {
 	
 	func driveManager(_ driveManager: AMapNaviDriveManager, error: Error) {
+		
 		let error = error as NSError
+		
 		NSLog("error:{%d - %@}", error.code, error.localizedDescription)
+	
 	}
 	
 	func driveManager(onCalculateRouteSuccess driveManager: AMapNaviDriveManager) {
+		
 		NSLog("CalculateRouteSuccess")
 		
 		//算路成功后显示路径

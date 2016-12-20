@@ -65,7 +65,7 @@ class MapController: UIViewController {
 				
 		mapView.delegate = self
 		
-		mapView.userTrackingMode = .follow
+		mapView.userTrackingMode = .none
 		
 		mapView.showsUserLocation = true
 		
