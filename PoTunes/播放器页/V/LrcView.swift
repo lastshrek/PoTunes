@@ -90,17 +90,67 @@ extension LrcView {
 		
 		currentIndex = 0
 				
+		lyricsLines = divideArray(lyrics: lyrics)
+		
+		self.tableView.reloadData()
+		
+	}
+	
+	func parseChLyrics(lyrics: String) {
+		
+		self.chLrcArray.removeAll()
+		
+		chLrcArray = divideArray(lyrics: lyrics)
+		
+		for lrc in self.lyricsLines {
+			
+			let lrcTime = lrc.time
+			
+			if lrcTime?.characters.count == 0 { continue }
+			
+			for chlrc in self.chLrcArray {
+				
+				let chlrcTime = chlrc.time
+				
+				if chlrcTime?.characters.count == 0 { continue }
+				
+				if chlrcTime == lrcTime {
+					
+					if lrc.lyrics?.characters.count == 0 {
+						
+						continue
+						
+					}
+					
+					lrc.lyrics = lrc.lyrics! + "\r" + chlrc.lyrics!
+					
+				}
+				
+				continue
+			}
+		
+			
+		}
+		
+		self.tableView.reloadData()
+
+	}
+	
+	func divideArray(lyrics: String) -> Array<LrcLine> {
+		
 		let sepArr = lyrics.components(separatedBy: "[")
 		
 		if sepArr.count <= 1 {
 			
 			self.tableView.reloadData()
 			
-			return
-		
+			return []
+			
 		}
 		
 		self.noLrcLabel.isHidden = true
+		
+		var temp: Array<LrcLine> = []
 		
 		for lyric in sepArr {
 			
@@ -123,90 +173,11 @@ extension LrcView {
 			
 			lrc.lyrics = array.last
 			
-			lyricsLines.append(lrc)
+			temp.append(lrc)
 			
 		}
-		
-		self.tableView.reloadData()
-		
-	}
-	
-	func parseChLyrics(lyrics: String) {
-		
-		self.chLrcArray.removeAll()
-		
-		let sepArr = lyrics.components(separatedBy: "[")
-		
-		if sepArr.count <= 1 {
-						
-			return
-		
-		}
-		
-		self.noLrcLabel.isHidden = true
-		
-		for lyric in sepArr {
-			
-			let lrc = LrcLine()
-			
-			//如果是歌名的头部信息
-			let array = lyric.components(separatedBy: "]")
-			
-			lrc.time = array.first?.replacingOccurrences(of: "[", with: "")
-			
-			if lrc.time?.characters.count == 0 {
-				
-				continue
-			
-			}
-			
-			
-			lrc.lyrics = array.last
-			
-			self.chLrcArray.append(lrc)
-			
-		}
-		
-		for lrc in self.lyricsLines {
-			
-			let lrcTime = lrc.time
-			
-			if lrcTime?.characters.count == 0 { continue }
-			
-			let index = lrcTime?.index((lrcTime?.startIndex)!, offsetBy: 8)
-			
-			let suffix = lrcTime?.substring(to: index!)
-						
-			for chlrc in self.chLrcArray {
-				
-				let chlrcTime = chlrc.time
-				
-				if chlrcTime?.characters.count == 0 { continue }
-				
-				let chindex = chlrcTime?.index(chlrcTime!.startIndex, offsetBy: 8)
-				
-				let chTime = chlrcTime?.substring(to: chindex!)
-				
-				if chTime == suffix {
-					
-					if lrc.lyrics?.characters.count == 0 {
-						
-						continue
-						
-					}
-					
-					lrc.lyrics = lrc.lyrics! + "\r" + chlrc.lyrics!
-					
-				}
-				
-				continue
-			}
-		
-			
-		}
-		
-		self.tableView.reloadData()
 
+		return temp
 	}
 	
 	func currentTime(time:TimeInterval) {
