@@ -78,7 +78,7 @@ class LrcView: DRNRealTimeBlurView {
 }
 
 extension LrcView {
-	// FIXME: - 重构
+	
 	func parseLyrics(lyrics: String) {
 		
 		if lyricsLines.count != 0 {
@@ -94,6 +94,11 @@ extension LrcView {
 		
 		self.tableView.reloadData()
 		
+		if lyricsLines.count > 0 {
+			
+			tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
+			
+		}
 	}
 	
 	func parseChLyrics(lyrics: String) {
@@ -167,7 +172,7 @@ extension LrcView {
 				
 			}
 			
-			let index = lrc.time?.index((lrc.time?.startIndex)!, offsetBy: 8)
+			let index = lrc.time?.index((lrc.time?.startIndex)!, offsetBy: 5)
 			
 			lrc.time = lrc.time?.substring(to: index!)
 			
