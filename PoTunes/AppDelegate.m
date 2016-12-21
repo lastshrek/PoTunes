@@ -8,7 +8,7 @@
 
 #import "AppDelegate.h"
 #import <AVFoundation/AVFoundation.h>
-#import "BPush.h"
+//#import "BPush.h"
 #import "WXApi.h"
 #import <MAMapKit/MAMapKit.h>
 //#import "MBProgressHUD+MJ.h"
@@ -31,26 +31,6 @@
     [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
     [self becomeFirstResponder];
 	
-
-
-    //注册通知·
-    // iOS8 下需要使用新的 API
-		UIUserNotificationType myTypes = UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert;
-		
-		UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:myTypes categories:nil];
-		[[UIApplication sharedApplication] registerUserNotificationSettings:settings];
-	
-    
-    // 在 App 启动时注册百度云推送服务，需要提供 Apikey
-    [BPush registerChannel:launchOptions apiKey:@"TS45ZOdrWavQSWGldFx72QZr" pushMode:BPushModeProduction withFirstAction:nil withSecondAction:nil withCategory:nil isDebug:YES];
-    // App 是用户点击推送消息启动
-    NSDictionary *userInfo = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
-    if (userInfo) {
-        [BPush handleNotification:userInfo];
-    }
-    //角标清0
-    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
-    
     //向微信注册
     [WXApi registerApp:@"wx0fc8d0673ec86694"];
     
@@ -65,24 +45,9 @@
 
 
 // 此方法是 用户点击了通知，应用在前台 或者开启后台并且应用在后台 时调起
-- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
-{
-    // 打印到日志 textView 中
-    
-//    NSLog(@"********** iOS7.0之后 background **********");
-    // 应用在前台 或者后台开启状态下，不跳转页面，让用户选择。
-    if (application.applicationState == UIApplicationStateActive || application.applicationState == UIApplicationStateBackground) {
-        UIAlertView *alertView =[[UIAlertView alloc]initWithTitle:@"收到一条消息" message:userInfo[@"aps"][@"alert"] delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
-        [alertView show];
-    }
-    else//杀死状态下，直接跳转到跳转页面。
-    {
-       
-        /*
-         // 根视图是普通的viewctr 用present跳转
-         [_tabBarCtr.selectedViewController presentViewController:skipCtr animated:YES completion:nil]; */
-    }
-}
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
+	
+ }
 
 // 在 iOS8 系统中，还需要添加这个方法。通过新的 API 注册推送服务
 - (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings {
@@ -92,10 +57,7 @@
 }
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
-    [BPush registerDeviceToken:deviceToken];
-    [BPush bindChannelWithCompleteHandler:^(id result, NSError *error) {
-
-    }];
+	
     
     // 打印到日志 textView 中
 }
@@ -103,17 +65,7 @@
 
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
-    // App 收到推送的通知
-    [BPush handleNotification:userInfo];
-//    NSLog(@"********** ios7.0之前 **********");
-    // 应用在前台 或者后台开启状态下，不跳转页面，让用户选择。
-    if (application.applicationState == UIApplicationStateActive || application.applicationState == UIApplicationStateBackground) {
-        UIAlertView *alertView =[[UIAlertView alloc]initWithTitle:@"收到一条消息" message:userInfo[@"aps"][@"alert"] delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
-        [alertView show];
-    }
-    else//杀死状态下，直接跳转到跳转页面。
-    {
-    }
+   
 }
 
 //重写AppDelegate的handleOpenURL和openURL方法：

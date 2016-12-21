@@ -11,9 +11,7 @@ import UIKit
 class NavButton: UIButton {
 
 	override func draw(_ rect: CGRect) {
-		
-		self.setTitle("开始导航", for: .normal)
-		
+				
 		self.setTitleColor(UIColor.colorByRGB(red: 225, green: 49, blue: 114, alpha: 1), for: .normal)
 		
 		self.titleLabel?.font = UIFont.init(name: "BebasNeue.otf", size: 16)

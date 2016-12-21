@@ -11,6 +11,11 @@
 		3C0A1A961DD5B35400E90306 /* MainScrollview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C0A1A951DD5B35400E90306 /* MainScrollview.swift */; };
 		3C0A1A981DD5B5B000E90306 /* MainPageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C0A1A971DD5B5B000E90306 /* MainPageControl.swift */; };
 		3C0A1A9A1DD5B72000E90306 /* MainControllers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C0A1A991DD5B72000E90306 /* MainControllers.swift */; };
+		3C12F1D81E0A68B90084753F /* DrivingCalculateController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C12F1D71E0A68B90084753F /* DrivingCalculateController.swift */; };
+		3C12F1DA1E0A711D0084753F /* NaviPointAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C12F1D91E0A711D0084753F /* NaviPointAnnotation.swift */; };
+		3C12F1DC1E0A75680084753F /* RouteCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C12F1DB1E0A75680084753F /* RouteCollectionViewCell.swift */; };
+		3C12F1DE1E0A7F720084753F /* SelectableOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C12F1DD1E0A7F720084753F /* SelectableOverlay.swift */; };
+		3C12F1E01E0A83000084753F /* PreferenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C12F1DF1E0A83000084753F /* PreferenceView.swift */; };
 		3C155EAE1DD4284000375469 /* PlaylistController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C155EA81DD4284000375469 /* PlaylistController.swift */; };
 		3C155EAF1DD4284000375469 /* Playlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C155EAA1DD4284000375469 /* Playlist.swift */; };
 		3C155EB21DD428A100375469 /* PlaylistCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C155EB11DD428A100375469 /* PlaylistCell.swift */; };
@@ -136,6 +141,11 @@
 		3C0A1A951DD5B35400E90306 /* MainScrollview.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainScrollview.swift; sourceTree = "<group>"; };
 		3C0A1A971DD5B5B000E90306 /* MainPageControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainPageControl.swift; sourceTree = "<group>"; };
 		3C0A1A991DD5B72000E90306 /* MainControllers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainControllers.swift; sourceTree = "<group>"; };
+		3C12F1D71E0A68B90084753F /* DrivingCalculateController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DrivingCalculateController.swift; sourceTree = "<group>"; };
+		3C12F1D91E0A711D0084753F /* NaviPointAnnotation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NaviPointAnnotation.swift; sourceTree = "<group>"; };
+		3C12F1DB1E0A75680084753F /* RouteCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RouteCollectionViewCell.swift; sourceTree = "<group>"; };
+		3C12F1DD1E0A7F720084753F /* SelectableOverlay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectableOverlay.swift; sourceTree = "<group>"; };
+		3C12F1DF1E0A83000084753F /* PreferenceView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferenceView.swift; sourceTree = "<group>"; };
 		3C155EA81DD4284000375469 /* PlaylistController.swift */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.swift; path = PlaylistController.swift; sourceTree = "<group>"; tabWidth = 4; };
 		3C155EAA1DD4284000375469 /* Playlist.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Playlist.swift; sourceTree = "<group>"; };
 		3C155EB11DD428A100375469 /* PlaylistCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaylistCell.swift; sourceTree = "<group>"; };
@@ -412,6 +422,7 @@
 			children = (
 				3C155ED61DD449AD00375469 /* NaviController.swift */,
 				3C23480E1DF6B4C100D3B915 /* MapController.swift */,
+				3C12F1D71E0A68B90084753F /* DrivingCalculateController.swift */,
 			);
 			path = C;
 			sourceTree = "<group>";
@@ -766,6 +777,10 @@
 				3C329A361DF2D7F7001EC10B /* SingleRoute.swift */,
 				3CE18E331E03BF500018AED0 /* SegmentControl.swift */,
 				3CE18E351E03C7420018AED0 /* NavButton.swift */,
+				3C12F1D91E0A711D0084753F /* NaviPointAnnotation.swift */,
+				3C12F1DB1E0A75680084753F /* RouteCollectionViewCell.swift */,
+				3C12F1DD1E0A7F720084753F /* SelectableOverlay.swift */,
+				3C12F1DF1E0A83000084753F /* PreferenceView.swift */,
 			);
 			path = V;
 			sourceTree = "<group>";
@@ -1071,6 +1086,7 @@
 				3CCFBF2F1DD41DAD00514873 /* PlayerInterface.swift in Sources */,
 				3CFA58CC1D6706D700341763 /* FSXMLHttpRequest.m in Sources */,
 				3CFA58C91D6706D700341763 /* FSParsePlaylistRequest.m in Sources */,
+				3C12F1E01E0A83000084753F /* PreferenceView.swift in Sources */,
 				3CFA58C61D6706D700341763 /* FSAudioController.m in Sources */,
 				3C155EBD1DD42A1C00375469 /* AlbumDownloadController.swift in Sources */,
 				3CDFB3981DD776D8006C0975 /* TrackCell.swift in Sources */,
@@ -1081,11 +1097,14 @@
 				3CDFB39C1DD83F48006C0975 /* BarItem.swift in Sources */,
 				3CDFB39A1DD77CD5006C0975 /* UIColor+RGB.swift in Sources */,
 				3CFA58C31D6706D700341763 /* id3_parser.cpp in Sources */,
+				3C12F1DE1E0A7F720084753F /* SelectableOverlay.swift in Sources */,
 				3CFA58CA1D6706D700341763 /* FSParseRssPodcastFeedRequest.m in Sources */,
 				3C9641E41D670DCE00386ABB /* DarwinNotificationHelper.m in Sources */,
 				3CCFBF381DD41E0300514873 /* LrcCell.swift in Sources */,
 				3C57B76A1DE448F200306ACB /* DownloadController.swift in Sources */,
+				3C12F1DC1E0A75680084753F /* RouteCollectionViewCell.swift in Sources */,
 				3CFA58BD1D6706D700341763 /* audio_queue.cpp in Sources */,
+				3C12F1DA1E0A711D0084753F /* NaviPointAnnotation.swift in Sources */,
 				3CCFBF511DD41F1C00514873 /* UIView+Geometry.m in Sources */,
 				3CFA58C81D6706D700341763 /* FSCheckContentTypeRequest.m in Sources */,
 				3C155ED71DD449AD00375469 /* NaviController.swift in Sources */,
@@ -1093,6 +1112,7 @@
 				3C24CEDB1DD30D2F007C862C /* Main.swift in Sources */,
 				3C3BD3191DDDA264007545DC /* UIImage+BoxBlur.m in Sources */,
 				3C155EAE1DD4284000375469 /* PlaylistController.swift in Sources */,
+				3C12F1D81E0A68B90084753F /* DrivingCalculateController.swift in Sources */,
 				3CFA58C51D6706D700341763 /* stream_configuration.cpp in Sources */,
 				3C2EA2CB1DE9CA7C004AE511 /* M13ProgressViewBar.m in Sources */,
 				3CFA58CB1D6706D700341763 /* FSPlaylistItem.m in Sources */,

@@ -10,6 +10,7 @@ import UIKit
 import PKHUD
 
 protocol MapControllerDelegate: class {
+	
 	func mapController(didClickTheAnnotationBySending destinationLocation: CLLocationCoordinate2D, destinationTitle: String, userlocation: CLLocationCoordinate2D)
 	
 	func mapController(didClickTheAnnotationBySendingCustomUserLocation userlocation:  CLLocationCoordinate2D, title: String)
@@ -55,7 +56,11 @@ class MapController: UIViewController {
 		initSearchBar()
 		
 		initTableView()
+		
+		HUD.show(.systemActivity)
+		
     }
+	
 
 	func initMapView() {
 		
@@ -79,16 +84,8 @@ class MapController: UIViewController {
 		
 		search?.delegate = self
 		
-		
 	}
 
-	override func viewWillDisappear(_ animated: Bool) {
-		
-		super.viewWillDisappear(animated)
-		
-		clearMapView()
-		
-	}
 	
 	func initSearchBar() {
 		
@@ -222,7 +219,9 @@ extension MapController: MAMapViewDelegate {
 	
 	func mapView(_ mapView: MAMapView!, didUpdate userLocation: MAUserLocation!, updatingLocation: Bool) {
 		
-		if updatingLocation {
+		if userLocation != nil {
+			
+			HUD.hide()
 			
 			self.userLocation = CLLocationCoordinate2DMake(userLocation.location.coordinate.latitude, userLocation.location.coordinate.longitude)
 			
@@ -253,6 +252,8 @@ extension MapController: MAMapViewDelegate {
 			destinationTitle = annotation?.title
 			
 			self.navigationController!.popToRootViewController(animated: true)
+			
+			clearMapView()
 			
 		}
 		

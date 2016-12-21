@@ -13,11 +13,11 @@ class NaviController: UIViewController, MAMapViewDelegate, AMapSearchDelegate {
 	
 	enum TravelTypes: Int {
 		
-		case car = 0
+		case Car = 0
 		
-		case walk
+		case Walk
 		
-		case ride
+		case Ride
 	
 	}
 	
@@ -31,7 +31,7 @@ class NaviController: UIViewController, MAMapViewDelegate, AMapSearchDelegate {
 	
 	var travelSeg: SegmentControl?
 	
-	var travelType: TravelTypes?
+	var travelType: TravelTypes = .Car
 	
 	var annotations = [MAPointAnnotation]()
 	
@@ -40,6 +40,10 @@ class NaviController: UIViewController, MAMapViewDelegate, AMapSearchDelegate {
 	var segmentedDrivingStrategy: SegmentControl?
 	
 	var navBtn: NavButton?
+	
+	var startLocation: CLLocationCoordinate2D?
+	
+	var endLocation: CLLocationCoordinate2D?
 
 
     override func viewDidLoad() {
@@ -74,7 +78,7 @@ class NaviController: UIViewController, MAMapViewDelegate, AMapSearchDelegate {
 		
 		routeSeletcion.switcher.addTarget(self, action: #selector(switchRoutes), for: .touchUpInside)
 		
-		self.view.addSubview(routeSeletcion)
+		view.addSubview(routeSeletcion)
 		
 		// Segment
 		travelSeg = SegmentControl.init(items: ["驾车", "步行", "骑行"])
@@ -83,7 +87,7 @@ class NaviController: UIViewController, MAMapViewDelegate, AMapSearchDelegate {
 		
 		travelSeg?.addTarget(self, action: #selector(travelTypeChanged(seg:)), for: .valueChanged)
 		
-		self.view.addSubview(travelSeg!)
+		view.addSubview(travelSeg!)
 		
 		segmentedDrivingStrategy = SegmentControl.init(items: ["速度优先", "路况优先"])
 		
@@ -91,7 +95,7 @@ class NaviController: UIViewController, MAMapViewDelegate, AMapSearchDelegate {
 		
 		segmentedDrivingStrategy?.addTarget(self, action: #selector(drivingStrategyChanged(seg:)), for: .valueChanged)
 		
-		self.view.addSubview(segmentedDrivingStrategy!)
+		view.addSubview(segmentedDrivingStrategy!)
 		
 		// button
 		
@@ -99,11 +103,11 @@ class NaviController: UIViewController, MAMapViewDelegate, AMapSearchDelegate {
 		
 		navBtn?.frame = CGRect(x: 20, y: self.view.bounds.size.height - 180, width: width - 40, height: 50)
 		
-		navBtn?.addTarget(self, action: #selector(startGPSNavi(button:)), for: .touchUpInside)
+		navBtn?.addTarget(self, action: #selector(btnClick(_:)), for: .touchUpInside)
+		
+		navBtn?.setTitle("开始导航", for: .normal)
 				
-		self.view.addSubview(navBtn!)
-		
-		
+		view.addSubview(navBtn!)
 		
 	}
 	
@@ -111,7 +115,7 @@ class NaviController: UIViewController, MAMapViewDelegate, AMapSearchDelegate {
 		
 		let index = seg.selectedSegmentIndex
 		
-		if index != travelType?.rawValue {
+		if index != travelType.rawValue {
 			
 			travelType = TravelTypes(rawValue: index)!
 			
@@ -133,7 +137,29 @@ class NaviController: UIViewController, MAMapViewDelegate, AMapSearchDelegate {
 		
 	}
 	
-	func startGPSNavi(button: NavButton) {
+	func btnClick(_: NavButton) {
+		
+		if navBtn?.titleLabel?.text == "路径规划" {
+			
+			switch travelType {
+				
+			case .Car:
+				
+				let driving = DrivingCalculateController()
+				
+				driving.startLocation = startLocation
+				
+				driving.endLocation = endLocation
+				
+				navigationController?.pushViewController(driving, animated: true)
+					
+					
+			default:
+				
+				break
+			}
+			
+		}
 		
 	}
 	
@@ -146,13 +172,7 @@ class NaviController: UIViewController, MAMapViewDelegate, AMapSearchDelegate {
 			return
 			
 		}
-		
-	}
-	
-	
-	func initialSubviews() {
-		
-		
+
 		
 	}
 	
@@ -210,16 +230,21 @@ extension NaviController: UITextFieldDelegate, MapControllerDelegate {
 	
 	func mapController(didClickTheAnnotationBySending destinationLocation: CLLocationCoordinate2D, destinationTitle: String, userlocation: CLLocationCoordinate2D) {
 		
-		debugPrint(destinationTitle)
-		
 		routeSeletcion.end.text.text = destinationTitle
+		
+		endLocation = destinationLocation
+		
+		startLocation = userlocation
+		
+		navBtn?.setTitle("路径规划", for: .normal)
+		
 	}
 	
 	func mapController(didClickTheAnnotationBySendingCustomUserLocation userlocation: CLLocationCoordinate2D, title: String) {
 		
-		debugPrint(title)
-		
 		routeSeletcion.start.text.text = title
+		
+		startLocation = userlocation
 		
 	}
 	
