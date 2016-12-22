@@ -139,27 +139,33 @@ class NaviController: UIViewController, MAMapViewDelegate, AMapSearchDelegate {
 	
 	func btnClick(_: NavButton) {
 		
-		if navBtn?.titleLabel?.text == "路径规划" {
-			
-			switch travelType {
-				
-			case .Car:
-				
-				let driving = DrivingCalculateController()
-				
-				driving.startLocation = startLocation
-				
-				driving.endLocation = endLocation
-				
-				navigationController?.pushViewController(driving, animated: true)
-					
-					
-			default:
-				
-				break
-			}
-			
-		}
+//		if navBtn?.titleLabel?.text == "路径规划" {
+//			
+//			switch travelType {
+//				
+//			case .Car: break
+//				
+//				
+//				
+//				
+//				
+//					
+//			default:
+//				
+//				break
+//			}
+//			
+//		}
+		
+		let driving = DrivingCalculateController()
+		
+		driving.startPoint = AMapNaviPoint.location(withLatitude: 39.993135, longitude: 116.474175)
+
+		
+		driving.endPoint = AMapNaviPoint.location(withLatitude: 39.908791, longitude: 116.321257)
+
+		
+		navigationController?.pushViewController(driving, animated: true)
 		
 	}
 	
