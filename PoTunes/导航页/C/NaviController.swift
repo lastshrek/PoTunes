@@ -60,14 +60,6 @@ class NaviController: UIViewController, MAMapViewDelegate, AMapSearchDelegate {
 		
 	}
 	
-	override func viewWillDisappear(_ animated: Bool) {
-		
-		super.viewWillDisappear(animated)
-		
-		clearMapView()
-		
-	}
-	
 	func initRoutesSelection() {
 		
 		routeSeletcion.frame = CGRect(x: 10, y: 20, width: width - 20, height: 130)
@@ -139,33 +131,42 @@ class NaviController: UIViewController, MAMapViewDelegate, AMapSearchDelegate {
 	
 	func btnClick(_: NavButton) {
 		
-//		if navBtn?.titleLabel?.text == "路径规划" {
-//			
-//			switch travelType {
-//				
-//			case .Car: break
-//				
-//				
-//				
-//				
-//				
-//					
-//			default:
-//				
-//				break
-//			}
-//			
-//		}
-		
-		let driving = DrivingCalculateController()
-		
-		driving.startPoint = AMapNaviPoint.location(withLatitude: 39.993135, longitude: 116.474175)
+		if navBtn?.titleLabel?.text == "路径规划" {
+			
+			switch travelType {
+				
+			case .Car:
+				
+				let driving = DrivingCalculateController()
+				
+				driving.startPoint = AMapNaviPoint.location(withLatitude: CGFloat((startLocation?.latitude)!), longitude: CGFloat((startLocation?.longitude)!))
+				
+				
+				driving.endPoint = AMapNaviPoint.location(withLatitude: CGFloat((endLocation?.latitude)!), longitude: CGFloat((endLocation?.longitude)!))
+				
+				
+				navigationController?.pushViewController(driving, animated: true)
 
+				
+				
+				
+					
+			default:
+				
+				break
+			}
+			
+		}
 		
-		driving.endPoint = AMapNaviPoint.location(withLatitude: 39.908791, longitude: 116.321257)
-
-		
-		navigationController?.pushViewController(driving, animated: true)
+//		let driving = DrivingCalculateController()
+//		
+//		driving.startPoint = AMapNaviPoint.location(withLatitude: 39.993135, longitude: 116.474175)
+//
+//		
+//		driving.endPoint = AMapNaviPoint.location(withLatitude: 39.908791, longitude: 116.321257)
+//
+//		
+//		navigationController?.pushViewController(driving, animated: true)
 		
 	}
 	
@@ -182,29 +183,7 @@ class NaviController: UIViewController, MAMapViewDelegate, AMapSearchDelegate {
 		
 	}
 	
-	func initMapView() {
-		
-		mapView.frame = view.bounds
-		
-		mapView.delegate = self
-		
-		view.addSubview(mapView)
-		
-	}
 	
-	func clearMapView() {
-		
-		mapView.showsUserLocation = false
-		
-		mapView.removeAnnotations(annotations)
-		
-		mapView.removeOverlays(mapView.overlays)
-		
-		mapView.delegate = nil
-		
-		mapView.showsUserLocation = true
-		
-	}
 	
 	func initDriveManager() {
 		
@@ -234,13 +213,19 @@ extension NaviController: UITextFieldDelegate, MapControllerDelegate {
 		
 	}
 	
+	
 	func mapController(didClickTheAnnotationBySending destinationLocation: CLLocationCoordinate2D, destinationTitle: String, userlocation: CLLocationCoordinate2D) {
 		
 		routeSeletcion.end.text.text = destinationTitle
 		
 		endLocation = destinationLocation
 		
-		startLocation = userlocation
+		if startLocation == nil {
+			
+			startLocation = userlocation
+			
+		}
+		
 		
 		navBtn?.setTitle("路径规划", for: .normal)
 		
@@ -265,54 +250,7 @@ extension NaviController: AMapNaviDriveManagerDelegate {
 		NSLog("error:{%d - %@}", error.code, error.localizedDescription)
 	
 	}
-	
-	func driveManager(onCalculateRouteSuccess driveManager: AMapNaviDriveManager) {
-		
-		NSLog("CalculateRouteSuccess")
-		
-		//算路成功后显示路径
-		showNaviRoutes()
-	}
-	
-	func showNaviRoutes() {
-		
-//		guard let allRoutes = driveManager.naviRoutes else {
-//			return
-//		}
-		
-//		mapView.removeOverlays(mapView.overlays)
-//		routeIndicatorInfoArray.removeAll()
-//		
-//		//将路径显示到地图上
-//		for (aNumber, aRoute) in allRoutes {
-//			
-//			//添加路径Polyline
-//			var coords = [CLLocationCoordinate2D]()
-//			for coordinate in aRoute.routeCoordinates {
-//				coords.append(CLLocationCoordinate2D(latitude: Double(coordinate.latitude), longitude: Double(coordinate.longitude)))
-//			}
-//			
-//			let polyline = MAPolyline(coordinates: &coords, count: UInt(aRoute.routeCoordinates.count))!
-//			let selectablePolyline = SelectableOverlay(aOverlay: polyline)
-//			selectablePolyline.routeID = Int(aNumber)
-//			
-//			mapView.add(selectablePolyline)
-//			
-//			//更新CollectonView的信息
-//			let title = String(format: "路径ID:%d | 路径计算策略:%d", Int(aNumber), preferenceView.strategy(isMultiple: isMultipleRoutePlan).rawValue)
-//			let subtitle = String(format: "长度:%d米 | 预估时间:%d秒 | 分段数:%d", aRoute.routeLength, aRoute.routeTime, aRoute.routeSegments.count)
-//			let info = RouteCollectionViewInfo(routeID: Int(aNumber), title: title, subTitle: subtitle)
-//			
-//			routeIndicatorInfoArray.append(info)
-//		}
-//		
-//		mapView.showAnnotations(mapView.annotations, animated: false)
-//		routeIndicatorView.reloadData()
-//		
-//		if let first = routeIndicatorInfoArray.first {
-//			selectNaviRouteWithID(routeID: first.routeID)
-//		}
-	}
+
 	
 	func driveManager(_ driveManager: AMapNaviDriveManager, onCalculateRouteFailure error: Error) {
 		let error = error as NSError

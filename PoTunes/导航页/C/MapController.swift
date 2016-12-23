@@ -20,7 +20,7 @@ class MapController: UIViewController {
 	
 	weak var delegate: MapControllerDelegate?
 	
-	var mapView: MAMapView = SharedMapView.sharedInstance().mapView
+	lazy var mapView: MAMapView! = SharedMapView.sharedInstance().mapView
 	
 	
 	var searchBar: UISearchBar?
@@ -60,6 +60,14 @@ class MapController: UIViewController {
 		HUD.show(.systemActivity)
 		
     }
+	
+	override func viewWillDisappear(_ animated: Bool) {
+		
+		super.viewWillDisappear(animated)
+		
+		mapView.removeAnnotations(mapView.annotations)
+
+	}
 	
 
 	func initMapView() {
@@ -119,20 +127,6 @@ class MapController: UIViewController {
 		
 		self.view.addSubview(tableView!)
 		
-	}
-	
-	func clearMapView() {
-		
-		mapView.showsUserLocation = false
-		
-		mapView.removeAnnotations(annotations)
-		
-		mapView.removeOverlays(mapView.overlays)
-		
-		mapView.delegate = nil
-		
-		SharedMapView.sharedInstance().popStatus()
-				
 	}
 	
 }
@@ -219,12 +213,14 @@ extension MapController: MAMapViewDelegate {
 	
 	func mapView(_ mapView: MAMapView!, didUpdate userLocation: MAUserLocation!, updatingLocation: Bool) {
 		
-		if userLocation != nil {
+		if self.userLocation == nil {
 			
 			HUD.hide()
 			
 			self.userLocation = CLLocationCoordinate2DMake(userLocation.location.coordinate.latitude, userLocation.location.coordinate.longitude)
 			
+			debugPrint(self.userLocation)
+
 		}
 		
 	}
@@ -253,7 +249,7 @@ extension MapController: MAMapViewDelegate {
 			
 			self.navigationController!.popToRootViewController(animated: true)
 			
-			clearMapView()
+			mapView.removeAnnotations(annotations)
 			
 		}
 		

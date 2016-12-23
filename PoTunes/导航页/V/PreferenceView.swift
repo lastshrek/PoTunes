@@ -31,7 +31,7 @@ class PreferenceView: UIView {
 		                                                 true,
 		                                                 true,
 		                                                 true,
-		                                                 true)
+		                                                 false)
 	}
 	
 	private func buildPreferenceView() {
