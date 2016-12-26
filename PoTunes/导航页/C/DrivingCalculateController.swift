@@ -45,7 +45,6 @@ class DrivingCalculateController: UIViewController, MAMapViewDelegate, AMapNaviD
 		
 		//进行多路径规划
 		
-		driverManager.setVehicleProvince("津", number: "JPC728")
 		driverManager.calculateDriveRoute(withStart: [startPoint!],
 		                                  end: [endPoint!],
 		                                  wayPoints: nil,
@@ -61,7 +60,6 @@ class DrivingCalculateController: UIViewController, MAMapViewDelegate, AMapNaviD
 	}
 	
 	// MARK: - Initalization
-	
 	func initMapView() {
 		
 		mapView = MAMapView(frame: CGRect(x: 0, y: routePlanInfoViewHeight, width: view.bounds.width, height: view.bounds.height - routePlanInfoViewHeight))
@@ -89,7 +87,7 @@ class DrivingCalculateController: UIViewController, MAMapViewDelegate, AMapNaviD
 		
 		layout.scrollDirection = .horizontal
 		
-		routeIndicatorView = UICollectionView(frame: CGRect(x: 0, y: 400, width: view.bounds.width, height: routeIndicatorViewHeight), collectionViewLayout: layout)
+		routeIndicatorView = UICollectionView(frame: CGRect(x: 0, y: view.bounds.size.height - routeIndicatorViewHeight - 64, width: view.bounds.width, height: routeIndicatorViewHeight), collectionViewLayout: layout)
 		
 		guard let routeIndicatorView = routeIndicatorView else {
 			
@@ -218,7 +216,9 @@ class DrivingCalculateController: UIViewController, MAMapViewDelegate, AMapNaviD
 	func selecteOverlayWithRouteID(routeID: Int) {
 		
 		guard let allOverlays = mapView.overlays else {
+			
 			return
+		
 		}
 		
 		for (index, aOverlay) in allOverlays.enumerated() {
@@ -316,7 +316,7 @@ class DrivingCalculateController: UIViewController, MAMapViewDelegate, AMapNaviD
 		
 		let error = error as NSError
 		
-		debugPrint("error:{%d - %@}", error.code, error.localizedDescription)
+		debugPrint("error: \(error.code), \(error.localizedDescription)")
 	
 	}
 	
@@ -331,36 +331,9 @@ class DrivingCalculateController: UIViewController, MAMapViewDelegate, AMapNaviD
 		
 		let error = error as NSError
 		
-		NSLog("CalculateRouteFailure:{%d - %@}", error.code, error.localizedDescription)
+		debugPrint("error: \(error.code), \(error.localizedDescription)")
+	
 	}
-	
-	func driveManagerNeedRecalculateRoute(forYaw driveManager: AMapNaviDriveManager) {
-		NSLog("needRecalculateRouteForYaw");
-	}
-	
-	func driveManagerNeedRecalculateRoute(forTrafficJam driveManager: AMapNaviDriveManager) {
-		NSLog("needRecalculateRouteForTrafficJam");
-	}
-	
-	func driveManager(_ driveManager: AMapNaviDriveManager, onArrivedWayPoint wayPointIndex: Int32) {
-		NSLog("ArrivedWayPoint:\(wayPointIndex)");
-	}
-	
-	func driveManager(_ driveManager: AMapNaviDriveManager, playNaviSound soundString: String, soundStringType: AMapNaviSoundType) {
-		NSLog("playNaviSoundString:{%d:%@}", soundStringType.rawValue, soundString);
-		
-	}
-	
-	func driveManagerDidEndEmulatorNavi(_ driveManager: AMapNaviDriveManager) {
-		NSLog("didEndEmulatorNavi");
-	}
-	
-	func driveManager(onArrivedDestination driveManager: AMapNaviDriveManager) {
-		NSLog("onArrivedDestination");
-	}
-	
-	
-	
 
 	
 	//MARK: - UICollectionViewDelegateFlowLayout
@@ -437,8 +410,8 @@ class DrivingCalculateController: UIViewController, MAMapViewDelegate, AMapNaviD
 	
 }
 
+//MARK: - UICollectionViewDataSource
 extension DrivingCalculateController: UICollectionViewDataSource {
-	//MARK: - UICollectionViewDataSource
 	
 	func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
 		
@@ -466,9 +439,8 @@ extension DrivingCalculateController: UICollectionViewDataSource {
 	
 }
 
+//MARK: - UICollectionViewDelegate
 extension DrivingCalculateController: UICollectionViewDelegate {
-	
-	//MARK: - UICollectionViewDelegate
 	
 	func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 		

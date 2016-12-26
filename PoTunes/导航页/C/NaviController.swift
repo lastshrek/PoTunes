@@ -60,6 +60,7 @@ class NaviController: UIViewController, MAMapViewDelegate, AMapSearchDelegate {
 		
 	}
 	
+	// MARK: - initialization
 	func initRoutesSelection() {
 		
 		routeSeletcion.frame = CGRect(x: 10, y: 20, width: width - 20, height: 130)
@@ -179,9 +180,13 @@ class NaviController: UIViewController, MAMapViewDelegate, AMapSearchDelegate {
 			return
 			
 		}
+		
+		
 
 		
 	}
+	
+	
 	
 	
 	
@@ -195,6 +200,7 @@ class NaviController: UIViewController, MAMapViewDelegate, AMapSearchDelegate {
 	
 }
 
+// MARK: - UITextFieldDelegate, MapControllerDelegate
 extension NaviController: UITextFieldDelegate, MapControllerDelegate {
 	
 	func textFieldDidBeginEditing(_ textField: UITextField) {

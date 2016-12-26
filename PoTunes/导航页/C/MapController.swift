@@ -208,8 +208,9 @@ extension MapController: UITableViewDelegate {
 	
 }
 
-extension MapController: MAMapViewDelegate {
+// MARK: - MAMapViewDelegate
 
+extension MapController: MAMapViewDelegate {
 	
 	func mapView(_ mapView: MAMapView!, didUpdate userLocation: MAUserLocation!, updatingLocation: Bool) {
 		
@@ -219,8 +220,6 @@ extension MapController: MAMapViewDelegate {
 			
 			self.userLocation = CLLocationCoordinate2DMake(userLocation.location.coordinate.latitude, userLocation.location.coordinate.longitude)
 			
-			debugPrint(self.userLocation)
-
 		}
 		
 	}
@@ -283,6 +282,9 @@ extension MapController: MAMapViewDelegate {
 	
 }
 
+
+// MARK: - AMapSearchDelegate
+
 extension MapController: AMapSearchDelegate {
 	
 	// 地理编码回调
@@ -304,6 +306,7 @@ extension MapController: AMapSearchDelegate {
 	
 }
 
+// MARK: - UISearchBarDelegate
 extension MapController: UISearchBarDelegate {
 	
 	func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {

@@ -20,8 +20,8 @@ class RouteCollectionViewCell: UICollectionViewCell {
 	
 	private let titleLabel = UILabel()
 	private let subtitleLabel = UILabel()
-	private let prevImageView = UIImageView(image: UIImage(named: "leftArrow"))
-	private let nextImageView = UIImageView(image: UIImage(named: "rightArrow"))
+	private let prevImageView = UIImageView(image: UIImage.fontAwesomeIcon(name: .handOLeft, textColor: UIColor.black, size: CGSize(width: 30, height: 30)))
+	private let nextImageView = UIImageView(image: UIImage.fontAwesomeIcon(name: .handORight, textColor: UIColor.black, size: CGSize(width: 30, height: 30)))
 	
 	public var shouldShowPrevIndicator: Bool {
 		didSet {
