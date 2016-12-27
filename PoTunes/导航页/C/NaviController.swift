@@ -46,6 +46,8 @@ class NaviController: UIViewController, MAMapViewDelegate, AMapSearchDelegate {
 	var endLocation: CLLocationCoordinate2D?
 	
 	var naviView: DriveNaviViewController?
+	
+	var speecher: AVSpeechSynthesizer?
 
 
     override func viewDidLoad() {
@@ -65,7 +67,6 @@ class NaviController: UIViewController, MAMapViewDelegate, AMapSearchDelegate {
 		initRoutesSelection()
 		
 	}
-	
 	
 	// MARK: - initialization
 	func initRoutesSelection() {
@@ -88,14 +89,6 @@ class NaviController: UIViewController, MAMapViewDelegate, AMapSearchDelegate {
 		travelSeg?.addTarget(self, action: #selector(travelTypeChanged(seg:)), for: .valueChanged)
 		
 		view.addSubview(travelSeg!)
-		
-		segmentedDrivingStrategy = SegmentControl.init(items: ["速度优先", "路况优先"])
-		
-		segmentedDrivingStrategy?.frame = CGRect(x: 15, y: 200, width: width - 30, height: 30)
-		
-		segmentedDrivingStrategy?.addTarget(self, action: #selector(drivingStrategyChanged(seg:)), for: .valueChanged)
-		
-		view.addSubview(segmentedDrivingStrategy!)
 		
 		// button
 		
@@ -133,9 +126,6 @@ class NaviController: UIViewController, MAMapViewDelegate, AMapSearchDelegate {
 		
 	}
 	
-	func drivingStrategyChanged(seg: UISegmentedControl) {
-		
-	}
 	
 	func btnClick(_: NavButton) {
 		
@@ -246,6 +236,7 @@ extension NaviController: UITextFieldDelegate, MapControllerDelegate {
 // MARK: - AMapNaviDriveManagerDelegate
 extension NaviController: AMapNaviDriveManagerDelegate {
 	
+	
 	func driveManager(_ driveManager: AMapNaviDriveManager, error: Error) {
 		
 		let error = error as NSError
@@ -256,8 +247,11 @@ extension NaviController: AMapNaviDriveManagerDelegate {
 
 	
 	func driveManager(_ driveManager: AMapNaviDriveManager, onCalculateRouteFailure error: Error) {
+		
 		let error = error as NSError
-		NSLog("CalculateRouteFailure:{%d - %@}", error.code, error.localizedDescription)
+		
+		debugPrint("error: \(error.code), \(error.localizedDescription)")
+	
 	}
 	
 	func driveManager(_ driveManager: AMapNaviDriveManager, didStartNavi naviMode: AMapNaviMode) {
@@ -275,9 +269,25 @@ extension NaviController: AMapNaviDriveManagerDelegate {
 	func driveManager(_ driveManager: AMapNaviDriveManager, onArrivedWayPoint wayPointIndex: Int32) {
 		NSLog("ArrivedWayPoint:\(wayPointIndex)");
 	}
-	
+	// MARK: - 语音播报
 	func driveManager(_ driveManager: AMapNaviDriveManager, playNaviSound soundString: String, soundStringType: AMapNaviSoundType) {
-		NSLog("playNaviSoundString:{%d:%@}", soundStringType.rawValue, soundString);
+		
+		speecher = AVSpeechSynthesizer()
+		
+		speecher?.delegate = self
+		
+		let utterance = AVSpeechUtterance(string: soundString)
+		
+		utterance.voice = AVSpeechSynthesisVoice(language: "zh-TW")
+		
+		utterance.volume = 1.0
+		
+		utterance.rate = 0.5
+		
+//		utterance.pitchMultiplier = 0.25
+		
+		speecher?.speak(utterance)
+		
 	}
 	
 	func driveManagerDidEndEmulatorNavi(_ driveManager: AMapNaviDriveManager) {
@@ -288,6 +298,30 @@ extension NaviController: AMapNaviDriveManagerDelegate {
 		NSLog("onArrivedDestination");
 	}
 
+}
+
+extension NaviController: AVSpeechSynthesizerDelegate {
+	
+	func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didStart utterance: AVSpeechUtterance) {
+		
+		let speaking = Notification.Name("speaking")
+		
+		let notify: Notification = Notification.init(name: speaking, object: nil, userInfo: nil)
+		
+		NotificationCenter.default.post(notify)
+		
+	}
+	
+	func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didFinish utterance: AVSpeechUtterance) {
+		
+		let nonspeaking = Notification.Name("nonspeaking")
+		
+		let notify: Notification = Notification.init(name: nonspeaking, object: nil, userInfo: nil)
+		
+		NotificationCenter.default.post(notify)
+		
+	}
+	
 }
 
 // MARK: - DrivingCalculateControllerDelegate 
@@ -324,10 +358,9 @@ extension NaviController: DriveNaviViewControllerDelegate {
 		driveManager.stopNavi()
 		
 		navBtn?.setTitle("路径规划", for: .normal)
-//
-//		//停止语音
-//		SpeechSynthesizer.Shared.stopSpeak()
-//		
+		
+		speecher?.stopSpeaking(at: .immediate)
+		
 		self.dismiss(animated: true, completion: nil)
 		
 		driveManager = nil

@@ -104,6 +104,8 @@ class PlayerInterface: UIView, UIApplicationDelegate {
 		// get last played
 		getLastPlaySongAndPlayState()
 		
+		getNotification()
+		
 	}
     
     override var canBecomeFirstResponder: Bool {
@@ -150,6 +152,7 @@ class PlayerInterface: UIView, UIApplicationDelegate {
 		leftTime.frame = CGRect(x: width / 2 - 2, y: 0, width: width / 2, height: (self.timeView.bounds.size.height))
 	}
 	
+	// Mark - : 锁屏及线控操作
     override func remoteControlReceived(with event: UIEvent?) {
         
         let remoteControl = event!.subtype
@@ -232,6 +235,30 @@ class PlayerInterface: UIView, UIApplicationDelegate {
 		
 		
 	}
+	
+	func getNotification() {
+		
+		let center: NotificationCenter = NotificationCenter.default
+		
+		center.addObserver(self, selector: #selector(speaking), name: Notification.Name("speaking"), object: nil)
+	
+		center.addObserver(self, selector: #selector(nonspeaking), name: Notification.Name("nonspeaking"), object: nil)
+
+		
+	}
+	
+	func speaking() {
+		
+		streamer?.volume = 0.1
+		
+	}
+	
+	func nonspeaking() {
+		
+		streamer?.volume = 1
+		
+	}
+
 
 }
 // MARK: - initial subviews
