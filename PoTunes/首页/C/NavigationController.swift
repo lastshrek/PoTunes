@@ -21,6 +21,8 @@ class NavigationController: UINavigationController {
 		navBar.isHidden = true
 		
 		UINavigationBar.appearance().isTranslucent = true
+		
+		
 	}
 
 	override func viewDidLoad() {
@@ -28,7 +30,7 @@ class NavigationController: UINavigationController {
 		super.viewDidLoad()
 		// Do any additional setup after loading the view.
 		self.hidden = self.view.isHidden
-	
+		
 	}
 
     

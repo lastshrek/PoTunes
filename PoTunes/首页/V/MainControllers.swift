@@ -15,7 +15,7 @@ protocol MainPageControllersDelegate: class {
 
 class MainControllers: UIView {
 	
-	lazy var controllers: NSMutableArray = { [] }()
+	lazy var controllers: Array<NavigationController> = { [] }()
 	
 	var selectedView: UIView?
 	
@@ -42,7 +42,16 @@ class MainControllers: UIView {
 	}
 	
 	override func layoutSubviews() {
+		
 		super.layoutSubviews()
+		
+		for controller in self.controllers {
+			
+			controller.view.frame = CGRect(x: 0, y: 64, width: frame.size.width, height: frame.size.height)
+			
+		}
+		
+		
 	}
 	
 	func setupControllers(frame: CGRect) {
@@ -71,10 +80,8 @@ class MainControllers: UIView {
 	func setupSingleViewControllerToScrollView(_ controller: UIViewController, hidden: Bool, frame: CGRect) {
 		
 		let nav: NavigationController = NavigationController(rootViewController: controller)
-		
-		nav.view.frame = CGRect(x: 0, y: 64, width: frame.size.width, height: frame.size.height)
-		
-		self.controllers.add(nav)
+				
+		self.controllers.append(nav)
 		
 		self.addSubview(nav.view)
 		
@@ -99,7 +106,7 @@ class MainControllers: UIView {
 		
 		self.selectedView?.isHidden = true
 		
-		let controller: UINavigationController = self.controllers[btn.tag] as! UINavigationController
+		let controller = self.controllers[btn.tag]
 		
 		controller.view.isHidden = false
 		
@@ -139,7 +146,7 @@ class MainControllers: UIView {
 			button.addGestureRecognizer(swipeFromTop)
 			
 			self.addSubview(button)
-		
+					
 		}
 	}
 	

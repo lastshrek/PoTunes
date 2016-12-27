@@ -62,8 +62,8 @@ extension PlayerController {
 		
 		self.player?.coverScroll.reloadData(initialIndex: index!)
 		
-		self.player?.coverScroll.scrollToIndex(index!, animated: true)
-				
+//		self.player?.coverScroll.scrollToIndex(index!, animated: true)
+		
 		self.player?.playTracks(tracks: tracks, index: index!)
 		
 		self.player?.changeInterface(index!)
@@ -78,7 +78,7 @@ extension PlayerController {
 		
 		if interruptReason == 2 {
 			
-			self.player?.streamer.pause()
+			self.player?.streamer?.pause()
 			
 		}
 		

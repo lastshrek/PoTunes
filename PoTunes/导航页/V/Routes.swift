@@ -17,6 +17,8 @@ class Routes: UIView {
 	
 	let switcher = UIButton()
 	
+
+	
 	override init(frame: CGRect) {
 		
 		super.init(frame: frame)
@@ -30,10 +32,14 @@ class Routes: UIView {
 		start.icon.image = UIImage.fontAwesomeIcon(name: .arrowCircleORight, textColor: UIColor.black, size: CGSize(width: 20, height: 20))
 		
 		start.text.text = "当前位置"
+		
+		start.text.tag = 1
 				
 		end.icon.image = UIImage.fontAwesomeIcon(name: .arrowCircleOLeft, textColor: UIColor.black, size: CGSize(width: 20, height: 20))
 		
 		end.text.placeholder = "目的位置"
+		
+		end.text.tag = 2
 		
 		switcher.backgroundColor = UIColor.white
 		
@@ -54,6 +60,8 @@ class Routes: UIView {
 		self.addSubview(switcher)
 		
 	}
+	
+	
 	
 	required init?(coder aDecoder: NSCoder) {
 		

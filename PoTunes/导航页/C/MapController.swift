@@ -10,19 +10,21 @@ import UIKit
 import PKHUD
 
 protocol MapControllerDelegate: class {
-	func mapController(didClickTheAnnotationAccessoryControlBySendingUserLocation userlocation:  CLLocationCoordinate2D, andDestinationLocation destinationLocation: CLLocationCoordinate2D, mapView: MAMapView, title: String, destinationTitle: String)
+	
+	func mapController(didClickTheAnnotationBySending destinationLocation: CLLocationCoordinate2D, destinationTitle: String, userlocation: CLLocationCoordinate2D)
+	
+	func mapController(didClickTheAnnotationBySendingCustomUserLocation userlocation:  CLLocationCoordinate2D, title: String)
 }
 
 class MapController: UIViewController {
 	
+	let backgroundView = UIImageView(image: UIImage(named: "outtake_mid"))
+	
 	weak var delegate: MapControllerDelegate?
 	
-	var mapView = MAMapView()
-	
+	var mapView: MAMapView!
 	
 	var searchBar: UISearchBar?
-	
-	var naviInfo: UILabel?
 	
 	var search: AMapSearchAPI?
 	
@@ -33,11 +35,11 @@ class MapController: UIViewController {
 	// user location
 	var userLocation: CLLocationCoordinate2D?
 	
-	// 目的地
+	// 用户选择的起始位置
 	var selectedstartLocation: CLLocationCoordinate2D?
 	
 	var isSelected: Bool?
-	
+	// 目的位置
 	var destinationLocation: CLLocationCoordinate2D?
 	
 	var destinationTitle: String?
@@ -48,22 +50,40 @@ class MapController: UIViewController {
 		
 		super.viewDidLoad()
 		
+		backgroundView.frame = self.view.bounds
+		
+		self.view.addSubview(backgroundView)
+
 		initMapView()
 		
 		initSearchBar()
 		
 		initTableView()
+		
+		HUD.show(.systemActivity)
+		
     }
+	
+	override func viewWillDisappear(_ animated: Bool) {
+		
+		super.viewWillDisappear(animated)
+		
+		mapView.removeAnnotations(mapView.annotations)
 
+	}
+	
+	// MARK: - Initialization
 	func initMapView() {
 		
 		AMapServices.shared().apiKey = "62443358a250ee522aba69dfa3c1d247"
 		
-		mapView.frame = view.bounds
+		mapView = MAMapView(frame: self.view.bounds)
 				
 		mapView.delegate = self
 		
 		mapView.userTrackingMode = .none
+		
+		mapView.showsUserLocation = true
 		
 		self.view.addSubview(mapView)
 		
@@ -72,23 +92,6 @@ class MapController: UIViewController {
 		search = AMapSearchAPI()
 		
 		search?.delegate = self
-		
-		
-	}
-
-	
-	override func viewDidAppear(_ animated: Bool) {
-		
-		super.viewDidAppear(animated)
-		
-		mapView.showsUserLocation = true
-	}
-	
-	override func viewWillDisappear(_ animated: Bool) {
-		
-		super.viewWillDisappear(animated)
-		
-		clearMapView()
 		
 	}
 	
@@ -105,6 +108,8 @@ class MapController: UIViewController {
 		searchBar?.placeholder = "请输入要查询的地点"
 		
 		searchBar?.keyboardType = .default
+		
+		searchBar?.becomeFirstResponder()
 		
 		self.view.addSubview(searchBar!)
 		
@@ -126,19 +131,9 @@ class MapController: UIViewController {
 		
 	}
 	
-	func clearMapView() {
-		
-		mapView.showsUserLocation = false
-		
-		mapView.removeAnnotations(annotations)
-		
-		mapView.removeOverlays(mapView.overlays)
-		
-		mapView.delegate = nil
-				
-	}
-	
 }
+
+// MARK: - UITableViewDataSource
 
 extension MapController: UITableViewDataSource {
 	
@@ -154,6 +149,8 @@ extension MapController: UITableViewDataSource {
 	
 	}
 }
+
+// MARK: - UITableViewDelegate
 
 extension MapController: UITableViewDelegate {
 	
@@ -195,6 +192,8 @@ extension MapController: UITableViewDelegate {
 		
 		annotation.subtitle = tip.address
 		
+		annotations.removeAll()
+		
 		annotations.append(annotation)
 		
 		showPOIAnnotations()
@@ -205,20 +204,27 @@ extension MapController: UITableViewDelegate {
 		
 	}
 	
+	func showPOIAnnotations() {
+		
+		mapView.addAnnotations(annotations)
+		
+		mapView.centerCoordinate = (annotations.first?.coordinate)!
+		
+	}
+	
 }
 
-extension MapController: MAMapViewDelegate {
+// MARK: - MAMapViewDelegate
 
+extension MapController: MAMapViewDelegate {
 	
 	func mapView(_ mapView: MAMapView!, didUpdate userLocation: MAUserLocation!, updatingLocation: Bool) {
 		
-		if updatingLocation {
+		if self.userLocation == nil {
+			
+			HUD.hide()
 			
 			self.userLocation = CLLocationCoordinate2DMake(userLocation.location.coordinate.latitude, userLocation.location.coordinate.longitude)
-			
-			mapView.centerCoordinate = self.userLocation!
-			
-			mapView.setZoomLevel(16.1, animated: true)
 			
 		}
 		
@@ -230,15 +236,25 @@ extension MapController: MAMapViewDelegate {
 			
 			let annotation = view.annotation
 			
-			if self.view.tag == 1 && self.isSelected == true {
+			if self.view.tag == 1 {
 				
-				self.userLocation = CLLocationCoordinate2DMake((annotation?.coordinate.latitude)!, (annotation?.coordinate.longitude)!)
+				userLocation = CLLocationCoordinate2DMake((annotation?.coordinate.latitude)!, (annotation?.coordinate.longitude)!)
+				
+				self.delegate?.mapController(didClickTheAnnotationBySendingCustomUserLocation: userLocation!, title: (annotation?.title)!)
+				
+			} else {
+				
+				destinationLocation = CLLocationCoordinate2DMake((annotation?.coordinate.latitude)!, (annotation?.coordinate.longitude)!)
+				
+				self.delegate?.mapController(didClickTheAnnotationBySending: destinationLocation!, destinationTitle: (annotation?.title)!, userlocation: userLocation!)
 				
 			}
 			
-			self.delegate?.mapController(didClickTheAnnotationAccessoryControlBySendingUserLocation: self.userLocation!, andDestinationLocation: self.destinationLocation!, mapView: self.mapView, title: self.title!, destinationTitle: self.destinationTitle!)
+			destinationTitle = annotation?.title
 			
 			self.navigationController!.popToRootViewController(animated: true)
+			
+			mapView.removeAnnotations(annotations)
 			
 		}
 		
@@ -272,6 +288,9 @@ extension MapController: MAMapViewDelegate {
 	
 }
 
+
+// MARK: - AMapSearchDelegate
+
 extension MapController: AMapSearchDelegate {
 	
 	// 地理编码回调
@@ -280,23 +299,6 @@ extension MapController: AMapSearchDelegate {
 		let error = error as NSError
 		
 		debugPrint(error.localizedDescription)
-		
-	}
-	
-	
-	func showPOIAnnotations() {
-		
-		mapView.addAnnotations(annotations)
-		
-		if annotations.count == 1 {
-			
-			mapView.centerCoordinate = (annotations.first?.coordinate)!
-			
-		} else {
-			
-			mapView.showAnnotations(annotations, animated: true)
-			
-		}
 		
 	}
 	
@@ -310,6 +312,7 @@ extension MapController: AMapSearchDelegate {
 	
 }
 
+// MARK: - UISearchBarDelegate
 extension MapController: UISearchBarDelegate {
 	
 	func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
@@ -360,24 +363,6 @@ extension MapController: UISearchBarDelegate {
 		tip.keywords = key
 		
 		search?.aMapInputTipsSearch(tip)
-		
-//		let request = AMapPOIAroundSearchRequest()
-//		
-//		if let userLocation = userLocation {
-//			
-//			request.location = AMapGeoPoint.location(withLatitude: CGFloat(userLocation.latitude), longitude: CGFloat(userLocation.longitude))
-//		
-//		} else {
-//		
-//			request.location = AMapGeoPoint.location(withLatitude: 39.990459, longitude: 116.471476)
-//		
-//		}
-//		
-//		request.keywords = key
-//		request.sortrule = 1
-//		request.requireExtension = false
-//		
-//		search?.aMapPOIAroundSearch(request)
 		
 	}
 	

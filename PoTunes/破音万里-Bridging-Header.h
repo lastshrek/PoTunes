@@ -4,7 +4,6 @@
 
 #import "UIImage+Reflection.h"
 #import <SDWebImage/UIImageView+WebCache.h>
-#import "PCDownloadManager.h"
 #import "WXApiObject.h"
 #import "WXApi.h"
 #import "UIImage+Reflection.h"
@@ -23,3 +22,4 @@
 #import <AMapFoundationKit/AMapFoundationKit.h>
 #import "SharedMapView.h"
 #import "GeocodeAnnotation.h"
+#import "MoreMenuView.h"

@@ -48,7 +48,7 @@ class PlayerInterface: UIView, UIApplicationDelegate {
 	
 	
 	// MARK: - streamer
-	var streamer = FSAudioController()
+	var streamer: FSAudioController?
 	var repeatMode: AudioRepeatMode?
 	var paused: Bool = true
 	// MARK: - Timer
@@ -104,6 +104,8 @@ class PlayerInterface: UIView, UIApplicationDelegate {
 		// get last played
 		getLastPlaySongAndPlayState()
 		
+		getNotification()
+		
 	}
     
     override var canBecomeFirstResponder: Bool {
@@ -150,27 +152,29 @@ class PlayerInterface: UIView, UIApplicationDelegate {
 		leftTime.frame = CGRect(x: width / 2 - 2, y: 0, width: width / 2, height: (self.timeView.bounds.size.height))
 	}
 	
+	// Mark - : 锁屏及线控操作
     override func remoteControlReceived(with event: UIEvent?) {
         
         let remoteControl = event!.subtype
         
         switch remoteControl {
             
-        case .remoteControlPlay, .remoteControlPause:
-            
-            self.playOrPause()
-            
-            break
-            
-        case .remoteControlNextTrack:
-            
-            self.playNext()
-            
-        case .remoteControlPreviousTrack:
-            
-            self.playPrevious()
-            
-        default: break
+			case .remoteControlPlay, .remoteControlPause:
+				
+				self.playOrPause()
+				
+				break
+				
+			case .remoteControlNextTrack:
+				
+				self.playNext()
+				
+			case .remoteControlPreviousTrack:
+				
+				self.playPrevious()
+				
+			default: break
+			
         }
     }
 	
@@ -231,12 +235,41 @@ class PlayerInterface: UIView, UIApplicationDelegate {
 		
 		
 	}
+	
+	func getNotification() {
+		
+		let center: NotificationCenter = NotificationCenter.default
+		
+		center.addObserver(self, selector: #selector(speaking), name: Notification.Name("speaking"), object: nil)
+	
+		center.addObserver(self, selector: #selector(nonspeaking), name: Notification.Name("nonspeaking"), object: nil)
+
+		
+	}
+	
+	func speaking() {
+		
+		streamer?.volume = 0.1
+		
+	}
+	
+	func nonspeaking() {
+		
+		streamer?.volume = 1
+		
+	}
+
 
 }
 // MARK: - initial subviews
 extension PlayerInterface {
 	
 	func initialSubviews() {
+		
+		// streamer
+		
+		streamer = FSAudioController()
+		
 		// backgourndView
 		backgroundView.backgroundColor = UIColor.black
 		
@@ -450,6 +483,14 @@ extension PlayerInterface {
 	// play tracks
 	func playTracks(tracks: Array<TrackEncoding>, index: Int) {
 		
+		streamer = nil
+		
+		self.lrcView.lyricsLines.removeAll()
+		
+		self.lrcView.chLrcArray.removeAll()
+		
+		self.lrcView.tableView.reloadData()
+		
 		self.paused = false
 
 		// check local files
@@ -462,6 +503,8 @@ extension PlayerInterface {
 		
 		let s = tracksDB.executeQuery(query, withArgumentsIn: [track.url])
 		
+		streamer = FSAudioController()
+		
 		if s?.next() == true {
 			
 			let isDownloaded = s?.bool(forColumn: "downloaded")
@@ -472,18 +515,18 @@ extension PlayerInterface {
 				
 				let filePath = rootPath + "/\(identifier)"
 								
-				streamer.activeStream.play(from: URL(fileURLWithPath: filePath))
+				streamer?.activeStream.play(from: URL(fileURLWithPath: filePath))
 
 				
 			} else {
 				
-				streamer.activeStream.play(from: URL(string: track.url))
+				streamer?.activeStream.play(from: URL(string: track.url))
 
 			}
 		
 		} else {
 			
-			streamer.activeStream.play(from: URL(string: track.url))
+			streamer?.activeStream.play(from: URL(string: track.url))
 			
 		}
 
@@ -506,8 +549,6 @@ extension PlayerInterface {
 	
 	func changeInterface(_ index: Int) {
 	
-		self.lrcView.renderStatic = false
-
 		self.progress?.progress = 0
 		
 		self.bufferingIndicator?.progress = 0
@@ -524,21 +565,7 @@ extension PlayerInterface {
 		
 		if self.lrcView.isHidden == false {
 			
-			self.lrcView.noLrcLabel.text = "正在加载歌词"
-			
-			self.lrcView.noLrcLabel.isHidden = false
-			
-			let url = URL(string: lrcUrl + "\(track.ID)")
-			
-			Alamofire.request(url!).response(completionHandler: { (response) in
-				
-				let lrcString: LrcString = Reflect<LrcString>.mapObject(data: response.data)
-				
-				self.lrcView.parseLyrics(lyrics: lrcString.lrc.replacingOccurrences(of: "\\n", with: " "))
-				
-				self.lrcView.parseChLyrics(lyrics: lrcString.lrc_cn.replacingOccurrences(of: "\\n", with: " "))
-				
-			})
+			loadLyrics(trackID: track.ID)
 		
 		}
 		
@@ -548,20 +575,34 @@ extension PlayerInterface {
 		
 		cover.sd_setImage(with: URL(string: track.cover + "!/fw/600")) { (image, _, _, _) in
 			
-			self.reflection.image = image?.reflection(withAlpha: 0.4)
-
-			let colorPicker: LEColorPicker = LEColorPicker()
-
-			let colorScheme = colorPicker.colorScheme(from: cover.image)
-
-			self.progress?.color = colorScheme?.backgroundColor
-
-			self.name?.textColor = colorScheme?.backgroundColor
-
-			self.artist?.textColor = colorScheme?.backgroundColor
-
-			self.album?.textColor = colorScheme?.backgroundColor
-
+			
+			DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
+				
+				self.lrcView.renderStatic = false
+				
+			}
+			
+			DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
+				
+				self.lrcView.renderStatic = true
+				
+				self.reflection.image = image?.reflection(withAlpha: 0.4)
+				
+				let colorPicker: LEColorPicker = LEColorPicker()
+				
+				let colorScheme = colorPicker.colorScheme(from: cover.image)
+				
+				self.progress?.color = colorScheme?.backgroundColor
+				
+				self.name?.textColor = colorScheme?.backgroundColor
+				
+				self.artist?.textColor = colorScheme?.backgroundColor
+				
+				self.album?.textColor = colorScheme?.backgroundColor
+				
+			}
+			
+			
 			// 设置锁屏信息
 //			let artwork: MPMediaItemArtwork = MPMediaItemArtwork.init(image: image!)
 //
@@ -584,10 +625,43 @@ extension PlayerInterface {
 //
 //			MPNowPlayingInfoCenter.default().nowPlayingInfo = info
 			
-			self.lrcView.renderStatic = true
 
 			
 		}
+		
+	}
+	
+	func loadLyrics(trackID: Int) {
+		
+		self.lrcView.noLrcLabel.text = "正在加载歌词"
+		
+		self.lrcView.noLrcLabel.isHidden = false
+		
+		let url = URL(string: lrcUrl + "\(trackID)")
+		
+		Alamofire.request(url!).response(completionHandler: { (response) in
+			
+			let lrcString: LrcString = Reflect<LrcString>.mapObject(data: response.data)
+			
+			if lrcString.lrc.characters.count == 0 || lrcString.lrc == "unwritten" {
+				
+				self.lrcView.noLrcLabel.text = "暂无歌词"
+				
+				self.lrcView.noLrcLabel.isHidden = false
+				
+				return
+				
+			}
+			
+			self.lrcView.parseLyrics(lyrics: lrcString.lrc.replacingOccurrences(of: "\\n", with: " "))
+			
+			if lrcString.lrc_cn.characters.count > 0 && lrcString.lrc_cn != "unwritten" {
+				
+				self.lrcView.parseChLyrics(lyrics: lrcString.lrc_cn.replacingOccurrences(of: "\\n", with: " "))
+				
+			}
+			
+		})
 		
 	}
 
@@ -629,11 +703,11 @@ extension PlayerInterface {
 	
 	func updateCurrentTime() {
 		
-		if streamer.activeStream.duration.minute == 0 && streamer.activeStream.duration.second == 0 { return }
+		if streamer?.activeStream.duration.minute == 0 && streamer?.activeStream.duration.second == 0 { return }
 		// get currentTime and duration
-		let cur: FSStreamPosition = (streamer.activeStream.currentTimePlayed)
+		let cur: FSStreamPosition = (streamer!.activeStream.currentTimePlayed)
 		
-		let total: FSStreamPosition = (streamer.activeStream.duration)
+		let total: FSStreamPosition = (streamer!.activeStream.duration)
 		// set play progress
 		let progress: Double = (Double)(cur.minute * 60 + cur.second) / (Double)(total.minute * 60 + total.second)
 		
@@ -668,15 +742,8 @@ extension PlayerInterface {
 		
 		// when play at the end of file
 		weak var weakself: PlayerInterface? = self
-//		self.streamer?.onStateChange = { (streamState) -> Void in
-//			print("播放下一首")
-//		}
-		self.streamer.activeStream.onCompletion = { () -> Void in
-			
-//			self.progress?.progress = 0
 
-			
-//			self.lrcView?.noLrcLabel?.text = "暂无歌词"
+		self.streamer?.activeStream.onCompletion = { () -> Void in
 			
 			weakself?.playNext()
 						
@@ -685,7 +752,7 @@ extension PlayerInterface {
 	
 	func updatePlayBackProgress() {
 		
-		if (streamer.activeStream.contentLength) > 0 {
+		if (streamer?.activeStream.contentLength)! > 0 {
 					
 			if (bufferingIndicator?.progress)! >= CGFloat(1)  {
 
@@ -697,11 +764,11 @@ extension PlayerInterface {
 				
 			}
 			
-			let currentOffset = streamer.activeStream.currentSeekByteOffset
+			let currentOffset = streamer?.activeStream.currentSeekByteOffset
 			
-			let totalBufferedData = Int(currentOffset.start) + streamer.activeStream.prebufferedByteCount
+			let totalBufferedData = Int((currentOffset?.start)!) + (streamer?.activeStream.prebufferedByteCount)!
 			
-			let bufferedDataFromTotal = Float(totalBufferedData) / Float(streamer.activeStream.contentLength)
+			let bufferedDataFromTotal = Float(totalBufferedData) / Float((streamer?.activeStream.contentLength)!)
 			
 			bufferingIndicator?.progress = CGFloat(bufferedDataFromTotal)
 		
@@ -788,7 +855,7 @@ extension PlayerInterface {
 		self.paused = !(self.paused)
 		
 		
-		if streamer.activeStream.url == nil {
+		if streamer?.activeStream.url == nil {
 			
 			playTracks(tracks: self.tracks, index: self.index!)
 			
@@ -796,7 +863,7 @@ extension PlayerInterface {
 			
 		}
 		
-		streamer.pause()
+		streamer?.pause()
 		
 	}
 	
@@ -811,7 +878,7 @@ extension PlayerInterface {
 			
 		}
         
-		let cur: FSStreamPosition = (self.streamer.activeStream.currentTimePlayed)
+		let cur: FSStreamPosition = (self.streamer!.activeStream.currentTimePlayed)
 
 		
 		if cur.minute == 0 || cur.second <= 5 {
@@ -902,6 +969,7 @@ extension PlayerInterface {
 		}
 		
 		var seek: FSStreamPosition = FSStreamPosition()
+		
 		var lastPoint: CGPoint?
 		
 		
@@ -916,9 +984,9 @@ extension PlayerInterface {
 			backgroundView.bounds = tempBounds
 			
 			// get current playing time
-			let now = self.streamer.activeStream.currentTimePlayed
+			let now = self.streamer?.activeStream.currentTimePlayed
 			
-			self.progressOriginal = now.position
+			self.progressOriginal = now?.position
 			
 			self.originalPoint = recognizer.location(in: self)
 		}
@@ -950,7 +1018,7 @@ extension PlayerInterface {
 			
 			seek.position = Float((self.progress?.progress)!)
 			
-			self.streamer.activeStream.seek(to: seek)
+			self.streamer?.activeStream.seek(to: seek)
 		}
 	}
 	
@@ -1030,9 +1098,27 @@ extension PlayerInterface {
 			
 			UIView.commitAnimations()
 			
-			self.lrcView.noLrcLabel.isHidden = false
+			if streamer != nil {
+				
+				addLrcTimer()
+
+				
+			}
 			
-			addLrcTimer()
+			self.lrcView.renderStatic = false
+
+			self.lrcView.renderStatic = true
+			
+			if self.lrcView.lyricsLines.count == 0 {
+				
+				let track = tracks[self.index!]
+				
+				loadLyrics(trackID: track.ID)
+				
+			}
+			
+			
+
 			
 		} else {
 			
@@ -1062,7 +1148,7 @@ extension PlayerInterface {
 		
 		if self.lrcView.isHidden == true { return }
 		
-		if self.streamer.activeStream.isPlaying() == false && self.lrcTimer != nil {
+		if self.streamer?.activeStream.isPlaying() == false && self.lrcTimer != nil {
 			
 			updateLrcTimer()
 			
@@ -1084,9 +1170,10 @@ extension PlayerInterface {
 		
 		// get now playing time and duration
 		
-		let cur = streamer.activeStream.currentTimePlayed
+		let cur = streamer?.activeStream.currentTimePlayed
 		
-		self.lrcView.currentTime = Double(cur.minute * 60 + cur.second)
+		self.lrcView.currentTime(time: Double((cur?.minute)! * 60 + (cur?.second)!))
+		
 	}
 	
 	func removeLrcTimer() {
@@ -1160,11 +1247,13 @@ extension PlayerInterface: LTInfiniteScrollViewDelegate {
 	
 	func scrollViewDidScrollToIndex(_ scrollView: LTInfiniteScrollView, index: Int) {
 		
+		
 		if self.tracks.count == 0 {
 		
 			return
 		
 		}
+
 		
 		self.index = index
 		
