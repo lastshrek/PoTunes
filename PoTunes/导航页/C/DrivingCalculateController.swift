@@ -12,10 +12,12 @@ import PKHUD
 protocol DrivingCalculateControllerDelegate: class {
 	
 	func drivingCalculateController(manager: AMapNaviDriveManager, controller: DrivingCalculateController)
-
+	
 }
 
-class DrivingCalculateController: UIViewController, MAMapViewDelegate, AMapNaviDriveManagerDelegate, UICollectionViewDelegateFlowLayout {
+class DrivingCalculateController: UIViewController, AMapNaviDriveManagerDelegate, UICollectionViewDelegateFlowLayout {
+	
+	let backgroundView = UIImageView(image: UIImage(named: "outtake_mid"))
 	
 	let routePlanInfoViewHeight: CGFloat = 130.0
 	
@@ -25,7 +27,9 @@ class DrivingCalculateController: UIViewController, MAMapViewDelegate, AMapNaviD
 	
 	var mapView: MAMapView!
 	
-	var driverManager: AMapNaviDriveManager!
+	var driverManager: AMapNaviDriveManager?
+	
+	var walkManager: AMapNaviWalkManager?
 	
 	var startPoint: AMapNaviPoint?
 	
@@ -43,6 +47,17 @@ class DrivingCalculateController: UIViewController, MAMapViewDelegate, AMapNaviD
 		
 		super.viewDidLoad()
 		
+		backgroundView.frame = self.view.bounds
+		
+		self.view.addSubview(backgroundView)
+
+		
+	}
+	
+	override func viewDidAppear(_ animated: Bool) {
+		
+		super.viewDidAppear(animated)
+		
 		view.backgroundColor = UIColor.white
 		
 		initMapView()
@@ -54,12 +69,6 @@ class DrivingCalculateController: UIViewController, MAMapViewDelegate, AMapNaviD
 		initRouteIndicatorView()
 		
 		HUD.show(.systemActivity)
-		
-	}
-	
-	override func viewDidAppear(_ animated: Bool) {
-		
-		super.viewDidAppear(animated)
 		
 		addAnnotations()
 	}
@@ -79,11 +88,12 @@ class DrivingCalculateController: UIViewController, MAMapViewDelegate, AMapNaviD
 		
 		driverManager = AMapNaviDriveManager()
 		
-		driverManager.delegate = self
+		driverManager?.delegate = self
 		
-		driverManager.allowsBackgroundLocationUpdates = true
+		driverManager?.allowsBackgroundLocationUpdates = true
 		
-		driverManager.pausesLocationUpdatesAutomatically = false
+		driverManager?.pausesLocationUpdatesAutomatically = false
+		
 	}
 	
 	func initRouteIndicatorView() {
@@ -102,7 +112,7 @@ class DrivingCalculateController: UIViewController, MAMapViewDelegate, AMapNaviD
 		
 		routeIndicatorView.autoresizingMask = [.flexibleWidth, .flexibleTopMargin]
 		
-		routeIndicatorView.backgroundColor = UIColor.clear
+		routeIndicatorView.backgroundColor = UIColor.white
 		
 		routeIndicatorView.isPagingEnabled = true
 		
@@ -146,7 +156,7 @@ class DrivingCalculateController: UIViewController, MAMapViewDelegate, AMapNaviD
 	
 	func showNaviRoutes() {
 		
-		guard let allRoutes = driverManager.naviRoutes else {
+		guard let allRoutes = driverManager?.naviRoutes else {
 			
 			return
 		
@@ -195,9 +205,51 @@ class DrivingCalculateController: UIViewController, MAMapViewDelegate, AMapNaviD
 	
 	}
 	
+	func showWalkRoutes() {
+		
+		guard let aRoute = walkManager?.naviRoute else {
+			return
+		}
+		
+		mapView.removeOverlays(mapView.overlays)
+		
+		routeIndicatorInfoArray.removeAll()
+		
+		//将路径显示到地图上
+		var coords = [CLLocationCoordinate2D]()
+		
+		for coordinate in aRoute.routeCoordinates {
+			
+			coords.append(CLLocationCoordinate2D.init(latitude: Double(coordinate.latitude), longitude: Double(coordinate.longitude)))
+		
+		}
+		
+		//添加路径Polyline
+		let polyline = MAPolyline(coordinates: &coords, count: UInt(aRoute.routeCoordinates.count))!
+		
+		let selectablePolyline = SelectableOverlay(aOverlay: polyline)
+		
+		mapView.add(selectablePolyline)
+		
+		//更新CollectonView的信息
+		let subtitle = "长度: \(self.toKiloMeters(route: aRoute.routeLength)) | 预估时间:\(self.toHours(route: aRoute.routeTime))\r点击出发"
+		
+		debugPrint(aRoute.routeTime)
+		
+		let info = RouteCollectionViewInfo(routeID: 0, subTitle: subtitle)
+		
+		routeIndicatorInfoArray.append(info)
+		
+		mapView.showAnnotations(mapView.annotations, animated: false)
+		
+		routeIndicatorView.reloadData()
+
+		
+	}
+	
 	func selectNaviRouteWithID(routeID: Int) {
 		//在开始导航前进行路径选择
-		if driverManager.selectNaviRoute(withRouteID: routeID) {
+		if (driverManager?.selectNaviRoute(withRouteID: routeID))! {
 		
 			selecteOverlayWithRouteID(routeID: routeID)
 		
@@ -260,10 +312,10 @@ class DrivingCalculateController: UIViewController, MAMapViewDelegate, AMapNaviD
 		
 		//进行多路径规划
 		
-		driverManager.calculateDriveRoute(withStart: [startPoint!],
-		                                  end: [endPoint!],
-		                                  wayPoints: nil,
-		                                  drivingStrategy: preferenceView.strategy(isMultiple: true))
+		driverManager?.calculateDriveRoute(withStart: [startPoint!],
+		                                   end: [endPoint!],
+		                                   wayPoints: nil,
+		                                   drivingStrategy: preferenceView.strategy(isMultiple: true))
 		
 	}
 	
@@ -331,65 +383,6 @@ class DrivingCalculateController: UIViewController, MAMapViewDelegate, AMapNaviD
 		return UIEdgeInsetsMake(0, 5, 5, 5)
 	
 	}
-	
-	//MARK: - MAMapView Delegate
-	
-	func mapView(_ mapView: MAMapView!, viewFor annotation: MAAnnotation!) -> MAAnnotationView! {
-		
-		if annotation is NaviPointAnnotation {
-			
-			let annotationIdentifier = "NaviPointAnnotationIdentifier"
-			
-			var pointAnnotationView = mapView.dequeueReusableAnnotationView(withIdentifier: annotationIdentifier) as? MAPinAnnotationView
-			
-			if pointAnnotationView == nil {
-			
-				pointAnnotationView = MAPinAnnotationView(annotation: annotation, reuseIdentifier: annotationIdentifier)
-			
-			}
-			
-			pointAnnotationView?.animatesDrop = false
-			
-			pointAnnotationView?.canShowCallout = true
-			
-			pointAnnotationView?.isDraggable = false
-			
-			let annotation = annotation as! NaviPointAnnotation
-			
-			if annotation.naviPointType == .start {
-			
-				pointAnnotationView?.pinColor = .green
-			
-			} else if annotation.naviPointType == .end {
-			
-				pointAnnotationView?.pinColor = .red
-			
-			}
-			
-			return pointAnnotationView
-		}
-		return nil
-	}
-	
-	func mapView(_ mapView: MAMapView!, rendererFor overlay: MAOverlay!) -> MAOverlayRenderer! {
-		
-		if overlay is SelectableOverlay {
-		
-			let selectableOverlay = overlay as! SelectableOverlay
-			
-			
-			let polylineRenderer = MAPolylineRenderer(overlay: selectableOverlay.overlay)
-			
-			polylineRenderer?.lineWidth = 8.0
-			
-			polylineRenderer?.strokeColor = selectableOverlay.selected ? selectableOverlay.selectedColor : selectableOverlay.reguarColor
-			
-			return polylineRenderer
-		}
-		
-		return nil
-	}
-	
 }
 
 //MARK: - UICollectionViewDataSource
@@ -427,8 +420,8 @@ extension DrivingCalculateController: UICollectionViewDelegate {
 	func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 		
 		_ = navigationController?.popToRootViewController(animated: true)
-
-		self.delegate?.drivingCalculateController(manager: driverManager, controller: self)
+		
+		self.delegate?.drivingCalculateController(manager: driverManager!, controller: self)
 		
 	}
 	
@@ -453,4 +446,108 @@ extension DrivingCalculateController: UICollectionViewDelegate {
 		}
 	}
 	
+}
+
+//MARK: - MAMapView Delegate
+extension DrivingCalculateController: MAMapViewDelegate {
+	
+	func mapView(_ mapView: MAMapView!, viewFor annotation: MAAnnotation!) -> MAAnnotationView! {
+		
+		if annotation is NaviPointAnnotation {
+			
+			let annotationIdentifier = "NaviPointAnnotationIdentifier"
+			
+			var pointAnnotationView = mapView.dequeueReusableAnnotationView(withIdentifier: annotationIdentifier) as? MAPinAnnotationView
+			
+			if pointAnnotationView == nil {
+				
+				pointAnnotationView = MAPinAnnotationView(annotation: annotation, reuseIdentifier: annotationIdentifier)
+				
+			}
+			
+			pointAnnotationView?.animatesDrop = false
+			
+			pointAnnotationView?.canShowCallout = true
+			
+			pointAnnotationView?.isDraggable = false
+			
+			let annotation = annotation as! NaviPointAnnotation
+			
+			if annotation.naviPointType == .start {
+				
+				pointAnnotationView?.pinColor = .green
+				
+			} else if annotation.naviPointType == .end {
+				
+				pointAnnotationView?.pinColor = .red
+				
+			}
+			
+			return pointAnnotationView
+		}
+		return nil
+	}
+	
+	func mapView(_ mapView: MAMapView!, rendererFor overlay: MAOverlay!) -> MAOverlayRenderer! {
+		
+		if overlay is SelectableOverlay {
+			
+			let selectableOverlay = overlay as! SelectableOverlay
+			
+			
+			let polylineRenderer = MAPolylineRenderer(overlay: selectableOverlay.overlay)
+			
+			polylineRenderer?.lineWidth = 8.0
+			
+			polylineRenderer?.strokeColor = selectableOverlay.selected ? selectableOverlay.selectedColor : selectableOverlay.reguarColor
+			
+			return polylineRenderer
+		}
+		
+		return nil
+	}
+
+}
+
+//MARK: - AMapNaviWalkManagerDelegate
+extension DrivingCalculateController: AMapNaviWalkManagerDelegate {
+	
+	func walkManager(_ walkManager: AMapNaviWalkManager, error: Error) {
+		let error = error as NSError
+		NSLog("error:{%d - %@}", error.code, error.localizedDescription)
+	}
+	
+	func walkManager(onCalculateRouteSuccess walkManager: AMapNaviWalkManager) {
+		debugPrint("CalculateRouteSuccess")
+		
+		HUD.hide()
+		
+		//算路成功后显示路径
+		showWalkRoutes()
+	}
+	
+	func walkManager(_ walkManager: AMapNaviWalkManager, onCalculateRouteFailure error: Error) {
+		let error = error as NSError
+		NSLog("CalculateRouteFailure:{%d - %@}", error.code, error.localizedDescription)
+	}
+	
+	func walkManager(_ walkManager: AMapNaviWalkManager, didStartNavi naviMode: AMapNaviMode) {
+		NSLog("didStartNavi");
+	}
+	
+	func walkManagerNeedRecalculateRoute(forYaw walkManager: AMapNaviWalkManager) {
+		NSLog("needRecalculateRouteForYaw");
+	}
+	
+	func walkManager(_ walkManager: AMapNaviWalkManager, playNaviSound soundString: String, soundStringType: AMapNaviSoundType) {
+		NSLog("playNaviSoundString:{%d:%@}", soundStringType.rawValue, soundString);
+	}
+	
+	func walkManagerDidEndEmulatorNavi(_ walkManager: AMapNaviWalkManager) {
+		NSLog("didEndEmulatorNavi");
+	}
+	
+	func walkManager(onArrivedDestination walkManager: AMapNaviWalkManager) {
+		NSLog("onArrivedDestination");
+	}
 }

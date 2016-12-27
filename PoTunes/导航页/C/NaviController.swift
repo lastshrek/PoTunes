@@ -35,7 +35,9 @@ class NaviController: UIViewController, MAMapViewDelegate, AMapSearchDelegate {
 	
 	var annotations = [MAPointAnnotation]()
 	
-	var driveManager: AMapNaviDriveManager!
+	var driveManager: AMapNaviDriveManager?
+	
+	var walkManager: AMapNaviWalkManager?
 	
 	var segmentedDrivingStrategy: SegmentControl?
 	
@@ -131,30 +133,16 @@ class NaviController: UIViewController, MAMapViewDelegate, AMapSearchDelegate {
 		
 		if navBtn?.titleLabel?.text == "路径规划" {
 			
-			switch travelType {
-				
-			case .Car:
-				
-				let driving = DrivingCalculateController()
-				
-				driving.startPoint = AMapNaviPoint.location(withLatitude: CGFloat((startLocation?.latitude)!), longitude: CGFloat((startLocation?.longitude)!))
-				
-				
-				driving.endPoint = AMapNaviPoint.location(withLatitude: CGFloat((endLocation?.latitude)!), longitude: CGFloat((endLocation?.longitude)!))
-				
-				driving.delegate = self
-				
-				
-				navigationController?.pushViewController(driving, animated: true)
-
-				
-				
-				
-					
-			default:
-				
-				break
-			}
+			let driving = DrivingCalculateController()
+						
+			driving.startPoint = AMapNaviPoint.location(withLatitude: CGFloat((startLocation?.latitude)!), longitude: CGFloat((startLocation?.longitude)!))
+			
+			
+			driving.endPoint = AMapNaviPoint.location(withLatitude: CGFloat((endLocation?.latitude)!), longitude: CGFloat((endLocation?.longitude)!))
+			
+			driving.delegate = self
+			
+			navigationController?.pushViewController(driving, animated: true)
 			
 		}
 		
@@ -208,6 +196,8 @@ extension NaviController: UITextFieldDelegate, MapControllerDelegate {
 		routeSeletcion.end.text.text = destinationTitle
 		
 		endLocation = destinationLocation
+		
+		debugPrint(destinationLocation)
 		
 		if startLocation == nil {
 			
@@ -300,6 +290,7 @@ extension NaviController: AMapNaviDriveManagerDelegate {
 
 }
 
+// MARK: - AVSpeechSynthesizerDelegate
 extension NaviController: AVSpeechSynthesizerDelegate {
 	
 	func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didStart utterance: AVSpeechUtterance) {
@@ -331,31 +322,32 @@ extension NaviController: DrivingCalculateControllerDelegate {
 		
 		driveManager = manager
 		
-		driveManager.delegate = self
+		driveManager?.delegate = self
 		
 		naviView = DriveNaviViewController()
 		
 		naviView?.delegate = self
 		
 		//将driveView添加为导航数据的Representative，使其可以接收到导航诱导数据
-		driveManager.addDataRepresentative((naviView?.driveView)!)
+		driveManager?.addDataRepresentative((naviView?.driveView)!)
 		
 		DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
 			
 			self.present(self.naviView!, animated: false, completion: nil)
 			
-			self.driveManager.startEmulatorNavi()
+			self.driveManager?.startEmulatorNavi()
 
 		}
 	}
-	
+		
 }
 
+// MARK: - DriveNaviViewControllerDelegate
 extension NaviController: DriveNaviViewControllerDelegate {
 	
 	func driveNaviViewCloseButtonClicked() {
 
-		driveManager.stopNavi()
+		driveManager?.stopNavi()
 		
 		navBtn?.setTitle("路径规划", for: .normal)
 		
@@ -374,6 +366,29 @@ extension NaviController: DriveNaviViewControllerDelegate {
 		
 		navBtn?.setTitle("继续导航", for: .normal)
 	
+	}
+	
+	func walkNaviViewCloseButtonClicked() {
+		
+		walkManager?.stopNavi()
+		
+		navBtn?.setTitle("路径规划", for: .normal)
+		
+		speecher?.stopSpeaking(at: .immediate)
+		
+		self.dismiss(animated: true, completion: nil)
+		
+		walkManager = nil
+	}
+	
+	func walkNaviViewMoreButtonClicked() {
+		
+		self.dismiss(animated: false) {
+			
+		}
+		
+		navBtn?.setTitle("继续导航", for: .normal)
+		
 	}
 	
 }

@@ -11,10 +11,12 @@ import UIKit
 protocol DriveNaviViewControllerDelegate: NSObjectProtocol {
 	func driveNaviViewCloseButtonClicked()
 	func driveNaviViewMoreButtonClicked()
+	func walkNaviViewCloseButtonClicked()
+	func walkNaviViewMoreButtonClicked()
 
 }
 
-class DriveNaviViewController: UIViewController, AMapNaviDriveViewDelegate {
+class DriveNaviViewController: UIViewController, AMapNaviDriveViewDelegate, AMapNaviWalkViewDelegate {
 	
 	public var delegate: DriveNaviViewControllerDelegate?
 	
@@ -31,6 +33,7 @@ class DriveNaviViewController: UIViewController, AMapNaviDriveViewDelegate {
 		driveView.frame = view.frame
 		
 		view.addSubview(driveView)
+		
 	}
 		
 	override func viewWillLayoutSubviews() {

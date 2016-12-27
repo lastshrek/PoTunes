@@ -72,7 +72,7 @@ class MapController: UIViewController {
 
 	}
 	
-
+	// MARK: - Initialization
 	func initMapView() {
 		
 		AMapServices.shared().apiKey = "62443358a250ee522aba69dfa3c1d247"
@@ -94,7 +94,6 @@ class MapController: UIViewController {
 		search?.delegate = self
 		
 	}
-
 	
 	func initSearchBar() {
 		
@@ -134,6 +133,8 @@ class MapController: UIViewController {
 	
 }
 
+// MARK: - UITableViewDataSource
+
 extension MapController: UITableViewDataSource {
 	
 	func numberOfSections(in tableView: UITableView) -> Int {
@@ -148,6 +149,8 @@ extension MapController: UITableViewDataSource {
 	
 	}
 }
+
+// MARK: - UITableViewDelegate
 
 extension MapController: UITableViewDelegate {
 	
