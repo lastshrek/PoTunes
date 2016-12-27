@@ -9,10 +9,10 @@
 import UIKit
 
 protocol DriveNaviViewControllerDelegate: NSObjectProtocol {
-	func driveNaviViewCloseButtonClicked()
-	func driveNaviViewMoreButtonClicked()
-	func walkNaviViewCloseButtonClicked()
-	func walkNaviViewMoreButtonClicked()
+	
+    func driveNaviViewCloseButtonClicked()
+	
+    func driveNaviViewMoreButtonClicked()
 
 }
 
