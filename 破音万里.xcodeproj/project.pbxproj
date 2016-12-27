@@ -19,13 +19,14 @@
 		3C155EAE1DD4284000375469 /* PlaylistController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C155EA81DD4284000375469 /* PlaylistController.swift */; };
 		3C155EAF1DD4284000375469 /* Playlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C155EAA1DD4284000375469 /* Playlist.swift */; };
 		3C155EB21DD428A100375469 /* PlaylistCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C155EB11DD428A100375469 /* PlaylistCell.swift */; };
-		3C155EBB1DD429B700375469 /* PCDownloadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C155EBA1DD429B700375469 /* PCDownloadManager.m */; };
 		3C155EBD1DD42A1C00375469 /* AlbumDownloadController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C155EBC1DD42A1C00375469 /* AlbumDownloadController.swift */; };
 		3C155EC31DD43A7A00375469 /* DownloadedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C155EC21DD43A7A00375469 /* DownloadedCell.swift */; };
 		3C155ED51DD448F000375469 /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C155ED41DD448F000375469 /* NavigationController.swift */; };
 		3C155ED71DD449AD00375469 /* NaviController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C155ED61DD449AD00375469 /* NaviController.swift */; };
 		3C155EDE1DD44A6400375469 /* SettingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C155EDD1DD44A6400375469 /* SettingController.swift */; };
 		3C23480F1DF6B4C100D3B915 /* MapController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C23480E1DF6B4C100D3B915 /* MapController.swift */; };
+		3C24C5A71E11046000D67545 /* DriveNaviViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C24C5A61E11046000D67545 /* DriveNaviViewController.swift */; };
+		3C24C5AA1E1104A700D67545 /* MoreMenuView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C24C5A91E1104A700D67545 /* MoreMenuView.m */; };
 		3C24CEDB1DD30D2F007C862C /* Main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C24CED81DD30D2F007C862C /* Main.swift */; };
 		3C24CEEB1DD32038007C862C /* Reflect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C24CEEA1DD32038007C862C /* Reflect.swift */; };
 		3C26B5721C4FD2AA0037893F /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CB2E3FD1BA7D19300805D4F /* AudioToolbox.framework */; };
@@ -149,14 +150,15 @@
 		3C155EA81DD4284000375469 /* PlaylistController.swift */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.swift; path = PlaylistController.swift; sourceTree = "<group>"; tabWidth = 4; };
 		3C155EAA1DD4284000375469 /* Playlist.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Playlist.swift; sourceTree = "<group>"; };
 		3C155EB11DD428A100375469 /* PlaylistCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaylistCell.swift; sourceTree = "<group>"; };
-		3C155EB91DD429B700375469 /* PCDownloadManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCDownloadManager.h; sourceTree = "<group>"; };
-		3C155EBA1DD429B700375469 /* PCDownloadManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCDownloadManager.m; sourceTree = "<group>"; };
 		3C155EBC1DD42A1C00375469 /* AlbumDownloadController.swift */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.swift; path = AlbumDownloadController.swift; sourceTree = "<group>"; tabWidth = 4; };
 		3C155EC21DD43A7A00375469 /* DownloadedCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadedCell.swift; sourceTree = "<group>"; };
 		3C155ED41DD448F000375469 /* NavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
 		3C155ED61DD449AD00375469 /* NaviController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NaviController.swift; sourceTree = "<group>"; };
 		3C155EDD1DD44A6400375469 /* SettingController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingController.swift; sourceTree = "<group>"; };
 		3C23480E1DF6B4C100D3B915 /* MapController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapController.swift; sourceTree = "<group>"; };
+		3C24C5A61E11046000D67545 /* DriveNaviViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DriveNaviViewController.swift; sourceTree = "<group>"; };
+		3C24C5A81E1104A700D67545 /* MoreMenuView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoreMenuView.h; sourceTree = "<group>"; };
+		3C24C5A91E1104A700D67545 /* MoreMenuView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MoreMenuView.m; sourceTree = "<group>"; };
 		3C24CED81DD30D2F007C862C /* Main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Main.swift; sourceTree = "<group>"; };
 		3C24CEEA1DD32038007C862C /* Reflect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reflect.swift; sourceTree = "<group>"; };
 		3C2EA2BE1DE5A8F2004AE511 /* DownloadingController.swift */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.swift; path = DownloadingController.swift; sourceTree = "<group>"; tabWidth = 4; };
@@ -423,6 +425,7 @@
 				3C155ED61DD449AD00375469 /* NaviController.swift */,
 				3C23480E1DF6B4C100D3B915 /* MapController.swift */,
 				3C12F1D71E0A68B90084753F /* DrivingCalculateController.swift */,
+				3C24C5A61E11046000D67545 /* DriveNaviViewController.swift */,
 			);
 			path = C;
 			sourceTree = "<group>";
@@ -720,8 +723,6 @@
 		3CCFBF421DD41F1C00514873 /* Category */ = {
 			isa = PBXGroup;
 			children = (
-				3C155EB91DD429B700375469 /* PCDownloadManager.h */,
-				3C155EBA1DD429B700375469 /* PCDownloadManager.m */,
 				3CCFBF441DD41F1C00514873 /* String+Extension.swift */,
 				3CDFB3991DD77CD5006C0975 /* UIColor+RGB.swift */,
 				3CCFBF451DD41F1C00514873 /* UIColor+RGBValues.h */,
@@ -773,6 +774,8 @@
 		3CE345591DF2CAFD007EDE5E /* V */ = {
 			isa = PBXGroup;
 			children = (
+				3C24C5A81E1104A700D67545 /* MoreMenuView.h */,
+				3C24C5A91E1104A700D67545 /* MoreMenuView.m */,
 				3CE3455A1DF2CB15007EDE5E /* Routes.swift */,
 				3C329A361DF2D7F7001EC10B /* SingleRoute.swift */,
 				3CE18E331E03BF500018AED0 /* SegmentControl.swift */,
@@ -1078,6 +1081,7 @@
 				3CCFBF3B1DD41E0300514873 /* LrcView.swift in Sources */,
 				3C434E841DEEAFDC00D4D076 /* LrcString.swift in Sources */,
 				3C4A41B91DD9A508008CE37F /* PlayerController.swift in Sources */,
+				3C24C5A71E11046000D67545 /* DriveNaviViewController.swift in Sources */,
 				3CCFBF4D1DD41F1C00514873 /* String+Extension.swift in Sources */,
 				3C4A41BB1DD9D350008CE37F /* TrackLabel.swift in Sources */,
 				3CFA58C11D6706D700341763 /* file_stream.cpp in Sources */,
@@ -1089,6 +1093,7 @@
 				3C12F1E01E0A83000084753F /* PreferenceView.swift in Sources */,
 				3CFA58C61D6706D700341763 /* FSAudioController.m in Sources */,
 				3C155EBD1DD42A1C00375469 /* AlbumDownloadController.swift in Sources */,
+				3C24C5AA1E1104A700D67545 /* MoreMenuView.m in Sources */,
 				3CDFB3981DD776D8006C0975 /* TrackCell.swift in Sources */,
 				3CFA58C01D6706D700341763 /* file_output.cpp in Sources */,
 				3C155EAF1DD4284000375469 /* Playlist.swift in Sources */,
@@ -1133,7 +1138,6 @@
 				3CCFBF501DD41F1C00514873 /* UIImage+Reflection.m in Sources */,
 				3C84DCCB1DD4909E0029D2E6 /* Track.swift in Sources */,
 				3CFA58BE1D6706D700341763 /* audio_stream.cpp in Sources */,
-				3C155EBB1DD429B700375469 /* PCDownloadManager.m in Sources */,
 				3CFA58C21D6706D700341763 /* http_stream.cpp in Sources */,
 				3CB2E2FB1BA7B26800805D4F /* AppDelegate.m in Sources */,
 				3C23480F1DF6B4C100D3B915 /* MapController.swift in Sources */,

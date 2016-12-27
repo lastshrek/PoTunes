@@ -46,4 +46,39 @@ extension NSObject {
 		
 	}
 	
+	func toKiloMeters(route: NSInteger) -> String {
+		
+		let routeInt = Int(route)
+		
+		if routeInt / 1000 == 0 {
+			
+			return "\(routeInt)米"
+			
+		}
+		
+		let kilo = routeInt / 1000
+		
+		
+		let meter = routeInt % 1000
+		
+		return "\(kilo).\(meter)公里"
+		
+	}
+	
+	func toHours(route: NSInteger) -> String {
+		
+		let routeInt = Int(route)
+		
+		let hour = routeInt / 3600
+		
+		let minute = routeInt / 60 + 1
+
+		if hour == 0 {
+			
+			return "\(minute)分"
+			
+		}
+		return "\(hour)小时\(minute)分"
+
+	}
 }

@@ -29,9 +29,9 @@ class PreferenceView: UIView {
 	public func strategy(isMultiple: Bool) -> AMapNaviDrivingStrategy {
 		return ConvertDrivingPreferenceToDrivingStrategy(isMultiple,
 		                                                 true,
-		                                                 true,
-		                                                 true,
-		                                                 false)
+		                                                 false,
+		                                                 false,
+		                                                 true)
 	}
 	
 	private func buildPreferenceView() {

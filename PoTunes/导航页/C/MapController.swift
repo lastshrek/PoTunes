@@ -18,14 +18,13 @@ protocol MapControllerDelegate: class {
 
 class MapController: UIViewController {
 	
+	let backgroundView = UIImageView(image: UIImage(named: "outtake_mid"))
+	
 	weak var delegate: MapControllerDelegate?
 	
-	lazy var mapView: MAMapView! = SharedMapView.sharedInstance().mapView
-	
+	var mapView: MAMapView!
 	
 	var searchBar: UISearchBar?
-	
-	var naviInfo: UILabel?
 	
 	var search: AMapSearchAPI?
 	
@@ -51,6 +50,10 @@ class MapController: UIViewController {
 		
 		super.viewDidLoad()
 		
+		backgroundView.frame = self.view.bounds
+		
+		self.view.addSubview(backgroundView)
+
 		initMapView()
 		
 		initSearchBar()
@@ -74,7 +77,7 @@ class MapController: UIViewController {
 		
 		AMapServices.shared().apiKey = "62443358a250ee522aba69dfa3c1d247"
 		
-		mapView.frame = view.bounds
+		mapView = MAMapView(frame: self.view.bounds)
 				
 		mapView.delegate = self
 		
@@ -83,8 +86,6 @@ class MapController: UIViewController {
 		mapView.showsUserLocation = true
 		
 		self.view.addSubview(mapView)
-		
-		SharedMapView.sharedInstance().stashMapViewStatus()
 		
 		// initialize searchapi
 		
@@ -108,6 +109,8 @@ class MapController: UIViewController {
 		searchBar?.placeholder = "请输入要查询的地点"
 		
 		searchBar?.keyboardType = .default
+		
+		searchBar?.becomeFirstResponder()
 		
 		self.view.addSubview(searchBar!)
 		

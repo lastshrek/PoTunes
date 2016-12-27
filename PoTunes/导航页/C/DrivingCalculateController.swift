@@ -6,6 +6,15 @@
 //  Copyright © 2016年 Purchas. All rights reserved.
 //
 
+import UIKit
+import PKHUD
+
+protocol DrivingCalculateControllerDelegate: class {
+	
+	func drivingCalculateController(manager: AMapNaviDriveManager, controller: DrivingCalculateController)
+
+}
+
 class DrivingCalculateController: UIViewController, MAMapViewDelegate, AMapNaviDriveManagerDelegate, UICollectionViewDelegateFlowLayout {
 	
 	let routePlanInfoViewHeight: CGFloat = 130.0
@@ -22,12 +31,13 @@ class DrivingCalculateController: UIViewController, MAMapViewDelegate, AMapNaviD
 	
 	var endPoint: AMapNaviPoint?
 	
-	
 	var routeIndicatorInfoArray = [RouteCollectionViewInfo]()
 	
 	var routeIndicatorView: UICollectionView!
 	
 	var preferenceView: PreferenceView!
+	
+	weak var delegate: DrivingCalculateControllerDelegate?
 	
 	override func viewDidLoad() {
 		
@@ -43,13 +53,8 @@ class DrivingCalculateController: UIViewController, MAMapViewDelegate, AMapNaviD
 		
 		initRouteIndicatorView()
 		
-		//进行多路径规划
+		HUD.show(.systemActivity)
 		
-		driverManager.calculateDriveRoute(withStart: [startPoint!],
-		                                  end: [endPoint!],
-		                                  wayPoints: nil,
-		                                  drivingStrategy: preferenceView.strategy(isMultiple: true))
-	
 	}
 	
 	override func viewDidAppear(_ animated: Bool) {
@@ -62,7 +67,7 @@ class DrivingCalculateController: UIViewController, MAMapViewDelegate, AMapNaviD
 	// MARK: - Initalization
 	func initMapView() {
 		
-		mapView = MAMapView(frame: CGRect(x: 0, y: routePlanInfoViewHeight, width: view.bounds.width, height: view.bounds.height - routePlanInfoViewHeight))
+		mapView = MAMapView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: view.bounds.height - routePlanInfoViewHeight))
 		
 		mapView.delegate = self
 		
@@ -137,16 +142,6 @@ class DrivingCalculateController: UIViewController, MAMapViewDelegate, AMapNaviD
 		mapView.addAnnotation(endAnnotation)
 	}
 	
-	//MARK: - Button Action
-	
-	func routePlanAction(sender: UIButton) {
-		//进行多路径规划
-		driverManager.calculateDriveRoute(withStart: [startPoint!],
-		                                 end: [endPoint!],
-		                                 wayPoints: nil,
-		                                 drivingStrategy: preferenceView.strategy(isMultiple: true))
-	}
-	
 	//MARK: - Handle Navi Routes
 	
 	func showNaviRoutes() {
@@ -166,7 +161,9 @@ class DrivingCalculateController: UIViewController, MAMapViewDelegate, AMapNaviD
 			var coords = [CLLocationCoordinate2D]()
 
 			for coordinate in aRoute.routeCoordinates {
+				
 				coords.append(CLLocationCoordinate2D(latitude: Double(coordinate.latitude), longitude: Double(coordinate.longitude)))
+			
 			}
 			
 			let polyline = MAPolyline(coordinates: &coords, count: UInt(aRoute.routeCoordinates.count))!
@@ -178,11 +175,9 @@ class DrivingCalculateController: UIViewController, MAMapViewDelegate, AMapNaviD
 			mapView.add(selectablePolyline)
 			
 			//更新CollectonView的信息
-			let title = String(format: "路径ID:%d | 路径计算策略:%d", Int(aNumber), preferenceView.strategy(isMultiple: true).rawValue)
+			let subtitle = "长度: \(self.toKiloMeters(route: aRoute.routeLength)) | 预估时间:\(self.toHours(route: aRoute.routeTime))\r点击出发"
 			
-			let subtitle = String(format: "长度:%d米 | 预估时间:%d秒 | 分段数:%d", aRoute.routeLength, aRoute.routeTime, aRoute.routeSegments.count)
-			
-			let info = RouteCollectionViewInfo(routeID: Int(aNumber), title: title, subTitle: subtitle)
+			let info = RouteCollectionViewInfo(routeID: Int(aNumber), subTitle: subtitle)
 			
 			routeIndicatorInfoArray.append(info)
 		
@@ -257,36 +252,19 @@ class DrivingCalculateController: UIViewController, MAMapViewDelegate, AMapNaviD
 	
 	func configSubview() {
 		
-		let startPointLabel = UILabel(frame: CGRect(x: 0, y: 5, width: view.bounds.width, height: 20))
-		
-		startPointLabel.textAlignment = .center
-		
-		startPointLabel.font = UIFont.systemFont(ofSize: 14)
-		
-		startPointLabel.text = String(format: "起 点: %.6f, %.6f", (startPoint?.latitude)!, (startPoint?.longitude)!)
-		
-		view.addSubview(startPointLabel)
-		
-		let endPointLabel = UILabel(frame: CGRect(x: 0, y: 30, width: view.bounds.width, height: 20))
-		
-		endPointLabel.textAlignment = .center
-		
-		endPointLabel.font = UIFont.systemFont(ofSize: 14)
-		
-		endPointLabel.text = String(format: "终 点: %.6f, %.6f", (endPoint?.latitude)!, (endPoint?.longitude)!)
-		
-		view.addSubview(endPointLabel)
-		
 		preferenceView = PreferenceView(frame: CGRect(x: 0, y: 60, width: view.bounds.width, height: 30))
+		
+		preferenceView.isHidden = true
+		
 		view.addSubview(preferenceView)
 		
-		let routeBtn = buttonForTitle("路径规划")
+		//进行多路径规划
 		
-		routeBtn.frame = CGRect(x: (view.bounds.width - 80) / 2.0, y: 95, width: 80, height: 30)
+		driverManager.calculateDriveRoute(withStart: [startPoint!],
+		                                  end: [endPoint!],
+		                                  wayPoints: nil,
+		                                  drivingStrategy: preferenceView.strategy(isMultiple: true))
 		
-		routeBtn.addTarget(self, action: #selector(self.routePlanAction(sender:)), for: .touchUpInside)
-		
-		view.addSubview(routeBtn)
 	}
 	
 	private func buttonForTitle(_ title: String) -> UIButton {
@@ -314,6 +292,8 @@ class DrivingCalculateController: UIViewController, MAMapViewDelegate, AMapNaviD
 	
 	func driveManager(_ driveManager: AMapNaviDriveManager, error: Error) {
 		
+		HUD.flash(.labeledError(title: "路径规划失败", subtitle: nil), delay: 0.6)
+		
 		let error = error as NSError
 		
 		debugPrint("error: \(error.code), \(error.localizedDescription)")
@@ -321,6 +301,8 @@ class DrivingCalculateController: UIViewController, MAMapViewDelegate, AMapNaviD
 	}
 	
 	func driveManager(onCalculateRouteSuccess driveManager: AMapNaviDriveManager) {
+		
+		HUD.hide()
 		
 		debugPrint("CalculateRouteSuccess")
 		
@@ -443,6 +425,10 @@ extension DrivingCalculateController: UICollectionViewDataSource {
 extension DrivingCalculateController: UICollectionViewDelegate {
 	
 	func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+		
+		_ = navigationController?.popToRootViewController(animated: true)
+
+		self.delegate?.drivingCalculateController(manager: driverManager, controller: self)
 		
 	}
 	
