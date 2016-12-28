@@ -26,6 +26,8 @@ class SettingController: UITableViewController {
 		
 		tableView.register(UITableViewCell.self, forCellReuseIdentifier: "setting")
 		
+		tableView.isScrollEnabled = false
+		
 		initFooterView()
 
 	}
@@ -81,7 +83,6 @@ class SettingController: UITableViewController {
 				
 				}
 				
-				
 			}
 			
 		}
@@ -89,6 +90,36 @@ class SettingController: UITableViewController {
 		HUD.flash(.success, delay: 0.5)
 		
 	}
+	
+	func getNotification() {
+		
+		let center = NotificationCenter.default
+		
+		center.addObserver(self, selector: #selector(switchOn), name: Notification.Name("wwanPlay"), object: nil)
+		
+		center.addObserver(self, selector: #selector(switchOn), name: Notification.Name("wwanDownload"), object: nil)
+		
+	}
+	
+	func switchOn() {
+		
+		DispatchQueue.main.async {
+			
+			self.tableView.reloadData()
+		
+		}
+		
+	}
+	
+
+	deinit {
+		
+		NotificationCenter.default.removeObserver(self, name: Notification.Name("wwanPlay"), object: nil)
+		
+		NotificationCenter.default.removeObserver(self, name: Notification.Name("wwanDownload"), object: nil)
+		
+	}
+
 }
 
 extension SettingController {
@@ -139,9 +170,7 @@ extension SettingController {
 		cell.imageView?.image = UIImage.fontAwesomeIcon(name: images[indexPath.row], textColor: color, size: CGSize(width: 30, height: 30))
 		
 		cell.textLabel?.textColor = color
-		
-		// Configure the cell...
-		
+				
 		return cell
 	}
 	
