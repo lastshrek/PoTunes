@@ -352,7 +352,7 @@ extension TrackListController {
 		
 		let indexPath = tableView.indexPathForRow(at: position)
 		
-		// FIXME: 检查网络状况是否允许播放
+		// FIXME: 检查网络状况是否允许下载
 		
 		let track = tracks[(indexPath?.row)!]
 		
