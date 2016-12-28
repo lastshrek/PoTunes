@@ -28,9 +28,7 @@ class DrivingCalculateController: UIViewController, AMapNaviDriveManagerDelegate
 	var mapView: MAMapView!
 	
 	var driverManager: AMapNaviDriveManager?
-	
-	var walkManager: AMapNaviWalkManager?
-	
+		
 	var startPoint: AMapNaviPoint?
 	
 	var endPoint: AMapNaviPoint?
@@ -205,48 +203,7 @@ class DrivingCalculateController: UIViewController, AMapNaviDriveManagerDelegate
 	
 	}
 	
-	func showWalkRoutes() {
-		
-		guard let aRoute = walkManager?.naviRoute else {
-			return
-		}
-		
-		mapView.removeOverlays(mapView.overlays)
-		
-		routeIndicatorInfoArray.removeAll()
-		
-		//将路径显示到地图上
-		var coords = [CLLocationCoordinate2D]()
-		
-		for coordinate in aRoute.routeCoordinates {
-			
-			coords.append(CLLocationCoordinate2D.init(latitude: Double(coordinate.latitude), longitude: Double(coordinate.longitude)))
-		
-		}
-		
-		//添加路径Polyline
-		let polyline = MAPolyline(coordinates: &coords, count: UInt(aRoute.routeCoordinates.count))!
-		
-		let selectablePolyline = SelectableOverlay(aOverlay: polyline)
-		
-		mapView.add(selectablePolyline)
-		
-		//更新CollectonView的信息
-		let subtitle = "长度: \(self.toKiloMeters(route: aRoute.routeLength)) | 预估时间:\(self.toHours(route: aRoute.routeTime))\r点击出发"
-		
-		debugPrint(aRoute.routeTime)
-		
-		let info = RouteCollectionViewInfo(routeID: 0, subTitle: subtitle)
-		
-		routeIndicatorInfoArray.append(info)
-		
-		mapView.showAnnotations(mapView.annotations, animated: false)
-		
-		routeIndicatorView.reloadData()
 
-		
-	}
-	
 	func selectNaviRouteWithID(routeID: Int) {
 		//在开始导航前进行路径选择
 		if (driverManager?.selectNaviRoute(withRouteID: routeID))! {
@@ -509,45 +466,4 @@ extension DrivingCalculateController: MAMapViewDelegate {
 
 }
 
-//MARK: - AMapNaviWalkManagerDelegate
-extension DrivingCalculateController: AMapNaviWalkManagerDelegate {
-	
-	func walkManager(_ walkManager: AMapNaviWalkManager, error: Error) {
-		let error = error as NSError
-		NSLog("error:{%d - %@}", error.code, error.localizedDescription)
-	}
-	
-	func walkManager(onCalculateRouteSuccess walkManager: AMapNaviWalkManager) {
-		debugPrint("CalculateRouteSuccess")
-		
-		HUD.hide()
-		
-		//算路成功后显示路径
-		showWalkRoutes()
-	}
-	
-	func walkManager(_ walkManager: AMapNaviWalkManager, onCalculateRouteFailure error: Error) {
-		let error = error as NSError
-		NSLog("CalculateRouteFailure:{%d - %@}", error.code, error.localizedDescription)
-	}
-	
-	func walkManager(_ walkManager: AMapNaviWalkManager, didStartNavi naviMode: AMapNaviMode) {
-		NSLog("didStartNavi");
-	}
-	
-	func walkManagerNeedRecalculateRoute(forYaw walkManager: AMapNaviWalkManager) {
-		NSLog("needRecalculateRouteForYaw");
-	}
-	
-	func walkManager(_ walkManager: AMapNaviWalkManager, playNaviSound soundString: String, soundStringType: AMapNaviSoundType) {
-		NSLog("playNaviSoundString:{%d:%@}", soundStringType.rawValue, soundString);
-	}
-	
-	func walkManagerDidEndEmulatorNavi(_ walkManager: AMapNaviWalkManager) {
-		NSLog("didEndEmulatorNavi");
-	}
-	
-	func walkManager(onArrivedDestination walkManager: AMapNaviWalkManager) {
-		NSLog("onArrivedDestination");
-	}
-}
+

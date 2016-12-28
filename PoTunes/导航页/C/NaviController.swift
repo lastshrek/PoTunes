@@ -10,17 +10,7 @@ import UIKit
 import PKHUD
 
 class NaviController: UIViewController, MAMapViewDelegate, AMapSearchDelegate {
-	
-	enum TravelTypes: Int {
 		
-		case Car = 0
-		
-		case Walk
-		
-		case Ride
-	
-	}
-	
 	let backgroundView = UIImageView(image: UIImage(named: "outtake_mid"))
 	
 	let routeSeletcion = Routes()
@@ -28,10 +18,6 @@ class NaviController: UIViewController, MAMapViewDelegate, AMapSearchDelegate {
 	let width = UIScreen.main.bounds.size.width
 	
 	var mapView = MAMapView()
-	
-	var travelSeg: SegmentControl?
-	
-	var travelType: TravelTypes = .Car
 	
 	var annotations = [MAPointAnnotation]()
 	
@@ -82,16 +68,7 @@ class NaviController: UIViewController, MAMapViewDelegate, AMapSearchDelegate {
 		routeSeletcion.switcher.addTarget(self, action: #selector(switchRoutes), for: .touchUpInside)
 		
 		view.addSubview(routeSeletcion)
-		
-		// Segment
-		travelSeg = SegmentControl.init(items: ["驾车", "步行", "骑行"])
-		
-		travelSeg?.frame = CGRect(x: 15, y: 160, width: width - 30, height: 30)
-		
-		travelSeg?.addTarget(self, action: #selector(travelTypeChanged(seg:)), for: .valueChanged)
-		
-		view.addSubview(travelSeg!)
-		
+
 		// button
 		
 		navBtn = NavButton(type: .custom)
@@ -105,29 +82,6 @@ class NaviController: UIViewController, MAMapViewDelegate, AMapSearchDelegate {
 		view.addSubview(navBtn!)
 		
 	}
-	
-	func travelTypeChanged(seg: UISegmentedControl) {
-		
-		let index = seg.selectedSegmentIndex
-		
-		if index != travelType.rawValue {
-			
-			travelType = TravelTypes(rawValue: index)!
-			
-		}
-		
-		if seg.selectedSegmentIndex != 0 {
-			
-			segmentedDrivingStrategy?.isHidden = true
-			
-		} else {
-			
-			segmentedDrivingStrategy?.isHidden = false
-			
-		}
-		
-	}
-	
 	
 	func btnClick(_: NavButton) {
 		
@@ -164,7 +118,17 @@ class NaviController: UIViewController, MAMapViewDelegate, AMapSearchDelegate {
 			
 		}
 		
-		
+		let temp = routeSeletcion.start.text.text
+        
+        routeSeletcion.start.text.text = routeSeletcion.end.text.text
+        
+        routeSeletcion.end.text.text = temp
+        
+        let location = startLocation
+        
+        startLocation = endLocation
+        
+        endLocation = location
 
 		
 	}
@@ -273,9 +237,7 @@ extension NaviController: AMapNaviDriveManagerDelegate {
 		utterance.volume = 1.0
 		
 		utterance.rate = 0.5
-		
-//		utterance.pitchMultiplier = 0.25
-		
+				
 		speecher?.speak(utterance)
 		
 	}
@@ -356,39 +318,16 @@ extension NaviController: DriveNaviViewControllerDelegate {
 		self.dismiss(animated: true, completion: nil)
 		
 		driveManager = nil
+        
 	}
 	
 	func driveNaviViewMoreButtonClicked() {
 		
-		self.dismiss(animated: false) {
-			
-		}
+        self.dismiss(animated: true, completion: nil)
+
 		
 		navBtn?.setTitle("继续导航", for: .normal)
 	
 	}
-	
-	func walkNaviViewCloseButtonClicked() {
-		
-		walkManager?.stopNavi()
-		
-		navBtn?.setTitle("路径规划", for: .normal)
-		
-		speecher?.stopSpeaking(at: .immediate)
-		
-		self.dismiss(animated: true, completion: nil)
-		
-		walkManager = nil
-	}
-	
-	func walkNaviViewMoreButtonClicked() {
-		
-		self.dismiss(animated: false) {
-			
-		}
-		
-		navBtn?.setTitle("继续导航", for: .normal)
-		
-	}
-	
+    
 }
