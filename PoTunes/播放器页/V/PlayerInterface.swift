@@ -929,6 +929,7 @@ extension PlayerInterface {
 // MARK: - Play Control
 extension PlayerInterface {
 	
+    // MARK: - 播放暂停
 	func playOrPause() {
 		
 		if self.tracks.count == 0 {
@@ -945,39 +946,35 @@ extension PlayerInterface {
             
             HUD.flash(.image(UIImage(named: "playB")), delay: 0.3, completion: { (_) in
                 
-                if self.streamer?.activeStream.url == nil {
-                    
-                    self.playTracks(tracks: self.tracks, index: self.index!)
-                    
-                    return
-                    
-                }
-                
-                self.streamer?.pause()
-                
+                self.playCommon()
             })
             
         } else {
             
             HUD.flash(.image(UIImage(named: "pauseB")), delay: 0.3, completion: { (_) in
 
-                if self.streamer?.activeStream.url == nil {
-                    
-                    self.playTracks(tracks: self.tracks, index: self.index!)
-                    
-                    return
-                    
-                }
-                
-                self.streamer?.pause()
+               self.playCommon()
 
             })
         }
 		
-		
-		
 	}
-	
+    
+    func playCommon() {
+        
+        if self.streamer?.activeStream.url == nil {
+            
+            self.playTracks(tracks: self.tracks, index: self.index!)
+            
+            return
+            
+        }
+        
+        self.streamer?.pause()
+        
+    }
+    // MARK: - 上一首
+
 	func playPrevious() {
 		
 		if self.tracks.count == 0 {
@@ -1017,8 +1014,12 @@ extension PlayerInterface {
 		}
 		
 		self.coverScroll.scrollToIndex(self.index!, animated: true)
-				
-		playTracks(tracks: self.tracks, index: self.index!)
+        
+        HUD.flash(.image(UIImage(named: "prevB")), delay: 0.3) { (_) in
+         
+            self.playTracks(tracks: self.tracks, index: self.index!)
+            
+        }
 
 	}
 	
