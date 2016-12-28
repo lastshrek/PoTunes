@@ -297,7 +297,7 @@ extension NaviController: DrivingCalculateControllerDelegate {
 			
 			self.present(self.naviView!, animated: false, completion: nil)
 			
-			self.driveManager?.startEmulatorNavi()
+			self.driveManager?.startGPSNavi()
 
 		}
 	}

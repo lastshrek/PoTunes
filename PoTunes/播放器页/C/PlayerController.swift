@@ -11,6 +11,8 @@ import UIKit
 class PlayerController: UIViewController {
 
 	var player: PlayerInterface?
+	
+
 
 	override func viewDidLoad() {
 
@@ -65,10 +67,10 @@ extension PlayerController {
 //		self.player?.coverScroll.scrollToIndex(index!, animated: true)
 		
 		self.player?.playTracks(tracks: tracks, index: index!)
-		
-		self.player?.changeInterface(index!)
-		
+				
 		self.player?.album?.text = title?.components(separatedBy: " - ").last
+		
+		self.player?.type = userInfo["type"] as? String
 	
 	}
 	
@@ -83,5 +85,7 @@ extension PlayerController {
 		}
 		
 	}
+	
+
 }
 

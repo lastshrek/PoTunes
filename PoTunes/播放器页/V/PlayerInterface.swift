@@ -14,6 +14,7 @@ import PKHUD
 import FMDB
 import LEColorPicker
 import Alamofire
+import SCLAlertView
 
 class PlayerInterface: UIView, UIApplicationDelegate {
     
@@ -43,8 +44,6 @@ class PlayerInterface: UIView, UIApplicationDelegate {
 	var index: Int?
 	var progressOriginal: Float?
 	var originalPoint: CGPoint?
-	
-	
 	// MARK: - streamer
 	var streamer: FSAudioController?
 	var repeatMode: AudioRepeatMode?
@@ -64,8 +63,11 @@ class PlayerInterface: UIView, UIApplicationDelegate {
 		
 		return db
 	}()
-	
-
+	// MARK: - 网络状态监控
+	var monitor: Reachability?
+	var reachable: Int?
+	// MARK: - 播放本地还是网络
+	var type: String?
 	// MARK: - 播放模式
 	enum AudioRepeatMode: Int {
 		case single = 0
@@ -154,7 +156,7 @@ class PlayerInterface: UIView, UIApplicationDelegate {
 		leftTime.frame = CGRect(x: width / 2 - 2, y: 0, width: width / 2, height: (self.timeView.bounds.size.height))
 	}
 	
-	// Mark - : 锁屏及线控操作
+	// MARK: - 锁屏及线控操作
     override func remoteControlReceived(with event: UIEvent?) {
         
         let remoteControl = event!.subtype
@@ -179,7 +181,7 @@ class PlayerInterface: UIView, UIApplicationDelegate {
 			
         }
     }
-	
+	// MARK: - 获取上次播放状态
 	func getLastPlaySongAndPlayState() {
 		
 		let user = UserDefaults.standard
@@ -238,6 +240,7 @@ class PlayerInterface: UIView, UIApplicationDelegate {
 		
 	}
 	
+	// MARK: - 接收通知
 	func getNotification() {
 		
 		let center: NotificationCenter = NotificationCenter.default
@@ -245,8 +248,14 @@ class PlayerInterface: UIView, UIApplicationDelegate {
 		center.addObserver(self, selector: #selector(speaking), name: Notification.Name("speaking"), object: nil)
 	
 		center.addObserver(self, selector: #selector(nonspeaking), name: Notification.Name("nonspeaking"), object: nil)
-
 		
+		center.addObserver(self, selector: #selector(networkStateChange), name: NSNotification.Name.reachabilityChanged, object: nil)
+		
+		monitor = Reachability.forInternetConnection()
+		
+		monitor?.startNotifier()
+		
+		reachable = monitor?.currentReachabilityStatus().rawValue
 	}
 	
 	func speaking() {
@@ -258,6 +267,30 @@ class PlayerInterface: UIView, UIApplicationDelegate {
 	func nonspeaking() {
 		
 		streamer?.volume = 1
+		
+	}
+	
+	func networkStateChange() {
+		
+		let wifi = Reachability.forLocalWiFi()
+		
+		let conn = Reachability.forInternetConnection()
+		
+		if wifi?.currentReachabilityStatus() != .NotReachable {
+			
+			// 有WIFI
+			reachable = 2
+			
+		} else if conn?.currentReachabilityStatus() != .NotReachable {
+			// 没有WIFI，使用手机自带网络上网
+			reachable = 1
+			
+		} else {
+			
+			// 没有网络
+			reachable = 0
+			
+		}
 		
 	}
 
@@ -405,6 +438,7 @@ extension PlayerInterface {
 		self.lrcView.renderStatic = false
 
 	}
+	
 }
 // MARK: - functional creation
 extension PlayerInterface {
@@ -482,8 +516,47 @@ extension PlayerInterface {
 
 // MARK: - play from tracks
 extension PlayerInterface {
-	// play tracks
+	// MARK: - play tracks
 	func playTracks(tracks: Array<TrackEncoding>, index: Int) {
+		
+		// MARK: - 判断网络状态以及是否允许网络播放
+		
+		let user = UserDefaults.standard
+		
+		let yes = user.bool(forKey: "wwanPlay")
+		
+		HUD.hide()
+		
+		if !yes && monitor?.currentReachabilityStatus().rawValue != 2 && type != "local" {
+			
+			let appearance = SCLAlertView.SCLAppearance(
+				
+				showCloseButton: false
+			)
+			
+			let alertView = SCLAlertView(appearance: appearance)
+			
+			alertView.addButton("取消") {
+
+				self.streamer?.activeStream.pause()
+			
+			}
+			
+			alertView.addButton("继续播放") {
+				
+				self.startPlay()
+				
+			}
+			
+			alertView.showWarning("温馨提示", subTitle: "您当前处于运营商网络中，是否继续播放")
+			
+			return
+		}
+		
+		startPlay()
+	}
+	
+	func startPlay() {
 		
 		streamer = nil
 		
@@ -494,10 +567,10 @@ extension PlayerInterface {
 		self.lrcView.tableView.reloadData()
 		
 		self.paused = false
-
+		
 		// check local files
 		
-		let track = tracks[index]
+		let track = tracks[self.index!]
 		
 		let rootPath = self.dirDoc()
 		
@@ -516,25 +589,26 @@ extension PlayerInterface {
 				let identifier = self.getIdentifier(urlStr: track.url)
 				
 				let filePath = rootPath + "/\(identifier)"
-								
+				
 				streamer?.activeStream.play(from: URL(fileURLWithPath: filePath))
-
+				
 				
 			} else {
 				
 				streamer?.activeStream.play(from: URL(string: track.url))
-
+				
 			}
-		
+			
 		} else {
 			
 			streamer?.activeStream.play(from: URL(string: track.url))
 			
 		}
-
+		
 		addCurrentTimeTimer()
 		
 		// 记录最后一次播放的歌曲和以及播放模式
+		
 		let user = UserDefaults.standard
 		
 		user.set(self.repeatMode?.rawValue, forKey: "repeatMode")
@@ -546,7 +620,9 @@ extension PlayerInterface {
 		user.set(tracksData, forKey: "tracksData")
 		
 		user.set(self.index!, forKey: "index")
-
+		
+		changeInterface(self.index!)
+		
 	}
 	
 	func changeInterface(_ index: Int) {
@@ -844,9 +920,12 @@ extension PlayerInterface {
 			
 		}
 		
-		if self.paused == true {
+		self.paused = !(self.paused)
+		
+		if self.paused == false {
 			
-			HUD.flash(.image(UIImage(named: "playB")), delay: 0.3)
+			HUD.show(.image(UIImage(named: "playB")))
+		
 			
 		} else {
 			
@@ -854,12 +933,11 @@ extension PlayerInterface {
 
 		}
 		
-		self.paused = !(self.paused)
-		
 		
 		if streamer?.activeStream.url == nil {
 			
-			playTracks(tracks: self.tracks, index: self.index!)
+			
+			self.playTracks(tracks: self.tracks, index: self.index!)
 			
 			return
 			
@@ -907,15 +985,12 @@ extension PlayerInterface {
 				}
 		}
 		
-		playTracks(tracks: self.tracks, index: self.index!)
-		
 		self.coverScroll.scrollToIndex(self.index!, animated: true)
 		
-		changeInterface(self.index!)
+		HUD.show(.image(UIImage(named: "prevB")))
 		
-		HUD.flash(.image(UIImage(named: "prevB")), delay: 0.3)
-		
-		
+		playTracks(tracks: self.tracks, index: self.index!)
+
 	}
 	
 	func playNext() {
@@ -950,14 +1025,14 @@ extension PlayerInterface {
 		
 		}
 		
+		self.coverScroll.scrollToIndex(self.index!, animated: true)
+		
+		HUD.show(.image(UIImage(named: "nextB")))
+		
 		playTracks(tracks: self.tracks, index: self.index!)
 		
 		//change interface
-		self.coverScroll.scrollToIndex(self.index!, animated: true)
 		
-		changeInterface(self.index!)
-		
-		HUD.flash(.image(UIImage(named: "nextB")), delay: 0.3)
 	}
 	
 	func doSeeking(recognizer: UILongPressGestureRecognizer) {
@@ -1245,6 +1320,7 @@ extension PlayerInterface: LTInfiniteScrollViewDelegate {
 	
 	func updateView(_ view: UIView, withProgress progress: CGFloat, scrollDirection direction: LTInfiniteScrollView.ScrollDirection) {
 		
+		
 	}
 	
 	func scrollViewDidScrollToIndex(_ scrollView: LTInfiniteScrollView, index: Int) {
@@ -1260,9 +1336,7 @@ extension PlayerInterface: LTInfiniteScrollViewDelegate {
 		self.index = index
 		
 		playTracks(tracks: self.tracks, index: index)
-		
-		changeInterface(index)
-		
+				
 	}
 }
 

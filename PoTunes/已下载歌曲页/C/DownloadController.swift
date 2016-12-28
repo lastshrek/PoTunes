@@ -57,5 +57,74 @@ extension DownloadController {
 		return "你真要删呐？"
 	}
 	
-	
+	override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+				
+		if tableView.tag == 2 {
+			
+			let message = WXMediaMessage()
+			
+			message.title = sharedTrack?.name
+			
+			message.description = sharedTrack?.artist
+			
+			message.setThumbImage(self.selectedCell?.imageView?.image)
+			
+			let ext = WXMusicObject()
+			
+			ext.musicUrl = "https://poche.fm"
+			
+			ext.musicDataUrl = self.sharedTrack?.url
+			
+			message.mediaObject = ext
+			
+			let req = SendMessageToWXReq.init()
+			
+			req.bText = false
+			
+			req.message = message
+			
+			if indexPath.row == 0 {
+				
+				req.scene = Int32(WXSceneSession.rawValue)
+				
+			} else {
+				
+				req.scene = Int32(WXSceneTimeline.rawValue)
+				
+			}
+			
+			
+			WXApi.send(req)
+			
+			dismissHover()
+			
+			
+		} else {
+			
+			tableView.deselectRow(at: indexPath, animated: true)
+			
+			let main  = Notification.Name("selected")
+			
+			let player  = Notification.Name("player")
+			
+			let userInfo = [
+				"indexPath": indexPath.row,
+				"tracks": self.tracks,
+				"type": "local",
+				"title": self.title!
+				] as [String : Any]
+			
+			
+			let mainNotify: Notification = Notification.init(name: main, object: nil, userInfo: nil)
+			
+			let playerNotify: Notification = Notification.init(name: player, object: nil, userInfo: userInfo)
+			
+			
+			NotificationCenter.default.post(mainNotify)
+			
+			NotificationCenter.default.post(playerNotify)
+			
+		}
+		
+	}
 }
