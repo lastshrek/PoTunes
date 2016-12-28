@@ -27,6 +27,7 @@
 		3C23480F1DF6B4C100D3B915 /* MapController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C23480E1DF6B4C100D3B915 /* MapController.swift */; };
 		3C24C5A71E11046000D67545 /* DriveNaviViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C24C5A61E11046000D67545 /* DriveNaviViewController.swift */; };
 		3C24C5AA1E1104A700D67545 /* MoreMenuView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C24C5A91E1104A700D67545 /* MoreMenuView.m */; };
+		3C24C5AC1E13958900D67545 /* UserGuideController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C24C5AB1E13958900D67545 /* UserGuideController.swift */; };
 		3C24CEDB1DD30D2F007C862C /* Main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C24CED81DD30D2F007C862C /* Main.swift */; };
 		3C24CEEB1DD32038007C862C /* Reflect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C24CEEA1DD32038007C862C /* Reflect.swift */; };
 		3C26B5721C4FD2AA0037893F /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CB2E3FD1BA7D19300805D4F /* AudioToolbox.framework */; };
@@ -159,6 +160,7 @@
 		3C24C5A61E11046000D67545 /* DriveNaviViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DriveNaviViewController.swift; sourceTree = "<group>"; };
 		3C24C5A81E1104A700D67545 /* MoreMenuView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoreMenuView.h; sourceTree = "<group>"; };
 		3C24C5A91E1104A700D67545 /* MoreMenuView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MoreMenuView.m; sourceTree = "<group>"; };
+		3C24C5AB1E13958900D67545 /* UserGuideController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserGuideController.swift; sourceTree = "<group>"; };
 		3C24CED81DD30D2F007C862C /* Main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Main.swift; sourceTree = "<group>"; };
 		3C24CEEA1DD32038007C862C /* Reflect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reflect.swift; sourceTree = "<group>"; };
 		3C2EA2BE1DE5A8F2004AE511 /* DownloadingController.swift */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.swift; path = DownloadingController.swift; sourceTree = "<group>"; tabWidth = 4; };
@@ -442,6 +444,7 @@
 			isa = PBXGroup;
 			children = (
 				3C155EDD1DD44A6400375469 /* SettingController.swift */,
+				3C24C5AB1E13958900D67545 /* UserGuideController.swift */,
 			);
 			path = C;
 			sourceTree = "<group>";
@@ -1139,6 +1142,7 @@
 				3C84DCCB1DD4909E0029D2E6 /* Track.swift in Sources */,
 				3CFA58BE1D6706D700341763 /* audio_stream.cpp in Sources */,
 				3CFA58C21D6706D700341763 /* http_stream.cpp in Sources */,
+				3C24C5AC1E13958900D67545 /* UserGuideController.swift in Sources */,
 				3CB2E2FB1BA7B26800805D4F /* AppDelegate.m in Sources */,
 				3C23480F1DF6B4C100D3B915 /* MapController.swift in Sources */,
 				3CFA58CD1D6706D700341763 /* Reachability.m in Sources */,

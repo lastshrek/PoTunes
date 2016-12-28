@@ -26,8 +26,6 @@ class PlayerInterface: UIView, UIApplicationDelegate {
     }()
 	
 	// MARK: - basic components
-	let width = UIScreen.main.bounds.size.width
-	let height = UIScreen.main.bounds.size.height
 	let backgroundView = UIView()
 	var coverScroll = LTInfiniteScrollView()
 	var reflection = UIImageView()
@@ -125,6 +123,10 @@ class PlayerInterface: UIView, UIApplicationDelegate {
 		super.layoutSubviews()
 		
 		backgroundView.frame = self.bounds
+		
+		let height = self.height()
+		
+		let width = self.width()
 		
 		reflection.frame =  CGRect(x: 0, y: height - width, width: width, height: width)
 		
@@ -995,7 +997,7 @@ extension PlayerInterface {
 			
 			let changingPoint = recognizer.location(in: self)
 			
-			let seekForwardPercent = self.progressOriginal! + Float((changingPoint.x - (self.originalPoint?.x)!) / width);
+			let seekForwardPercent = self.progressOriginal! + Float((changingPoint.x - (self.originalPoint?.x)!) / self.width());
 			
 			if seekForwardPercent >= 1 || seekForwardPercent < 0 { return }
 			
@@ -1011,7 +1013,7 @@ extension PlayerInterface {
 			
 			backgroundView.frame = self.frame
 			
-			self.playModeView.frame = CGRect(x: self.width / 2 - 10,y: self.height - 20,width: 20,height: 20)
+			self.playModeView.frame = CGRect(x: self.width() / 2 - 10,y: self.height() - 20,width: 20,height: 20)
 			
 			// if didn't move don't change
 			if lastPoint?.x == self.originalPoint?.x { return }
