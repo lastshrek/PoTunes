@@ -46,8 +46,6 @@ class TrackListController: UITableViewController {
         return db
     }()
 	
-	var reachable: Int?
-	
 	override func viewDidLoad() {
 		
 		super.viewDidLoad()
@@ -57,33 +55,6 @@ class TrackListController: UITableViewController {
 		tableView.separatorStyle = .none
 		
 		tableView.contentInset = UIEdgeInsetsMake(0, 0, 64, 0)
-		
-		tableView.contentOffset = CGPoint(x: 0, y: 0)
-
-        getNotification()
-	}
-	
-	func getNotification() {
-		
-		let center: NotificationCenter = NotificationCenter.default
-		
-		center.addObserver(self, selector: #selector(reachable(sender:)), name: Notification.Name("reachable"), object: nil)
-		
-	}
-	
-	func reachable(sender: Notification) {
-		
-		let userInfo = sender.userInfo!
-		
-		let reach = userInfo["reachable"] as! Int
-		
-		reachable = reach
-		
-	}
-	
-	deinit {
-		
-		NotificationCenter.default.removeObserver(self, name: Notification.Name("reachable"), object: nil)
 		
 	}
 	
@@ -374,71 +345,9 @@ extension TrackListController {
 		
 		if online == nil { return }
 		
-		// MARK: 检查网络状况是否允许下载
-
-		let yes = user.bool(forKey: "wwanDownload")
+		let cell = recognizer.view as! TrackCell
 		
-		if !yes && reachable != 2 {
-			
-			let appearance = SCLAlertView.SCLAppearance(
-				
-				showCloseButton: false
-			)
-			
-			let alertView = SCLAlertView(appearance: appearance)
-			
-			alertView.addButton("取消") {
-				
-				HUD.flash(.labeledError(title: "取消下载", subtitle: nil), delay: 1.0)
-			}
-			
-			alertView.addButton("继续播放") {
-				
-				if self.reachable == 0 {
-					
-					HUD.flash(.labeledError(title: "请检查网络状况", subtitle: nil), delay: 1.0)
-					
-					return
-					
-				}
-				
-								
-				user.set(1, forKey: "wwanDownload")
-				
-				NotificationCenter.default.post(name: Notification.Name("wwanDownload"), object: nil)
-				
-				self.startDownload(recognizer: recognizer)
-				
-			}
-			
-			alertView.showWarning("温馨提示", subTitle: "您当前处于运营商网络中，是否继续下载")
-			
-			return
-
-			
-		}
-		
-		if reachable == 2 || yes {
-			
-			self.startDownload(recognizer: recognizer)
-			
-		}
-		
-		if reachable == 0 {
-			
-			HUD.flash(.labeledError(title: "请检查网络状况", subtitle: nil), delay: 1.0)
-			
-		}
-
-        
-    }
-	
-	func startDownload(recognizer: UIGestureRecognizer) {
-		
-		let position = recognizer.location(in: tableView)
-		
-		let indexPath = tableView.indexPathForRow(at: position)
-		
+		let indexPath = self.tableView.indexPath(for: cell)
 		
 		let track = tracks[(indexPath?.row)!]
 		
@@ -482,12 +391,16 @@ extension TrackListController {
 		
 		let userInfo = ["title": self.title!, "identifier": identifier, "track": track] as [String : Any]
 		
-		NotificationCenter.default.post(name: Notification.Name("download"), object: nil, userInfo: userInfo)
-		
-		HUD.flash(.label("开始下载"), delay: 0.3)
+		HUD.flash(.label("开始下载"), delay: 0.3) { (_) in
+			
+			NotificationCenter.default.post(name: Notification.Name("download"), object: nil, userInfo: userInfo)
+			
+		}
 		
 		
 		s?.close()
-		
-	}
+
+        
+    }
+	
 }

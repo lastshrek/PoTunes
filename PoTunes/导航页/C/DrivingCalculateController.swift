@@ -300,9 +300,7 @@ class DrivingCalculateController: UIViewController, AMapNaviDriveManagerDelegate
 	//MARK: - AMapNaviDriveManager Delegate
 	
 	func driveManager(_ driveManager: AMapNaviDriveManager, error: Error) {
-		
-		HUD.flash(.labeledError(title: "路径规划失败", subtitle: nil), delay: 0.6)
-		
+			
 		let error = error as NSError
 		
 		debugPrint("error: \(error.code), \(error.localizedDescription)")
