@@ -535,9 +535,7 @@ extension PlayerInterface {
 				}
 				
 				self.startPlay()
-                
-                let user = UserDefaults.standard
-                
+                                
                 user.set(1, forKey: "wwanPlay")
                 
                 NotificationCenter.default.post(name: Notification.Name("wwanPlay"), object: nil)
