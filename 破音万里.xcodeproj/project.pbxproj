@@ -37,6 +37,7 @@
 		3C2EA2CB1DE9CA7C004AE511 /* M13ProgressViewBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C2EA2CA1DE9CA7C004AE511 /* M13ProgressViewBar.m */; };
 		3C2EA2CE1DE9CAA8004AE511 /* M13ProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C2EA2CD1DE9CAA8004AE511 /* M13ProgressView.m */; };
 		3C329A371DF2D7F7001EC10B /* SingleRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C329A361DF2D7F7001EC10B /* SingleRoute.swift */; };
+		3C36F44F1E150F6A00BD447F /* LrcLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C36F44E1E150F6A00BD447F /* LrcLabel.swift */; };
 		3C3BD3181DDDA264007545DC /* DRNRealTimeBlurView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3BD3141DDDA264007545DC /* DRNRealTimeBlurView.m */; };
 		3C3BD3191DDDA264007545DC /* UIImage+BoxBlur.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3BD3161DDDA264007545DC /* UIImage+BoxBlur.m */; };
 		3C434E841DEEAFDC00D4D076 /* LrcString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C434E831DEEAFDC00D4D076 /* LrcString.swift */; };
@@ -171,6 +172,7 @@
 		3C2EA2CC1DE9CAA8004AE511 /* M13ProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = M13ProgressView.h; sourceTree = "<group>"; };
 		3C2EA2CD1DE9CAA8004AE511 /* M13ProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = M13ProgressView.m; sourceTree = "<group>"; };
 		3C329A361DF2D7F7001EC10B /* SingleRoute.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SingleRoute.swift; sourceTree = "<group>"; };
+		3C36F44E1E150F6A00BD447F /* LrcLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LrcLabel.swift; sourceTree = "<group>"; };
 		3C3BD3131DDDA264007545DC /* DRNRealTimeBlurView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DRNRealTimeBlurView.h; sourceTree = "<group>"; };
 		3C3BD3141DDDA264007545DC /* DRNRealTimeBlurView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DRNRealTimeBlurView.m; sourceTree = "<group>"; };
 		3C3BD3151DDDA264007545DC /* UIImage+BoxBlur.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+BoxBlur.h"; sourceTree = "<group>"; };
@@ -710,6 +712,7 @@
 				3CCFBF321DD41E0300514873 /* LrcCell.swift */,
 				3CCFBF361DD41E0300514873 /* LrcView.swift */,
 				3CCFBF2E1DD41DAD00514873 /* PlayerInterface.swift */,
+				3C36F44E1E150F6A00BD447F /* LrcLabel.swift */,
 			);
 			path = V;
 			sourceTree = "<group>";
@@ -1080,6 +1083,7 @@
 			files = (
 				3C2EA2CE1DE9CAA8004AE511 /* M13ProgressView.m in Sources */,
 				3C155EDE1DD44A6400375469 /* SettingController.swift in Sources */,
+				3C36F44F1E150F6A00BD447F /* LrcLabel.swift in Sources */,
 				3CCFBF411DD41E6800514873 /* LrcLine.swift in Sources */,
 				3CCFBF3B1DD41E0300514873 /* LrcView.swift in Sources */,
 				3C434E841DEEAFDC00D4D076 /* LrcString.swift in Sources */,

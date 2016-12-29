@@ -347,9 +347,7 @@ extension AlbumDownloadController {
 		let reach = userInfo["reachable"] as! Int
 		
 		reachable = reach
-		
-		debugPrint("reachble: \(reachable)")
-		
+				
 	}
 	
 	func fullAlbum(sender: Notification) {
