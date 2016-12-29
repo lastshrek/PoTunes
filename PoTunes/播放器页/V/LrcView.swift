@@ -279,11 +279,11 @@ extension LrcView: UITableViewDelegate {
 		
 		if self.currentIndex == indexPath.row {
 			
-			cell.textLabel?.textColor = UIColor.white
+			cell.lyricLabel?.textColor = UIColor.white
 			
 		} else {
 			
-			cell.textLabel?.textColor = UIColor.gray
+			cell.lyricLabel?.textColor = UIColor.gray
 			
 		}
 

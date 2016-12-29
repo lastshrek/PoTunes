@@ -16,11 +16,13 @@ class LrcCell: UITableViewCell {
 		
 			guard let `lrcLine` = lrcLine else { return }
 			
-			self.textLabel?.text = lrcLine.lyrics
+			self.lyricLabel?.text = lrcLine.lyrics
 	
 		}
 	
 	}
+	
+	var lyricLabel: LrcLabel?
 	
 	override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
 	
@@ -30,15 +32,19 @@ class LrcCell: UITableViewCell {
 		
 		self.selectionStyle = .none
 		
-		self.textLabel?.textColor = UIColor.gray
+		self.lyricLabel = LrcLabel()
 		
-		self.textLabel?.lineBreakMode = .byWordWrapping
+		self.lyricLabel?.textColor = UIColor.gray
 		
-		self.textLabel?.textAlignment = .center
+		self.lyricLabel?.lineBreakMode = .byWordWrapping
 		
-		self.textLabel?.numberOfLines = 0
+		self.lyricLabel?.textAlignment = .center
 		
-		self.textLabel?.font = UIFont(name: "BebasNeue", size: 13)
+		self.lyricLabel?.numberOfLines = 0
+		
+		self.lyricLabel?.font = UIFont(name: "BebasNeue", size: 13)
+		
+		self.contentView.addSubview(self.lyricLabel!)
 	
 	}
 	
@@ -53,7 +59,7 @@ class LrcCell: UITableViewCell {
 	
 		super.layoutSubviews()
 		
-		self.textLabel?.frame = CGRect(x: 0, y: self.bounds.size.height * 0.1, width: self.bounds.size.width, height: self.bounds.size.height * 0.8)
+		self.lyricLabel?.frame = CGRect(x: 0, y: self.bounds.size.height * 0.1, width: self.bounds.size.width, height: self.bounds.size.height * 0.8)
 	
 	}
 }

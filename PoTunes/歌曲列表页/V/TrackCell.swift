@@ -21,6 +21,8 @@ class TrackCell: UITableViewCell {
 		
 		self.textLabel?.textAlignment = .left
 		
+		self.textLabel?.adjustsFontSizeToFitWidth = true
+		
 		self.textLabel?.textColor = UIColor.colorByRGB(red: 224, green: 0, blue: 81, alpha: 0.8)
 		
 		self.textLabel?.font = UIFont(name: "BebasNeue", size: 18)
@@ -30,6 +32,9 @@ class TrackCell: UITableViewCell {
 		self.detailTextLabel?.textAlignment = .left
 		
 		self.detailTextLabel?.font = UIFont(name: "BebasNeue", size: 12)
+		
+		self.detailTextLabel?.adjustsFontSizeToFitWidth = true
+
 		
 		// 分割线
 		divider.backgroundColor = UIColor.lightGray

@@ -11,6 +11,8 @@ import Alamofire
 import DGElasticPullToRefresh
 import PKHUD
 import FMDB
+import SCLAlertView
+
 
 protocol PlaylistDelegate: class {
 	
@@ -67,6 +69,7 @@ class PlaylistController: UITableViewController {
 		debugPrint(self.dirDoc())
 		
 	}
+	
 	
 	func checkLocalPlaylists() {
 		
@@ -310,12 +313,19 @@ class PlaylistController: UITableViewController {
 	}
 	// MARK: - 下载每月歌曲 - TODO
 	func download(recognizer: UIGestureRecognizer) {
-				
-		let position = recognizer.location(in: self.tableView)
 		
-		let indexPath: IndexPath = self.tableView.indexPathForRow(at: position)!
+		// check user network and whether allow to play
+		let user = UserDefaults.standard
 		
-		let playlist = playlists[indexPath.row]
+		let online = user.object(forKey: "online")
+		
+		if online == nil { return }
+		
+		let cell = recognizer.view as! PlaylistCell
+		
+		let indexPath = self.tableView.indexPath(for: cell)
+		
+		let playlist = playlists[(indexPath?.row)!]
 		
 		let album = playlist.title
 		
@@ -326,7 +336,7 @@ class PlaylistController: UITableViewController {
 			Alamofire.request(url!).response(completionHandler: { (response) in
 				
 				let tracks: Array = Reflect<Track>.mapObjects(data: response.data)
-
+				
 				var downloadArray: Array<Track> = []
 				
 				for track in tracks {
@@ -342,7 +352,7 @@ class PlaylistController: UITableViewController {
 					self.queue.inDatabase({ (database) in
 						
 						let s = database?.executeQuery(query, withArgumentsIn: [artist, title, album])
-                        
+						
 						
 						if s?.next() == false {
 							
@@ -359,23 +369,28 @@ class PlaylistController: UITableViewController {
 				if downloadArray.count == 0 {
 					
 					HUD.flash(.label("专辑已下载"), delay: 0.4)
-				
+					
 				} else {
 					
-					HUD.flash(.label("开始下载"), delay: 0.3)
+					HUD.flash(.label("开始下载"), delay: 0.3, completion: { (_) in
+						
+						let name = Notification.Name("fullAlbum")
+						
+						let userInfo = ["album": album, "tracks": downloadArray] as [String : Any]
+						
+						let notify = Notification.init(name: name, object: nil, userInfo: userInfo)
+						
+						NotificationCenter.default.post(notify)
+						
+					})
 					
-					let name = Notification.Name("fullAlbum")
-					
-					let userInfo = ["album": album, "tracks": downloadArray] as [String : Any]
-					
-					let notify = Notification.init(name: name, object: nil, userInfo: userInfo)
-					
-					NotificationCenter.default.post(notify)
 					
 				}
 				
 			})
 		}
+
+		
 	}
 }
 

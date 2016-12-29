@@ -11,6 +11,7 @@ import Alamofire
 import FMDB
 import AFNetworking
 import PKHUD
+import SCLAlertView
 
 class AlbumDownloadController: UITableViewController {
 		
@@ -72,6 +73,8 @@ class AlbumDownloadController: UITableViewController {
 	}()
 	
 	var op: AFHTTPRequestOperation?
+	
+	var reachable: Int?
 
 	override func viewDidLoad() {
 		
@@ -88,9 +91,16 @@ class AlbumDownloadController: UITableViewController {
 		// 修复之前的下载文件名称
 		repaireFormerTrackName()
 		
+		debugPrint("debug:\(reachable)")
+	
+	}
+	
+	override func viewWillAppear(_ animated: Bool) {
 		
-        
+		super.viewWillAppear(animated)
 		
+		
+//		self.tableView.reloadData()
 	}
 	
 	deinit {
@@ -98,6 +108,8 @@ class AlbumDownloadController: UITableViewController {
 		NotificationCenter.default.removeObserver(self, name: Notification.Name("fullAlbum"), object: nil)
 		
 		NotificationCenter.default.removeObserver(self, name: Notification.Name("download"), object: nil)
+		
+		NotificationCenter.default.removeObserver(self, name: Notification.Name("reachable"), object: nil)
 		
 	}
 	
@@ -239,6 +251,8 @@ extension AlbumDownloadController {
 			
 			downloading.downloadingArray = downloadingArray
 			
+			downloading.reachable = reachable
+			
 			self.navigationController?.pushViewController(downloading, animated: true)
 			
 		}
@@ -260,7 +274,9 @@ extension AlbumDownloadController {
 	}
 	// Override delete confirmation title
 	override func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
+		
 		return "你真要删呐？"
+	
 	}
 	
 	// Override to support editing the table view.
@@ -271,7 +287,6 @@ extension AlbumDownloadController {
 			let album = self.downloadAlbums[indexPath.row]
 			
 			let query = "SELECT * FROM t_downloading WHERE album = '\(album)' and downloaded = 1;"
-			
 				
 			let s = tracksDB.executeQuery(query, withArgumentsIn: nil)
 			
@@ -331,6 +346,18 @@ extension AlbumDownloadController {
 		
 		center.addObserver(self, selector: #selector(download(sender:)), name: Notification.Name("download"), object: nil)
 		
+		center.addObserver(self, selector: #selector(reachable(sender:)), name: Notification.Name("reachable"), object: nil)
+		
+	}
+	
+	func reachable(sender: Notification) {
+		
+		let userInfo = sender.userInfo!
+		
+		let reach = userInfo["reachable"] as! Int
+		
+		reachable = reach
+				
 	}
 	
 	func fullAlbum(sender: Notification) {
@@ -419,6 +446,73 @@ extension AlbumDownloadController {
 	}
 	
 	func beginDownloadMusic(urlStr: String, identifier: String, newIdentifier: String)  {
+		
+		let user = UserDefaults.standard
+		// MARK: 检查网络状况是否允许下载
+		
+		let yes = user.bool(forKey: "wwanDownload")
+		
+		let monitor = Reachability.forInternetConnection()
+		
+		reachable = monitor?.currentReachabilityStatus().rawValue
+		
+		if !yes && reachable != 2 {
+			
+			let appearance = SCLAlertView.SCLAppearance(
+				
+				showCloseButton: false
+			)
+			
+			let alertView = SCLAlertView(appearance: appearance)
+			
+			alertView.addButton("取消") {
+				
+				HUD.flash(.labeledError(title: "取消下载", subtitle: nil), delay: 1.0)
+			}
+			
+			alertView.addButton("继续下载") {
+				
+				if self.reachable == 0 {
+					
+					HUD.flash(.labeledError(title: "请检查网络状况", subtitle: nil), delay: 1.0)
+					
+					return
+					
+				}
+				
+				
+				user.set(1, forKey: "wwanDownload")
+				
+				NotificationCenter.default.post(name: Notification.Name("wwanDownload"), object: nil)
+				
+				self.download(urlStr: urlStr, identifier: identifier, newIdentifier: newIdentifier)
+				
+			}
+			
+			alertView.showWarning("温馨提示", subTitle: "您当前处于运营商网络中，是否继续下载")
+			
+			return
+			
+			
+		}
+		
+		if reachable == 2 || yes {
+			
+			self.download(urlStr: urlStr, identifier: identifier, newIdentifier: newIdentifier)
+			
+		}
+		
+		if reachable == 0 {
+			
+			HUD.flash(.labeledError(title: "请检查网络状况", subtitle: nil), delay: 1.0)
+			
+		}
+
+		
+		
+	}
+	
+	func download(urlStr: String, identifier: String, newIdentifier: String) {
 		
 		// download loacation
 		let filePath = self.dirDoc() + "/\(identifier)"
@@ -512,17 +606,17 @@ extension AlbumDownloadController {
 								self.beginDownloadMusic(urlStr: urlStr!, identifier: identifier!, newIdentifier: newIdentifier!)
 								
 							}
-                            
-                            s?.close()
+							
+							s?.close()
 							
 						}
 						
 					}
 					
 					s?.close()
-
+					
 				})
-	
+				
 			}, failure: { (operation, error) in
 				
 				debugPrint(error)
@@ -532,6 +626,7 @@ extension AlbumDownloadController {
 			queue.addOperation(self.op!)
 			
 		}
+
 		
 	}
 	
@@ -676,6 +771,8 @@ extension AlbumDownloadController: TrackListDelegate {
 extension AlbumDownloadController: DownloadingControllerDelegate {
 	
 	func didClickThePauseButton(button: UIButton) {
+		
+		debugPrint(reachable)
 		
 		if self.op == nil {
 			

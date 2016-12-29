@@ -32,6 +32,8 @@ class DownloadingController: UITableViewController {
 	var delete: OperationButton?
 	
 	var index: Int?
+	
+	var reachable: Int?
 
 	override func viewDidLoad() {
 		
@@ -76,7 +78,7 @@ extension DownloadingController {
 	
 	override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		
-		let cell = tableView.dequeueReusableCell(withIdentifier: "Track") as! DownloadingCell
+		let cell = DownloadingCell(style: .default, reuseIdentifier: "Track")
 		
 		// Configure the cell...
 		cell.textLabel?.text = downloadingArray?[indexPath.row]

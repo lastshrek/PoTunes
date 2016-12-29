@@ -9,6 +9,7 @@
 import UIKit
 import PKHUD
 import FMDB
+import SCLAlertView
 
 @objc  protocol TrackListDelegate: class {
 	
@@ -55,9 +56,6 @@ class TrackListController: UITableViewController {
 		
 		tableView.contentInset = UIEdgeInsetsMake(0, 0, 64, 0)
 		
-		tableView.contentOffset = CGPoint(x: 0, y: 0)
-
-        
 	}
 	
 }
@@ -347,12 +345,9 @@ extension TrackListController {
 		
 		if online == nil { return }
 		
-
-		let position = recognizer.location(in: tableView)
+		let cell = recognizer.view as! TrackCell
 		
-		let indexPath = tableView.indexPathForRow(at: position)
-		
-		// FIXME: 检查网络状况是否允许下载
+		let indexPath = self.tableView.indexPath(for: cell)
 		
 		let track = tracks[(indexPath?.row)!]
 		
@@ -361,48 +356,51 @@ extension TrackListController {
 		let title = self.doubleQuotation(single: track.name)
 		
 		let query = "SELECT * FROM t_downloading WHERE author = ? and title = ? and album = ?;"
-        
-        let s = tracksDB.executeQuery(query, withArgumentsIn: [artist, title, self.title!])
-        
-        if (s?.next())! {
-            
-            let downloaded = s?.bool(forColumn: "downloaded")
-            
-            if downloaded == true {
-                
-                HUD.flash(.label("歌曲已下载"), delay: 0.3)
-                
-                return
-                
-            } else {
-                
-                HUD.flash(.label("歌曲正在下载中"), delay: 0.3)
-                
-            }
-            
-            s?.close()
-            
-            
-            return
-            
-        }
-        
-        let identifier = self.getIdentifier(urlStr: track.url)
-        
-        let sql = "INSERT INTO t_downloading(author,title,sourceURL,indexPath,thumb,album,downloaded,identifier) VALUES(?,?,?,?,?,?,'0',?)"
-        
-        tracksDB.executeUpdate(sql, withArgumentsIn: [artist, title, track.url, track.ID, track.cover, self.title!,identifier])
-        
-        
-        let userInfo = ["title": self.title!, "identifier": identifier, "track": track] as [String : Any]
-        
-        NotificationCenter.default.post(name: Notification.Name("download"), object: nil, userInfo: userInfo)
-        
-        HUD.flash(.label("开始下载"), delay: 0.3)
-        
-        
-        s?.close()
+		
+		let s = tracksDB.executeQuery(query, withArgumentsIn: [artist, title, self.title!])
+		
+		if (s?.next())! {
+			
+			let downloaded = s?.bool(forColumn: "downloaded")
+			
+			if downloaded == true {
+				
+				HUD.flash(.label("歌曲已下载"), delay: 0.3)
+				
+				return
+				
+			} else {
+				
+				HUD.flash(.label("歌曲正在下载中"), delay: 0.3)
+				
+			}
+			
+			s?.close()
+			
+			
+			return
+			
+		}
+		
+		let identifier = self.getIdentifier(urlStr: track.url)
+		
+		let sql = "INSERT INTO t_downloading(author,title,sourceURL,indexPath,thumb,album,downloaded,identifier) VALUES(?,?,?,?,?,?,'0',?)"
+		
+		tracksDB.executeUpdate(sql, withArgumentsIn: [artist, title, track.url, track.ID, track.cover, self.title!,identifier])
+		
+		
+		let userInfo = ["title": self.title!, "identifier": identifier, "track": track] as [String : Any]
+		
+		HUD.flash(.label("开始下载"), delay: 0.3) { (_) in
+			
+			NotificationCenter.default.post(name: Notification.Name("download"), object: nil, userInfo: userInfo)
+			
+		}
+		
+		
+		s?.close()
 
         
     }
+	
 }
