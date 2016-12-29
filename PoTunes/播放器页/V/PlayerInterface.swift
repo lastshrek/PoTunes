@@ -64,7 +64,6 @@ class PlayerInterface: UIView, UIApplicationDelegate {
 		return db
 	}()
 	// MARK: - 网络状态监控
-	var monitor: Reachability!
 	var reachable: Int!
 	// MARK: - 播放本地还是网络
 	var type: String?
@@ -204,9 +203,13 @@ class PlayerInterface: UIView, UIApplicationDelegate {
 		
 		let repeatMode = user.integer(forKey: "repeatMode")
 		
+		let type = user.object(forKey: "type")
+		
 		self.tracks = tracks
 		
 		self.index = index
+		
+		self.type = type as! String?
 		
 		coverScroll.reloadData(initialIndex: index)
 		
@@ -247,13 +250,8 @@ class PlayerInterface: UIView, UIApplicationDelegate {
 	
 		center.addObserver(self, selector: #selector(nonspeaking), name: Notification.Name("nonspeaking"), object: nil)
 		
-		center.addObserver(self, selector: #selector(networkStateChange), name: NSNotification.Name.reachabilityChanged, object: nil)
+		center.addObserver(self, selector: #selector(reachable(sender:)), name: Notification.Name("reachable"), object: nil)
 		
-		monitor = Reachability.forInternetConnection()
-		
-		monitor.startNotifier()
-		
-		reachable = monitor.currentReachabilityStatus().rawValue
 	}
 	
 	func speaking() {
@@ -268,31 +266,16 @@ class PlayerInterface: UIView, UIApplicationDelegate {
 		
 	}
 	
-	func networkStateChange() {
+	func reachable(sender: Notification) {
 		
-		let wifi = Reachability.forLocalWiFi()
+		let userInfo = sender.userInfo!
 		
-		let conn = Reachability.forInternetConnection()
+		let reach = userInfo["reachable"] as! Int
 		
-		if wifi?.currentReachabilityStatus() != .NotReachable {
-			
-			// 有WIFI
-			reachable = 2
-			
-		} else if conn?.currentReachabilityStatus() != .NotReachable {
-			// 没有WIFI，使用手机自带网络上网
-			reachable = 1
-			
-		} else {
-			
-			// 没有网络
-			reachable = 0
-			
-		}
+		reachable = reach
 		
 	}
-
-
+	
 }
 // MARK: - initial subviews
 extension PlayerInterface {
@@ -519,11 +502,14 @@ extension PlayerInterface {
 		
 		// MARK: - 判断网络状态以及是否允许网络播放
 		
+		debugPrint(reachable)
+
+		
 		let user = UserDefaults.standard
 		
 		let yes = user.bool(forKey: "wwanPlay")
 				
-		if !yes && monitor?.currentReachabilityStatus().rawValue != 2 && type != "local" {
+		if !yes && reachable != 2 && type != "local" {
 			
 			let appearance = SCLAlertView.SCLAppearance(
 				
@@ -539,6 +525,14 @@ extension PlayerInterface {
 			}
 			
 			alertView.addButton("继续播放") {
+				
+				if self.reachable == 0 {
+					
+					HUD.flash(.labeledError(title: "请检查网络状况", subtitle: nil), delay: 1.0)
+					
+					return
+					
+				}
 				
 				self.startPlay()
                 
@@ -557,7 +551,7 @@ extension PlayerInterface {
 			return
 		}
         
-        if monitor?.currentReachabilityStatus().rawValue == 2 || type == "local" || yes {
+        if reachable == 2 || type == "local" || yes {
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: { 
                 
@@ -566,6 +560,12 @@ extension PlayerInterface {
             })
             
         }
+		
+		if reachable == 0 {
+			
+			HUD.flash(.labeledError(title: "请检查网络状况", subtitle: nil), delay: 1.0)
+			
+		}
 		
 	}
 	
@@ -631,6 +631,8 @@ extension PlayerInterface {
 		user.set(self.album?.text, forKey: "album")
 		
 		user.set(tracksData, forKey: "tracksData")
+		
+		user.set(self.type, forKey: "type")
 		
 		user.set(self.index!, forKey: "index")
 		
