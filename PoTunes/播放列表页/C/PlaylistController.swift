@@ -321,7 +321,7 @@ class PlaylistController: UITableViewController {
 		
 		if online == nil { return }
 		
-		let cell = recognizer.view as! TrackCell
+		let cell = recognizer.view as! PlaylistCell
 		
 		let indexPath = self.tableView.indexPath(for: cell)
 		

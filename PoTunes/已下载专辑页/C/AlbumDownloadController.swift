@@ -91,9 +91,16 @@ class AlbumDownloadController: UITableViewController {
 		// 修复之前的下载文件名称
 		repaireFormerTrackName()
 		
+		debugPrint("debug:\(reachable)")
+	
+	}
+	
+	override func viewWillAppear(_ animated: Bool) {
 		
-        
+		super.viewWillAppear(animated)
 		
+		
+//		self.tableView.reloadData()
 	}
 	
 	deinit {
@@ -244,6 +251,8 @@ extension AlbumDownloadController {
 			
 			downloading.downloadingArray = downloadingArray
 			
+			downloading.reachable = reachable
+			
 			self.navigationController?.pushViewController(downloading, animated: true)
 			
 		}
@@ -265,7 +274,9 @@ extension AlbumDownloadController {
 	}
 	// Override delete confirmation title
 	override func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
+		
 		return "你真要删呐？"
+	
 	}
 	
 	// Override to support editing the table view.
@@ -276,7 +287,6 @@ extension AlbumDownloadController {
 			let album = self.downloadAlbums[indexPath.row]
 			
 			let query = "SELECT * FROM t_downloading WHERE album = '\(album)' and downloaded = 1;"
-			
 				
 			let s = tracksDB.executeQuery(query, withArgumentsIn: nil)
 			
@@ -441,6 +451,10 @@ extension AlbumDownloadController {
 		// MARK: 检查网络状况是否允许下载
 		
 		let yes = user.bool(forKey: "wwanDownload")
+		
+		let monitor = Reachability.forInternetConnection()
+		
+		reachable = monitor?.currentReachabilityStatus().rawValue
 		
 		if !yes && reachable != 2 {
 			
@@ -757,6 +771,8 @@ extension AlbumDownloadController: TrackListDelegate {
 extension AlbumDownloadController: DownloadingControllerDelegate {
 	
 	func didClickThePauseButton(button: UIButton) {
+		
+		debugPrint(reachable)
 		
 		if self.op == nil {
 			

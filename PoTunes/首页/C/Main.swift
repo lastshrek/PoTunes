@@ -85,6 +85,8 @@ class Main: UIViewController, UIGestureRecognizerDelegate, UIAlertViewDelegate {
 		
 		mainControllers.delegate = self
 		
+		mainControllers.reachable = reachable
+		
 		scrollView.addSubview(mainControllers)
 	
 	}

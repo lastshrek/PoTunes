@@ -479,6 +479,8 @@ extension PlayerInterface {
 		
 		label.textAlignment = textAlignment
 		
+		label.adjustsFontSizeToFitWidth = true
+		
 		if let unwrappedOffset = shadowOffset {
 		
 			label.shadowOffset = unwrappedOffset

@@ -24,6 +24,8 @@ class MainControllers: UIView {
 	var size: CGRect?
 	
 	weak var delegate: MainPageControllersDelegate?
+	
+	var reachable: Int?
 
 	override init(frame: CGRect) {
 		
@@ -64,6 +66,8 @@ class MainControllers: UIView {
 		
 		//已下载专辑页面
 		let albumDownload = AlbumDownloadController()
+		
+		albumDownload.reachable = reachable
 		
 		setupSingleViewControllerToScrollView(albumDownload, hidden: true, frame: frame)
 		//导航页面
