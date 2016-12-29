@@ -29,7 +29,8 @@ class SettingController: UITableViewController {
 		tableView.isScrollEnabled = false
 		
 		initFooterView()
-
+        
+        getNotification()
 	}
 	
 	func initFooterView() {

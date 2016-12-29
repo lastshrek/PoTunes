@@ -64,8 +64,8 @@ class PlayerInterface: UIView, UIApplicationDelegate {
 		return db
 	}()
 	// MARK: - 网络状态监控
-	var monitor: Reachability?
-	var reachable: Int?
+	var monitor: Reachability!
+	var reachable: Int!
 	// MARK: - 播放本地还是网络
 	var type: String?
 	// MARK: - 播放模式
@@ -210,7 +210,6 @@ class PlayerInterface: UIView, UIApplicationDelegate {
 		
 		coverScroll.reloadData(initialIndex: index)
 		
-		
 		changeInterface(index)
 		
 		self.album?.text = album
@@ -237,7 +236,6 @@ class PlayerInterface: UIView, UIApplicationDelegate {
 			
 		}
 		
-		
 	}
 	
 	// MARK: - 接收通知
@@ -253,9 +251,9 @@ class PlayerInterface: UIView, UIApplicationDelegate {
 		
 		monitor = Reachability.forInternetConnection()
 		
-		monitor?.startNotifier()
+		monitor.startNotifier()
 		
-		reachable = monitor?.currentReachabilityStatus().rawValue
+		reachable = monitor.currentReachabilityStatus().rawValue
 	}
 	
 	func speaking() {
@@ -524,9 +522,7 @@ extension PlayerInterface {
 		let user = UserDefaults.standard
 		
 		let yes = user.bool(forKey: "wwanPlay")
-		
-		HUD.hide()
-		
+				
 		if !yes && monitor?.currentReachabilityStatus().rawValue != 2 && type != "local" {
 			
 			let appearance = SCLAlertView.SCLAppearance(
@@ -538,13 +534,21 @@ extension PlayerInterface {
 			
 			alertView.addButton("取消") {
 
-				self.streamer?.activeStream.pause()
+				self.streamer?.activeStream.stop()
 			
 			}
 			
 			alertView.addButton("继续播放") {
 				
 				self.startPlay()
+                
+                let user = UserDefaults.standard
+                
+                user.set(1, forKey: "wwanPlay")
+                
+                NotificationCenter.default.post(name: Notification.Name("wwanPlay"), object: nil)
+                
+                self.paused = false
 				
 			}
 			
@@ -552,8 +556,17 @@ extension PlayerInterface {
 			
 			return
 		}
+        
+        if monitor?.currentReachabilityStatus().rawValue == 2 || type == "local" || yes {
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: { 
+                
+                self.startPlay()
+            
+            })
+            
+        }
 		
-		startPlay()
 	}
 	
 	func startPlay() {
@@ -829,6 +842,12 @@ extension PlayerInterface {
 	}
 	
 	func updatePlayBackProgress() {
+        
+        if streamer?.activeStream.contentLength == nil {
+            
+            return
+            
+        }
 		
 		if (streamer?.activeStream.contentLength)! > 0 {
 					
@@ -910,6 +929,7 @@ extension PlayerInterface {
 // MARK: - Play Control
 extension PlayerInterface {
 	
+    // MARK: - 播放暂停
 	func playOrPause() {
 		
 		if self.tracks.count == 0 {
@@ -921,32 +941,40 @@ extension PlayerInterface {
 		}
 		
 		self.paused = !(self.paused)
-		
-		if self.paused == false {
-			
-			HUD.show(.image(UIImage(named: "playB")))
-		
-			
-		} else {
-			
-			HUD.flash(.image(UIImage(named: "pauseB")), delay: 0.3)
+        
+        if paused == false {
+            
+            HUD.flash(.image(UIImage(named: "playB")), delay: 0.3, completion: { (_) in
+                
+                self.playCommon()
+            })
+            
+        } else {
+            
+            HUD.flash(.image(UIImage(named: "pauseB")), delay: 0.3, completion: { (_) in
 
-		}
-		
-		
-		if streamer?.activeStream.url == nil {
-			
-			
-			self.playTracks(tracks: self.tracks, index: self.index!)
-			
-			return
-			
-		}
-		
-		streamer?.pause()
+               self.playCommon()
+
+            })
+        }
 		
 	}
-	
+    
+    func playCommon() {
+        
+        if self.streamer?.activeStream.url == nil {
+            
+            self.playTracks(tracks: self.tracks, index: self.index!)
+            
+            return
+            
+        }
+        
+        self.streamer?.pause()
+        
+    }
+    // MARK: - 上一首
+
 	func playPrevious() {
 		
 		if self.tracks.count == 0 {
@@ -986,10 +1014,12 @@ extension PlayerInterface {
 		}
 		
 		self.coverScroll.scrollToIndex(self.index!, animated: true)
-		
-		HUD.show(.image(UIImage(named: "prevB")))
-		
-		playTracks(tracks: self.tracks, index: self.index!)
+        
+        HUD.flash(.image(UIImage(named: "prevB")), delay: 0.3) { (_) in
+         
+            self.playTracks(tracks: self.tracks, index: self.index!)
+            
+        }
 
 	}
 	
@@ -1026,9 +1056,7 @@ extension PlayerInterface {
 		}
 		
 		self.coverScroll.scrollToIndex(self.index!, animated: true)
-		
-		HUD.show(.image(UIImage(named: "nextB")))
-		
+				
 		playTracks(tracks: self.tracks, index: self.index!)
 		
 		//change interface
