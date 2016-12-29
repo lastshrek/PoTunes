@@ -21,9 +21,6 @@ class Main: UIViewController, UIGestureRecognizerDelegate, UIAlertViewDelegate {
 	var player: PlayerController = PlayerController()
 	lazy var songs: NSArray = { [] }()
 	var db: FMDatabase?
-	// MARK: - 网络状态监控
-	var monitor: Reachability!
-	var reachable: Int!
 
 	override func viewDidLoad() {
 		
@@ -84,9 +81,7 @@ class Main: UIViewController, UIGestureRecognizerDelegate, UIAlertViewDelegate {
 		mainControllers.frame  = CGRect(x: 0, y: height, width: width, height: height)
 		
 		mainControllers.delegate = self
-		
-		mainControllers.reachable = reachable
-		
+				
 		scrollView.addSubview(mainControllers)
 	
 	}
@@ -146,51 +141,9 @@ extension Main {
 		
 		center.addObserver(self, selector: #selector(didSelectTrack(_:)), name: Notification.Name("selected"), object: nil)
 		
-		center.addObserver(self, selector: #selector(networkStateChange), name: NSNotification.Name.reachabilityChanged, object: nil)
-		
-		monitor = Reachability.forInternetConnection()
-		
-		monitor.startNotifier()
-		
-		reachable = monitor.currentReachabilityStatus().rawValue
-		
-		let userinfo = ["reachable": reachable]
-		
-		center.post(name: Notification.Name("reachable"), object: nil, userInfo: userinfo)
-
-	
 	}
 	
-	func networkStateChange() {
 		
-		let wifi = Reachability.forLocalWiFi()
-		
-		let conn = Reachability.forInternetConnection()
-		
-		if wifi?.currentReachabilityStatus() != .NotReachable {
-			
-			// 有WIFI
-			reachable = 2
-			
-		} else if conn?.currentReachabilityStatus() != .NotReachable {
-			// 没有WIFI，使用手机自带网络上网
-			reachable = 1
-			
-		} else {
-			
-			// 没有网络
-			reachable = 0
-			
-		}
-		
-		let center: NotificationCenter = NotificationCenter.default
-		
-		let userinfo = ["reachable": reachable]
-		
-		center.post(name: Notification.Name("reachable"), object: nil, userInfo: userinfo)
-		
-	}
-	
 	func didSelectTrack(_ notification: Notification) {
 		
 		//滚到上层

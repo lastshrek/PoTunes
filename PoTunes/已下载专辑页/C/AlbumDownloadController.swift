@@ -74,8 +74,6 @@ class AlbumDownloadController: UITableViewController {
 	
 	var op: AFHTTPRequestOperation?
 	
-	var reachable: Int?
-
 	override func viewDidLoad() {
 		
 		super.viewDidLoad()
@@ -90,9 +88,7 @@ class AlbumDownloadController: UITableViewController {
 		
 		// 修复之前的下载文件名称
 		repaireFormerTrackName()
-		
-		debugPrint("debug:\(reachable)")
-	
+			
 	}
 	
 	override func viewWillAppear(_ animated: Bool) {
@@ -108,9 +104,7 @@ class AlbumDownloadController: UITableViewController {
 		NotificationCenter.default.removeObserver(self, name: Notification.Name("fullAlbum"), object: nil)
 		
 		NotificationCenter.default.removeObserver(self, name: Notification.Name("download"), object: nil)
-		
-		NotificationCenter.default.removeObserver(self, name: Notification.Name("reachable"), object: nil)
-		
+				
 	}
 	
 	
@@ -250,9 +244,9 @@ extension AlbumDownloadController {
 			downloading.delegate = self
 			
 			downloading.downloadingArray = downloadingArray
-			
-			downloading.reachable = reachable
-			
+            
+            debugPrint(downloadingArray.count)
+						
 			self.navigationController?.pushViewController(downloading, animated: true)
 			
 		}
@@ -345,18 +339,6 @@ extension AlbumDownloadController {
 		center.addObserver(self, selector: #selector(fullAlbum(sender:)), name: Notification.Name("fullAlbum"), object: nil)
 		
 		center.addObserver(self, selector: #selector(download(sender:)), name: Notification.Name("download"), object: nil)
-		
-		center.addObserver(self, selector: #selector(reachable(sender:)), name: Notification.Name("reachable"), object: nil)
-		
-	}
-	
-	func reachable(sender: Notification) {
-		
-		let userInfo = sender.userInfo!
-		
-		let reach = userInfo["reachable"] as! Int
-		
-		reachable = reach
 				
 	}
 	
@@ -427,6 +409,8 @@ extension AlbumDownloadController {
 		let newIdentifier = track.artist + " - " + track.name
 		
 		let identifier = userInfo["identifier"] as! String
+        
+        debugPrint(identifier)
 		
 		downloadingArray.append(newIdentifier)
 		
@@ -454,7 +438,7 @@ extension AlbumDownloadController {
 		
 		let monitor = Reachability.forInternetConnection()
 		
-		reachable = monitor?.currentReachabilityStatus().rawValue
+		let reachable = monitor?.currentReachabilityStatus().rawValue
 		
 		if !yes && reachable != 2 {
 			
@@ -472,7 +456,7 @@ extension AlbumDownloadController {
 			
 			alertView.addButton("继续下载") {
 				
-				if self.reachable == 0 {
+				if reachable == 0 {
 					
 					HUD.flash(.labeledError(title: "请检查网络状况", subtitle: nil), delay: 1.0)
 					
@@ -771,9 +755,7 @@ extension AlbumDownloadController: TrackListDelegate {
 extension AlbumDownloadController: DownloadingControllerDelegate {
 	
 	func didClickThePauseButton(button: UIButton) {
-		
-		debugPrint(reachable)
-		
+				
 		if self.op == nil {
 			
 			let newIdentifier = self.downloadingArray.first

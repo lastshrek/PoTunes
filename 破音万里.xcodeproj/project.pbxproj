@@ -52,7 +52,6 @@
 		3C9641E41D670DCE00386ABB /* DarwinNotificationHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C9641E31D670DCE00386ABB /* DarwinNotificationHelper.m */; };
 		3C9641E91D670E2200386ABB /* libWeChatSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C9641E61D670E2200386ABB /* libWeChatSDK.a */; };
 		3C9641FA1D670FB800386ABB /* GeocodeAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C9641F71D670FB800386ABB /* GeocodeAnnotation.m */; };
-		3C9641FE1D6712C500386ABB /* libBPush.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C9641FD1D6712C500386ABB /* libBPush.a */; };
 		3CA224FE1BAFDCDC0028387F /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CA224FD1BAFDCDC0028387F /* CoreMedia.framework */; };
 		3CA3E5D11DE2AB5300CB36ED /* DBHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CA3E5D01DE2AB5300CB36ED /* DBHelper.swift */; };
 		3CB2E2F81BA7B26800805D4F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB2E2F71BA7B26800805D4F /* main.m */; };
@@ -195,8 +194,6 @@
 		3C9641E81D670E2200386ABB /* WXApiObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApiObject.h; sourceTree = "<group>"; };
 		3C9641F61D670FB800386ABB /* GeocodeAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeocodeAnnotation.h; sourceTree = "<group>"; };
 		3C9641F71D670FB800386ABB /* GeocodeAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeocodeAnnotation.m; sourceTree = "<group>"; };
-		3C9641FC1D6712C500386ABB /* BPush.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPush.h; sourceTree = "<group>"; };
-		3C9641FD1D6712C500386ABB /* libBPush.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libBPush.a; sourceTree = "<group>"; };
 		3CA224FD1BAFDCDC0028387F /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		3CA3E5D01DE2AB5300CB36ED /* DBHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DBHelper.swift; sourceTree = "<group>"; };
 		3CB09B761D5F661500DEAEDA /* 破音万里-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "破音万里-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -308,7 +305,6 @@
 				3C26B5721C4FD2AA0037893F /* AudioToolbox.framework in Frameworks */,
 				3C77D24E1BE3D1110029AB70 /* SystemConfiguration.framework in Frameworks */,
 				3CF1E2C71DEC11E300DD48DC /* AMapSearchKit.framework in Frameworks */,
-				3C9641FE1D6712C500386ABB /* libBPush.a in Frameworks */,
 				3CF1E2C81DEC11E300DD48DC /* AMapNaviKit.framework in Frameworks */,
 				3C9641E91D670E2200386ABB /* libWeChatSDK.a in Frameworks */,
 				3C77D24D1BE3D0F00029AB70 /* CoreTelephony.framework in Frameworks */,
@@ -584,15 +580,6 @@
 			path = AutoNavi;
 			sourceTree = "<group>";
 		};
-		3C9641FB1D6712C500386ABB /* BaiduPush */ = {
-			isa = PBXGroup;
-			children = (
-				3C9641FC1D6712C500386ABB /* BPush.h */,
-				3C9641FD1D6712C500386ABB /* libBPush.a */,
-			);
-			path = BaiduPush;
-			sourceTree = "<group>";
-		};
 		3CB2E2E91BA7B26800805D4F = {
 			isa = PBXGroup;
 			children = (
@@ -808,7 +795,6 @@
 			children = (
 				3C2EA2C81DE9CA7C004AE511 /* ProgressViewBar */,
 				3C3BD3111DDDA264007545DC /* DRNRealTimeBlurView */,
-				3C9641FB1D6712C500386ABB /* BaiduPush */,
 				3C9641F31D670FB800386ABB /* AutoNavi */,
 				3C9641E51D670E2200386ABB /* Wechat */,
 				3C9641E11D670DCE00386ABB /* DarwinNotificationHelper */,
@@ -954,7 +940,7 @@
 						CreatedOnToolsVersion = 6.4;
 						DevelopmentTeam = 7LKFCH3GR5;
 						LastSwiftMigration = 0800;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
 								enabled = 1;
@@ -1192,6 +1178,7 @@
 /* Begin XCBuildConfiguration section */
 		3C947D4A1BB7BBBA008039B9 /* ad hoc distribution */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0D348453E5A357FD09B587CE /* Pods-破音万里.ad hoc distribution.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -1241,11 +1228,11 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = PoTunes/3rdParty/PoTunes.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer: PengCheng Zhao (2P9E2Y5942)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: PengCheng Zhao (7LKFCH3GR5)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 7LKFCH3GR5;
-				ENABLE_BITCODE = YES;
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/PoTunes",
@@ -1277,8 +1264,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = fm.poche.PoTunes;
 				PRODUCT_MODULE_NAME = PotunesRemix;
 				PRODUCT_NAME = PoTunes;
-				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE = "23f45992-1cf6-4283-adf4-9925978def36";
+				PROVISIONING_PROFILE_SPECIFIER = Potunes;
 				SWIFT_OBJC_BRIDGING_HEADER = "PoTunes/破音万里-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 			};
@@ -1402,10 +1389,10 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = PoTunes/3rdParty/PoTunes.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer: PengCheng Zhao (2P9E2Y5942)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 7LKFCH3GR5;
-				ENABLE_BITCODE = YES;
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/PoTunes",
@@ -1437,8 +1424,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = fm.poche.PoTunes;
 				PRODUCT_MODULE_NAME = PotunesRemix;
 				PRODUCT_NAME = PoTunes;
-				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE = "23f45992-1cf6-4283-adf4-9925978def36";
+				PROVISIONING_PROFILE_SPECIFIER = Potunes;
 				SWIFT_OBJC_BRIDGING_HEADER = "PoTunes/破音万里-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
@@ -1455,10 +1442,10 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = PoTunes/3rdParty/PoTunes.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: PengCheng Zhao (7LKFCH3GR5)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 7LKFCH3GR5;
-				ENABLE_BITCODE = YES;
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/PoTunes",
@@ -1491,8 +1478,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = fm.poche.PoTunes;
 				PRODUCT_MODULE_NAME = PotunesRemix;
 				PRODUCT_NAME = PoTunes;
-				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE = "23f45992-1cf6-4283-adf4-9925978def36";
+				PROVISIONING_PROFILE_SPECIFIER = Potunes;
 				SWIFT_OBJC_BRIDGING_HEADER = "PoTunes/破音万里-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 			};
