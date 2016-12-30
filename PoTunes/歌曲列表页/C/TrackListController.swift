@@ -215,7 +215,7 @@ extension TrackListController {
 		
 		}
 		
-		return 44
+		return 50
 		
 	}
     
@@ -286,9 +286,11 @@ extension TrackListController {
             hover?.addGestureRecognizer(tap)
             
             // Create shareTable
-            shareTable = UITableView.init(frame: CGRect(x: 0, y: height - 200, width: width, height: 88), style: .plain)
+            shareTable = UITableView.init(frame: CGRect(x: 0, y: height, width: width, height: 100), style: .plain)
             
             shareTable?.tag = 2
+			
+			shareTable?.isScrollEnabled = false
             
             shareTable?.delegate = self
             
@@ -301,7 +303,7 @@ extension TrackListController {
             
             UIView.animate(withDuration: 0.2, animations: { 
 				
-                self.shareTable?.frame = CGRect(x: 0, y: height - 200, width: width, height: 88)
+                self.shareTable?.frame = CGRect(x: 0, y: height - 164, width: width, height: 100)
                 
                 self.hover?.alpha = 0.5
             })
