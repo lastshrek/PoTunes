@@ -284,6 +284,8 @@ class PlayerInterface: UIView, UIApplicationDelegate {
 					
 				}
 				
+				self.paused = true
+				
 				break
 			
 			default:

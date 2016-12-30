@@ -40,16 +40,16 @@ class BarItem: UIButton {
 		
 	}
 	
-	override var isHighlighted: Bool {
-		
-		didSet {
-			
-			super.isSelected = true
-			super.isHighlighted = false
-
-		}
-		
-	}
+//	override var isHighlighted: Bool {
+//		
+//		didSet {
+//			
+//			super.isSelected = true
+//			super.isHighlighted = false
+//
+//		}
+//		
+//	}
 
 
 	required init?(coder aDecoder: NSCoder) {

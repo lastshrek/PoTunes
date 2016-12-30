@@ -1289,6 +1289,7 @@
 		};
 		3CB2E3131BA7B26800805D4F /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 28F6DD77EB623BF8E85E58B2 /* Pods-破音万里.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -1338,6 +1339,7 @@
 		};
 		3CB2E3141BA7B26800805D4F /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5ACE65060298DC83FD3A5186 /* Pods-破音万里.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";

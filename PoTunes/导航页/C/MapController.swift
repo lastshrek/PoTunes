@@ -78,6 +78,8 @@ class MapController: UIViewController {
 		
 		clearMapView()
 		
+		self.view.endEditing(true)
+		
 	}
 		
 	
@@ -90,7 +92,7 @@ class MapController: UIViewController {
 				
 		mapView?.delegate = self
 		
-		mapView?.userTrackingMode = .none
+		mapView?.userTrackingMode = .follow
 		
 		mapView?.showsUserLocation = true
 		
@@ -238,15 +240,6 @@ extension MapController: UITableViewDelegate {
 // MARK: - MAMapViewDelegate
 
 extension MapController: MAMapViewDelegate {
-	
-	func mapViewDidFinishLoadingMap(_ mapView: MAMapView!) {
-		
-		
-		
-		
-
-		
-	}
 	
 	func mapView(_ mapView: MAMapView!, didUpdate userLocation: MAUserLocation!, updatingLocation: Bool) {
 		

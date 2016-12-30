@@ -108,12 +108,14 @@ class MainControllers: UIView {
 		
 		self.selectedView?.isHidden = true
 		
+		self.selectedView?.endEditing(true)
+		
 		let controller = self.controllers[btn.tag]
 		
 		controller.view.isHidden = false
 		
 		self.selectedView = controller.view
-
+		
 		controller.popToRootViewController(animated: true)
 		
 	}
