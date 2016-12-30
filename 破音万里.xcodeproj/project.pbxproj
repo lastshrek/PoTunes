@@ -938,9 +938,8 @@
 				TargetAttributes = {
 					3CB2E2F11BA7B26800805D4F = {
 						CreatedOnToolsVersion = 6.4;
-						DevelopmentTeam = 7LKFCH3GR5;
 						LastSwiftMigration = 0800;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
 								enabled = 1;
@@ -1229,9 +1228,9 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = PoTunes/3rdParty/PoTunes.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: PengCheng Zhao (7LKFCH3GR5)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 7LKFCH3GR5;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1264,8 +1263,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = fm.poche.PoTunes;
 				PRODUCT_MODULE_NAME = PotunesRemix;
 				PRODUCT_NAME = PoTunes;
-				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE = "3514515e-facc-463a-8e63-b369514602ac";
+				PROVISIONING_PROFILE_SPECIFIER = Potunes;
 				SWIFT_OBJC_BRIDGING_HEADER = "PoTunes/破音万里-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 			};

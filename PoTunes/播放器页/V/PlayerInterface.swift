@@ -656,6 +656,33 @@ extension PlayerInterface {
 		
 		changeInterface(self.index!)
 		
+		DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { 
+			
+			// MARK: 设置锁屏信息
+			let cover = self.coverScroll.viewAtIndex(self.index!) as! UIImageView
+			
+			let artwork: MPMediaItemArtwork = MPMediaItemArtwork.init(image: cover.image!)
+			
+			let duration: TimeInterval = Double((self.streamer!.activeStream.duration.minute)) * 60 + Double((self.streamer!.activeStream.duration.second))
+			
+			let info : [String:AnyObject] = [
+				
+				MPMediaItemPropertyArtist : track.artist as AnyObject,
+				
+				MPMediaItemPropertyAlbumTitle : self.album!.text as AnyObject,
+				
+				MPMediaItemPropertyTitle: track.name as AnyObject,
+				
+				MPMediaItemPropertyArtwork: artwork,
+				
+				MPMediaItemPropertyPlaybackDuration: duration as AnyObject
+				
+			]
+			
+			MPNowPlayingInfoCenter.default().nowPlayingInfo = info
+			
+		}
+		
 	}
 	// MARK: Change interface
 	func changeInterface(_ index: Int) {
@@ -715,29 +742,7 @@ extension PlayerInterface {
 			
 			
 			// 设置锁屏信息
-//			let artwork: MPMediaItemArtwork = MPMediaItemArtwork.init(image: image!)
-//
-//			let duration: TimeInterval = Double((self.streamer.activeStream.duration.minute)) * 60 + Double((self.streamer.activeStream.duration.second))
-//
-//
-//			let info : [String:AnyObject] = [
-//				
-//				MPMediaItemPropertyArtist : track.artist as AnyObject,
-//				
-//				MPMediaItemPropertyAlbumTitle : self.album!.text as AnyObject,
-//				
-//				MPMediaItemPropertyTitle: track.name as AnyObject,
-//				
-//				MPMediaItemPropertyArtwork: artwork,
-//				
-//				MPMediaItemPropertyPlaybackDuration: duration as AnyObject
-//				
-//			]
-//
-//			MPNowPlayingInfoCenter.default().nowPlayingInfo = info
-			
-
-			
+	
 		}
 		
 	}
@@ -859,6 +864,8 @@ extension PlayerInterface {
 			weakself?.playNext()
 						
 		}
+		
+
 	}
 	
 	func updatePlayBackProgress() {
@@ -964,14 +971,14 @@ extension PlayerInterface {
         
         if paused == false {
             
-            HUD.flash(.image(UIImage(named: "playB")), delay: 0.3, completion: { (_) in
+            HUD.flash(.image(UIImage(named: "playB")), delay: 0.1, completion: { (_) in
                 
                 self.playCommon()
             })
             
         } else {
             
-            HUD.flash(.image(UIImage(named: "pauseB")), delay: 0.3, completion: { (_) in
+            HUD.flash(.image(UIImage(named: "pauseB")), delay: 0.1, completion: { (_) in
 
                self.playCommon()
 
@@ -1035,7 +1042,7 @@ extension PlayerInterface {
 		
 		self.coverScroll.scrollToIndex(self.index!, animated: true)
         
-        HUD.flash(.image(UIImage(named: "prevB")), delay: 0.3) { (_) in
+        HUD.flash(.image(UIImage(named: "prevB")), delay: 0.1) { (_) in
          
             self.playTracks(tracks: self.tracks, index: self.index!)
             
