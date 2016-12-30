@@ -160,12 +160,10 @@ class PlayerInterface: UIView, UIApplicationDelegate {
         
         switch remoteControl {
             
-			case .remoteControlPlay, .remoteControlPause:
+			case .remoteControlPlay, .remoteControlPause, .remoteControlTogglePlayPause:
 				
 				self.playOrPause()
-				
-				break
-				
+			
 			case .remoteControlNextTrack:
 				
 				self.playNext()
@@ -247,6 +245,8 @@ class PlayerInterface: UIView, UIApplicationDelegate {
 		center.addObserver(self, selector: #selector(speaking), name: Notification.Name("speaking"), object: nil)
 	
 		center.addObserver(self, selector: #selector(nonspeaking), name: Notification.Name("nonspeaking"), object: nil)
+		
+		center.addObserver(self, selector: #selector(audioSessionDidChangeInterruptionType(notification:)), name: NSNotification.Name.AVAudioSessionRouteChange, object: AVAudioSession.sharedInstance())
 				
 	}
 	
@@ -260,6 +260,37 @@ class PlayerInterface: UIView, UIApplicationDelegate {
 		
 		streamer?.volume = 1
 		
+	}
+	// MARK: earphone plugged in
+	func audioSessionDidChangeInterruptionType(notification: NSNotification) {
+		
+		let interruptReason = notification.userInfo![AVAudioSessionRouteChangeReasonKey] as! UInt
+		
+		switch interruptReason {
+			
+			case 1:
+			
+				debugPrint("插入耳机")
+				
+				break
+		
+			case 2:
+			
+				debugPrint("拔出耳机")
+				
+				if self.paused == false {
+					
+					playOrPause()
+					
+				}
+				
+				break
+			
+			default:
+				
+			break
+		}
+	
 	}
 		
 }
@@ -487,7 +518,6 @@ extension PlayerInterface {
 extension PlayerInterface {
 	// MARK: - play tracks
 	func playTracks(tracks: Array<TrackEncoding>, index: Int) {
-		
 		// MARK: - 判断网络状态以及是否允许网络播放
 		let user = UserDefaults.standard
 		
@@ -625,7 +655,7 @@ extension PlayerInterface {
 		changeInterface(self.index!)
 		
 	}
-	
+	// MARK: Change interface
 	func changeInterface(_ index: Int) {
 	
 		self.progress?.progress = 0
@@ -709,7 +739,7 @@ extension PlayerInterface {
 		}
 		
 	}
-	
+	// MARK: Load Lyrics
 	func loadLyrics(trackID: Int) {
 		
 		self.lrcView.noLrcLabel.text = "正在加载歌词"

@@ -44,7 +44,7 @@ extension PlayerController {
 		// 播放歌曲通知
 		center.addObserver(self, selector: #selector(didSelectTrack(_:)), name: Notification.Name("player"), object: nil)
 		
-		center.addObserver(self, selector: #selector(audioSessionDidChangeInterruptionType(notification:)), name: NSNotification.Name.AVAudioSessionRouteChange, object: AVAudioSession.sharedInstance())
+		
 		
 	}
 	
@@ -74,18 +74,7 @@ extension PlayerController {
 	
 	}
 	
-	func audioSessionDidChangeInterruptionType(notification: NSNotification) {
-		
-		let interruptReason = notification.userInfo![AVAudioSessionRouteChangeReasonKey] as! UInt
-		
-		if interruptReason == 2 {
-			
-			self.player?.streamer?.pause()
-			
-		}
-		
-	}
-	
+
 
 }
 

@@ -22,7 +22,7 @@ class MapController: UIViewController {
 	
 	weak var delegate: MapControllerDelegate?
 	
-	var mapView: MAMapView!
+	var mapView: MAMapView?
 	
 	var searchBar: UISearchBar?
 	
@@ -53,14 +53,30 @@ class MapController: UIViewController {
 		backgroundView.frame = self.view.bounds
 		
 		self.view.addSubview(backgroundView)
+		
+		if CLLocationManager.authorizationStatus() == .authorizedWhenInUse && CLLocationManager.locationServicesEnabled() == true {
+			
+			debugPrint(CLLocationManager.locationServicesEnabled())
+			
+			
+			
+			initMapView()
+//
+//			initSearchBar()
+//			
+//			initTableView()
+//			
+//			HUD.show(.systemActivity)
+			
+		} else {
+			
+			initMapView()
+			
+			HUD.flash(.labeledError(title: "您尚未允许获取您的位置", subtitle: "前往设置修改"), delay: 1.6)
+			
+		}
 
-		initMapView()
 		
-		initSearchBar()
-		
-		initTableView()
-		
-		HUD.show(.systemActivity)
 		
     }
 	
@@ -68,8 +84,14 @@ class MapController: UIViewController {
 		
 		super.viewWillDisappear(animated)
 		
-		mapView.removeAnnotations(mapView.annotations)
+		mapView?.removeAnnotations(mapView?.annotations)
 
+	}
+	
+	override func viewDidAppear(_ animated: Bool) {
+		
+		
+		
 	}
 	
 	// MARK: - Initialization
@@ -79,13 +101,13 @@ class MapController: UIViewController {
 		
 		mapView = MAMapView(frame: self.view.bounds)
 				
-		mapView.delegate = self
+		mapView?.delegate = self
 		
-		mapView.userTrackingMode = .none
+//		mapView?.userTrackingMode = .none
 		
-		mapView.showsUserLocation = true
+//		mapView?.showsUserLocation = true
 		
-		self.view.addSubview(mapView)
+		self.view.addSubview(mapView!)
 		
 		// initialize searchapi
 		
@@ -114,6 +136,7 @@ class MapController: UIViewController {
 		self.view.addSubview(searchBar!)
 		
 	}
+	
 	
 	func initTableView() {
 		
@@ -206,9 +229,9 @@ extension MapController: UITableViewDelegate {
 	
 	func showPOIAnnotations() {
 		
-		mapView.addAnnotations(annotations)
+		mapView?.addAnnotations(annotations)
 		
-		mapView.centerCoordinate = (annotations.first?.coordinate)!
+		mapView?.centerCoordinate = (annotations.first?.coordinate)!
 		
 	}
 	
@@ -336,7 +359,7 @@ extension MapController: UISearchBarDelegate {
 	// delete annotation
 	func clear() {
 		
-		mapView.removeAnnotations(mapView.annotations)
+		mapView?.removeAnnotations(mapView?.annotations)
 		
 	}
 	
