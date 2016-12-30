@@ -135,7 +135,7 @@ extension SettingController {
 	
 	override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		
-		let cell = tableView.dequeueReusableCell(withIdentifier: "setting", for: indexPath)
+		let cell = UITableViewCell(style: .default, reuseIdentifier: "setting")
 		
 		if indexPath.row == 0 {
 			

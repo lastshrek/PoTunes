@@ -33,8 +33,6 @@ class DownloadingController: UITableViewController {
 	
 	var index: Int?
 	
-	var reachable: Int?
-
 	override func viewDidLoad() {
 		
 		super.viewDidLoad()
@@ -190,6 +188,8 @@ extension DownloadingController {
 		downloadingArray?.removeAll()
 		
 		tableView.reloadData()
+        
+        self.start?.setTitle("全部开始", for: .normal)
 		
 		if downloadingArray?.count == 0 {
 			
@@ -239,13 +239,19 @@ extension DownloadingController {
 		
 		let indexPath = IndexPath(row: index, section: 0)
 		
-		let cell = tableView.cellForRow(at: indexPath) as! DownloadingCell
+		let cell = tableView.cellForRow(at: indexPath) as? DownloadingCell
+        
+        if cell == nil {
+            
+            return
+            
+        }
 		
 		let progress = userInfo["percent"] as! Double
 		
-		cell.progressView.isHidden = false
+		cell?.progressView.isHidden = false
 		
-		cell.progressView.setProgress(CGFloat(progress), animated: true)
+		cell?.progressView.setProgress(CGFloat(progress), animated: true)
 		
 	}
 	
@@ -255,8 +261,8 @@ extension DownloadingController {
 		downloadingArray?.remove(at: index!)
 		
 		DispatchQueue.main.async {
-			
-			self.tableView.reloadData()
+            
+            self.tableView.deleteRows(at: [IndexPath(row: self.index!, section: 0)], with: .fade)
 			
 			if self.downloadingArray?.count == 0 {
 				

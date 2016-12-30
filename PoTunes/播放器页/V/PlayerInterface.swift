@@ -63,8 +63,6 @@ class PlayerInterface: UIView, UIApplicationDelegate {
 		
 		return db
 	}()
-	// MARK: - 网络状态监控
-	var reachable: Int!
 	// MARK: - 播放本地还是网络
 	var type: String?
 	// MARK: - 播放模式
@@ -249,9 +247,7 @@ class PlayerInterface: UIView, UIApplicationDelegate {
 		center.addObserver(self, selector: #selector(speaking), name: Notification.Name("speaking"), object: nil)
 	
 		center.addObserver(self, selector: #selector(nonspeaking), name: Notification.Name("nonspeaking"), object: nil)
-		
-		center.addObserver(self, selector: #selector(reachable(sender:)), name: Notification.Name("reachable"), object: nil)
-		
+				
 	}
 	
 	func speaking() {
@@ -265,17 +261,7 @@ class PlayerInterface: UIView, UIApplicationDelegate {
 		streamer?.volume = 1
 		
 	}
-	
-	func reachable(sender: Notification) {
 		
-		let userInfo = sender.userInfo!
-		
-		let reach = userInfo["reachable"] as! Int
-		
-		reachable = reach
-		
-	}
-	
 }
 // MARK: - initial subviews
 extension PlayerInterface {
@@ -503,13 +489,13 @@ extension PlayerInterface {
 	func playTracks(tracks: Array<TrackEncoding>, index: Int) {
 		
 		// MARK: - 判断网络状态以及是否允许网络播放
-		
-		debugPrint(reachable)
-
-		
 		let user = UserDefaults.standard
 		
 		let yes = user.bool(forKey: "wwanPlay")
+        
+        let monitor = Reachability.forInternetConnection()
+        
+        let reachable = monitor?.currentReachabilityStatus().rawValue
 				
 		if !yes && reachable != 2 && type != "local" {
 			
@@ -528,7 +514,7 @@ extension PlayerInterface {
 			
 			alertView.addButton("继续播放") {
 				
-				if self.reachable == 0 {
+				if reachable == 0 {
 					
 					HUD.flash(.labeledError(title: "请检查网络状况", subtitle: nil), delay: 1.0)
 					
