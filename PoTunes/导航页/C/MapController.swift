@@ -33,7 +33,7 @@ class MapController: UIViewController {
 	var tableView: UITableView?
 	
 	// user location
-	var userLocation: CLLocationCoordinate2D?
+	var user: CLLocationCoordinate2D?
 	
 	// 用户选择的起始位置
 	var selectedstartLocation: CLLocationCoordinate2D?
@@ -54,30 +54,14 @@ class MapController: UIViewController {
 		
 		self.view.addSubview(backgroundView)
 		
-		if CLLocationManager.authorizationStatus() == .authorizedWhenInUse && CLLocationManager.locationServicesEnabled() == true {
-			
-			debugPrint(CLLocationManager.locationServicesEnabled())
-			
-			
-			
-			initMapView()
-//
-//			initSearchBar()
-//			
-//			initTableView()
-//			
-//			HUD.show(.systemActivity)
-			
-		} else {
-			
-			initMapView()
-			
-			HUD.flash(.labeledError(title: "您尚未允许获取您的位置", subtitle: "前往设置修改"), delay: 1.6)
-			
-		}
+		initMapView()
+		
+		initSearchBar()
+		
+		initTableView()
+		
+		HUD.show(.systemActivity)
 
-		
-		
     }
 	
 	override func viewWillDisappear(_ animated: Bool) {
@@ -88,11 +72,14 @@ class MapController: UIViewController {
 
 	}
 	
-	override func viewDidAppear(_ animated: Bool) {
+	override func viewDidDisappear(_ animated: Bool) {
+	
+		super.viewDidDisappear(animated)
 		
-		
+		clearMapView()
 		
 	}
+		
 	
 	// MARK: - Initialization
 	func initMapView() {
@@ -103,9 +90,9 @@ class MapController: UIViewController {
 				
 		mapView?.delegate = self
 		
-//		mapView?.userTrackingMode = .none
+		mapView?.userTrackingMode = .none
 		
-//		mapView?.showsUserLocation = true
+		mapView?.showsUserLocation = true
 		
 		self.view.addSubview(mapView!)
 		
@@ -114,6 +101,18 @@ class MapController: UIViewController {
 		search = AMapSearchAPI()
 		
 		search?.delegate = self
+		
+	}
+	
+	func clearMapView() {
+		
+		mapView = nil
+		
+		mapView?.delegate = nil
+		
+		searchBar = nil
+		
+		tableView = nil
 		
 	}
 	
@@ -136,8 +135,7 @@ class MapController: UIViewController {
 		self.view.addSubview(searchBar!)
 		
 	}
-	
-	
+
 	func initTableView() {
 		
 		tableView = UITableView.init(frame: CGRect(x: 0, y: 44, width: self.view.bounds.size.width, height: self.view.bounds.size.height - 44))
@@ -241,15 +239,35 @@ extension MapController: UITableViewDelegate {
 
 extension MapController: MAMapViewDelegate {
 	
+	func mapViewDidFinishLoadingMap(_ mapView: MAMapView!) {
+		
+		
+		
+		
+
+		
+	}
+	
 	func mapView(_ mapView: MAMapView!, didUpdate userLocation: MAUserLocation!, updatingLocation: Bool) {
 		
-		if self.userLocation == nil {
+		HUD.hide()
+		
+		if updatingLocation {
 			
-			HUD.hide()
+			if user != nil { return }
 			
-			self.userLocation = CLLocationCoordinate2DMake(userLocation.location.coordinate.latitude, userLocation.location.coordinate.longitude)
+			user = CLLocationCoordinate2DMake(userLocation.location.coordinate.latitude, userLocation.location.coordinate.longitude)
 			
 		}
+		
+		
+//		debugPrint(userLocation.location.coordinate.latitude)
+		
+//		if user == nil && userLocation.location.coordinate.latitude >= 0 {
+//			
+//			
+//			
+//		}
 		
 	}
 	
@@ -261,15 +279,15 @@ extension MapController: MAMapViewDelegate {
 			
 			if self.view.tag == 1 {
 				
-				userLocation = CLLocationCoordinate2DMake((annotation?.coordinate.latitude)!, (annotation?.coordinate.longitude)!)
+				user = CLLocationCoordinate2DMake((annotation?.coordinate.latitude)!, (annotation?.coordinate.longitude)!)
 				
-				self.delegate?.mapController(didClickTheAnnotationBySendingCustomUserLocation: userLocation!, title: (annotation?.title)!)
+				self.delegate?.mapController(didClickTheAnnotationBySendingCustomUserLocation: user!, title: (annotation?.title)!)
 				
 			} else {
 				
 				destinationLocation = CLLocationCoordinate2DMake((annotation?.coordinate.latitude)!, (annotation?.coordinate.longitude)!)
 				
-				self.delegate?.mapController(didClickTheAnnotationBySending: destinationLocation!, destinationTitle: (annotation?.title)!, userlocation: userLocation!)
+				self.delegate?.mapController(didClickTheAnnotationBySending: destinationLocation!, destinationTitle: (annotation?.title)!, userlocation: user!)
 				
 			}
 			

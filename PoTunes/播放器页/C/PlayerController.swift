@@ -44,8 +44,6 @@ extension PlayerController {
 		// 播放歌曲通知
 		center.addObserver(self, selector: #selector(didSelectTrack(_:)), name: Notification.Name("player"), object: nil)
 		
-		
-		
 	}
 	
 	func didSelectTrack(_ notification: Notification) {
