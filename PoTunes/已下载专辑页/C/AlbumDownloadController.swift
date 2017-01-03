@@ -28,27 +28,7 @@ class AlbumDownloadController: UITableViewController {
         return db
     }()
 
-	lazy var downloadAlbums: Array<String> = {
-		
-		var temp: Array = [] as Array<String>
-		
-		let distinct = "SELECT distinct album FROM t_downloading;"
-		
-        let s = self.tracksDB.executeQuery(distinct, withArgumentsIn: nil)
-        
-        while (s?.next())! {
-            
-            let album = s?.string(forColumn: "album")!
-            
-            temp.append(album!)
-            
-        }
-        
-        s?.close()
-			
-		return temp
-		
-	}()
+	lazy var downloadAlbums: Array<String> = self.reloadDownloadAlbums()
 	
 	lazy var downloadingArray: Array<String> = {
 		
@@ -56,18 +36,18 @@ class AlbumDownloadController: UITableViewController {
 		
 		let query = "SELECT * FROM t_downloading WHERE downloaded = 0;"
 		
-        let s = self.tracksDB.executeQuery(query, withArgumentsIn: nil)
-        
-        while (s?.next())! {
-            
-            let identifier = (s?.string(forColumn: "author")!)! + " - " + (s?.string(forColumn: "title")!)!
-            
-            temp.append(identifier)
-            
-        }
-        
-        s?.close()
+		let s = self.tracksDB.executeQuery(query, withArgumentsIn: nil)
+		
+		while (s?.next())! {
 			
+			let identifier = (s?.string(forColumn: "author")!)! + " - " + (s?.string(forColumn: "title")!)!
+			
+			temp.append(identifier)
+			
+		}
+		
+		s?.close()
+		
 		return temp
 		
 	}()
@@ -95,8 +75,10 @@ class AlbumDownloadController: UITableViewController {
 		
 		super.viewWillAppear(animated)
 		
+		self.tableView.reloadData()
 		
-//		self.tableView.reloadData()
+		debugPrint(downloadAlbums.count)
+		
 	}
 	
 	deinit {
@@ -137,7 +119,7 @@ extension AlbumDownloadController {
 		
 		if indexPath.section == 0 {
 			
-			cell.imageView?.image = UIImage(named: "noArtwork.jpg")
+			cell.imageView?.image = UIImage.fontAwesomeIcon(name: .download, textColor: UIColor.colorByRGB(red: 17, green: 133, blue: 117, alpha: 0.8), size: CGSize(width: 100, height: 100))
 			
 			cell.textLabel?.text = "正在缓存"
 			
@@ -149,7 +131,6 @@ extension AlbumDownloadController {
 			
 			let query = "SELECT * FROM t_downloading WHERE album = '\(album)';"
 			
-				
             let s = tracksDB.executeQuery(query, withArgumentsIn: nil)
             
             if (s?.next())! {
@@ -169,7 +150,7 @@ extension AlbumDownloadController {
 	
 	override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
 
-		return 66
+		return 55
 		
 	}
 	
@@ -728,6 +709,8 @@ extension AlbumDownloadController: TrackListDelegate {
 	
 	func didDeletedTrack(track: TrackEncoding, title: String) {
 		
+		self.op?.pause()
+		
 		let identifier = self.getIdentifier(urlStr: track.url)
 		
 		let album = self.doubleQuotation(single: track.artist + " - " + title)
@@ -773,6 +756,7 @@ extension AlbumDownloadController: TrackListDelegate {
 			debugPrint("Could not clear temp folder: \(error)")
 			
 		}
+		
 	}
 }
 
@@ -898,9 +882,35 @@ extension AlbumDownloadController: DownloadingControllerDelegate {
 			
 			self.downloadingArray.removeAll()
 			
+			self.downloadAlbums = self.reloadDownloadAlbums()
+			
 			self.tableView.reloadData()
 
 			
 		}
+	}
+	
+	func reloadDownloadAlbums() -> Array<String>{
+		
+		var temp: Array = [] as Array<String>
+		
+		let distinct = "SELECT distinct album FROM t_downloading;"
+		
+		let s = self.tracksDB.executeQuery(distinct, withArgumentsIn: nil)
+		
+		while (s?.next())! {
+			
+			let album = s?.string(forColumn: "album")!
+			
+			temp.append(album!)
+			
+			debugPrint(album!)
+			
+		}
+		
+		s?.close()
+		
+		return temp
+		
 	}
 }

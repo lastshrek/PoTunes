@@ -10,13 +10,26 @@ import UIKit
 
 class DownloadedCell:  UITableViewCell {
 	
+	let divider: UIView = UIView()
+	
 	override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
 		
 		super.init(style: style, reuseIdentifier: reuseIdentifier)
 		
-		self.textLabel?.font = UIFont(name: "BebasNeue", size: 18)
+		self.imageView?.contentMode = .scaleAspectFit
 		
-		self.backgroundColor = UIColor.white
+		self.textLabel?.textAlignment = .left
+		
+		self.textLabel?.adjustsFontSizeToFitWidth = true
+		
+		self.textLabel?.textColor = UIColor.colorByRGB(red: 224, green: 0, blue: 81, alpha: 0.8)
+		
+		self.textLabel?.font = UIFont(name: "BebasNeue", size: 18)
+
+		// 分割线
+		divider.backgroundColor = UIColor.lightGray
+		
+		self.addSubview(divider)
 		
 	}
 	
@@ -32,10 +45,10 @@ class DownloadedCell:  UITableViewCell {
 		
 		let height = self.bounds.size.height
 				
-		self.imageView?.frame = CGRect(x: 10, y: 0, width: height, height: height)
+		self.imageView?.frame = CGRect(x: 10, y: 5, width: height - 10, height: height - 10)
 		
-		self.textLabel?.frame = CGRect(x: height + 15, y: 0, width: width - height - 15, height: height)
+		self.textLabel?.frame = CGRect(x: ((self.imageView?.frame)?.maxX)! + 10, y: 5, width: width - ((self.imageView?.frame)!).maxX - 15, height: height - 10)
 
-		//		self.divider?.frame = CGRect(x: height + 15, y: 0, width: width - height - 15, height: 1)
+		self.divider.frame = CGRect(x: ((self.imageView?.frame)?.maxX)! + 10, y: height - 0.3, width: width, height: 0.3)
 	}
 }

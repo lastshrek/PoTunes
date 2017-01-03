@@ -182,6 +182,7 @@ extension DownloadingController {
 			
 		}
 		
+		
 		self.delegate?.didClickTheDeleteButton(button: button)
 		
 		downloadingArray?.removeAll()
@@ -190,11 +191,6 @@ extension DownloadingController {
         
         self.start?.setTitle("全部开始", for: .normal)
 		
-		if downloadingArray?.count == 0 {
-			
-			
-			
-		}
 	}
 	
 	func setStart(button: OperationButton) {
