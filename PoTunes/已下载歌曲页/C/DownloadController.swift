@@ -18,10 +18,7 @@ class DownloadController: TrackListController {
 	}
 	
 	//MARK: 禁止本地下载
-	override func downloadSingle(recognizer: UIGestureRecognizer) {
-		
-	
-	}
+	override func downloadSingle(recognizer: UIGestureRecognizer) {}
 
 }
 

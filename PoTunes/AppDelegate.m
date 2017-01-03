@@ -14,6 +14,15 @@
 //#import "MBProgressHUD+MJ.h"
 @interface AppDelegate ()<WXApiDelegate>
 
+@property (nonatomic, strong) NSTimer *timer;
+
+@property (nonatomic, assign) int bgTime;
+
+@property (nonatomic, assign) UIBackgroundTaskIdentifier backIdentifier;
+
+@property (nonatomic, assign) BOOL isDownloading;
+
+
 @end
 
 @implementation AppDelegate
@@ -24,23 +33,42 @@
     
     //设置音乐后台播放的会话类型
     AVAudioSession *session = [AVAudioSession sharedInstance];
-    [session setActive:YES error:nil];
-    [session setCategory:AVAudioSessionCategoryPlayback error:nil];
+	
+	[session setActive:YES error:nil];
+	
+	[session setCategory:AVAudioSessionCategoryPlayback error:nil];
 
     // 接受远程事件
     [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
-    [self becomeFirstResponder];
+	
+	[self becomeFirstResponder];
 	
     //向微信注册
     [WXApi registerApp:@"wx0fc8d0673ec86694"];
-    
-        
+	
+	NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+	
+	[center addObserver:self selector:@selector(percent:) name:@"percent" object:nil];
+	
+	[center addObserver:self selector:@selector(complete:) name:@"downloadComplete" object:nil];
+
     return YES;
 }
 
-- (BOOL)canBecomeFirstResponder
-{
+- (BOOL)canBecomeFirstResponder {
     return YES;
+}
+
+- (void)percent:(NSNotification *)sender {
+	
+	self.isDownloading = 1;
+	
+}
+
+- (void)complete:(NSNotification *)sender {
+	
+	self.isDownloading = 0;
+	
 }
 
 
@@ -106,11 +134,47 @@
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
     //    [application beginBackgroundTaskWithExpirationHandler:nil];
+	
+	if (self.isDownloading) {
+		
+		self.backIdentifier = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
+			
+			self.timer = [NSTimer timerWithTimeInterval:1 target:self selector:@selector(repeatTimer) userInfo:nil repeats:YES];
+			
+			[[NSRunLoop mainRunLoop] addTimer:self.timer forMode:NSDefaultRunLoopMode];
+		
+		}];
+	}
+
+}
+
+- (void)repeatTimer {
+	
+	if (self.bgTime > 600) {
+	
+		[self removeBgTimer];
+	
+	}
+
+}
+
+- (void)removeBgTimer {
+
+	[self.timer invalidate];
+	
+	self.bgTime = 0;
+	
+	[[UIApplication sharedApplication] endBackgroundTask:self.backIdentifier];
+	
+	self.backIdentifier = UIBackgroundTaskInvalid;
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
-    
+	
+	[self removeBgTimer];
+
 }
+
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.

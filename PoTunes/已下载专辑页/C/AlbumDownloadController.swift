@@ -28,7 +28,7 @@ class AlbumDownloadController: UITableViewController {
         return db
     }()
 
-	lazy var downloadAlbums: Array<String> = self.reloadDownloadAlbums()
+	var downloadAlbums: Array<String>?
 	
 	lazy var downloadingArray: Array<String> = {
 		
@@ -64,6 +64,8 @@ class AlbumDownloadController: UITableViewController {
 		
 		tableView.register(DownloadedCell.self, forCellReuseIdentifier: "downloaded")
 		
+		downloadAlbums = reloadDownloadAlbums()
+		
 		getNotification()
 		
 		// 修复之前的下载文件名称
@@ -71,13 +73,14 @@ class AlbumDownloadController: UITableViewController {
 			
 	}
 	
-	override func viewWillAppear(_ animated: Bool) {
+	
+	override func viewDidAppear(_ animated: Bool) {
 		
-		super.viewWillAppear(animated)
+		super.viewDidAppear(animated)
+		
+		self.downloadAlbums = reloadDownloadAlbums()
 		
 		self.tableView.reloadData()
-		
-		debugPrint(downloadAlbums.count)
 		
 	}
 	
@@ -108,7 +111,7 @@ extension AlbumDownloadController {
 			
 		} else {
 			
-			return downloadAlbums.count
+			return downloadAlbums!.count
 		}
 		
 	}
@@ -125,11 +128,11 @@ extension AlbumDownloadController {
 			
 		} else {
 			
-			let album = downloadAlbums[indexPath.row]
+			let album = downloadAlbums?[indexPath.row]
 			
-			cell.textLabel?.text = album
+			cell.textLabel?.text = album!
 			
-			let query = "SELECT * FROM t_downloading WHERE album = '\(album)';"
+			let query = "SELECT * FROM t_downloading WHERE album = '\(album!)';"
 			
             let s = tracksDB.executeQuery(query, withArgumentsIn: nil)
             
@@ -164,10 +167,9 @@ extension AlbumDownloadController {
 			
 			var tracks: Array<TrackEncoding> = []
 			
-			let title = downloadAlbums[indexPath.row]
+			let title = downloadAlbums?[indexPath.row]
 			
-			let query = "SELECT * FROM t_downloading WHERE album = '\(title)' and downloaded = 1 order by indexPath;"
-			
+			let query = "SELECT * FROM t_downloading WHERE album = '\(title!)' and downloaded = 1 order by indexPath;"
 				
             let s = tracksDB.executeQuery(query, withArgumentsIn: nil)
             
@@ -186,12 +188,12 @@ extension AlbumDownloadController {
 				let track = TrackEncoding(ID: ID, name: name, artist: artist, cover: cover, url: url)
 
                 tracks.append(track)
-                
+				
             }
             
             s?.close()
             
-            download.title = title.components(separatedBy: " - ").last
+            download.title = title?.components(separatedBy: " - ").last
             
             download.tracks = tracks
             
@@ -225,9 +227,7 @@ extension AlbumDownloadController {
 			downloading.delegate = self
 			
 			downloading.downloadingArray = downloadingArray
-            
-            debugPrint(downloadingArray.count)
-						
+			
 			self.navigationController?.pushViewController(downloading, animated: true)
 			
 		}
@@ -259,9 +259,9 @@ extension AlbumDownloadController {
 		
 		if editingStyle == .delete {
 			
-			let album = self.downloadAlbums[indexPath.row]
+			let album = self.downloadAlbums?[indexPath.row]
 			
-			let query = "SELECT * FROM t_downloading WHERE album = '\(album)' and downloaded = 1;"
+			let query = "SELECT * FROM t_downloading WHERE album = '\(album!)' and downloaded = 1;"
 				
 			let s = tracksDB.executeQuery(query, withArgumentsIn: nil)
 			
@@ -292,14 +292,13 @@ extension AlbumDownloadController {
 				}
 			}
 			
-			let delete = "DELETE FROM t_downloading WHERE album = '\(album)' and downloaded = 1;"
+			let delete = "DELETE FROM t_downloading WHERE album = '\(album!)' and downloaded = 1;"
 			
 			tracksDB.executeUpdate(delete, withArgumentsIn: nil)
 			
 			s?.close()
-
 			
-			downloadAlbums.remove(at: indexPath.row)
+			downloadAlbums?.remove(at: indexPath.row)
 			
 			// Delete the row from the data source
 			tableView.deleteRows(at: [indexPath], with: .top)
@@ -331,11 +330,11 @@ extension AlbumDownloadController {
 		
 		let title = userInfo["album"] as! String
 		
-		let a = downloadAlbums.index(of: title)
+		let a = downloadAlbums?.index(of: title)
 		
 		if a == nil {
 			
-			downloadAlbums.append(title)
+			downloadAlbums?.append(title)
 			
 			self.tableView.reloadData()
 			
@@ -390,8 +389,6 @@ extension AlbumDownloadController {
 		let newIdentifier = track.artist + " - " + track.name
 		
 		let identifier = userInfo["identifier"] as! String
-        
-        debugPrint(identifier)
 		
 		downloadingArray.append(newIdentifier)
 		
@@ -401,11 +398,11 @@ extension AlbumDownloadController {
 			
 		}
 		
-		let index = downloadAlbums.index(of: title)
+		let index = downloadAlbums?.index(of: title)
 		
 		if index != nil { return }
 		
-		downloadAlbums.append(title)
+		downloadAlbums?.append(title)
 		
 		tableView.reloadData()
 	}
@@ -504,8 +501,6 @@ extension AlbumDownloadController {
 				
 				if (progress % 10 == 0 || (Int)(progress) == 1) && downloadProgress <= 1 && downloadProgress >= 0.01 {
 					
-					print(downloadProgress)
-					
 					let userInfo = [
 						"index": index!,
 						"percent": downloadProgress
@@ -514,6 +509,7 @@ extension AlbumDownloadController {
 					NotificationCenter.default.post(name: Notification.Name("percent"), object: nil, userInfo: userInfo)
 					
 				}
+				
 			})
 			
 			self.op?.setCompletionBlockWithSuccess({ (operation, responseObject) in
@@ -709,7 +705,7 @@ extension AlbumDownloadController: TrackListDelegate {
 	
 	func didDeletedTrack(track: TrackEncoding, title: String) {
 		
-		self.op?.pause()
+		self.op?.cancel()
 		
 		let identifier = self.getIdentifier(urlStr: track.url)
 		
@@ -721,12 +717,12 @@ extension AlbumDownloadController: TrackListDelegate {
 			
 			database?.executeUpdate(delete, withArgumentsIn: [identifier])
 			
-			let index = self.downloadAlbums.index(of: album)
+			let index = self.downloadAlbums?.index(of: album)
 			
 
 			if index != nil {
 				
-				self.downloadAlbums.remove(at: index!)
+				self.downloadAlbums?.remove(at: index!)
 				
 				DispatchQueue.main.async {
 					
@@ -882,11 +878,8 @@ extension AlbumDownloadController: DownloadingControllerDelegate {
 			
 			self.downloadingArray.removeAll()
 			
-			self.downloadAlbums = self.reloadDownloadAlbums()
-			
 			self.tableView.reloadData()
 
-			
 		}
 	}
 	
@@ -903,8 +896,6 @@ extension AlbumDownloadController: DownloadingControllerDelegate {
 			let album = s?.string(forColumn: "album")!
 			
 			temp.append(album!)
-			
-			debugPrint(album!)
 			
 		}
 		
