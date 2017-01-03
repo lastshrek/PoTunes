@@ -572,7 +572,31 @@ extension AlbumDownloadController {
 						
 						let author = self.doubleQuotation(single: (splitArr?.first)!)
 						
-						let title = self.doubleQuotation(single: (splitArr?.last)!)
+						var title = ""
+						
+						if splitArr?.count == 2 {
+							
+							title = self.doubleQuotation(single: (splitArr?.last)!)
+							
+						} else if (splitArr?.count)! > 2 {
+							
+							for (index, split) in splitArr!.enumerated() {
+								
+								if index > 0  && index != (splitArr?.count)! - 1{
+									
+									title = title + self.doubleQuotation(single: split) + " - "
+									
+								} else if index > 0 && index == (splitArr?.count)! - 1 {
+									
+									title = title + self.doubleQuotation(single: split)
+									
+								}
+								
+							}
+							
+						}
+						
+						
 						
 						let query = "SELECT * FROM t_downloading WHERE author = '\(author)' and title = '\(title)';"
 						
@@ -755,8 +779,8 @@ extension AlbumDownloadController: TrackListDelegate {
 extension AlbumDownloadController: DownloadingControllerDelegate {
 	
 	func didClickThePauseButton(button: UIButton) {
-				
-		if self.op == nil {
+		
+		if self.op == nil || (self.op?.isPaused())! {
 			
 			let newIdentifier = self.downloadingArray.first
 			
@@ -764,7 +788,31 @@ extension AlbumDownloadController: DownloadingControllerDelegate {
 			
 			let artist = self.doubleQuotation(single: (splitArr?.first)!)
 			
-			let title = self.doubleQuotation(single: (splitArr?.last)!)
+			var title = ""
+			
+			if splitArr?.count == 2 {
+				
+				title = self.doubleQuotation(single: (splitArr?.last)!)
+				
+			} else if (splitArr?.count)! > 2 {
+				
+				for (index, split) in splitArr!.enumerated() {
+					
+					if index > 0  && index != (splitArr?.count)! - 1{
+						
+						title = title + self.doubleQuotation(single: split) + " - "
+						
+					} else if index > 0 && index == (splitArr?.count)! - 1 {
+						
+						title = title + self.doubleQuotation(single: split)
+						
+					}
+					
+				}
+				
+			}
+			
+			
 			
 			let query = "SELECT * FROM t_downloading WHERE author = ? and title = ?;"
 			
@@ -777,6 +825,10 @@ extension AlbumDownloadController: DownloadingControllerDelegate {
 				let identifier = s?.string(forColumn: "identifier")
 				
 				self.beginDownloadMusic(urlStr: url!, identifier: identifier!, newIdentifier: newIdentifier!)
+				
+			} else {
+				
+				debugPrint("没有找到这首歌，请排查原因")
 				
 			}
 			

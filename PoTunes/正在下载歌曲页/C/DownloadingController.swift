@@ -45,7 +45,6 @@ class DownloadingController: UITableViewController {
 		
 		tableView.contentOffset = CGPoint(x: 0, y: 0)
 
-		
 		getNotification()
 		
 	}

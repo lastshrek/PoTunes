@@ -14,12 +14,19 @@ import FMDB
 class Main: UIViewController, UIGestureRecognizerDelegate, UIAlertViewDelegate {
     
 	let height = UIScreen.main.bounds.size.height
+	
 	let width = UIScreen.main.bounds.size.width
+	
 	var pageControl = MainPageControl()
+	
 	var scrollView = MainScrollview()
+	
 	var mainControllers: MainControllers = MainControllers()
+	
 	var player: PlayerController = PlayerController()
+	
 	lazy var songs: NSArray = { [] }()
+	
 	var db: FMDatabase?
 
 	override func viewDidLoad() {
