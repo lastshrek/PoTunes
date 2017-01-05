@@ -233,7 +233,7 @@
 		3CCFBF4B1DD41F1C00514873 /* UIView+Geometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Geometry.h"; sourceTree = "<group>"; };
 		3CCFBF4C1DD41F1C00514873 /* UIView+Geometry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Geometry.m"; sourceTree = "<group>"; };
 		3CDCD2001E1CFF39004F117A /* Debug.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Debug.h; sourceTree = "<group>"; };
-		3CDCD2051E1DFAB1004F117A /* PoTunes.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PoTunes.entitlements; sourceTree = "<group>"; };
+		3CDCD2051E1DFAB1004F117A /* PoTunes.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PoTunes.entitlements; sourceTree = SOURCE_ROOT; };
 		3CDFB3911DD76E5D006C0975 /* TrackListController.swift */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.swift; path = TrackListController.swift; sourceTree = "<group>"; tabWidth = 4; };
 		3CDFB3971DD776D8006C0975 /* TrackCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackCell.swift; sourceTree = "<group>"; };
 		3CDFB3991DD77CD5006C0975 /* UIColor+RGB.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+RGB.swift"; sourceTree = "<group>"; };
@@ -601,7 +601,6 @@
 		3CB2E2E91BA7B26800805D4F = {
 			isa = PBXGroup;
 			children = (
-				3CDCD2051E1DFAB1004F117A /* PoTunes.entitlements */,
 				3CB2E2F41BA7B26800805D4F /* PoTunes */,
 				3CB2E30E1BA7B26800805D4F /* PoTunesTests */,
 				3CB2E2F31BA7B26800805D4F /* Products */,
@@ -678,6 +677,7 @@
 		3CB2E31B1BA7C92300805D4F /* Others */ = {
 			isa = PBXGroup;
 			children = (
+				3CDCD2051E1DFAB1004F117A /* PoTunes.entitlements */,
 				3CCFBF421DD41F1C00514873 /* Category */,
 				3CB2E3B01BA7CF2200805D4F /* BebasNeue.otf */,
 				3CDCD2001E1CFF39004F117A /* Debug.h */,

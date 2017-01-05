@@ -20,11 +20,18 @@ protocol PlaylistDelegate: class {
 
 }
 
-let P_URL = "https://poche.fm/api/app/playlists/"
+let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
+//let P_URL = "http://localhost:3000/api/app/playlists?v=" + version
+//let O_URL = "http://localhost:3000/api/app/playlists/"
+let O_URL = "https://poche.fm/api/app/playlists/"
+let P_URL = "http://poche.fm/api/app/playlists?v=" + version
+
 
 class PlaylistController: UITableViewController {
 	
 	var playlists: Array<Playlist> = []
+	
+	let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString")
 	
 	lazy var queue: FMDatabaseQueue = DBHelper.sharedInstance.queue!
 
@@ -103,7 +110,15 @@ class PlaylistController: UITableViewController {
 			
 			s?.close()
 			
-			self.delegate?.tabBarCount(count: 4)
+			if playlists.count == 3 {
+				
+				self.delegate?.tabBarCount(count: 3)
+				
+			} else {
+				
+				self.delegate?.tabBarCount(count: 4)
+				
+			}			
 			
 			tableView.reloadData()
 			
@@ -129,8 +144,6 @@ class PlaylistController: UITableViewController {
 	}
 	
 	func loadNewPlaylist() {
-		// FIXME: 版本号
-		
 		// 请求接口
 		Alamofire.request(P_URL).response(completionHandler: { (response) in
 			
@@ -275,7 +288,9 @@ class PlaylistController: UITableViewController {
 		
 		let playlist: Playlist = self.playlists[indexPath.row]
 
-		let url = URL(string: P_URL + "\(playlist.ID)")
+		let url = URL(string: O_URL + "\(playlist.ID)")
+		
+		debugPrint(url)
 
 		Alamofire.request(url!).response(completionHandler: { (response) in
 			
@@ -329,7 +344,7 @@ class PlaylistController: UITableViewController {
 		
 		let album = playlist.title
 		
-		let url = URL(string: P_URL + "\(playlist.ID)")
+		let url = URL(string: O_URL + "\(playlist.ID)")
 		
 		DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
 			

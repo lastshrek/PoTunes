@@ -122,21 +122,31 @@ class MainControllers: UIView {
 	
 	func setupTabBarItem(_ count: Int, frame: CGRect) {
 		
-		let iconArr: Array = [FontAwesome.home, FontAwesome.music, FontAwesome.road, FontAwesome.wrench]
+		let iconArr: Array<FontAwesome> = [.home, .music, .road, .wrench]
 		
 		for i in 0..<count {
-		
+			
 			let button: BarItem = BarItem(frame: CGRect(x: CGFloat(i) * self.bounds.size.width / CGFloat(count), y: 0, width: self.bounds.size.width / CGFloat(count), height: 64))
 			
-			button.setTitle(String.fontAwesomeIcon(name: iconArr[i]), for: .normal)
+			if count == 3 && (i == 1 || i == 2) {
+				
+				button.setTitle(String.fontAwesomeIcon(name: iconArr[i + 1]), for: .normal)
+
+				button.tag = i + 1
+				
+			} else if count == 4 || i == 0 {
+				
+				button.setTitle(String.fontAwesomeIcon(name: iconArr[i]), for: .normal)
+				
+				button.tag = i
+				
+			}
 			
 			if i == 0 {
 			
 				self.buttonClick(button)
 			
 			}
-			
-			button.tag = i
 			
 			button.addTarget(self, action: #selector(MainControllers.buttonClick(_:)), for: .touchUpInside)
 			
@@ -166,7 +176,7 @@ class MainControllers: UIView {
 extension MainControllers: PlaylistDelegate {
 	
 	func tabBarCount(count: Int) {
-	
+			
 		self.setupTabBarItem(count, frame: self.size!)
 	
 	}

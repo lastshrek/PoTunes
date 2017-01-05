@@ -150,9 +150,9 @@ extension TrackListController {
 
 			let ext = WXMusicObject()
 
-			ext.musicUrl = "https://poche.fm"
+			ext.musicUrl = "https://poche.fm/api/app/track/\(sharedTrack!.ID)"
 
-			ext.musicDataUrl = self.sharedTrack?.url
+			ext.musicDataUrl = self.sharedTrack!.url
 
 			message.mediaObject = ext
 
@@ -252,7 +252,6 @@ extension TrackListController {
 		}
 	}
 	
-    // FIXME: Hover position
     func shareToWechat(recognizer: UIGestureRecognizer) {
         
         if recognizer.state.rawValue == 1 {
