@@ -43,14 +43,16 @@
 		3C434E841DEEAFDC00D4D076 /* LrcString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C434E831DEEAFDC00D4D076 /* LrcString.swift */; };
 		3C4A41B91DD9A508008CE37F /* PlayerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C4A41B81DD9A508008CE37F /* PlayerController.swift */; };
 		3C4A41BB1DD9D350008CE37F /* TrackLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C4A41BA1DD9D350008CE37F /* TrackLabel.swift */; };
+		3C5537851E1CDF3D00720879 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C5537841E1CDF3D00720879 /* UserNotifications.framework */; };
+		3C55378A1E1CE2F200720879 /* libXG-SDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C5537871E1CE2F200720879 /* libXG-SDK.a */; };
 		3C57B76A1DE448F200306ACB /* DownloadController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C57B7691DE448F200306ACB /* DownloadController.swift */; };
 		3C5813711BE4BFEA0012C689 /* guide.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3C5813701BE4BFEA0012C689 /* guide.plist */; };
+		3C6471C31E1C9E5A0072A5FB /* libWeChatSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C6471C01E1C9E5A0072A5FB /* libWeChatSDK.a */; };
 		3C77D24D1BE3D0F00029AB70 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C77D2421BE3BD8C0029AB70 /* CoreTelephony.framework */; };
 		3C77D24E1BE3D1110029AB70 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C77D2441BE3BD940029AB70 /* SystemConfiguration.framework */; };
 		3C84DCCB1DD4909E0029D2E6 /* Track.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C84DCCA1DD4909E0029D2E6 /* Track.swift */; };
 		3C8E35281DEAD3DC002D3AC7 /* TrackEncoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C8E35271DEAD3DC002D3AC7 /* TrackEncoding.swift */; };
 		3C9641E41D670DCE00386ABB /* DarwinNotificationHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C9641E31D670DCE00386ABB /* DarwinNotificationHelper.m */; };
-		3C9641E91D670E2200386ABB /* libWeChatSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C9641E61D670E2200386ABB /* libWeChatSDK.a */; };
 		3C9641FA1D670FB800386ABB /* GeocodeAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C9641F71D670FB800386ABB /* GeocodeAnnotation.m */; };
 		3CA224FE1BAFDCDC0028387F /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CA224FD1BAFDCDC0028387F /* CoreMedia.framework */; };
 		3CA3E5D11DE2AB5300CB36ED /* DBHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CA3E5D01DE2AB5300CB36ED /* DBHelper.swift */; };
@@ -110,7 +112,6 @@
 		3CFA58CB1D6706D700341763 /* FSPlaylistItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CFA585E1D6706D700341763 /* FSPlaylistItem.m */; };
 		3CFA58CC1D6706D700341763 /* FSXMLHttpRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CFA58601D6706D700341763 /* FSXMLHttpRequest.m */; };
 		3CFA58CD1D6706D700341763 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CFA58631D6706D700341763 /* Reachability.m */; };
-		3CFA58DB1D6706D700341763 /* PoTunes.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = 3CFA587F1D6706D700341763 /* PoTunes.entitlements */; };
 		3CFFC8031D5DC65D00696F66 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3CFFC8021D5DC65D00696F66 /* Main.storyboard */; };
 /* End PBXBuildFile section */
 
@@ -179,8 +180,15 @@
 		3C434E831DEEAFDC00D4D076 /* LrcString.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LrcString.swift; sourceTree = "<group>"; };
 		3C4A41B81DD9A508008CE37F /* PlayerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerController.swift; sourceTree = "<group>"; };
 		3C4A41BA1DD9D350008CE37F /* TrackLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackLabel.swift; sourceTree = "<group>"; };
+		3C5537841E1CDF3D00720879 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
+		3C5537871E1CE2F200720879 /* libXG-SDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libXG-SDK.a"; sourceTree = "<group>"; };
+		3C5537881E1CE2F200720879 /* XGPush.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XGPush.h; sourceTree = "<group>"; };
+		3C5537891E1CE2F200720879 /* XGSetting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XGSetting.h; sourceTree = "<group>"; };
 		3C57B7691DE448F200306ACB /* DownloadController.swift */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.swift; path = DownloadController.swift; sourceTree = "<group>"; tabWidth = 4; };
 		3C5813701BE4BFEA0012C689 /* guide.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = guide.plist; sourceTree = "<group>"; };
+		3C6471C01E1C9E5A0072A5FB /* libWeChatSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libWeChatSDK.a; sourceTree = "<group>"; };
+		3C6471C11E1C9E5A0072A5FB /* WXApi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApi.h; sourceTree = "<group>"; };
+		3C6471C21E1C9E5A0072A5FB /* WXApiObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApiObject.h; sourceTree = "<group>"; };
 		3C77D2421BE3BD8C0029AB70 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		3C77D2441BE3BD940029AB70 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		3C77D2461BE3BDAF0029AB70 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
@@ -189,9 +197,6 @@
 		3C8E35271DEAD3DC002D3AC7 /* TrackEncoding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackEncoding.swift; sourceTree = "<group>"; };
 		3C9641E21D670DCE00386ABB /* DarwinNotificationHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DarwinNotificationHelper.h; sourceTree = "<group>"; };
 		3C9641E31D670DCE00386ABB /* DarwinNotificationHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DarwinNotificationHelper.m; sourceTree = "<group>"; };
-		3C9641E61D670E2200386ABB /* libWeChatSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libWeChatSDK.a; sourceTree = "<group>"; };
-		3C9641E71D670E2200386ABB /* WXApi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApi.h; sourceTree = "<group>"; };
-		3C9641E81D670E2200386ABB /* WXApiObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApiObject.h; sourceTree = "<group>"; };
 		3C9641F61D670FB800386ABB /* GeocodeAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeocodeAnnotation.h; sourceTree = "<group>"; };
 		3C9641F71D670FB800386ABB /* GeocodeAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeocodeAnnotation.m; sourceTree = "<group>"; };
 		3CA224FD1BAFDCDC0028387F /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
@@ -227,6 +232,8 @@
 		3CCFBF4A1DD41F1C00514873 /* UIImage+Reflection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Reflection.m"; sourceTree = "<group>"; };
 		3CCFBF4B1DD41F1C00514873 /* UIView+Geometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Geometry.h"; sourceTree = "<group>"; };
 		3CCFBF4C1DD41F1C00514873 /* UIView+Geometry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Geometry.m"; sourceTree = "<group>"; };
+		3CDCD2001E1CFF39004F117A /* Debug.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Debug.h; sourceTree = "<group>"; };
+		3CDCD2051E1DFAB1004F117A /* PoTunes.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PoTunes.entitlements; sourceTree = "<group>"; };
 		3CDFB3911DD76E5D006C0975 /* TrackListController.swift */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.swift; path = TrackListController.swift; sourceTree = "<group>"; tabWidth = 4; };
 		3CDFB3971DD776D8006C0975 /* TrackCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackCell.swift; sourceTree = "<group>"; };
 		3CDFB3991DD77CD5006C0975 /* UIColor+RGB.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+RGB.swift"; sourceTree = "<group>"; };
@@ -283,7 +290,6 @@
 		3CFA58601D6706D700341763 /* FSXMLHttpRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSXMLHttpRequest.m; sourceTree = "<group>"; };
 		3CFA58621D6706D700341763 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		3CFA58631D6706D700341763 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
-		3CFA587F1D6706D700341763 /* PoTunes.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = PoTunes.entitlements; sourceTree = "<group>"; };
 		3CFFC7F61D5DBF3500696F66 /* 破音万里-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "破音万里-Bridging-Header.h"; sourceTree = "<group>"; };
 		3CFFC8021D5DC65D00696F66 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		5ACE65060298DC83FD3A5186 /* Pods-破音万里.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-破音万里.release.xcconfig"; path = "Pods/Target Support Files/Pods-破音万里/Pods-破音万里.release.xcconfig"; sourceTree = "<group>"; };
@@ -295,21 +301,23 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3C5537851E1CDF3D00720879 /* UserNotifications.framework in Frameworks */,
 				3CF1E2C11DEB0AE400DD48DC /* Security.framework in Frameworks */,
 				3CF1E2BF1DEB0ABE00DD48DC /* JavaScriptCore.framework in Frameworks */,
 				3CF1E2B11DEB06B900DD48DC /* libxml2.2.tbd in Frameworks */,
 				3CF1E2AF1DEB068500DD48DC /* libsqlite3.tbd in Frameworks */,
 				3CF1E2C91DEC11E300DD48DC /* AMapFoundationKit.framework in Frameworks */,
 				3CF1E2A81DEB032400DD48DC /* libstdc++.6.0.9.tbd in Frameworks */,
+				3C55378A1E1CE2F200720879 /* libXG-SDK.a in Frameworks */,
 				3CF1E2A61DEB031200DD48DC /* libz.tbd in Frameworks */,
 				3C26B5721C4FD2AA0037893F /* AudioToolbox.framework in Frameworks */,
 				3C77D24E1BE3D1110029AB70 /* SystemConfiguration.framework in Frameworks */,
 				3CF1E2C71DEC11E300DD48DC /* AMapSearchKit.framework in Frameworks */,
 				3CF1E2C81DEC11E300DD48DC /* AMapNaviKit.framework in Frameworks */,
-				3C9641E91D670E2200386ABB /* libWeChatSDK.a in Frameworks */,
 				3C77D24D1BE3D0F00029AB70 /* CoreTelephony.framework in Frameworks */,
 				3CA224FE1BAFDCDC0028387F /* CoreMedia.framework in Frameworks */,
 				3CF1E2C61DEC11E300DD48DC /* MAMapKit.framework in Frameworks */,
+				3C6471C31E1C9E5A0072A5FB /* libWeChatSDK.a in Frameworks */,
 				3CB2E45A1BA7D4FA00805D4F /* AddressBook.framework in Frameworks */,
 				3CB2E4041BA7D1CB00805D4F /* MediaPlayer.framework in Frameworks */,
 				3CB2E4001BA7D1B300805D4F /* AVFoundation.framework in Frameworks */,
@@ -529,6 +537,16 @@
 			path = C;
 			sourceTree = "<group>";
 		};
+		3C5537861E1CE2F200720879 /* XGPush */ = {
+			isa = PBXGroup;
+			children = (
+				3C5537871E1CE2F200720879 /* libXG-SDK.a */,
+				3C5537881E1CE2F200720879 /* XGPush.h */,
+				3C5537891E1CE2F200720879 /* XGSetting.h */,
+			);
+			path = XGPush;
+			sourceTree = "<group>";
+		};
 		3C57B7671DE4488B00306ACB /* 已下载歌曲页 */ = {
 			isa = PBXGroup;
 			children = (
@@ -557,9 +575,9 @@
 		3C9641E51D670E2200386ABB /* Wechat */ = {
 			isa = PBXGroup;
 			children = (
-				3C9641E61D670E2200386ABB /* libWeChatSDK.a */,
-				3C9641E71D670E2200386ABB /* WXApi.h */,
-				3C9641E81D670E2200386ABB /* WXApiObject.h */,
+				3C6471C01E1C9E5A0072A5FB /* libWeChatSDK.a */,
+				3C6471C11E1C9E5A0072A5FB /* WXApi.h */,
+				3C6471C21E1C9E5A0072A5FB /* WXApiObject.h */,
 			);
 			path = Wechat;
 			sourceTree = "<group>";
@@ -583,6 +601,7 @@
 		3CB2E2E91BA7B26800805D4F = {
 			isa = PBXGroup;
 			children = (
+				3CDCD2051E1DFAB1004F117A /* PoTunes.entitlements */,
 				3CB2E2F41BA7B26800805D4F /* PoTunes */,
 				3CB2E30E1BA7B26800805D4F /* PoTunesTests */,
 				3CB2E2F31BA7B26800805D4F /* Products */,
@@ -661,6 +680,7 @@
 			children = (
 				3CCFBF421DD41F1C00514873 /* Category */,
 				3CB2E3B01BA7CF2200805D4F /* BebasNeue.otf */,
+				3CDCD2001E1CFF39004F117A /* Debug.h */,
 			);
 			name = Others;
 			sourceTree = "<group>";
@@ -793,13 +813,13 @@
 		3CFA580F1D6706D700341763 /* 3rdParty */ = {
 			isa = PBXGroup;
 			children = (
+				3C5537861E1CE2F200720879 /* XGPush */,
 				3C2EA2C81DE9CA7C004AE511 /* ProgressViewBar */,
 				3C3BD3111DDDA264007545DC /* DRNRealTimeBlurView */,
 				3C9641F31D670FB800386ABB /* AutoNavi */,
 				3C9641E51D670E2200386ABB /* Wechat */,
 				3C9641E11D670DCE00386ABB /* DarwinNotificationHelper */,
 				3CFA583E1D6706D700341763 /* FSAudioStreamer */,
-				3CFA587F1D6706D700341763 /* PoTunes.entitlements */,
 			);
 			path = 3rdParty;
 			sourceTree = "<group>";
@@ -872,6 +892,7 @@
 		4F9130A802A7CD39C1715976 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				3C5537841E1CDF3D00720879 /* UserNotifications.framework */,
 				3CF1E2C01DEB0AE400DD48DC /* Security.framework */,
 				3CF1E2BE1DEB0ABE00DD48DC /* JavaScriptCore.framework */,
 				3CF1E2B01DEB06B900DD48DC /* libxml2.2.tbd */,
@@ -938,13 +959,17 @@
 				TargetAttributes = {
 					3CB2E2F11BA7B26800805D4F = {
 						CreatedOnToolsVersion = 6.4;
+						DevelopmentTeam = 7LKFCH3GR5;
 						LastSwiftMigration = 0800;
-						ProvisioningStyle = Manual;
+						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
-								enabled = 1;
+								enabled = 0;
 							};
 							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+							com.apple.Push = {
 								enabled = 1;
 							};
 						};
@@ -982,7 +1007,6 @@
 			files = (
 				3CF1E2CD1DEC127900DD48DC /* AMap.bundle in Resources */,
 				3CF1E2CB1DEC126200DD48DC /* AMapNavi.bundle in Resources */,
-				3CFA58DB1D6706D700341763 /* PoTunes.entitlements in Resources */,
 				3CB2E3061BA7B26800805D4F /* LaunchScreen.xib in Resources */,
 				3CFFC8031D5DC65D00696F66 /* Main.storyboard in Resources */,
 				3CB2E3B11BA7CF2200805D4F /* BebasNeue.otf in Resources */,
@@ -1209,7 +1233,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_LDFLAGS = "$(inherited)";
 				PROVISIONING_PROFILE = "";
@@ -1226,12 +1250,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = PoTunes/3rdParty/PoTunes.entitlements;
+				CODE_SIGN_ENTITLEMENTS = PoTunes.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: PengCheng Zhao (7LKFCH3GR5)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 7LKFCH3GR5;
-				ENABLE_BITCODE = NO;
+				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/PoTunes",
@@ -1255,6 +1279,7 @@
 					"$(PROJECT_DIR)/PoTunes/3rdParty",
 					"$(PROJECT_DIR)/PoTunes/3rdParty/Wechat",
 					"$(PROJECT_DIR)/PoTunes/3rdParty/BaiduPush",
+					"$(PROJECT_DIR)/PoTunes/3rdParty/XGPush",
 				);
 				OTHER_LDFLAGS = (
 					"$(OTHER_LDFLAGS)",
@@ -1263,8 +1288,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = fm.poche.PoTunes;
 				PRODUCT_MODULE_NAME = PotunesRemix;
 				PRODUCT_NAME = PoTunes;
-				PROVISIONING_PROFILE = "975616b5-e726-4eb6-a67e-a5684f84eace";
-				PROVISIONING_PROFILE_SPECIFIER = Potunes;
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "PoTunes/破音万里-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 			};
@@ -1327,7 +1352,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "$(inherited)";
@@ -1370,7 +1395,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_LDFLAGS = "$(inherited)";
 				PROVISIONING_PROFILE = "";
@@ -1388,12 +1413,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = PoTunes/3rdParty/PoTunes.entitlements;
+				CODE_SIGN_ENTITLEMENTS = PoTunes.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer: PengCheng Zhao (2P9E2Y5942)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = "";
-				ENABLE_BITCODE = NO;
+				DEVELOPMENT_TEAM = 7LKFCH3GR5;
+				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/PoTunes",
@@ -1417,6 +1442,7 @@
 					"$(PROJECT_DIR)/PoTunes/3rdParty",
 					"$(PROJECT_DIR)/PoTunes/3rdParty/Wechat",
 					"$(PROJECT_DIR)/PoTunes/3rdParty/BaiduPush",
+					"$(PROJECT_DIR)/PoTunes/3rdParty/XGPush",
 				);
 				OTHER_LDFLAGS = (
 					"$(OTHER_LDFLAGS)",
@@ -1441,12 +1467,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = PoTunes/3rdParty/PoTunes.entitlements;
+				CODE_SIGN_ENTITLEMENTS = PoTunes.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: PengCheng Zhao (7LKFCH3GR5)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = "";
-				ENABLE_BITCODE = NO;
+				DEVELOPMENT_TEAM = 7LKFCH3GR5;
+				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/PoTunes",
@@ -1470,6 +1496,7 @@
 					"$(PROJECT_DIR)/PoTunes/3rdParty",
 					"$(PROJECT_DIR)/PoTunes/3rdParty/Wechat",
 					"$(PROJECT_DIR)/PoTunes/3rdParty/BaiduPush",
+					"$(PROJECT_DIR)/PoTunes/3rdParty/XGPush",
 				);
 				OTHER_LDFLAGS = (
 					"$(OTHER_LDFLAGS)",

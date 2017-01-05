@@ -58,6 +58,12 @@ class Main: UIViewController, UIGestureRecognizerDelegate, UIAlertViewDelegate {
 	
 	}
 	
+	override var preferredStatusBarStyle: UIStatusBarStyle {
+		
+		return .lightContent
+		
+	}
+	
 	// MARK: - 添加ScrollView
 	func setupScrollView() {
 		

@@ -13,8 +13,8 @@ class NavigationController: UINavigationController {
 	var hidden: Bool?
 
 	override class func initialize() {
-		
-		UIApplication.shared.statusBarStyle = .lightContent
+	
+//		UIApplication.shared.statusBarStyle = .lightContent
 		//设置导航栏样式
 		let navBar: UINavigationBar = UINavigationBar.appearance()
 		
@@ -24,6 +24,7 @@ class NavigationController: UINavigationController {
 		
 		
 	}
+	
 
 	override func viewDidLoad() {
 	
@@ -32,8 +33,7 @@ class NavigationController: UINavigationController {
 		self.hidden = self.view.isHidden
 		
 	}
-
-    
+	
 	override func pushViewController(_ viewController: UIViewController, animated: Bool) {
 	
 		if self.viewControllers.count > 0 {
