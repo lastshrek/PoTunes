@@ -14,7 +14,9 @@
 #import "XGPush.h"
 #import "XGSetting.h"
 #import "Debug.h"
-//#import "MBProgressHUD+MJ.h"
+#import "UMMobClick/MobClick.h"
+#import "PotunesRemix-swift.h"
+
 @interface AppDelegate ()<WXApiDelegate, UNUserNotificationCenterDelegate>
 
 @property (nonatomic, strong) NSTimer *timer;
@@ -72,6 +74,11 @@
 	} errorCallback:^{
 		NSSLog(@"[XGDemo] Handle launching error");
 	}];
+	
+	// 友盟统计
+	UMConfigInstance.appKey = @"58b79080ae1bf8640300208e";
+	UMConfigInstance.channelId = @"App Store";
+	[MobClick startWithConfigure:UMConfigInstance];
 
     return YES;
 }
@@ -271,6 +278,8 @@
 - (void)applicationWillEnterForeground:(UIApplication *)application {
 	
 	[self removeBgTimer];
+	
+//	[[PlayerInterface shared] refreshProgressColor];
 
 }
 

@@ -46,6 +46,7 @@ PODS:
     - SDWebImage/Core (= 3.8.2)
   - SDWebImage/Core (3.8.2)
   - TDImageColors (0.3.1)
+  - UMengAnalytics-NO-IDFA (4.1.5)
 
 DEPENDENCIES:
   - AFNetworking (= 2.6.3)
@@ -64,6 +65,7 @@ DEPENDENCIES:
   - SCLAlertView
   - SDWebImage
   - TDImageColors (~> 0.2)
+  - UMengAnalytics-NO-IDFA
 
 SPEC CHECKSUMS:
   AFNetworking: cb8d14a848e831097108418f5d49217339d4eb60
@@ -84,7 +86,8 @@ SPEC CHECKSUMS:
   SCLAlertView: 8a14ffc40590c619e183eed2298b854385f30be1
   SDWebImage: 098e97e6176540799c27e804c96653ee0833d13c
   TDImageColors: 73feaadb478d4ffa9c3d5c09e2621f8768aa02f9
+  UMengAnalytics-NO-IDFA: f1b08b540eba6ebad044a574cae6d988cf40cfda
 
-PODFILE CHECKSUM: e484b3a5c33e18b8e3aac8f47769befb18a4d210
+PODFILE CHECKSUM: cf5bdea9dca8daf15a2a0613c3c9c4dbd875141e
 
-COCOAPODS: 1.2.0.beta.1
+COCOAPODS: 1.1.1

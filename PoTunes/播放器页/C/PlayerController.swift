@@ -11,7 +11,6 @@ import UIKit
 class PlayerController: UIViewController {
 
 	var player: PlayerInterface?
-	
 
 
 	override func viewDidLoad() {
@@ -31,6 +30,7 @@ class PlayerController: UIViewController {
 		getNotification()
 
 	}
+	
 
 }
 
@@ -61,9 +61,7 @@ extension PlayerController {
 		self.player?.index = index
 		
 		self.player?.coverScroll.reloadData(initialIndex: index!)
-		
-//		self.player?.coverScroll.scrollToIndex(index!, animated: true)
-		
+				
 		self.player?.playTracks(tracks: tracks, index: index!)
 				
 		self.player?.album?.text = title?.components(separatedBy: " - ").last

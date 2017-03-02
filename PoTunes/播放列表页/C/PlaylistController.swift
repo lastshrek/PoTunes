@@ -290,8 +290,6 @@ class PlaylistController: UITableViewController {
 
 		let url = URL(string: O_URL + "\(playlist.ID)")
 		
-		debugPrint(url)
-
 		Alamofire.request(url!).response(completionHandler: { (response) in
 			
 			let tracks: Array = Reflect<Track>.mapObjects(data: response.data)

@@ -25,7 +25,7 @@ class DownloadingCell: UITableViewCell {
 		
 		self.textLabel?.font = UIFont(name: "BebasNeue", size: 14)
 		
-		
+		self.textLabel?.adjustsFontSizeToFitWidth = true
 		
 		progressView.setProgress(0.5, animated: true)
 		

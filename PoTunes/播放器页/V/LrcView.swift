@@ -172,10 +172,16 @@ extension LrcView {
 				
 			}
 			
-			let index = lrc.time?.index((lrc.time?.startIndex)!, offsetBy: 5)
+			if ((lrc.time?.characters.count)! > 8) {
+				
+				let index = lrc.time?.index((lrc.time?.startIndex)!, offsetBy: 8)
+				
+				lrc.time = lrc.time?.substring(to: index!)
+
+			}
 			
-			lrc.time = lrc.time?.substring(to: index!)
 			
+//
 			lrc.lyrics = array.last
 			
 			temp.append(lrc)

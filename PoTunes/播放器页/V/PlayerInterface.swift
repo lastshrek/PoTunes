@@ -44,6 +44,8 @@ class PlayerInterface: UIView, UIApplicationDelegate {
 	var index: Int?
 	var progressOriginal: Float?
 	var originalPoint: CGPoint?
+	var currentProgressColor: UIColor = UIColor.white
+	var cover: UIImage?
 	// MARK: - streamer
 	var streamer: FSAudioController?
 	var repeatMode: AudioRepeatMode?
@@ -104,6 +106,8 @@ class PlayerInterface: UIView, UIApplicationDelegate {
 		getNotification()
 		
 	}
+	
+	
     
     override var canBecomeFirstResponder: Bool {
         
@@ -246,7 +250,9 @@ class PlayerInterface: UIView, UIApplicationDelegate {
 	
 		center.addObserver(self, selector: #selector(nonspeaking), name: Notification.Name("nonspeaking"), object: nil)
 		
-		center.addObserver(self, selector: #selector(audioSessionDidChangeInterruptionType(notification:)), name: NSNotification.Name.AVAudioSessionRouteChange, object: AVAudioSession.sharedInstance())
+		center.addObserver(self, selector: #selector(audioSessionDidChangeInterruptionType(notification:)),
+		                   name: NSNotification.Name.AVAudioSessionRouteChange,
+		                   object: AVAudioSession.sharedInstance())
 				
 	}
 	
@@ -294,7 +300,24 @@ class PlayerInterface: UIView, UIApplicationDelegate {
 		}
 	
 	}
+	
+	func refreshProgressColor() {
 		
+		let colorPicker: LEColorPicker = LEColorPicker()
+		
+		let colorScheme = colorPicker.colorScheme(from: cover)
+		
+		self.progress?.color = colorScheme?.backgroundColor
+		
+		self.name?.textColor = colorScheme?.backgroundColor
+		
+		self.artist?.textColor = colorScheme?.backgroundColor
+		
+		self.album?.textColor = colorScheme?.backgroundColor
+
+	
+	}
+	
 }
 // MARK: - initial subviews
 extension PlayerInterface {
@@ -316,11 +339,15 @@ extension PlayerInterface {
 		
 		reflection.image = UIImage(named: "noArtwork")?.reflection(withAlpha: 0.4)
 		
+		reflection.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+		
 		self.backgroundView.addSubview(reflection)
 		
 		self.backgroundView.sendSubview(toBack: reflection)
 		
 		coverScroll.dataSource = self
+		
+		coverScroll.autoresizingMask = [.flexibleHeight, .flexibleWidth]
 		
 		coverScroll.delegate = self
 		
@@ -658,28 +685,6 @@ extension PlayerInterface {
 		
 		DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { 
 			
-			// MARK: 设置锁屏信息
-			let cover = self.coverScroll.viewAtIndex(self.index!) as! UIImageView
-			
-			let artwork: MPMediaItemArtwork = MPMediaItemArtwork.init(image: cover.image!)
-			
-			let duration: TimeInterval = Double((self.streamer!.activeStream.duration.minute)) * 60 + Double((self.streamer!.activeStream.duration.second))
-			
-			let info : [String:AnyObject] = [
-				
-				MPMediaItemPropertyArtist : track.artist as AnyObject,
-				
-				MPMediaItemPropertyAlbumTitle : self.album!.text as AnyObject,
-				
-				MPMediaItemPropertyTitle: track.name as AnyObject,
-				
-				MPMediaItemPropertyArtwork: artwork,
-				
-				MPMediaItemPropertyPlaybackDuration: duration as AnyObject
-				
-			]
-			
-			MPNowPlayingInfoCenter.default().nowPlayingInfo = info
 			
 		}
 		
@@ -713,6 +718,7 @@ extension PlayerInterface {
 		
 		cover.sd_setImage(with: URL(string: track.cover + "!/fw/600")) { (image, _, _, _) in
 			
+			self.cover = image
 			
 			DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
 				
@@ -726,23 +732,30 @@ extension PlayerInterface {
 				
 				self.reflection.image = image?.reflection(withAlpha: 0.4)
 				
-				let colorPicker: LEColorPicker = LEColorPicker()
+				self.refreshProgressColor()
 				
-				let colorScheme = colorPicker.colorScheme(from: cover.image)
+				let artwork: MPMediaItemArtwork = MPMediaItemArtwork.init(image: image!)
 				
-				self.progress?.color = colorScheme?.backgroundColor
+				let duration: TimeInterval = Double((self.streamer!.activeStream.duration.minute)) * 60 + Double((self.streamer!.activeStream.duration.second))
 				
-				self.name?.textColor = colorScheme?.backgroundColor
+				let info : [String:AnyObject] = [
+					
+					MPMediaItemPropertyArtist : track.artist as AnyObject,
+					
+					MPMediaItemPropertyAlbumTitle : self.album!.text as AnyObject,
+					
+					MPMediaItemPropertyTitle: track.name as AnyObject,
+					
+					MPMediaItemPropertyArtwork: artwork,
+					
+					MPMediaItemPropertyPlaybackDuration: duration as AnyObject
+					
+				]
 				
-				self.artist?.textColor = colorScheme?.backgroundColor
-				
-				self.album?.textColor = colorScheme?.backgroundColor
-				
+				MPNowPlayingInfoCenter.default().nowPlayingInfo = info
+
 			}
 			
-			
-			// 设置锁屏信息
-	
 		}
 		
 	}
@@ -855,6 +868,8 @@ extension PlayerInterface {
 		currentTime.text = NSString(format: "%d:%@", cur.minute, currSecond) as String
 		
 		leftTime.text = NSString(format: "%@:%@", leftMin, leftSec) as String
+		
+		refreshProgressColor()
 		
 		// when play at the end of file
 		weak var weakself: PlayerInterface? = self
@@ -1111,7 +1126,7 @@ extension PlayerInterface {
 			
 			tempBounds.size.width -= 40
 			
-			tempBounds.size.height -= 40
+			tempBounds.size.height -= 400
 			
 			backgroundView.bounds = tempBounds
 			
@@ -1132,13 +1147,13 @@ extension PlayerInterface {
 			if seekForwardPercent >= 1 || seekForwardPercent < 0 { return }
 			
 			self.progress?.progress = CGFloat(seekForwardPercent)
+			
 		}
 		
 		// change the progress
 		if recognizer.state == .ended {
 			
 			// restore
-			
 			lastPoint = recognizer.location(in: self)
 			
 			backgroundView.frame = self.frame
@@ -1151,6 +1166,7 @@ extension PlayerInterface {
 			seek.position = Float((self.progress?.progress)!)
 			
 			self.streamer?.activeStream.seek(to: seek)
+			
 		}
 	}
 	
@@ -1342,6 +1358,8 @@ extension PlayerInterface: LTInfiniteScrollViewDataSource {
 		let size = self.bounds.size.width / CGFloat(numberOfVisibleViews())
 		
 		let cover: UIImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: size, height: size))
+		
+		cover.autoresizingMask = [.flexibleHeight, .flexibleWidth]
 
 		if self.tracks.count > 0 {
 			
