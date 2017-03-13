@@ -1,6 +1,0 @@
-framework module LTInfiniteScrollViewSwift {
-  umbrella header "LTInfiniteScrollViewSwift-umbrella.h"
-
-  export *
-  module * { export * }
-}

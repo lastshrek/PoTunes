@@ -9,7 +9,6 @@
 
 import UIKit
 import LDProgressView
-import LTInfiniteScrollViewSwift
 import PKHUD
 import FMDB
 import LEColorPicker
@@ -17,19 +16,7 @@ import Alamofire
 import SCLAlertView
 
 class PlayerInterface: UIView, UIApplicationDelegate {
-    
-    static let shared: PlayerInterface = {
-        
-        let instance = PlayerInterface()
-        
-        return instance
-        
-    }()
-	
-	// MARK: - basic components
-	let backgroundView = UIView()
-	var coverScroll = LTInfiniteScrollView()
-	var reflection = UIImageView()
+
 	var bufferingIndicator :LDProgressView?
 	var progress: LDProgressView?
 	var timeView = UIView()
@@ -37,11 +24,8 @@ class PlayerInterface: UIView, UIApplicationDelegate {
 	var leftTime = UILabel()
 	var name: TrackLabel?
 	var artist: TrackLabel?
-	var album: TrackLabel?
 	var playModeView = UIImageView()
 	var lrcView = LrcView()
-	var tracks: Array<TrackEncoding> = []
-	var index: Int?
 	var progressOriginal: Float?
 	var originalPoint: CGPoint?
 	var currentProgressColor: UIColor = UIColor.white
@@ -65,22 +49,6 @@ class PlayerInterface: UIView, UIApplicationDelegate {
 		
 		return db
 	}()
-	// MARK: - 播放本地还是网络
-	var type: String?
-	// MARK: - 播放模式
-	enum AudioRepeatMode: Int {
-		case single = 0
-		case playlist
-		case towards
-		case shuffle
-	}
-	// MARK: - 播放操作
-	enum AudioPlayState {
-		case play
-		case pause
-		case next
-		case previous
-	}
 	
 	let lrcUrl = "https://poche.fm/api/app/lyrics/"
 	
