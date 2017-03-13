@@ -8,14 +8,12 @@ target '破音万里' do
 	pod 'SDWebImage'
 	pod 'Alamofire', '~> 4.0'
 	pod 'FontAwesome.swift'
-	pod 'TDImageColors', '~> 0.2'
 	pod 'FMDB'
-	pod 'Masonry'
 	pod 'LTInfiniteScrollViewSwift'
 	pod 'LEColorPicker'
+	pod 'SCLAlertView'
+	pod 'UMengAnalytics-NO-IDFA'
 	pod 'AMapNavi'  #导航 SDK
 	pod 'AMapLocation' #定位SDK
 	pod 'AMapSearch' #搜索服务SDK
-	pod 'SCLAlertView'
-	pod 'UMengAnalytics-NO-IDFA'
 end

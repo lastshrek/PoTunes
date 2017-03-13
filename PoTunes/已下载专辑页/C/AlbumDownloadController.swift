@@ -107,7 +107,7 @@ extension AlbumDownloadController {
 		// #warning Incomplete implementation, return the number of rows
 		if section == 0 {
 			
-			return 1
+			return 2
 			
 		} else {
 			
@@ -122,9 +122,23 @@ extension AlbumDownloadController {
 		
 		if indexPath.section == 0 {
 			
-			cell.imageView?.image = UIImage.fontAwesomeIcon(name: .download, textColor: UIColor.colorByRGB(red: 17, green: 133, blue: 117, alpha: 0.8), size: CGSize(width: 100, height: 100))
+			if (indexPath.row == 0) {
+				
+				cell.imageView?.image = UIImage.fontAwesomeIcon(name: .download, textColor: UIColor.colorByRGB(red: 17, green: 133, blue: 117, alpha: 0.8), size: CGSize(width: 30, height: 30))
+				
+				cell.textLabel?.text = "正在缓存"
 			
-			cell.textLabel?.text = "正在缓存"
+			}
+			
+			if (indexPath.row == 1) {
+				
+				cell.imageView?.image = UIImage.fontAwesomeIcon(name: .list, textColor: UIColor.colorByRGB(red: 17, green: 133, blue: 117, alpha: 0.8), size: CGSize(width: 30, height: 30))
+				
+				cell.textLabel?.text = "所有歌曲"
+				
+			}
+			
+			
 			
 		} else {
 			
@@ -174,29 +188,18 @@ extension AlbumDownloadController {
             let s = tracksDB.executeQuery(query, withArgumentsIn: nil)
             
             while (s?.next())! {
-				
-                let artist = (s?.string(forColumn: "author"))!
-                
+				let artist = (s?.string(forColumn: "author"))!
                 let name = (s?.string(forColumn: "title"))!
-                
                 let url = (s?.string(forColumn: "sourceURL"))!
-                
                 let ID = (Int)((s?.int(forColumn: "indexPath"))!)
-                
                 let cover = (s?.string(forColumn: "thumb"))!
-				
 				let track = TrackEncoding(ID: ID, name: name, artist: artist, cover: cover, url: url)
-
                 tracks.append(track)
-				
             }
-            
             s?.close()
-            
-            download.title = title?.components(separatedBy: " - ").last
-            
+
+			download.title = title?.components(separatedBy: " - ").last
             download.tracks = tracks
-            
             download.delegate = self
             
             self.navigationController?.pushViewController(download, animated: true)
@@ -204,31 +207,68 @@ extension AlbumDownloadController {
 			
 		} else {
 			
-			if downloadingArray.count == 0 {
+			if (indexPath.row == 0) {
 				
-				HUD.flash(.labeledError(title: "当前并无正在缓存歌曲", subtitle: nil), delay: 0.6)
+				if downloadingArray.count == 0 {
+					
+					HUD.flash(.labeledError(title: "当前并无正在缓存歌曲", subtitle: nil), delay: 0.6)
+					
+					return
+					
+				}
+				
+				let downloading = DownloadingController()
+				
+				if op == nil || op?.isPaused() == true {
+					
+					downloading.isPaused = true
+					
+				} else {
+					
+					downloading.isPaused = false
+					
+				}
+				
+				downloading.delegate = self
+				
+				downloading.downloadingArray = downloadingArray
+				
+				self.navigationController?.pushViewController(downloading, animated: true)
 				
 				return
 				
 			}
 			
-			let downloading = DownloadingController()
-			
-			if op == nil || op?.isPaused() == true {
+			if (indexPath.row == 1) {
 				
-				downloading.isPaused = true
+				let download = DownloadController()
 				
-			} else {
+				var tracks: Array<TrackEncoding> = []
+								
+				let query = "SELECT * FROM t_downloading WHERE downloaded = 1;"
 				
-				downloading.isPaused = false
+				let s = tracksDB.executeQuery(query, withArgumentsIn: nil)
+				
+				while (s?.next())! {
+					let artist = (s?.string(forColumn: "author"))!
+					let name = (s?.string(forColumn: "title"))!
+					let url = (s?.string(forColumn: "sourceURL"))!
+					let ID = (Int)((s?.int(forColumn: "indexPath"))!)
+					let cover = (s?.string(forColumn: "thumb"))!
+					let track = TrackEncoding(ID: ID, name: name, artist: artist, cover: cover, url: url)
+					tracks.append(track)
+				}
+				s?.close()
+				
+				download.title = "本地歌曲"
+				download.tracks = tracks
+				download.delegate = self
+				
+				self.navigationController?.pushViewController(download, animated: true)
 				
 			}
 			
-			downloading.delegate = self
 			
-			downloading.downloadingArray = downloadingArray
-			
-			self.navigationController?.pushViewController(downloading, animated: true)
 			
 		}
 		
@@ -678,7 +718,6 @@ extension AlbumDownloadController {
 							print("Could not clear temp folder: \(error)")
 							
 						}
-						
 						
 					}
 					

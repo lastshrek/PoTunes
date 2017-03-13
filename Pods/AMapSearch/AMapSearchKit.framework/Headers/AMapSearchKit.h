@@ -3,7 +3,7 @@
 //  AMapSearchKit
 //
 //  Created by xiaoming han on 15/7/22.
-//  Copyright (c) 2015年 AutoNavi. All rights reserved.
+//  Copyright (c) 2015年 Amap. All rights reserved.
 //
 
 #import <AMapSearchKit/AMapSearchAPI.h>

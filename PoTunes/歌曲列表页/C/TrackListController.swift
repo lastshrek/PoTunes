@@ -378,7 +378,6 @@ extension TrackListController {
 			
 			s?.close()
 			
-			
 			return
 			
 		}

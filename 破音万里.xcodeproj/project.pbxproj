@@ -48,6 +48,7 @@
 		3C57B76A1DE448F200306ACB /* DownloadController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C57B7691DE448F200306ACB /* DownloadController.swift */; };
 		3C5813711BE4BFEA0012C689 /* guide.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3C5813701BE4BFEA0012C689 /* guide.plist */; };
 		3C6471C31E1C9E5A0072A5FB /* libWeChatSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C6471C01E1C9E5A0072A5FB /* libWeChatSDK.a */; };
+		3C7795961E76814500CCC315 /* PlayerInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C7795951E76814500CCC315 /* PlayerInterface.m */; };
 		3C77D24D1BE3D0F00029AB70 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C77D2421BE3BD8C0029AB70 /* CoreTelephony.framework */; };
 		3C77D24E1BE3D1110029AB70 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C77D2441BE3BD940029AB70 /* SystemConfiguration.framework */; };
 		3C84DCCB1DD4909E0029D2E6 /* Track.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C84DCCA1DD4909E0029D2E6 /* Track.swift */; };
@@ -189,6 +190,8 @@
 		3C6471C01E1C9E5A0072A5FB /* libWeChatSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libWeChatSDK.a; sourceTree = "<group>"; };
 		3C6471C11E1C9E5A0072A5FB /* WXApi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApi.h; sourceTree = "<group>"; };
 		3C6471C21E1C9E5A0072A5FB /* WXApiObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApiObject.h; sourceTree = "<group>"; };
+		3C7795941E76814500CCC315 /* PlayerInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerInterface.h; sourceTree = "<group>"; };
+		3C7795951E76814500CCC315 /* PlayerInterface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayerInterface.m; sourceTree = "<group>"; };
 		3C77D2421BE3BD8C0029AB70 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		3C77D2441BE3BD940029AB70 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		3C77D2461BE3BDAF0029AB70 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
@@ -720,6 +723,8 @@
 				3CCFBF361DD41E0300514873 /* LrcView.swift */,
 				3CCFBF2E1DD41DAD00514873 /* PlayerInterface.swift */,
 				3C36F44E1E150F6A00BD447F /* LrcLabel.swift */,
+				3C7795941E76814500CCC315 /* PlayerInterface.h */,
+				3C7795951E76814500CCC315 /* PlayerInterface.m */,
 			);
 			path = V;
 			sourceTree = "<group>";
@@ -1166,6 +1171,7 @@
 				3C2EA2C71DE9B7DD004AE511 /* DownloadingCell.swift in Sources */,
 				3C0A1A961DD5B35400E90306 /* MainScrollview.swift in Sources */,
 				3CB2E2F81BA7B26800805D4F /* main.m in Sources */,
+				3C7795961E76814500CCC315 /* PlayerInterface.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1203,6 +1209,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 0D348453E5A357FD09B587CE /* Pods-破音万里.ad hoc distribution.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -1315,6 +1322,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 28F6DD77EB623BF8E85E58B2 /* Pods-破音万里.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -1365,6 +1373,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 5ACE65060298DC83FD3A5186 /* Pods-破音万里.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";

@@ -21,15 +21,15 @@ PODS:
     - AFNetworking/NSURLConnection
     - AFNetworking/NSURLSession
   - Alamofire (4.0.1)
-  - AMap3DMap (4.4.0):
+  - AMap3DMap (4.6.1):
     - AMapFoundation (~> 1.3)
-  - AMapFoundation (1.3.1)
-  - AMapLocation (2.2.0):
+  - AMapFoundation (1.3.4)
+  - AMapLocation (2.3.0):
     - AMapFoundation (~> 1.3)
   - AMapNavi (2.3.0):
     - AMap3DMap (~> 4.2)
     - AMapFoundation (~> 1.2)
-  - AMapSearch (4.4.0):
+  - AMapSearch (4.5.0):
     - AMapFoundation (~> 1.2)
   - DGElasticPullToRefresh (1.1)
   - FMDB (2.6.2):
@@ -39,13 +39,11 @@ PODS:
   - LDProgressView (1.2.1)
   - LEColorPicker (1.0.3)
   - LTInfiniteScrollViewSwift (0.4.0)
-  - Masonry (1.0.2)
   - PKHUD (4.0.0)
   - SCLAlertView (0.7.0)
   - SDWebImage (3.8.2):
     - SDWebImage/Core (= 3.8.2)
   - SDWebImage/Core (3.8.2)
-  - TDImageColors (0.3.1)
   - UMengAnalytics-NO-IDFA (4.1.5)
 
 DEPENDENCIES:
@@ -60,34 +58,30 @@ DEPENDENCIES:
   - LDProgressView (>= 1.1)
   - LEColorPicker
   - LTInfiniteScrollViewSwift
-  - Masonry
   - PKHUD (~> 4.0)
   - SCLAlertView
   - SDWebImage
-  - TDImageColors (~> 0.2)
   - UMengAnalytics-NO-IDFA
 
 SPEC CHECKSUMS:
   AFNetworking: cb8d14a848e831097108418f5d49217339d4eb60
   Alamofire: 7682d43245de14874acd142ec137b144aa1dd335
-  AMap3DMap: c3f6aa63aea668e34f88c7beea69167ef6e8f1a2
-  AMapFoundation: 636834a27cd003084f56b4232f3031e6a44c7e7e
-  AMapLocation: 3f2005c6dec6a7a1107258d0cde43b9d7399d217
+  AMap3DMap: eb6656fb441ed7eb310b3c121032e947d4d649e5
+  AMapFoundation: 486493b8e9ae4a1cb7ce2d8d8978ee1aabf9bb34
+  AMapLocation: 5fb51fe0e35e68a899199651942e6234d6257d91
   AMapNavi: 4f48c7b34275f80f3d14eff669ac739e0e190c1b
-  AMapSearch: a6c7c83905dbe12aa059c7ff83cb0726cb4fc32f
+  AMapSearch: 7a6ebc20a42e34a021b042b047f198082fc2fc30
   DGElasticPullToRefresh: 28f11a6026302a90f8ffebbc6e24748e584dddd3
   FMDB: 854a0341b4726e53276f2a8996f06f1b80f9259a
   FontAwesome.swift: 2d32a3d62195343c2004b7c9043294ed2948553a
   LDProgressView: f6afc7c30d2a9edf33001515f3189338567a32d2
   LEColorPicker: 34509a9df7a128b1109a5dbe3f25921fc511c03d
   LTInfiniteScrollViewSwift: 726501ddfedca36d1513f058f11284d6ccc7c949
-  Masonry: 7c429b56da9d4ee0bbb3ed77a5ea710d6a5df39e
   PKHUD: 2bb45c936bb8afa39f3cd33ec14e8cc89f624255
   SCLAlertView: 8a14ffc40590c619e183eed2298b854385f30be1
   SDWebImage: 098e97e6176540799c27e804c96653ee0833d13c
-  TDImageColors: 73feaadb478d4ffa9c3d5c09e2621f8768aa02f9
   UMengAnalytics-NO-IDFA: f1b08b540eba6ebad044a574cae6d988cf40cfda
 
-PODFILE CHECKSUM: cf5bdea9dca8daf15a2a0613c3c9c4dbd875141e
+PODFILE CHECKSUM: 6c256386104bb2efeb1edbf17b66520ee3969cba
 
 COCOAPODS: 1.1.1

@@ -45,10 +45,10 @@ class PlayerInterface: UIView, UIApplicationDelegate {
 	var progressOriginal: Float?
 	var originalPoint: CGPoint?
 	var currentProgressColor: UIColor = UIColor.white
-	var cover: UIImage?
+	var nowCover: UIImageView?
 	// MARK: - streamer
-	var streamer: FSAudioController?
-	var repeatMode: AudioRepeatMode?
+	var streamer: FSAudioController = FSAudioController()
+	var repeatMode = AudioRepeatMode.towards
 	var paused: Bool = true
 	// MARK: - Timer
 	var currentTimeTimer: Timer?
@@ -85,41 +85,20 @@ class PlayerInterface: UIView, UIApplicationDelegate {
 	let lrcUrl = "https://poche.fm/api/app/lyrics/"
 	
 	override init(frame: CGRect) {
-		
 		super.init(frame: frame)
-		
-		self.backgroundColor = UIColor.black
+		UIApplication.shared.beginReceivingRemoteControlEvents()
+		backgroundColor = UIColor.black
 		
 		initialSubviews()
-		
 		addGestureRecognizer()
-		
-		repeatMode = AudioRepeatMode.towards
-        
-        UIApplication.shared.beginReceivingRemoteControlEvents()
-        
-        self.becomeFirstResponder()
-		
-		// get last played
+        becomeFirstResponder()
 		getLastPlaySongAndPlayState()
-		
 		getNotification()
 		
 	}
+    override var canBecomeFirstResponder: Bool { return true }
 	
-	
-    
-    override var canBecomeFirstResponder: Bool {
-        
-        return true
-        
-    }
-	
-	required init?(coder aDecoder: NSCoder) {
-		
-		fatalError("init(coder:) has not been implemented")
-	
-	}
+	required init?(coder aDecoder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 	
 	override func layoutSubviews() {
 		
@@ -132,28 +111,17 @@ class PlayerInterface: UIView, UIApplicationDelegate {
 		let width = self.width()
 		
 		reflection.frame =  CGRect(x: 0, y: height - width, width: width, height: width)
-		
 		coverScroll.frame = CGRect(x: 0, y: 0, width: width, height: width)
-
 		lrcView.frame = CGRect(x: 0, y: 0, width: width, height: width)
-
 		bufferingIndicator?.frame = CGRect(x: 0, y: width, width: width, height: 15)
-		
 		progress?.frame = CGRect(x: 0, y: width, width: width, height: 15)
-
 		playModeView.frame = CGRect(x: width / 2 - 10, y: height - 50, width: 20, height: 20)
-
 		// MARK: - 除3
 		self.name?.frame = CGRect(x: 0, y: width + 20, width: width, height: 40)
-		
 		self.artist?.frame = CGRect(x: 0, y: width + 60, width: width, height: 40)
-		
 		self.album?.frame = CGRect(x: 0, y: width + 100, width: width, height: 40)
-		
 		timeView.frame = CGRect(x: 0, y: (self.progress?.frame.maxY)!, width: width, height: 20)
-		
 		currentTime.frame = CGRect(x: 2, y: 0, width: width / 2, height: 20)
-		
 		leftTime.frame = CGRect(x: width / 2 - 2, y: 0, width: width / 2, height: (self.timeView.bounds.size.height))
 	}
 	
@@ -258,13 +226,13 @@ class PlayerInterface: UIView, UIApplicationDelegate {
 	
 	func speaking() {
 		
-		streamer?.volume = 0.1
+		streamer.volume = 0.1
 		
 	}
 	
 	func nonspeaking() {
 		
-		streamer?.volume = 1
+		streamer.volume = 1
 		
 	}
 	// MARK: earphone plugged in
@@ -305,7 +273,7 @@ class PlayerInterface: UIView, UIApplicationDelegate {
 		
 		let colorPicker: LEColorPicker = LEColorPicker()
 		
-		let colorScheme = colorPicker.colorScheme(from: cover)
+		let colorScheme = colorPicker.colorScheme(from: nowCover?.image)
 		
 		self.progress?.color = colorScheme?.backgroundColor
 		
@@ -323,38 +291,21 @@ class PlayerInterface: UIView, UIApplicationDelegate {
 extension PlayerInterface {
 	
 	func initialSubviews() {
-		
-		// streamer
-		
-		streamer = FSAudioController()
-		
 		// backgourndView
 		backgroundView.backgroundColor = UIColor.black
-		
 		backgroundView.autoresizingMask = [.flexibleWidth, .flexibleTopMargin]
-		
 		self.addSubview(backgroundView)
 		// 倒影封面
 		reflection.autoresizingMask = [.flexibleHeight, .flexibleWidth]
-		
 		reflection.image = UIImage(named: "noArtwork")?.reflection(withAlpha: 0.4)
-		
 		reflection.autoresizingMask = [.flexibleHeight, .flexibleWidth]
-		
 		self.backgroundView.addSubview(reflection)
-		
 		self.backgroundView.sendSubview(toBack: reflection)
 		
 		coverScroll.dataSource = self
-		
-		coverScroll.autoresizingMask = [.flexibleHeight, .flexibleWidth]
-		
 		coverScroll.delegate = self
-		
 		coverScroll.maxScrollDistance = 2
-		
 		coverScroll.reloadData(initialIndex: 0)
-		
 		self.backgroundView.addSubview(coverScroll)
 		
 		//缓冲条
@@ -371,7 +322,6 @@ extension PlayerInterface {
 		                                                            backgroundColor: UIColor.lightText)
 		
 		self.bufferingIndicator = bufferingIndicator
-		
 		self.backgroundView.addSubview(bufferingIndicator)
 		
 		//进度条
@@ -388,7 +338,6 @@ extension PlayerInterface {
 		                                                  backgroundColor: UIColor.clear)
 		
 		self.progress = progress
-		
 		self.backgroundView.addSubview(progress)
 		
 		//开始时间和剩余时间
@@ -403,7 +352,6 @@ extension PlayerInterface {
 		                              textAlignment: .left)
 		
 		self.currentTime = currentTime
-		
 		self.timeView.addSubview(currentTime)
 		
 		//剩余时间
@@ -412,9 +360,7 @@ extension PlayerInterface {
 		                           textColor: UIColor.white,
 		                           text: nil,
 		                           textAlignment: .right)
-		
 		self.timeView.addSubview(leftTime)
-		
 		self.leftTime = leftTime
 		
 		//歌曲名
@@ -567,7 +513,7 @@ extension PlayerInterface {
 			
 			alertView.addButton("取消") {
 
-				self.streamer?.activeStream.stop()
+				self.streamer.activeStream.stop()
 			
 			}
 			
@@ -616,8 +562,6 @@ extension PlayerInterface {
 	
 	func startPlay() {
 		
-		streamer = nil
-		
 		self.lrcView.lyricsLines.removeAll()
 		
 		self.lrcView.chLrcArray.removeAll()
@@ -636,8 +580,6 @@ extension PlayerInterface {
 		
 		let s = tracksDB.executeQuery(query, withArgumentsIn: [track.url])
 		
-		streamer = FSAudioController()
-		
 		if s?.next() == true {
 			
 			let isDownloaded = s?.bool(forColumn: "downloaded")
@@ -648,18 +590,18 @@ extension PlayerInterface {
 				
 				let filePath = rootPath + "/\(identifier)"
 				
-				streamer?.activeStream.play(from: URL(fileURLWithPath: filePath))
+				streamer.activeStream.play(from: URL(fileURLWithPath: filePath))
 				
 				
 			} else {
 				
-				streamer?.activeStream.play(from: URL(string: track.url))
-				
+				streamer.activeStream.play(from: URL(string: track.url))
+								
 			}
 			
 		} else {
 			
-			streamer?.activeStream.play(from: URL(string: track.url))
+			streamer.activeStream.play(from: URL(string: track.url))
 			
 		}
 		
@@ -669,7 +611,7 @@ extension PlayerInterface {
 		
 		let user = UserDefaults.standard
 		
-		user.set(self.repeatMode?.rawValue, forKey: "repeatMode")
+		user.set(self.repeatMode.rawValue, forKey: "repeatMode")
 		
 		let tracksData = NSKeyedArchiver.archivedData(withRootObject: tracks)
 		
@@ -683,10 +625,6 @@ extension PlayerInterface {
 		
 		changeInterface(self.index!)
 		
-		DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { 
-			
-			
-		}
 		
 	}
 	// MARK: Change interface
@@ -714,49 +652,33 @@ extension PlayerInterface {
 		
 		self.lrcView.noLrcLabel.isHidden = true
 		
-		let cover: UIImageView = UIImageView()
 		
-		cover.sd_setImage(with: URL(string: track.cover + "!/fw/600")) { (image, _, _, _) in
+		nowCover?.sd_setImage(with: URL(string: track.cover + "!/fw/600"), placeholderImage: nowCover?.image, options: .retryFailed, progress: { (_, _) in
 			
-			self.cover = image
+		}, completed: { (image, _, _, _) in
+		
 			
+			self.nowCover?.image = image
+
 			DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
-				
+
 				self.lrcView.renderStatic = false
-				
-			}
-			
-			DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
-				
-				self.lrcView.renderStatic = true
-				
-				self.reflection.image = image?.reflection(withAlpha: 0.4)
-				
-				self.refreshProgressColor()
-				
-				let artwork: MPMediaItemArtwork = MPMediaItemArtwork.init(image: image!)
-				
-				let duration: TimeInterval = Double((self.streamer!.activeStream.duration.minute)) * 60 + Double((self.streamer!.activeStream.duration.second))
-				
-				let info : [String:AnyObject] = [
-					
-					MPMediaItemPropertyArtist : track.artist as AnyObject,
-					
-					MPMediaItemPropertyAlbumTitle : self.album!.text as AnyObject,
-					
-					MPMediaItemPropertyTitle: track.name as AnyObject,
-					
-					MPMediaItemPropertyArtwork: artwork,
-					
-					MPMediaItemPropertyPlaybackDuration: duration as AnyObject
-					
-				]
-				
-				MPNowPlayingInfoCenter.default().nowPlayingInfo = info
 
 			}
-			
-		}
+
+			DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
+
+				self.lrcView.renderStatic = true
+
+				self.reflection.image = image?.reflection(withAlpha: 0.3)
+
+				self.refreshProgressColor()
+
+				
+			}
+
+		})
+		
 		
 	}
 	// MARK: Load Lyrics
@@ -832,11 +754,11 @@ extension PlayerInterface {
 	
 	func updateCurrentTime() {
 		
-		if streamer?.activeStream.duration.minute == 0 && streamer?.activeStream.duration.second == 0 { return }
+		if streamer.activeStream.duration.minute == 0 && streamer.activeStream.duration.second == 0 { return }
 		// get currentTime and duration
-		let cur: FSStreamPosition = (streamer!.activeStream.currentTimePlayed)
+		let cur: FSStreamPosition = (streamer.activeStream.currentTimePlayed)
 		
-		let total: FSStreamPosition = (streamer!.activeStream.duration)
+		let total: FSStreamPosition = (streamer.activeStream.duration)
 		// set play progress
 		let progress: Double = (Double)(cur.minute * 60 + cur.second) / (Double)(total.minute * 60 + total.second)
 		
@@ -874,24 +796,44 @@ extension PlayerInterface {
 		// when play at the end of file
 		weak var weakself: PlayerInterface? = self
 
-		self.streamer?.activeStream.onCompletion = { () -> Void in
+		self.streamer.activeStream.onCompletion = { () -> Void in
 			
 			weakself?.playNext()
 						
 		}
 		
+		let artwork: MPMediaItemArtwork = MPMediaItemArtwork.init(image: (nowCover?.image)!)
+		
+		let duration: TimeInterval = Double((self.streamer.activeStream.duration.minute)) * 60 + Double((self.streamer.activeStream.duration.second))
+		
+		let elapsedPlaybackTime = cur.minute * 60 + cur.second
+		
+		let track: TrackEncoding = tracks[index!];
+		
+		let info : [String:AnyObject] = [
+			
+			MPMediaItemPropertyArtist : track.artist as AnyObject,
+			
+			MPMediaItemPropertyAlbumTitle : self.album!.text as AnyObject,
+			
+			MPMediaItemPropertyTitle: track.name as AnyObject,
+			
+			MPMediaItemPropertyArtwork: artwork,
+			
+			MPMediaItemPropertyPlaybackDuration: duration as AnyObject,
+			
+			MPNowPlayingInfoPropertyElapsedPlaybackTime: elapsedPlaybackTime as AnyObject
+			
+		]
+		
+		MPNowPlayingInfoCenter.default().nowPlayingInfo = info
+		
 
 	}
 	
 	func updatePlayBackProgress() {
-        
-        if streamer?.activeStream.contentLength == nil {
-            
-            return
-            
-        }
-		
-		if (streamer?.activeStream.contentLength)! > 0 {
+	
+		if (streamer.activeStream.contentLength) > 0 {
 					
 			if (bufferingIndicator?.progress)! >= CGFloat(1)  {
 
@@ -903,11 +845,11 @@ extension PlayerInterface {
 				
 			}
 			
-			let currentOffset = streamer?.activeStream.currentSeekByteOffset
+			let currentOffset = streamer.activeStream.currentSeekByteOffset
 			
-			let totalBufferedData = Int((currentOffset?.start)!) + (streamer?.activeStream.prebufferedByteCount)!
+			let totalBufferedData = Int((currentOffset.start)) + (streamer.activeStream.prebufferedByteCount)
 			
-			let bufferedDataFromTotal = Float(totalBufferedData) / Float((streamer?.activeStream.contentLength)!)
+			let bufferedDataFromTotal = Float(totalBufferedData) / Float((streamer.activeStream.contentLength))
 			
 			bufferingIndicator?.progress = CGFloat(bufferedDataFromTotal)
 		
@@ -974,29 +916,22 @@ extension PlayerInterface {
     // MARK: - 播放暂停
 	func playOrPause() {
 		
-		if self.tracks.count == 0 {
-			
+		if tracks.count == 0 {
 			HUD.flash(.label("向上滑动，更多精彩"), delay: 0.3)
-			
 			return
-			
 		}
 		
 		self.paused = !(self.paused)
         
         if paused == false {
-            
-            HUD.flash(.image(UIImage(named: "playB")), delay: 0.1, completion: { (_) in
-                
+			
+			HUD.flash(.image(UIImage(named: "playB")), delay: 0.1, completion: { (_) in
                 self.playCommon()
             })
             
         } else {
-            
             HUD.flash(.image(UIImage(named: "pauseB")), delay: 0.1, completion: { (_) in
-
                self.playCommon()
-
             })
         }
 		
@@ -1004,19 +939,14 @@ extension PlayerInterface {
     
     func playCommon() {
         
-        if self.streamer?.activeStream.url == nil {
-            
+        if self.streamer.activeStream.url == nil {
             self.playTracks(tracks: self.tracks, index: self.index!)
-            
             return
-            
         }
-        
-        self.streamer?.pause()
+        self.streamer.pause()
         
     }
     // MARK: - 上一首
-
 	func playPrevious() {
 		
 		if self.tracks.count == 0 {
@@ -1025,11 +955,9 @@ extension PlayerInterface {
 			
 			return
 			
-			
 		}
         
-		let cur: FSStreamPosition = (self.streamer!.activeStream.currentTimePlayed)
-
+		let cur: FSStreamPosition = (self.streamer.activeStream.currentTimePlayed)
 		
 		if cur.minute == 0 || cur.second <= 5 {
 				
@@ -1052,6 +980,7 @@ extension PlayerInterface {
 								self.index = self.index! - 1
 								
 						}
+					
 				}
 		}
 		
@@ -1101,8 +1030,6 @@ extension PlayerInterface {
 				
 		playTracks(tracks: self.tracks, index: self.index!)
 		
-		//change interface
-		
 	}
 	
 	func doSeeking(recognizer: UILongPressGestureRecognizer) {
@@ -1119,7 +1046,6 @@ extension PlayerInterface {
 		
 		var lastPoint: CGPoint?
 		
-		
 		if recognizer.state == .began {
 			
 			var tempBounds = self.backgroundView.bounds
@@ -1131,9 +1057,9 @@ extension PlayerInterface {
 			backgroundView.bounds = tempBounds
 			
 			// get current playing time
-			let now = self.streamer?.activeStream.currentTimePlayed
+			let now = self.streamer.activeStream.currentTimePlayed
 			
-			self.progressOriginal = now?.position
+			self.progressOriginal = now.position
 			
 			self.originalPoint = recognizer.location(in: self)
 		}
@@ -1165,7 +1091,7 @@ extension PlayerInterface {
 			
 			seek.position = Float((self.progress?.progress)!)
 			
-			self.streamer?.activeStream.seek(to: seek)
+			self.streamer.activeStream.seek(to: seek)
 			
 		}
 	}
@@ -1190,8 +1116,7 @@ extension PlayerInterface {
 	
 		}
 		
-		UserDefaults.standard.set(self.repeatMode?.rawValue, forKey: "repeatMode")
-		
+		UserDefaults.standard.set(self.repeatMode.rawValue, forKey: "repeatMode")
 		UserDefaults.standard.synchronize()
 	
 	}
@@ -1199,95 +1124,58 @@ extension PlayerInterface {
 	func singleRewind() {
 		
 		if self.repeatMode == AudioRepeatMode.single {
-			
 			HUD.flash(.image(UIImage(named: "repeatOnB")), delay: 0.3)
-			
-			self.repeatMode = AudioRepeatMode.towards
-			
-			self.playModeView.image = UIImage(named: "repeatOnB")
-			
+			repeatMode = AudioRepeatMode.towards
+			playModeView.image = UIImage(named: "repeatOnB")
+		
 		} else {
-			
 			HUD.flash(.image(UIImage(named: "repeatOneB")), delay: 0.3)
-			
-			self.repeatMode = AudioRepeatMode.single
-			
-			self.playModeView.image = UIImage(named: "repeatOneB")
-			
+			repeatMode = AudioRepeatMode.single
+			playModeView.image = UIImage(named: "repeatOneB")
 		}
 		
-		UserDefaults.standard.set(self.repeatMode?.rawValue, forKey: "repeatMode")
+		UserDefaults.standard.set(self.repeatMode.rawValue, forKey: "repeatMode")
 		
 		UserDefaults.standard.synchronize()
 		
 	}
 	
 	func showLyrics() {
-		
 		if self.tracks.count == 0 {
-			
 			HUD.flash(.label("向上滑动，更多精彩"), delay: 0.3)
-			
 			return
-			
 		}
-		
 		if lrcView.isHidden == true {
 			
 			self.lrcView.isHidden = false
-			
 			self.lrcView.alpha = 0
 			
-			UIView.animate(withDuration: 0.5, animations: { 
-				
-				self.lrcView.alpha = 1
-				
-			})
+			UIView.animate(withDuration: 0.5, animations: { self.lrcView.alpha = 1 })
 			
 			UIView.commitAnimations()
 			
-			if streamer != nil {
-				
-				addLrcTimer()
-
-				
-			}
+			addLrcTimer()
 			
 			self.lrcView.renderStatic = false
-
 			self.lrcView.renderStatic = true
 			
 			if self.lrcView.lyricsLines.count == 0 {
 				
 				let track = tracks[self.index!]
-				
 				loadLyrics(trackID: track.ID)
 				
 			}
-			
-			
 
-			
 		} else {
 			
 			self.lrcView.alpha = 1
-			
-			UIView.animate(withDuration: 0.5, animations: { 
-				
-				self.lrcView.alpha = 0
-				
-			})
-			
+		
+			UIView.animate(withDuration: 0.5, animations: { self.lrcView.alpha = 0 })
 			UIView.commitAnimations()
-			
-			DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
-				
-				self.lrcView.isHidden = true
-				
-			})
+			DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: { self.lrcView.isHidden = true })
 			
 			removeLrcTimer()
-			
+		
 		}
 		
 	}
@@ -1296,16 +1184,12 @@ extension PlayerInterface {
 		
 		if self.lrcView.isHidden == true { return }
 		
-		if self.streamer?.activeStream.isPlaying() == false && self.lrcTimer != nil {
-			
+		if self.streamer.activeStream.isPlaying() == false && self.lrcTimer != nil {
 			updateLrcTimer()
-			
 			return
-			
 		}
 		
 		removeLrcTimer()
-		
 		updateLrcTimer()
 		
 		lrcTimer = CADisplayLink(target: self, selector: #selector(updateLrcTimer))
@@ -1315,21 +1199,14 @@ extension PlayerInterface {
 	}
 	
 	func updateLrcTimer() {
-		
 		// get now playing time and duration
-		
-		let cur = streamer?.activeStream.currentTimePlayed
-		
-		self.lrcView.currentTime(time: Double((cur?.minute)! * 60 + (cur?.second)!))
-		
+		let cur = streamer.activeStream.currentTimePlayed
+		self.lrcView.currentTime(time: Double((cur.minute) * 60 + (cur.second)))
 	}
 	
 	func removeLrcTimer() {
-		
 		self.lrcTimer?.invalidate()
-		
 		self.lrcTimer = nil
-		
 	}
 	
 }
@@ -1337,53 +1214,33 @@ extension PlayerInterface {
 extension PlayerInterface: LTInfiniteScrollViewDataSource {
 	
 	func numberOfViews() -> Int {
-		
-		if self.tracks.count > 0 {
-		
-			return self.tracks.count
-		
-		}
-		
+		if self.tracks.count > 0 { return self.tracks.count }
 		return 1
 	}
 	
-	func numberOfVisibleViews() -> Int {
-		
-		return 1
-		
-	}
+	func numberOfVisibleViews() -> Int { return 1 }
 	
 	func viewAtIndex(_ index: Int, reusingView view: UIView?) -> UIView {
 		
 		let size = self.bounds.size.width / CGFloat(numberOfVisibleViews())
+		let cover = UIImageView(frame: CGRect(x: 0, y: 0, width: size, height: size))
 		
-		let cover: UIImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: size, height: size))
-		
-		cover.autoresizingMask = [.flexibleHeight, .flexibleWidth]
-
 		if self.tracks.count > 0 {
 			
 			let track: TrackEncoding = self.tracks[index]
-			
 			let urlStr: String = track.cover + "!/fw/600"
-			
 			let url: URL = URL(string: urlStr)!
 			
 			cover.sd_setImage(with: url, placeholderImage: UIImage(named: "noArtwork"), options: [], completed: { (image, _, _, _) in
 				
 				if index == self.index {
-					
 					self.reflection.image = cover.image?.reflection(withAlpha: 0.4)
-					
+					self.nowCover = cover
 				}
 
 			})
 			
-		} else {
-			
-			cover.image = UIImage(named: "noArtwork")
-		
-		}
+		} else { cover.image = UIImage(named: "noArtwork") }
 		
 		return cover
 	}
@@ -1391,23 +1248,12 @@ extension PlayerInterface: LTInfiniteScrollViewDataSource {
 // MARK: - LTInfiniteScrollViewDelegate
 extension PlayerInterface: LTInfiniteScrollViewDelegate {
 	
-	func updateView(_ view: UIView, withProgress progress: CGFloat, scrollDirection direction: LTInfiniteScrollView.ScrollDirection) {
-		
-		
-	}
+	func updateView(_ view: UIView, withProgress progress: CGFloat, scrollDirection direction: LTInfiniteScrollView.ScrollDirection) {}
 	
 	func scrollViewDidScrollToIndex(_ scrollView: LTInfiniteScrollView, index: Int) {
-		
-		
-		if self.tracks.count == 0 {
-		
-			return
-		
-		}
+		if self.tracks.count == 0 { return }
 
-		
 		self.index = index
-		
 		playTracks(tracks: self.tracks, index: index)
 				
 	}

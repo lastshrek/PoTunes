@@ -3,7 +3,7 @@
 //  AMapSearchKit
 //
 //  Created by xiaoming han on 15/10/27.
-//  Copyright © 2015年 AutoNavi. All rights reserved.
+//  Copyright © 2015年 Amap. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -12,7 +12,7 @@
 #ifndef AMapSearchVersion_h
 #define AMapSearchVersion_h
 
-#define AMapSearchVersionNumber                40400
+#define AMapSearchVersionNumber                40500
 #define AMapSearchMinRequiredFoundationVersion 10200
 
 // 依赖库版本检测

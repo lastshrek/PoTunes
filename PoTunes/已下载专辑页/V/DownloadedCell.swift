@@ -22,7 +22,7 @@ class DownloadedCell:  UITableViewCell {
 		
 		self.textLabel?.adjustsFontSizeToFitWidth = true
 		
-		self.textLabel?.textColor = UIColor.colorByRGB(red: 224, green: 0, blue: 81, alpha: 0.8)
+		self.textLabel?.textColor = UIColor.colorByRGB(red: 17, green: 133, blue: 117, alpha: 0.8)
 		
 		self.textLabel?.font = UIFont(name: "BebasNeue", size: 18)
 
@@ -45,9 +45,9 @@ class DownloadedCell:  UITableViewCell {
 		
 		let height = self.bounds.size.height
 				
-		self.imageView?.frame = CGRect(x: 10, y: 5, width: height - 10, height: height - 10)
+		self.imageView?.frame = CGRect(x: 10, y: 12.5, width: 30, height: 30)
 		
-		self.textLabel?.frame = CGRect(x: ((self.imageView?.frame)?.maxX)! + 10, y: 5, width: width - ((self.imageView?.frame)!).maxX - 15, height: height - 10)
+		self.textLabel?.frame = CGRect(x: ((self.imageView?.frame)?.maxX)! + 10, y: 12.5, width: width - ((self.imageView?.frame)!).maxX - 15, height: 30)
 
 		self.divider.frame = CGRect(x: ((self.imageView?.frame)?.maxX)! + 10, y: height - 0.3, width: width, height: 0.3)
 	}

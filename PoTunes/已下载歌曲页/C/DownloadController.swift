@@ -120,7 +120,6 @@ extension DownloadController {
 			
 			let playerNotify: Notification = Notification.init(name: player, object: nil, userInfo: userInfo)
 			
-			
 			NotificationCenter.default.post(mainNotify)
 			
 			NotificationCenter.default.post(playerNotify)
