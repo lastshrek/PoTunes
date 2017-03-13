@@ -6,7 +6,6 @@
 #import <SDWebImage/UIImageView+WebCache.h>
 #import "WXApiObject.h"
 #import "WXApi.h"
-#import "UIImage+Reflection.h"
 #import "FSAudioController.h"
 #import <MediaPlayer/MediaPlayer.h>
 #import "AppDelegate.h"
@@ -25,6 +24,7 @@
 #import "MoreMenuView.h"
 #import "UIView+Geometry.h"
 #import "Reachability.h"
+#import "PlayerInterface.h"
 
 
 

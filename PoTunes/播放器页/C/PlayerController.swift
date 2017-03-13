@@ -52,21 +52,19 @@ extension PlayerController {
 		
 		let tracks = (userInfo["tracks"] as! Array<TrackEncoding>?)!
 		
-		let index = userInfo["indexPath"] as? Int
+		let index = userInfo["indexPath"] as? NSInteger
 		
 		let title = userInfo["title"] as? String
 		
 		self.player?.tracks = tracks
-		
-		self.player?.index = index
-		
-		self.player?.coverScroll.reloadData(initialIndex: index!)
 				
-		self.player?.playTracks(tracks: tracks, index: index!)
+		self.player?.coverScroll.reloadData(withInitialIndex: index!)
+				
+		self.player?.playTracks(tracks, index: index!)
 				
 		self.player?.album?.text = title?.components(separatedBy: " - ").last
 		
-		self.player?.type = userInfo["type"] as? String
+		self.player?.type = userInfo["type"] as? NSString
 	
 	}
 	

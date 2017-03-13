@@ -52,6 +52,8 @@
 		3C77D24D1BE3D0F00029AB70 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C77D2421BE3BD8C0029AB70 /* CoreTelephony.framework */; };
 		3C77D24E1BE3D1110029AB70 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C77D2441BE3BD940029AB70 /* SystemConfiguration.framework */; };
 		3C78F1111E769155001E8569 /* LTInfiniteScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C78F1101E769155001E8569 /* LTInfiniteScrollView.m */; };
+		3C78F11F1E76975D001E8569 /* GeocodeAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C78F1171E76975D001E8569 /* GeocodeAnnotation.m */; };
+		3C78F1211E76975D001E8569 /* SharedMapView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C78F11B1E76975D001E8569 /* SharedMapView.m */; };
 		3C84DCCB1DD4909E0029D2E6 /* Track.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C84DCCA1DD4909E0029D2E6 /* Track.swift */; };
 		3C8E35281DEAD3DC002D3AC7 /* TrackEncoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C8E35271DEAD3DC002D3AC7 /* TrackEncoding.swift */; };
 		3C9641E41D670DCE00386ABB /* DarwinNotificationHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C9641E31D670DCE00386ABB /* DarwinNotificationHelper.m */; };
@@ -67,7 +69,6 @@
 		3CB2E4001BA7D1B300805D4F /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CB2E3FF1BA7D1B300805D4F /* AVFoundation.framework */; };
 		3CB2E4041BA7D1CB00805D4F /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CB2E4031BA7D1CB00805D4F /* MediaPlayer.framework */; };
 		3CB2E45A1BA7D4FA00805D4F /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CB2E4591BA7D4FA00805D4F /* AddressBook.framework */; };
-		3CCFBF2F1DD41DAD00514873 /* PlayerInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CCFBF2E1DD41DAD00514873 /* PlayerInterface.swift */; };
 		3CCFBF381DD41E0300514873 /* LrcCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CCFBF321DD41E0300514873 /* LrcCell.swift */; };
 		3CCFBF3B1DD41E0300514873 /* LrcView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CCFBF361DD41E0300514873 /* LrcView.swift */; };
 		3CCFBF411DD41E6800514873 /* LrcLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CCFBF3F1DD41E6800514873 /* LrcLine.swift */; };
@@ -191,6 +192,10 @@
 		3C77D2481BE3BDBC0029AB70 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		3C78F10F1E769155001E8569 /* LTInfiniteScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LTInfiniteScrollView.h; sourceTree = "<group>"; };
 		3C78F1101E769155001E8569 /* LTInfiniteScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LTInfiniteScrollView.m; sourceTree = "<group>"; };
+		3C78F1161E76975D001E8569 /* GeocodeAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeocodeAnnotation.h; sourceTree = "<group>"; };
+		3C78F1171E76975D001E8569 /* GeocodeAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeocodeAnnotation.m; sourceTree = "<group>"; };
+		3C78F11A1E76975D001E8569 /* SharedMapView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SharedMapView.h; sourceTree = "<group>"; };
+		3C78F11B1E76975D001E8569 /* SharedMapView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SharedMapView.m; sourceTree = "<group>"; };
 		3C84DCCA1DD4909E0029D2E6 /* Track.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Track.swift; sourceTree = "<group>"; };
 		3C8E35271DEAD3DC002D3AC7 /* TrackEncoding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackEncoding.swift; sourceTree = "<group>"; };
 		3C9641E21D670DCE00386ABB /* DarwinNotificationHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DarwinNotificationHelper.h; sourceTree = "<group>"; };
@@ -215,7 +220,6 @@
 		3CB2E4031BA7D1CB00805D4F /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		3CB2E4061BA7D28600805D4F /* FreeStreamerMobile-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "FreeStreamerMobile-Prefix.pch"; sourceTree = "<group>"; };
 		3CB2E4591BA7D4FA00805D4F /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
-		3CCFBF2E1DD41DAD00514873 /* PlayerInterface.swift */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.swift; path = PlayerInterface.swift; sourceTree = "<group>"; tabWidth = 4; };
 		3CCFBF321DD41E0300514873 /* LrcCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LrcCell.swift; sourceTree = "<group>"; };
 		3CCFBF361DD41E0300514873 /* LrcView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LrcView.swift; sourceTree = "<group>"; };
 		3CCFBF3F1DD41E6800514873 /* LrcLine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LrcLine.swift; sourceTree = "<group>"; };
@@ -556,6 +560,25 @@
 			path = LTInfiniteScrollView;
 			sourceTree = "<group>";
 		};
+		3C78F1121E76975D001E8569 /* AutoNavi */ = {
+			isa = PBXGroup;
+			children = (
+				3C78F1161E76975D001E8569 /* GeocodeAnnotation.h */,
+				3C78F1171E76975D001E8569 /* GeocodeAnnotation.m */,
+				3C78F1191E76975D001E8569 /* SharedMapView */,
+			);
+			path = AutoNavi;
+			sourceTree = "<group>";
+		};
+		3C78F1191E76975D001E8569 /* SharedMapView */ = {
+			isa = PBXGroup;
+			children = (
+				3C78F11A1E76975D001E8569 /* SharedMapView.h */,
+				3C78F11B1E76975D001E8569 /* SharedMapView.m */,
+			);
+			path = SharedMapView;
+			sourceTree = "<group>";
+		};
 		3C9641E11D670DCE00386ABB /* DarwinNotificationHelper */ = {
 			isa = PBXGroup;
 			children = (
@@ -702,7 +725,6 @@
 				3C4A41BA1DD9D350008CE37F /* TrackLabel.swift */,
 				3CCFBF321DD41E0300514873 /* LrcCell.swift */,
 				3CCFBF361DD41E0300514873 /* LrcView.swift */,
-				3CCFBF2E1DD41DAD00514873 /* PlayerInterface.swift */,
 				3C36F44E1E150F6A00BD447F /* LrcLabel.swift */,
 				3C7795941E76814500CCC315 /* PlayerInterface.h */,
 				3C7795951E76814500CCC315 /* PlayerInterface.m */,
@@ -790,6 +812,7 @@
 		3CFA580F1D6706D700341763 /* 3rdParty */ = {
 			isa = PBXGroup;
 			children = (
+				3C78F1121E76975D001E8569 /* AutoNavi */,
 				3C78F10E1E769155001E8569 /* LTInfiniteScrollView */,
 				3C5537861E1CE2F200720879 /* XGPush */,
 				3C2EA2C81DE9CA7C004AE511 /* ProgressViewBar */,
@@ -1080,9 +1103,9 @@
 				3C0A1A981DD5B5B000E90306 /* MainPageControl.swift in Sources */,
 				3C155EB21DD428A100375469 /* PlaylistCell.swift in Sources */,
 				3C78F1111E769155001E8569 /* LTInfiniteScrollView.m in Sources */,
-				3CCFBF2F1DD41DAD00514873 /* PlayerInterface.swift in Sources */,
 				3CFA58CC1D6706D700341763 /* FSXMLHttpRequest.m in Sources */,
 				3CFA58C91D6706D700341763 /* FSParsePlaylistRequest.m in Sources */,
+				3C78F11F1E76975D001E8569 /* GeocodeAnnotation.m in Sources */,
 				3C12F1E01E0A83000084753F /* PreferenceView.swift in Sources */,
 				3CFA58C61D6706D700341763 /* FSAudioController.m in Sources */,
 				3C155EBD1DD42A1C00375469 /* AlbumDownloadController.swift in Sources */,
@@ -1111,6 +1134,7 @@
 				3C155EAE1DD4284000375469 /* PlaylistController.swift in Sources */,
 				3C12F1D81E0A68B90084753F /* DrivingCalculateController.swift in Sources */,
 				3CFA58C51D6706D700341763 /* stream_configuration.cpp in Sources */,
+				3C78F1211E76975D001E8569 /* SharedMapView.m in Sources */,
 				3C2EA2CB1DE9CA7C004AE511 /* M13ProgressViewBar.m in Sources */,
 				3CFA58CB1D6706D700341763 /* FSPlaylistItem.m in Sources */,
 				3CCFBF4E1DD41F1C00514873 /* UIColor+RGBValues.m in Sources */,

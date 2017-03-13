@@ -12,13 +12,14 @@
 @interface PlayerInterface : UIView
 
 @property (nonatomic, strong) NSArray *tracks;
-@property (nonatomic, assign) int *index;
+@property (nonatomic, assign) NSInteger *index;
 @property (nonatomic, strong) LTInfiniteScrollView *coverScroll;
-@property (nonatomic, weak) UILabel *album;
+@property (nonatomic, weak)	  UILabel *album;
 @property (nonatomic, assign) NSString* type;
 
 
 + (PlayerInterface *) sharedInstance;
-- (void)playTracks:(NSArray *)tracks index:(int)index;
+
+- (void)playTracks:(NSArray *)tracks index:(NSInteger)index;
 
 @end

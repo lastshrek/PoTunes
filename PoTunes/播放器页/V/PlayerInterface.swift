@@ -1,43 +1,4 @@
-
-//
-//  PlayerInterface.swift
-//  破音万里
-//
-//  Created by Purchas on 16/8/12.
-//  Copyright © 2016年 Purchas. All rights reserved.
-//
-
-import UIKit
-import LDProgressView
-import PKHUD
-import FMDB
-import LEColorPicker
-import Alamofire
-import SCLAlertView
-
 class PlayerInterface: UIView, UIApplicationDelegate {
-
-	var bufferingIndicator :LDProgressView?
-	var progress: LDProgressView?
-	var timeView = UIView()
-	var currentTime = UILabel()
-	var leftTime = UILabel()
-	var name: TrackLabel?
-	var artist: TrackLabel?
-	var playModeView = UIImageView()
-	var lrcView = LrcView()
-	var progressOriginal: Float?
-	var originalPoint: CGPoint?
-	var currentProgressColor: UIColor = UIColor.white
-	var nowCover: UIImageView?
-	// MARK: - streamer
-	var streamer: FSAudioController = FSAudioController()
-	var repeatMode = AudioRepeatMode.towards
-	var paused: Bool = true
-	// MARK: - Timer
-	var currentTimeTimer: Timer?
-	var playbackTimer: Timer?
-	var lrcTimer: CADisplayLink?
 	// MARK: - trackDB
 	lazy var tracksDB: FMDatabase = {
 		
@@ -53,9 +14,6 @@ class PlayerInterface: UIView, UIApplicationDelegate {
 	let lrcUrl = "https://poche.fm/api/app/lyrics/"
 	
 	override init(frame: CGRect) {
-		super.init(frame: frame)
-		UIApplication.shared.beginReceivingRemoteControlEvents()
-		backgroundColor = UIColor.black
 		
 		initialSubviews()
 		addGestureRecognizer()
@@ -259,54 +217,6 @@ class PlayerInterface: UIView, UIApplicationDelegate {
 extension PlayerInterface {
 	
 	func initialSubviews() {
-		// backgourndView
-		backgroundView.backgroundColor = UIColor.black
-		backgroundView.autoresizingMask = [.flexibleWidth, .flexibleTopMargin]
-		self.addSubview(backgroundView)
-		// 倒影封面
-		reflection.autoresizingMask = [.flexibleHeight, .flexibleWidth]
-		reflection.image = UIImage(named: "noArtwork")?.reflection(withAlpha: 0.4)
-		reflection.autoresizingMask = [.flexibleHeight, .flexibleWidth]
-		self.backgroundView.addSubview(reflection)
-		self.backgroundView.sendSubview(toBack: reflection)
-		
-		coverScroll.dataSource = self
-		coverScroll.delegate = self
-		coverScroll.maxScrollDistance = 2
-		coverScroll.reloadData(initialIndex: 0)
-		self.backgroundView.addSubview(coverScroll)
-		
-		//缓冲条
-		let bufferingIndicator: LDProgressView = createProgressView(false, progress: 0,
-		                                                            animate: false,
-		                                                            showText: false,
-		                                                            showStroke: false,
-		                                                            progressInset: 0,
-		                                                            showBackground: false,
-		                                                            outerStrokeWidth: 0,
-		                                                            type: LDProgressSolid,
-		                                                            autoresizingMask: [.flexibleWidth, .flexibleTopMargin],
-		                                                            borderRadius: 0,
-		                                                            backgroundColor: UIColor.lightText)
-		
-		self.bufferingIndicator = bufferingIndicator
-		self.backgroundView.addSubview(bufferingIndicator)
-		
-		//进度条
-		let progress: LDProgressView = createProgressView(false, progress: 0,
-		                                                  animate: false,
-		                                                  showText: false,
-		                                                  showStroke: false,
-		                                                  progressInset: 0,
-		                                                  showBackground: false,
-		                                                  outerStrokeWidth: 0,
-		                                                  type: LDProgressSolid,
-		                                                  autoresizingMask: [.flexibleWidth, .flexibleTopMargin],
-		                                                  borderRadius: 0,
-		                                                  backgroundColor: UIColor.clear)
-		
-		self.progress = progress
-		self.backgroundView.addSubview(progress)
 		
 		//开始时间和剩余时间
 		timeView.autoresizingMask = [.flexibleWidth, .flexibleTopMargin]
@@ -384,50 +294,7 @@ extension PlayerInterface {
 // MARK: - functional creation
 extension PlayerInterface {
 	
-	func createProgressView(_ flat: Bool,
-	                        progress: CGFloat,
-	                        animate: Bool,
-	                        showText: Bool,
-	                        showStroke: Bool,
-	                        progressInset: NSNumber,
-	                        showBackground: Bool,
-	                        outerStrokeWidth: NSNumber,
-	                        type: LDProgressType,
-	                        autoresizingMask: UIViewAutoresizing,
-	                        borderRadius: NSNumber,
-	                        backgroundColor: UIColor)
-		-> LDProgressView {
-		
-		
-			let buffer: LDProgressView = LDProgressView()
-
-			buffer.flat = flat as NSNumber!
-		
-			buffer.progress = progress
-		
-			buffer.animate = animate as NSNumber!
-		
-			buffer.showText = showText as NSNumber!
-		
-			buffer.showStroke = showStroke as NSNumber!
-		
-			buffer.progressInset = progressInset
-		
-			buffer.showBackground = showBackground as NSNumber!
-		
-			buffer.outerStrokeWidth = outerStrokeWidth
-		
-			buffer.type = type
-		
-			buffer.borderRadius = borderRadius
-		
-			buffer.backgroundColor = backgroundColor
-		
-			buffer.autoresizingMask = autoresizingMask
-		
-			return buffer
-			
-	}
+	
 	
 	func createLabel(_ autoresizingMask: UIViewAutoresizing, shadowOffset: CGSize?, textColor: UIColor, text: String?, textAlignment: NSTextAlignment) -> UILabel {
 		
