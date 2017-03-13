@@ -10,6 +10,8 @@
 
 @interface PlayerInterface : UIView
 
-@property (nonatomic, strong) NSMutableArray *tracks;
+@property (nonatomic, strong) NSArray *tracks;
+@property (nonatomic, assign) int *index;
+@property (nonatomic, strong) <#type#> *<#name#>
 
 @end

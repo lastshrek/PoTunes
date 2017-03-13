@@ -9,7 +9,6 @@ target '破音万里' do
 	pod 'Alamofire', '~> 4.0'
 	pod 'FontAwesome.swift'
 	pod 'FMDB'
-	pod 'LTInfiniteScrollViewSwift'
 	pod 'LEColorPicker'
 	pod 'SCLAlertView'
 	pod 'UMengAnalytics-NO-IDFA'
