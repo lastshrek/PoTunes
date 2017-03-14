@@ -1,21 +1,10 @@
 class PlayerInterface: UIView, UIApplicationDelegate {
-	// MARK: - trackDB
-	lazy var tracksDB: FMDatabase = {
-		
-		let path = self.dirDoc() + "/downloadingSong.db"
-		
-		let db: FMDatabase = FMDatabase(path: path)
-		
-		db.open()
-		
-		return db
-	}()
+	
 	
 	let lrcUrl = "https://poche.fm/api/app/lyrics/"
 	
 	override init(frame: CGRect) {
 		
-		initialSubviews()
 		addGestureRecognizer()
         becomeFirstResponder()
 		getLastPlaySongAndPlayState()
@@ -24,32 +13,7 @@ class PlayerInterface: UIView, UIApplicationDelegate {
 	}
     override var canBecomeFirstResponder: Bool { return true }
 	
-	required init?(coder aDecoder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 	
-	override func layoutSubviews() {
-		
-		super.layoutSubviews()
-		
-		backgroundView.frame = self.bounds
-		
-		let height = self.height()
-		
-		let width = self.width()
-		
-		reflection.frame =  CGRect(x: 0, y: height - width, width: width, height: width)
-		coverScroll.frame = CGRect(x: 0, y: 0, width: width, height: width)
-		lrcView.frame = CGRect(x: 0, y: 0, width: width, height: width)
-		bufferingIndicator?.frame = CGRect(x: 0, y: width, width: width, height: 15)
-		progress?.frame = CGRect(x: 0, y: width, width: width, height: 15)
-		playModeView.frame = CGRect(x: width / 2 - 10, y: height - 50, width: 20, height: 20)
-		// MARK: - 除3
-		self.name?.frame = CGRect(x: 0, y: width + 20, width: width, height: 40)
-		self.artist?.frame = CGRect(x: 0, y: width + 60, width: width, height: 40)
-		self.album?.frame = CGRect(x: 0, y: width + 100, width: width, height: 40)
-		timeView.frame = CGRect(x: 0, y: (self.progress?.frame.maxY)!, width: width, height: 20)
-		currentTime.frame = CGRect(x: 2, y: 0, width: width / 2, height: 20)
-		leftTime.frame = CGRect(x: width / 2 - 2, y: 0, width: width / 2, height: (self.timeView.bounds.size.height))
-	}
 	
 	// MARK: - 锁屏及线控操作
     override func remoteControlReceived(with event: UIEvent?) {
@@ -212,116 +176,6 @@ class PlayerInterface: UIView, UIApplicationDelegate {
 	
 	}
 	
-}
-// MARK: - initial subviews
-extension PlayerInterface {
-	
-	func initialSubviews() {
-		
-		//开始时间和剩余时间
-		timeView.autoresizingMask = [.flexibleWidth, .flexibleTopMargin]
-		
-		self.backgroundView.addSubview(timeView)
-		//当前播放时间
-		let currentTime = createLabel([.flexibleHeight, .flexibleWidth],
-		                              shadowOffset: CGSize(width: 0, height: 0),
-		                              textColor: UIColor.white,
-		                              text: nil,
-		                              textAlignment: .left)
-		
-		self.currentTime = currentTime
-		self.timeView.addSubview(currentTime)
-		
-		//剩余时间
-		let leftTime = createLabel([.flexibleHeight, .flexibleWidth, .flexibleLeftMargin],
-		                           shadowOffset: CGSize(width: 0, height: 0),
-		                           textColor: UIColor.white,
-		                           text: nil,
-		                           textAlignment: .right)
-		self.timeView.addSubview(leftTime)
-		self.leftTime = leftTime
-		
-		//歌曲名
-		let name: TrackLabel = TrackLabel()
-		
-		name.autoresizingMask = [.flexibleWidth, .flexibleTopMargin]
-		
-		self.backgroundView.addSubview(name)
-		
-		self.name = name
-		
-		//歌手名
-		let artist: TrackLabel = TrackLabel()
-		
-		artist.autoresizingMask = [.flexibleWidth, .flexibleTopMargin]
-		
-		self.backgroundView.addSubview(artist)
-		
-		self.artist = artist
-		
-		//专辑名
-		let album: TrackLabel = TrackLabel()
-		
-		album.autoresizingMask = [.flexibleWidth, .flexibleTopMargin]
-		
-		album.text = "尚未播放歌曲"
-		
-		self.backgroundView.addSubview(album)
-		
-		self.album = album
-		
-		//播放模式
-		playModeView.autoresizingMask = [.flexibleWidth, .flexibleTopMargin]
-		
-		playModeView.image = UIImage(named: "repeatOnB.png")
-		
-		playModeView.contentMode = .scaleAspectFit
-		
-		self.backgroundView.addSubview(playModeView)
-		
-		// 歌词
-		lrcView.autoresizingMask = [.flexibleWidth, .flexibleTopMargin]
-		
-		lrcView.isHidden = true
-		
-		self.addSubview(lrcView)
-		
-		self.lrcView.renderStatic = false
-
-	}
-	
-}
-// MARK: - functional creation
-extension PlayerInterface {
-	
-	
-	
-	func createLabel(_ autoresizingMask: UIViewAutoresizing, shadowOffset: CGSize?, textColor: UIColor, text: String?, textAlignment: NSTextAlignment) -> UILabel {
-		
-		let label: UILabel = UILabel()
-		
-		label.autoresizingMask = autoresizingMask
-		
-		label.textColor = textColor
-		
-		label.textAlignment = textAlignment
-		
-		label.adjustsFontSizeToFitWidth = true
-		
-		if let unwrappedOffset = shadowOffset {
-		
-			label.shadowOffset = unwrappedOffset
-		
-		}
-		
-		if let unwrappedText = text {
-		
-			label.text = unwrappedText
-		
-		}
-		
-		return label
-	}
 }
 
 // MARK: - play from tracks
@@ -1045,52 +899,6 @@ extension PlayerInterface {
 	}
 	
 }
-// MARK: - LTInfiniteScrollViewDataSource
-extension PlayerInterface: LTInfiniteScrollViewDataSource {
-	
-	func numberOfViews() -> Int {
-		if self.tracks.count > 0 { return self.tracks.count }
-		return 1
-	}
-	
-	func numberOfVisibleViews() -> Int { return 1 }
-	
-	func viewAtIndex(_ index: Int, reusingView view: UIView?) -> UIView {
-		
-		let size = self.bounds.size.width / CGFloat(numberOfVisibleViews())
-		let cover = UIImageView(frame: CGRect(x: 0, y: 0, width: size, height: size))
-		
-		if self.tracks.count > 0 {
-			
-			let track: TrackEncoding = self.tracks[index]
-			let urlStr: String = track.cover + "!/fw/600"
-			let url: URL = URL(string: urlStr)!
-			
-			cover.sd_setImage(with: url, placeholderImage: UIImage(named: "noArtwork"), options: [], completed: { (image, _, _, _) in
-				
-				if index == self.index {
-					self.reflection.image = cover.image?.reflection(withAlpha: 0.4)
-					self.nowCover = cover
-				}
 
-			})
-			
-		} else { cover.image = UIImage(named: "noArtwork") }
-		
-		return cover
-	}
-}
-// MARK: - LTInfiniteScrollViewDelegate
-extension PlayerInterface: LTInfiniteScrollViewDelegate {
-	
-	func updateView(_ view: UIView, withProgress progress: CGFloat, scrollDirection direction: LTInfiniteScrollView.ScrollDirection) {}
-	
-	func scrollViewDidScrollToIndex(_ scrollView: LTInfiniteScrollView, index: Int) {
-		if self.tracks.count == 0 { return }
 
-		self.index = index
-		playTracks(tracks: self.tracks, index: index)
-				
-	}
-}
 
