@@ -15,4 +15,5 @@ target '破音万里' do
 	pod 'AMapNavi'  #导航 SDK
 	pod 'AMapLocation' #定位SDK
 	pod 'AMapSearch' #搜索服务SDK
+	pod 'SVProgressHUD'
 end
