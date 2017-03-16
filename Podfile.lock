@@ -40,6 +40,7 @@ PODS:
   - LEColorPicker (1.0.3)
   - PKHUD (4.0.0)
   - SCLAlertView (0.7.0)
+  - SCLAlertView-Objective-C (1.1.1)
   - SDWebImage (3.8.2):
     - SDWebImage/Core (= 3.8.2)
   - SDWebImage/Core (3.8.2)
@@ -59,6 +60,7 @@ DEPENDENCIES:
   - LEColorPicker
   - PKHUD (~> 4.0)
   - SCLAlertView
+  - SCLAlertView-Objective-C
   - SDWebImage
   - SVProgressHUD
   - UMengAnalytics-NO-IDFA
@@ -78,10 +80,11 @@ SPEC CHECKSUMS:
   LEColorPicker: 34509a9df7a128b1109a5dbe3f25921fc511c03d
   PKHUD: 2bb45c936bb8afa39f3cd33ec14e8cc89f624255
   SCLAlertView: 8a14ffc40590c619e183eed2298b854385f30be1
+  SCLAlertView-Objective-C: d397ae2b52bae7dedf7188fa1616fcb89200b33a
   SDWebImage: 098e97e6176540799c27e804c96653ee0833d13c
   SVProgressHUD: c404a55d78acbeb7ebb78b76d3faf986475a6994
   UMengAnalytics-NO-IDFA: f1b08b540eba6ebad044a574cae6d988cf40cfda
 
-PODFILE CHECKSUM: ab9ca1c3932ebe2fa592ebf094267c09d12a940e
+PODFILE CHECKSUM: 5046955dc07b84c22dcab01b2e116c6a418ac0dc
 
 COCOAPODS: 1.1.1

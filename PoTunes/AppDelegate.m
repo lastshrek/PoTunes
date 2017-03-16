@@ -86,13 +86,10 @@
 - (void)registerAPNS {
 	float sysVer = [[[UIDevice currentDevice] systemVersion] floatValue];
 	if (sysVer >= 10) {
-		// iOS 10
 		[self registerPush10];
 	} else if (sysVer >= 9) {
-		// iOS 8-9
 		[self registerPush8to9];
 	}
-
 }
 
 - (void)registerPush10{
@@ -255,32 +252,27 @@
 }
 
 - (void)repeatTimer {
-	
 	if (self.bgTime > 600) {
-	
 		[self removeBgTimer];
-	
 	}
-
 }
 
 - (void)removeBgTimer {
-
 	[self.timer invalidate];
-	
 	self.bgTime = 0;
-	
 	[[UIApplication sharedApplication] endBackgroundTask:self.backIdentifier];
-	
 	self.backIdentifier = UIBackgroundTaskInvalid;
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
-	
 	[self removeBgTimer];
-	
-//	[[PlayerInterface shared] refreshProgressColor];
+}
 
+/** 接收远程事件 */
+- (void)remoteControlReceivedWithEvent:(UIEvent *)event {
+	if (event.type == UIEventTypeRemoteControl) {
+		self.remoteEventBlock(event);
+	}
 }
 
 

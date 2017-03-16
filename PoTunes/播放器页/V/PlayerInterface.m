@@ -15,7 +15,8 @@
 #import "Reachability.h"
 #import "FMDB.h"
 #import <SVProgressHUD/SVProgressHUD.h>
-
+#import <LEColorPicker/LEColorPicker.h>
+#import <SCLAlertView_Objective_C/SCLAlertView.h>
 /** 播放模式 */
 typedef NS_ENUM(NSUInteger, PCAudioRepeatMode) {
 	PCAudioRepeatModeSingle,
@@ -59,8 +60,6 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 @property (nonatomic, strong) NSTimer* playbackTimer;
 @property (nonatomic, strong) CADisplayLink* lrcTimer;
 @property (nonatomic, strong) FMDatabase* tracksDB;
-
-
 @end
 
 @implementation PlayerInterface
@@ -74,7 +73,6 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 	}
 	return _tracksDB;
 }
-
 - (instancetype)initWithFrame:(CGRect)frame {
 	self = [super initWithFrame:frame];
 	if (self) {
@@ -82,14 +80,16 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 	}
 	return self;
 }
-
 - (void)setup {
-	
 	[[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
-	
 	[self initialSubviews];
 	[self addGestureRecognizer];
-	
+	//获取上次播放曲目
+	[self getLastPlayTrackAndPlaystate];
+	/** 注册通知 */
+	[self getNotification];
+	//设置appdelegate的block
+	[self setupDelegateBlock];
 }
 
 #pragma mark - initialSubViews
@@ -98,7 +98,7 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 	self.currentProgressColor = [UIColor whiteColor];
 	self.streamer = [[FSAudioController alloc] init];
 	self.repeatMode = PCAudioRepeatModeTowards;
-	self.paused = true;
+	self.paused = YES;
 	//底
 	UIView *backgroundView = [[UIView alloc] init];
 	backgroundView.backgroundColor = [UIColor blackColor];
@@ -107,6 +107,8 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 	//倒影封面
 	UIImageView *reflection = [[UIImageView alloc] init];
 	reflection.image = [[UIImage imageNamed:@"noArtwork"] reflectionWithAlpha:0.4];
+	reflection.contentMode = UIViewContentModeScaleAspectFit;
+	self.reflection = reflection;
 	[self.backgroundView addSubview:reflection];
 	[self.backgroundView sendSubviewToBack:reflection];
 	//封面队列
@@ -167,9 +169,9 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 	self.playModeView = playModeView;
 	//歌词
 //	LrcView* lrcView = [[LrcView alloc] init];
-//	lrcView.hidden = true;
+//	lrcView.hidden = YES;
 //	[self addSubview:lrcView];
-//	self.lrcView.renderStatic = false;
+//	self.lrcView.renderStatic = NO;
 //	self.lrcView = lrcView;
 }
 - (void)layoutSubviews {
@@ -179,7 +181,7 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 	CGFloat width = [self width];
 	
 	self.backgroundView.frame = self.bounds;
-	self.reflection.frame = CGRectMake(0, height - width, height, height);
+	self.reflection.frame = CGRectMake(0, height - width, width, width);
 	self.coverScroll.frame = CGRectMake(0, 0, width, width);
 	self.lrcView.frame = CGRectMake(0, 0, width, width);
 	self.bufferingIndicator.frame = CGRectMake(0, width, width, 10);
@@ -191,9 +193,10 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 	self.timeView.frame = CGRectMake(0, CGRectGetMaxY(self.progress.frame), width, 20);
 	self.currentTime.frame = CGRectMake(2, 0, width / 2, 20);
 	self.leftTime.frame = CGRectMake(width / 2 - 2, 0, width / 2, self.timeView.bounds.size.height);
-	
 }
-- (LDProgressView *)createProgressViewByShowBackground:(NSNumber*)showBackground type: (LDProgressType)type backgroundColor:(UIColor*)backgroundColor {
+- (LDProgressView *)createProgressViewByShowBackground:(NSNumber*)showBackground
+												  type: (LDProgressType)type
+									   backgroundColor:(UIColor*)backgroundColor {
 	
 	LDProgressView* buffer = [[LDProgressView alloc] init];
 	buffer.flat = @YES;
@@ -219,7 +222,7 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 	label.autoresizingMask = autoresizingMask;
 	label.textColor = textColor;
 	label.textAlignment = textAlignment;
-	label.adjustsFontSizeToFitWidth = true;
+	label.adjustsFontSizeToFitWidth = YES;
 	label.shadowOffset = shadowOffset;
 	label.text = text;
 	return label;
@@ -232,7 +235,7 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 	singleTap.numberOfTouchesRequired = 1;
 	[self addGestureRecognizer:singleTap];
 	//上一首
-	UISwipeGestureRecognizer* swipeFromLeft = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(playPrevious)];
+	UISwipeGestureRecognizer* swipeFromLeft = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(playNext)];
 	swipeFromLeft.direction = UISwipeGestureRecognizerDirectionRight;
 	swipeFromLeft.numberOfTouchesRequired = 1;
 	[self addGestureRecognizer:swipeFromLeft];
@@ -270,162 +273,492 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 	[singleTap requireGestureRecognizerToFail:doubleTouch];
 	[singleTap requireGestureRecognizerToFail:doubleTap];
 }
-
 - (void)playOrPause {
 	if (self.tracks.count == 0) {
 		[SVProgressHUD showErrorWithStatus:@"向上滑动，更多精彩"];
 		return;
 	}
+	self.paused = !(self.paused);
+	
+	if (self.paused == false) {
+		[SVProgressHUD showImage:[UIImage imageNamed:@"playB"] status:@"继续播放"];
+	} else {
+		[SVProgressHUD showImage:[UIImage imageNamed:@"pauseB"] status:@"暂停播放"];
+	}
+	
+	if (self.streamer.activeStream == nil) {
+		[self playTracks:self.tracks index:self.index];
+		return;
+	}
+	[self.streamer pause];
 }
-
 - (void)playPrevious {
+	if (self.tracks.count == 0) {
+		[SVProgressHUD showErrorWithStatus:@"向上滑动，更多精彩"];
+		return;
+	}
 	
+	FSStreamPosition cur = self.streamer.activeStream.currentTimePlayed;
+	if (cur.minute == 0 || cur.second <= 5) {
+		if (self.repeatMode == PCAudioRepeatModeShuffle) {
+			self.index = arc4random() % self.tracks.count;
+		} else if (self.repeatMode == PCAudioRepeatModeSingle) {
+			self.index = self.index;
+		} else {
+			if (self.index == 0) {
+				self.index = self.tracks.count - 1;
+			} else {
+				self.index = self.index - 1;
+			}
+		}
+	}
+	
+	[self.coverScroll scrollToIndex:self.index animated:YES];
+	[SVProgressHUD showImage:[UIImage imageNamed:@"prevB"] status:nil];
+	[self playTracks:self.tracks index:self.index];
 }
-
+- (void)playNext {
+	if (self.tracks.count == 0) {
+		[SVProgressHUD showErrorWithStatus:@"向上滑动，更多精彩"];
+		return;
+	}
+	
+	if (self.repeatMode == PCAudioRepeatModeShuffle) {
+		self.index = arc4random() % self.tracks.count;
+	} else if (self.repeatMode == PCAudioRepeatModeSingle) {
+		self.index = self.index;
+	} else {
+		if (self.index == self.tracks.count - 1) {
+			self.index = 0;
+		} else {
+			self.index = self.index + 1;
+		}
+	}
+	
+	[self.coverScroll scrollToIndex:self.index animated:YES];
+	[SVProgressHUD showImage:[UIImage imageNamed:@"nextB"] status:nil];
+	[self playTracks:self.tracks index:self.index];
+}
 - (void)doSeeking:(UILongPressGestureRecognizer*)recognizer {
+	if (self.tracks.count == 0) {
+		[SVProgressHUD showErrorWithStatus:@"向上滑动，更多精彩"];
+		return;
+	}
 	
+	FSStreamPosition seek;
+	CGPoint lastPoint;
+	if (recognizer.state == UIGestureRecognizerStateBegan) {
+		//缩小
+		CGRect tempBounds = self.backgroundView.bounds;
+		tempBounds.size.width -= 40;
+		tempBounds.size.height -= 40;
+		self.backgroundView.bounds = tempBounds;
+		
+		//获取按住播放时间
+		FSStreamPosition now = self.streamer.activeStream.currentTimePlayed;
+		self.progressOriginal = now.position;
+		self.originalPoint = [recognizer locationInView:self];
+	}
+	//改变进度条的值
+	if (recognizer.state == UIGestureRecognizerStateChanged) {
+		CGPoint changingPoint = [recognizer locationInView:self];
+		CGFloat seekForwardPercent =  self.progressOriginal + ((changingPoint.x - self.originalPoint.x) / self.width);
+		if (seekForwardPercent >= 1 || seekForwardPercent < 0) { return; }
+		self.progress.progress = seekForwardPercent;
+	}
+	
+	if (recognizer.state == UIGestureRecognizerStateEnded) {
+		//还原
+		lastPoint = [recognizer locationInView:self];
+		
+		self.backgroundView.frame = self.frame;
+		self.playModeView.frame = CGRectMake(self.width / 2 - 10, self.height - 20, 20, 20);
+		//如果没有移动不移动进度条
+		if (lastPoint.x == self.originalPoint.x) { return; }
+		seek.position = self.progress.progress;
+		[self.streamer.activeStream seekToPosition:seek];
+	}
 }
-
 - (void)playShuffle:(UISwipeGestureRecognizer*)recognizer {
+	if (self.tracks.count == 0) {
+		[SVProgressHUD showErrorWithStatus:@"向上滑动，更多精彩"];
+		return;
+	}
 	
+	if (recognizer.direction == UISwipeGestureRecognizerDirectionLeft) {
+		[SVProgressHUD showImage:[UIImage imageNamed:@"shuffleOnB"] status:nil];
+		self.repeatMode = PCAudioRepeatModeShuffle;
+		self.playModeView.image = [UIImage imageNamed:@"shuffleOnB"];
+	} else {
+		[SVProgressHUD showImage:[UIImage imageNamed:@"shuffleOffB"] status:nil];
+		self.repeatMode = PCAudioRepeatModeTowards;
+		self.playModeView.image = [UIImage imageNamed:@"repeatOnB"];
+	}
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	[defaults setObject:@(self.repeatMode) forKey:@"repeatMode"];
+	[defaults synchronize];
 }
-
 - (void)singleRewind {
-	
+	if (self.repeatMode == PCAudioRepeatModeSingle) {
+		[SVProgressHUD showImage:[UIImage imageNamed:@"repeatOnB"] status:nil];
+		self.repeatMode = PCAudioRepeatModeTowards;
+		self.playModeView.image = [UIImage imageNamed:@"repeatOnB"];
+	} else {
+		[SVProgressHUD showImage:[UIImage imageNamed:@"repeatOneB"] status:nil];
+		self.repeatMode = PCAudioRepeatModeSingle;
+		self.playModeView.image = [UIImage imageNamed:@"repeatOneB"];
+	}
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	[defaults setObject:@(self.repeatMode) forKey:@"repeatMode"];
+	[defaults synchronize];
 }
-
 - (void)showLyrics {
+	if (self.tracks.count == 0) {
+		[SVProgressHUD showErrorWithStatus:@"向上滑动，更多精彩"];
+		return;
+	}
 	
+	if (self.lrcView.hidden == YES) {
+		self.lrcView.hidden = NO;
+		self.lrcView.alpha = 0;
+		
+		[UIView animateWithDuration:0.5 animations:^{ self.lrcView.alpha = 1; }];
+		[UIView commitAnimations];
+		[self addLrcTimer];
+		
+		if (self.lrcView.lyricsLines.count == 0) {
+			Track* track = self.tracks[self.index];
+			[self loadLyrics:(int)track.ID];
+		}
+		
+	} else {
+		self.lrcView.alpha = 1;
+		[UIView animateWithDuration:0.5 animations:^{ self.lrcView.alpha = 0; }];
+		[UIView commitAnimations];
+		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+			self.lrcView.hidden = YES;
+		});
+		[self removeLrcTimer];
+	}
 }
 
+- (void)loadLyrics:(NSInteger)trackID {
+	self.lrcView.noLrcLabel.text = @"正在加载歌词";
+	self.lrcView.noLrcLabel.hidden = NO;
+	
+	NSString* lrcUrl = @"https://poche.fm/api/app/lyrics/";
+	
+
+}
+#pragma mark - getLastPlayTrackAndPlaystate
+- (void)getLastPlayTrackAndPlaystate {
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	NSData* tracksData = [defaults objectForKey:@"tracksData"];
+	
+	if (tracksData == nil) {
+		self.repeatMode = PCAudioRepeatModePlaylist;
+		return;
+	}
+	
+	NSString* album = [defaults stringForKey:@"album"];
+	self.tracks = [NSKeyedUnarchiver unarchiveObjectWithData:tracksData];
+	self.index = [defaults integerForKey:@"index"];
+	self.type = [defaults stringForKey:@"type"];
+	self.album.text = album;
+	[self.coverScroll reloadDataWithInitialIndex:self.index];
+	[self changeInterface:self.index];
+	
+	NSInteger repeateMode = [defaults integerForKey:@"repeatMode"];
+	self.repeatMode = repeateMode;
+	if (self.repeatMode == PCAudioRepeatModeSingle) {
+		self.playModeView.image = [UIImage imageNamed:@"repeatOneB"];
+	} else if (self.repeatMode == PCAudioRepeatModeShuffle) {
+		self.playModeView.image = [UIImage imageNamed:@"shuffleOnB"];
+	} else {
+		self.playModeView.image = [UIImage imageNamed:@"repeatOnB"];
+	}
+	
+}
 - (void)playTracks:(NSArray *)tracks index:(NSInteger)index {
 	self.tracks = tracks;
 	self.index = index;
 	
 	NSUserDefaults* user = [NSUserDefaults standardUserDefaults];
-	Boolean yes = [user boolForKey:@"wwanPlay"];
+	BOOL yes = [user boolForKey:@"wwanPlay"];
 	Reachability* monitor = [Reachability reachabilityForInternetConnection];
 	NetworkStatus reachable = [monitor currentReachabilityStatus];
-	if(!yes && reachable != 2 && [self.type isEqualToString:@"local"]) {
-		
-	}
 	
+	if(!yes && reachable != 2 && ![self.type isEqualToString:@"local"]) {
+		SCLAlertView *alert = [[SCLAlertView alloc] initWithNewWindow];
+		[alert addButton:@"继续播放" actionBlock:^{
+			if (reachable == 0) {
+				[SVProgressHUD showErrorWithStatus:@"貌似断网了，请检查网络状况"];
+			}
+			
+			[self startPlay];
+			[user setBool:YES forKey:@"wwanPlay"];
+			[[NSNotificationCenter defaultCenter] postNotificationName:@"wwanPlay" object:nil userInfo:nil];
+		}];
+		[alert addButton:@"取消" actionBlock:^{}];
+		[alert showWarning:@"温馨提示" subTitle:@"您当前处于运营商网络中，是否继续播放" closeButtonTitle:nil duration:0.0f];
+	}
 	if (reachable == 2 || [self.type isEqualToString:@"local"] || yes) {
-		[self startPlay];
+		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+			[self startPlay];
+		});
+	}
+	if (reachable == 0) {
+		[SVProgressHUD showErrorWithStatus:@"貌似断网了，请检查网络状况"];
 	}
 }
 - (void)startPlay {
+	//Remove Last Track Lyrics
 	self.lrcView.lyricsLines = [[NSMutableArray alloc] init];
 	self.lrcView.chLrcArray = [[NSMutableArray alloc] init];
 	[self.lrcView.tableView reloadData];
+	
 	self.paused = false;
+	self.streamer = nil;
+	self.streamer = [[FSAudioController alloc] init];
 	
 	Track* track = self.tracks[self.index];
 	NSString* rootPath = [self dirDoc];
-//	[self.streamer.activeStream playFromURL:[NSURL URLWithString:track.url]];
-	self.streamer.url = [NSURL URLWithString:track.url];
-	[self.streamer play];
+	NSString* query = @"SELECT * FROM t_downloading WHERE sourceURL = ?;";
+	FMResultSet* s = [self.tracksDB executeQuery:query withArgumentsInArray:@[track.url]];
+	if (s.next) {
+		BOOL isDownloaded = [s stringForColumn:@"downloaded"];
+		if (isDownloaded) {
+			NSString* identifier = [self getIdentifierWithUrlStr:track.url];
+			NSString* filePath = [NSString stringWithFormat:@"%@%@", rootPath, identifier];
+			self.streamer.url = [NSURL fileURLWithPath:filePath];
+			[self.streamer play];
+		} else {
+			
+		}
+	} else {
+		self.streamer.url = [NSURL URLWithString:track.url];
+		[self.streamer play];
+	}
 	[self addCurrentTimeTimer];
+	[self changeInterface:self.index];
+	//记录最后一次播放的歌曲和以及播放模式
+	NSData* tracksData = [NSKeyedArchiver archivedDataWithRootObject:self.tracks];
+	NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+	[defaults setObject:@(self.repeatMode) forKey:@"repeatMode"];
+	[defaults setObject:tracksData forKey:@"songsData"];
+	[defaults setInteger:self.index forKey:@"index"];
+	[defaults setValue:self.type forKey:@"type"];
+	[defaults setValue:self.album.text forKey:@"album"];
+	[defaults synchronize];
 }
-- (void)addCurrentTimeTimer {
-	if (self.paused == true) return;
+- (void)changeInterface:(NSInteger)index {
+	Track* track = self.tracks[self.index];
 	
+	self.name.text = track.name;
+	self.artist.text = track.artist;
+	self.progress.progress = 0;
+	self.bufferingIndicator.progress = 0;
+	self.currentTime.text = @"0:00";
+	self.leftTime.text = @"0:00";
+	
+	if (self.lrcView.hidden == NO) {
+		[self loadLyrics:index];
+	}
+	self.lrcView.noLrcLabel.hidden = YES;
+	[self.nowCover sd_setImageWithURL:[NSURL URLWithString:track.url] placeholderImage:self.nowCover.image completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+		
+		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+			self.lrcView.renderStatic = NO;
+		});
+		
+		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+			self.lrcView.renderStatic = YES;
+			self.reflection.image = [image reflectionWithAlpha:0.3];
+			[self refreshProgressColor];
+		});
+	}];
+}
+- (void)refreshProgressColor {
+	LEColorPicker* colorPicker = [[LEColorPicker alloc] init];
+	LEColorScheme* colorScheme = [colorPicker colorSchemeFromImage:self.nowCover.image];
+	self.progress.color = colorScheme.backgroundColor;
+	self.name.textColor = colorScheme.backgroundColor;
+	self.artist.textColor = colorScheme.backgroundColor;
+	self.album.textColor = colorScheme.backgroundColor;
+}
+#pragma mark - Notifications
+- (void)getNotification {
+	NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+	[center addObserver:self selector:@selector(speaking) name:@"speaking" object:nil];
+	[center addObserver:self selector:@selector(nonspeaking) name:@"nonspeaking" object:nil];
+	[center addObserver:self selector:@selector(audioSessionDidChangeInterruptionType:)
+				   name:AVAudioSessionRouteChangeNotification object:[AVAudioSession sharedInstance]];
+}
+- (void)speaking { self.streamer.volume = 0.1; }
+- (void)nonspeaking { self.streamer.volume = 1; }
+- (void)audioSessionDidChangeInterruptionType:(NSNotification *)notification {
+	NSInteger interruptReason = [[notification.userInfo objectForKey:@"AVAudioSessionRouteChangeReasonKey"] integerValue];
+	if (interruptReason == 2) {
+		dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+				dispatch_sync(dispatch_get_main_queue(), ^{
+					[self playOrPause];
+			});
+		});
+	}
+}
+#pragma mark - DelegateBlock
+- (void)setupDelegateBlock {
+	AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+	appDelegate.remoteEventBlock = ^(UIEvent *event) {
+		switch (event.subtype) {
+			case UIEventSubtypeRemoteControlTogglePlayPause | UIEventSubtypeRemoteControlPlay | UIEventSubtypeRemoteControlPause:
+				[self playOrPause];
+				break;
+			case UIEventSubtypeRemoteControlPlay:
+				[self playOrPause];
+				break;
+			case UIEventSubtypeRemoteControlPause:
+				[self playOrPause];
+				break;
+			case UIEventSubtypeRemoteControlNextTrack:
+				[self playNext];
+				break;
+			case UIEventSubtypeRemoteControlPreviousTrack:
+				[self playPrevious];
+				break;
+			default:
+				break;
+		}
+	};
+}
+#pragma mark - Various Timers
+- (void)addCurrentTimeTimer {
+	if (self.paused == YES) return;
 	[self removeCurrentTimeTimer];
 	//保证定时器的工作是即时的
 	[self updateCurrentTime];
-	
 	[self updatePlayBackProgress];
-	
-	self.currentTimeTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(updateCurrentTime) userInfo:nil repeats:YES];
+	self.currentTimeTimer = [NSTimer scheduledTimerWithTimeInterval:1.0
+															 target:self
+														   selector:@selector(updateCurrentTime)
+																			  userInfo:nil repeats:YES];
 	self.playbackTimer = [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(updatePlayBackProgress) userInfo:nil repeats:YES];
-	
 	[[NSRunLoop mainRunLoop] addTimer:self.currentTimeTimer forMode:NSRunLoopCommonModes];
 	[[NSRunLoop mainRunLoop] addTimer:self.playbackTimer forMode:NSRunLoopCommonModes];
 }
-- (void)removeCurrentTimeTimer {
-	[self.currentTimeTimer invalidate];
-	[self.playbackTimer invalidate];
-	
-	self.currentTimeTimer = nil;
-	self.playbackTimer = nil;
+- (void)addLrcTimer {
+	if (self.lrcView.hidden == YES) return;
+	if (self.streamer.activeStream.isPlaying == NO && self.lrcTimer) {
+		[self updateLrcTimer];
+		return;
+	}
+	[self removeLrcTimer];
+	[self updateLrcTimer];
+	self.lrcTimer = [CADisplayLink displayLinkWithTarget:self selector:@selector(updateLrcTimer)];
+	[self.lrcTimer addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
 }
 - (void)updateCurrentTime {
 	//计算进度值
 	if (self.streamer.activeStream.duration.minute == 0 && self.streamer.activeStream.duration.second == 0) return;
-	
 	//取出当前播放时长以及总时长
 	FSStreamPosition cur = self.streamer.activeStream.currentTimePlayed;
-	
 	FSStreamPosition total = self.streamer.activeStream.duration;
-	
 	//设置进度条进度
 	double progress = (float)(cur.minute * 60 + cur.second) / (float)(total.minute * 60 + total.second);
-	
+
 	self.progress.progress = progress;
-	
 	//设置当前时间以及剩余时间
-	
-	NSString *curSecond = [NSString stringWithFormat:@"%d",cur.second];
-	
 	int totalLeftSecond = total.minute * 60 + total.second - cur.minute * 60 - cur.second;
-	
+	NSString *curSecond = [NSString stringWithFormat:@"%d",cur.second];
 	NSString *leftMin = [NSString stringWithFormat:@"%d",totalLeftSecond / 60];
-	
 	NSString *leftSec = [NSString stringWithFormat:@"%d",totalLeftSecond % 60];
 	
-	if (cur.second < 10) {
-		
-		curSecond = [NSString stringWithFormat:@"0%@",curSecond];
-		
-	}
-	
-	if ([leftSec intValue] < 10) {
-		
-		leftSec = [NSString stringWithFormat:@"0%@",leftSec];
-		
-	}
-	
+	if (cur.second < 10) curSecond = [NSString stringWithFormat:@"0%@",curSecond];
+	if ([leftSec intValue] < 10) leftSec = [NSString stringWithFormat:@"0%@",leftSec];
+
 	self.currentTime.text = [NSString stringWithFormat:@"%d:%@",cur.minute, curSecond];
-	
 	self.leftTime.text = [NSString stringWithFormat:@"%@:%@",leftMin,leftSec];
-	
 	__weak PlayerInterface *weakSelf = self;
-	
 	self.streamer.onStateChange = ^(FSAudioStreamState state) {
-		
 		if (state == kFsAudioStreamPlaybackCompleted) {
 			NSLog(@"播放完毕");
-			
 			[weakSelf playTracks:weakSelf.tracks index:weakSelf.index + 1];
-			
 		}
 	};
-}
-- (void)updatePlayBackProgress {
 	
-	if (self.streamer.activeStream.contentLength > 0) {
-		
-		if (self.bufferingIndicator.progress >= 1.0) {
-			
-			[self.playbackTimer invalidate];
-			
+	self.streamer.activeStream.onStateChange = ^(FSAudioStreamState state) {
+		if (state == kFsAudioStreamPlaybackCompleted) {
+			NSLog(@"播放完成");
+			[self playNext];
 		}
 		
+		if (state == kFsAudioStreamFailed) {
+			NSLog(@"播放失败fsAudioStreamFailed");
+		}
+		
+		if (state == kFsAudioStreamRetryingFailed) {
+			NSLog(@"多次播放失败");
+		}
+		
+		if (state == kFSAudioStreamEndOfFile) {
+			NSLog(@"缓冲结束");
+			if (self.playbackTimer == nil) return;
+			[self.playbackTimer invalidate];
+			self.playbackTimer = nil;
+			self.bufferingIndicator.progress = 1;
+		}
+		
+		if (state == kFsAudioStreamUnknownState) {
+			NSLog(@"unknown state");
+		}
+		
+		if (state == kFsAudioStreamStopped) {
+			NSLog(@"播放停止");
+		}
+	};
+	//设置锁屏信息
+	NSMutableDictionary *info = [NSMutableDictionary dictionary];
+	MPMediaItemArtwork* artwork = [[MPMediaItemArtwork alloc] initWithImage:self.nowCover.image];
+	NSTimeInterval duration = self.streamer.activeStream.duration.minute + self.streamer.activeStream.duration.second;
+	int elapsedPlaybackTime = cur.minute * 60 + cur.second;
+	Track* track = self.tracks[self.index];
+	
+	info[MPMediaItemPropertyPlaybackDuration] = @(duration);
+	info[MPNowPlayingInfoPropertyElapsedPlaybackTime] = @(elapsedPlaybackTime);
+	info[MPMediaItemPropertyAlbumTitle] = self.album.text;
+	info[MPMediaItemPropertyArtist] = track.artist;
+	info[MPMediaItemPropertyTitle] = track.name;
+	info[MPMediaItemPropertyArtwork] = artwork;
+	[MPNowPlayingInfoCenter defaultCenter].nowPlayingInfo = info;
+}
+- (void)updatePlayBackProgress {
+	if (self.streamer.activeStream == nil) return;
+	if (self.streamer.activeStream.contentLength > 0) {
 		FSSeekByteOffset currentOffset = self.streamer.activeStream.currentSeekByteOffset;
-		
 		UInt64 totalBufferedData = currentOffset.start + self.streamer.activeStream.prebufferedByteCount;
-		
 		float bufferedDataFromTotal = (float)totalBufferedData / self.streamer.activeStream.contentLength;
 		
 		self.bufferingIndicator.progress = bufferedDataFromTotal;
-		
 	} else {
-		
 		self.bufferingIndicator.progress = (float)self.streamer.activeStream.prebufferedByteCount / _maxPrebufferedByteCount;
-		
 	}
 }
-
+- (void)updateLrcTimer {
+	FSStreamPosition cur = self.streamer.activeStream.currentTimePlayed;
+	[self.lrcView currentTimeWithTime:(cur.minute * 60 + cur.second)];
+}
+- (void)removeCurrentTimeTimer {
+	[self.currentTimeTimer invalidate];
+	[self.playbackTimer invalidate];
+	self.currentTimeTimer = nil;
+	self.playbackTimer = nil;
+	self.bufferingIndicator.progress = 0;
+	self.progress.progress = 0;
+}
+- (void)removeLrcTimer {
+	[self.lrcTimer invalidate];
+	self.lrcTimer = nil;
+}
 #pragma mark - LTInfiniteScrollViewDataSource
 - (NSInteger)numberOfViews {
 	if (self.tracks.count > 0) return self.tracks.count;
@@ -443,20 +776,18 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 		NSString* urlStr = [NSString stringWithFormat:@"%@!/fw/600", track.cover];
 		NSURL* url = [NSURL URLWithString:urlStr];
 		
-		[cover sd_setImageWithURL:url
-				 placeholderImage:[UIImage imageNamed:@"noArtwork"]
+		[cover sd_setImageWithURL:url placeholderImage:[UIImage imageNamed:@"noArtwork"]
 						completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-							if (index == (NSInteger)self.index) {
+							if (index == self.index) {
 								self.reflection.image = [image reflectionWithAlpha:0.4];
 								self.nowCover = cover;
 							}
-						}];
+		}];
 	} else {
 		cover.image = [UIImage imageNamed:@"noArtwork"];
 	}
 	return cover;
 }
-
 #pragma mark - LTInfiniteScrollViewDelegate
 - (void)updateView:(UIView *)view withProgress:(CGFloat)progress scrollDirection:(ScrollDirection)direction {}
 - (void)scrollView:(LTInfiniteScrollView *)scrollView didScrollToIndex:(NSInteger)index {
@@ -464,8 +795,5 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 	self.index = index;
 	[self playTracks:self.tracks index:index];
 }
-
-
-
 @end
 

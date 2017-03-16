@@ -10,10 +10,11 @@ target '破音万里' do
 	pod 'FontAwesome.swift'
 	pod 'FMDB'
 	pod 'LEColorPicker'
-	pod 'SCLAlertView'
 	pod 'UMengAnalytics-NO-IDFA'
 	pod 'AMapNavi'  #导航 SDK
 	pod 'AMapLocation' #定位SDK
 	pod 'AMapSearch' #搜索服务SDK
 	pod 'SVProgressHUD'
+	pod 'SCLAlertView-Objective-C'
+	pod 'SCLAlertView'
 end
