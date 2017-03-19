@@ -36,109 +36,64 @@ class LrcView: DRNRealTimeBlurView {
 	}
 	
 	func setup() {
+//		self.backgroundColor = UIColor.lightGray
 		// 暂无歌词页面
 		noLrcLabel.backgroundColor = UIColor.clear
-		
 		noLrcLabel.textAlignment = .center
-		
 		noLrcLabel.text = "暂无歌词"
-		
 		noLrcLabel.textColor = UIColor.gray
-		
 		self.addSubview(noLrcLabel)
 		// 歌词
 		tableView.delegate = self
-		
 		tableView.dataSource = self
-		
 		tableView.separatorStyle = .none
-		
 		tableView.showsVerticalScrollIndicator = false
-		
 		tableView.backgroundColor = UIColor.clear
-		
 		tableView.register(LrcCell.self, forCellReuseIdentifier: "lrc")
-		
 		self.addSubview(tableView)
-		
 	}
 	
 	override func layoutSubviews() {
-		
 		super.layoutSubviews()
-		
 		tableView.frame = self.bounds
-		
 		self.tableView.contentInset = UIEdgeInsetsMake(self.bounds.size.height * 0.5, 0, self.bounds.size.height * 0.5, 0)
-		
 		noLrcLabel.frame = self.bounds
-	
 	}
-	
 }
 
 extension LrcView {
-	
 	func parseLyrics(lyrics: String) {
-		
 		if lyricsLines.count != 0 {
-			
 			self.lyricsLines.removeAll()
-
 		}
-		
-		
 		currentIndex = 0
-				
 		lyricsLines = divideArray(lyrics: lyrics)
-		
 		self.tableView.reloadData()
-		
 		if lyricsLines.count > 0 {
-			
 			tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
-			
 		}
 	}
 	
 	func parseChLyrics(lyrics: String) {
-		
 		self.chLrcArray.removeAll()
-		
 		chLrcArray = divideArray(lyrics: lyrics)
-		
+
 		for lrc in self.lyricsLines {
-			
 			let lrcTime = lrc.time
-			
 			if lrcTime?.characters.count == 0 { continue }
-			
 			for chlrc in self.chLrcArray {
-				
 				let chlrcTime = chlrc.time
-				
 				if chlrcTime?.characters.count == 0 { continue }
-				
 				if chlrcTime == lrcTime {
-					
 					if lrc.lyrics?.characters.count == 0 {
-						
 						continue
-						
 					}
-					
 					lrc.lyrics = lrc.lyrics! + "\r" + chlrc.lyrics!
-					
 				}
-				
 				continue
 			}
-		
-			
 		}
-		
 		self.tableView.reloadData()
-
 	}
 	
 	func divideArray(lyrics: String) -> Array<LrcLine> {

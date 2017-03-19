@@ -9,7 +9,7 @@ target '破音万里' do
 	pod 'Alamofire', '~> 4.0'
 	pod 'FontAwesome.swift'
 	pod 'FMDB'
-	pod 'LEColorPicker'
+	pod 'TDImageColors', '~> 0.2'
 	pod 'UMengAnalytics-NO-IDFA'
 	pod 'AMapNavi'  #导航 SDK
 	pod 'AMapLocation' #定位SDK

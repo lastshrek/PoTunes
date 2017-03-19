@@ -15,7 +15,6 @@
 #import "XGSetting.h"
 #import "Debug.h"
 #import "UMMobClick/MobClick.h"
-#import "PotunesRemix-swift.h"
 
 @interface AppDelegate ()<WXApiDelegate, UNUserNotificationCenterDelegate>
 

@@ -1,6 +1,0 @@
-framework module LEColorPicker {
-  umbrella header "LEColorPicker-umbrella.h"
-
-  export *
-  module * { export * }
-}

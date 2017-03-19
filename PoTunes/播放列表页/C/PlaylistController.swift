@@ -178,6 +178,7 @@ class PlaylistController: UITableViewController {
 					if playlist.ID > maxID {
 						
 						temp.append(playlist)
+						debugPrint(playlist.cover)
 						
 					}
 					
@@ -261,9 +262,9 @@ class PlaylistController: UITableViewController {
 			cell.imageView?.image = UIImage(named:"defaultArtCover")
 	
 		} else {
-		
-			let url: URL = URL(string: playlist.cover)!
 			
+			let url = URL(string: playlist.cover)
+		
 			cell.imageView?.sd_setImage(with: url, placeholderImage: UIImage(named:"defaultArtCover"))
 			
 			// MARK: - 添加下载手势 - TODO

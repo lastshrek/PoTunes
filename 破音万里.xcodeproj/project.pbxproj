@@ -936,7 +936,7 @@
 		3CB2E2EA1BA7B26800805D4F /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0820;
+				LastUpgradeCheck = 0830;
 				ORGANIZATIONNAME = Purchas;
 				TargetAttributes = {
 					3CB2E2F11BA7B26800805D4F = {
@@ -1280,6 +1280,7 @@
 		};
 		3C947D4C1BB7BBBA008039B9 /* ad hoc distribution */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0D348453E5A357FD09B587CE /* Pods-破音万里.ad hoc distribution.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_IDENTITY = "iPhone Distribution: PengCheng Zhao (7LKFCH3GR5)";

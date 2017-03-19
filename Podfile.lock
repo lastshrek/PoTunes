@@ -37,7 +37,6 @@ PODS:
   - FMDB/standard (2.6.2)
   - FontAwesome.swift (1.0.0)
   - LDProgressView (1.2.1)
-  - LEColorPicker (1.0.3)
   - PKHUD (4.0.0)
   - SCLAlertView (0.7.0)
   - SCLAlertView-Objective-C (1.1.1)
@@ -45,6 +44,7 @@ PODS:
     - SDWebImage/Core (= 3.8.2)
   - SDWebImage/Core (3.8.2)
   - SVProgressHUD (2.1.2)
+  - TDImageColors (0.3.1)
   - UMengAnalytics-NO-IDFA (4.1.5)
 
 DEPENDENCIES:
@@ -57,12 +57,12 @@ DEPENDENCIES:
   - FMDB
   - FontAwesome.swift
   - LDProgressView (>= 1.1)
-  - LEColorPicker
   - PKHUD (~> 4.0)
   - SCLAlertView
   - SCLAlertView-Objective-C
   - SDWebImage
   - SVProgressHUD
+  - TDImageColors (~> 0.2)
   - UMengAnalytics-NO-IDFA
 
 SPEC CHECKSUMS:
@@ -77,14 +77,14 @@ SPEC CHECKSUMS:
   FMDB: 854a0341b4726e53276f2a8996f06f1b80f9259a
   FontAwesome.swift: 2d32a3d62195343c2004b7c9043294ed2948553a
   LDProgressView: f6afc7c30d2a9edf33001515f3189338567a32d2
-  LEColorPicker: 34509a9df7a128b1109a5dbe3f25921fc511c03d
   PKHUD: 2bb45c936bb8afa39f3cd33ec14e8cc89f624255
   SCLAlertView: 8a14ffc40590c619e183eed2298b854385f30be1
   SCLAlertView-Objective-C: d397ae2b52bae7dedf7188fa1616fcb89200b33a
   SDWebImage: 098e97e6176540799c27e804c96653ee0833d13c
   SVProgressHUD: c404a55d78acbeb7ebb78b76d3faf986475a6994
+  TDImageColors: 73feaadb478d4ffa9c3d5c09e2621f8768aa02f9
   UMengAnalytics-NO-IDFA: f1b08b540eba6ebad044a574cae6d988cf40cfda
 
-PODFILE CHECKSUM: 5046955dc07b84c22dcab01b2e116c6a418ac0dc
+PODFILE CHECKSUM: 57bc7edeba00a96ad8d434d4cf8ac9205c37e1de
 
 COCOAPODS: 1.1.1

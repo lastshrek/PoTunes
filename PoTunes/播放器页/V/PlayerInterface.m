@@ -15,8 +15,8 @@
 #import "Reachability.h"
 #import "FMDB.h"
 #import <SVProgressHUD/SVProgressHUD.h>
-#import <LEColorPicker/LEColorPicker.h>
 #import <SCLAlertView_Objective_C/SCLAlertView.h>
+#import <TDImageColors/TDImageColors.h>
 /** 播放模式 */
 typedef NS_ENUM(NSUInteger, PCAudioRepeatMode) {
 	PCAudioRepeatModeSingle,
@@ -91,7 +91,6 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 	//设置appdelegate的block
 	[self setupDelegateBlock];
 }
-
 #pragma mark - initialSubViews
 - (void)initialSubviews {
 	self.streamer = [[FSAudioController alloc] init];
@@ -115,6 +114,8 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 	LTInfiniteScrollView *coverScroll = [[LTInfiniteScrollView alloc] init];
 	coverScroll.delegate = self;
 	coverScroll.dataSource = self;
+	coverScroll.pagingEnabled = YES;
+	coverScroll.bounces = NO;
 	coverScroll.maxScrollDistance = 2;
 	[coverScroll reloadDataWithInitialIndex:0];
 	[self.backgroundView addSubview:coverScroll];
@@ -125,7 +126,7 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 	self.bufferingIndicator = bufferingIndicator;
 	
 	//进度条
-	LDProgressView* progress = [self createProgressViewByShowBackground:@NO type:LDProgressSolid backgroundColor:[UIColor clearColor]];
+	LDProgressView* progress = [self createProgressViewByShowBackground:@NO type:LDProgressGradient backgroundColor:[UIColor clearColor]];
 	[self.backgroundView addSubview:progress];
 	self.progress = progress;
 	//开始时间和剩余时间
@@ -168,11 +169,18 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 	[self.backgroundView addSubview:playModeView];
 	self.playModeView = playModeView;
 	//歌词
-//	LrcView* lrcView = [[LrcView alloc] init];
-//	lrcView.hidden = YES;
-//	[self addSubview:lrcView];
-//	self.lrcView.renderStatic = NO;
-//	self.lrcView = lrcView;
+	LrcView* lrcView = [[LrcView alloc] init];
+	lrcView.hidden = YES;
+	lrcView.renderStatic = NO;
+	[self addSubview:lrcView];
+	self.lrcView = lrcView;
+	//当前封面
+	UIImageView* nowCover = [[UIImageView alloc] init];
+	self.nowCover = nowCover;
+	self.nowCover.hidden = YES;
+	[self addSubview:nowCover];
+	[self sendSubviewToBack:self.nowCover];
+	
 }
 - (void)layoutSubviews {
 	[super layoutSubviews];
@@ -182,8 +190,8 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 	
 	self.backgroundView.frame = self.bounds;
 	self.reflection.frame = CGRectMake(0, height - width, width, width);
+	self.nowCover.frame = CGRectMake(0, 0, width, width);
 	self.coverScroll.frame = CGRectMake(0, 0, width, width);
-	self.lrcView.frame = CGRectMake(0, 0, width, width);
 	self.bufferingIndicator.frame = CGRectMake(0, width, width, 10);
 	self.progress.frame = CGRectMake(0, width, width, 10);
 	self.playModeView.frame = CGRectMake(width / 2 - 10, height - 50, 20, 20);
@@ -193,6 +201,7 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 	self.timeView.frame = CGRectMake(0, CGRectGetMaxY(self.progress.frame), width, 20);
 	self.currentTime.frame = CGRectMake(2, 0, width / 2, 20);
 	self.leftTime.frame = CGRectMake(width / 2 - 2, 0, width / 2, self.timeView.bounds.size.height);
+	self.lrcView.frame = CGRectMake(0, 0, width, width);
 }
 - (LDProgressView *)createProgressViewByShowBackground:(NSNumber*)showBackground
 												  type: (LDProgressType)type
@@ -210,7 +219,6 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 	buffer.type = type;
 	buffer.borderRadius = 0;
 	buffer.backgroundColor = backgroundColor;
-	
 	return buffer;
 }
 - (UILabel*)createLabelByAutoresizingMask:(UIViewAutoresizing)autoresizingMask
@@ -422,6 +430,9 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 		self.lrcView.hidden = NO;
 		self.lrcView.alpha = 0;
 		
+		self.lrcView.renderStatic = NO;
+		self.lrcView.renderStatic = YES;
+		
 		[UIView animateWithDuration:0.5 animations:^{ self.lrcView.alpha = 1; }];
 		[UIView commitAnimations];
 		[self addLrcTimer];
@@ -441,12 +452,33 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 		[self removeLrcTimer];
 	}
 }
-
 - (void)loadLyrics:(NSInteger)trackID {
 	self.lrcView.noLrcLabel.text = @"正在加载歌词";
 	self.lrcView.noLrcLabel.hidden = NO;
 	
 	NSString* lrcUrl = @"https://poche.fm/api/app/lyrics/";
+	lrcUrl = [NSString stringWithFormat:@"%@%ld", lrcUrl, (long)trackID];
+	
+	AFHTTPRequestOperationManager* manager = [AFHTTPRequestOperationManager manager];
+	[manager GET:lrcUrl parameters:nil success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
+		self.lrcView.noLrcLabel.hidden = YES;
+		NSDictionary* dict = responseObject;
+		LrcString* lrcString = [[LrcString alloc] init];
+		lrcString.lrc = dict[@"lrc"];
+		lrcString.lrc_cn = dict[@"lrc_cn"];
+		if (lrcString.lrc.length == 0 || [lrcString.lrc isEqualToString:@"unwritten"]) {
+			self.lrcView.noLrcLabel.text = @"暂无歌词";
+			return;
+		}
+		[self.lrcView parseLyricsWithLyrics:[lrcString.lrc stringByReplacingOccurrencesOfString:@"\\n" withString:@" "]];
+		if (lrcString.lrc_cn.length > 0 && ![lrcString.lrc_cn isEqualToString:@"unwritten"]) {
+			[self.lrcView parseChLyricsWithLyrics:[lrcString.lrc_cn stringByReplacingOccurrencesOfString:@"\\n" withString:@" "]];
+		}
+		
+
+	} failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
+		self.lrcView.noLrcLabel.text = @"暂无歌词";
+	}];
 	
 
 }
@@ -454,7 +486,6 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 - (void)getLastPlayTrackAndPlaystate {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	NSData* tracksData = [defaults objectForKey:@"tracksData"];
-	
 	if (tracksData == nil) {
 		self.repeatMode = PCAudioRepeatModePlaylist;
 		return;
@@ -465,11 +496,8 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 	self.index = [defaults integerForKey:@"index"];
 	self.type = [defaults stringForKey:@"type"];
 	self.album.text = album;
-	[self.coverScroll reloadDataWithInitialIndex:self.index];
-	[self changeInterface:self.index];
+	self.repeatMode = [defaults integerForKey:@"repeatMode"];
 	
-	NSInteger repeateMode = [defaults integerForKey:@"repeatMode"];
-	self.repeatMode = repeateMode;
 	if (self.repeatMode == PCAudioRepeatModeSingle) {
 		self.playModeView.image = [UIImage imageNamed:@"repeatOneB"];
 	} else if (self.repeatMode == PCAudioRepeatModeShuffle) {
@@ -477,12 +505,15 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 	} else {
 		self.playModeView.image = [UIImage imageNamed:@"repeatOnB"];
 	}
+
 	
+	[self.coverScroll reloadDataWithInitialIndex:self.index];
+	[self changeInterface:self.index];
 }
+#pragma mark - Play
 - (void)playTracks:(NSArray *)tracks index:(NSInteger)index {
 	self.tracks = tracks;
 	self.index = index;
-	
 	NSUserDefaults* user = [NSUserDefaults standardUserDefaults];
 	BOOL yes = [user boolForKey:@"wwanPlay"];
 	Reachability* monitor = [Reachability reachabilityForInternetConnection];
@@ -525,15 +556,17 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 	NSString* rootPath = [self dirDoc];
 	NSString* query = @"SELECT * FROM t_downloading WHERE sourceURL = ?;";
 	FMResultSet* s = [self.tracksDB executeQuery:query withArgumentsInArray:@[track.url]];
+	
 	if (s.next) {
 		BOOL isDownloaded = [s stringForColumn:@"downloaded"];
 		if (isDownloaded) {
 			NSString* identifier = [self getIdentifierWithUrlStr:track.url];
-			NSString* filePath = [NSString stringWithFormat:@"%@%@", rootPath, identifier];
+			NSString* filePath = [NSString stringWithFormat:@"%@/%@", rootPath, identifier];
 			self.streamer.url = [NSURL fileURLWithPath:filePath];
 			[self.streamer play];
 		} else {
-			
+			self.streamer.url = [NSURL URLWithString:track.url];
+			[self.streamer play];
 		}
 	} else {
 		self.streamer.url = [NSURL URLWithString:track.url];
@@ -545,46 +578,40 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 	NSData* tracksData = [NSKeyedArchiver archivedDataWithRootObject:self.tracks];
 	NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
 	[defaults setObject:@(self.repeatMode) forKey:@"repeatMode"];
-	[defaults setObject:tracksData forKey:@"songsData"];
+	[defaults setObject:tracksData forKey:@"tracksData"];
 	[defaults setInteger:self.index forKey:@"index"];
-	[defaults setValue:self.type forKey:@"type"];
+	[defaults setObject:self.type forKey:@"type"];
 	[defaults setValue:self.album.text forKey:@"album"];
 	[defaults synchronize];
 }
 - (void)changeInterface:(NSInteger)index {
 	Track* track = self.tracks[self.index];
-	
+	NSString* urlStr = [NSString stringWithFormat:@"%@!/fw/600", track.cover];
+
 	self.name.text = track.name;
 	self.artist.text = track.artist;
 	self.progress.progress = 0;
 	self.bufferingIndicator.progress = 0;
 	self.currentTime.text = @"0:00";
 	self.leftTime.text = @"0:00";
-	
 	if (self.lrcView.hidden == NO) {
-		[self loadLyrics:index];
+		[self loadLyrics:track.ID];
 	}
 	self.lrcView.noLrcLabel.hidden = YES;
-	[self.nowCover sd_setImageWithURL:[NSURL URLWithString:track.url] placeholderImage:self.nowCover.image completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-		
-		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-			self.lrcView.renderStatic = NO;
-		});
-		
-		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-			self.lrcView.renderStatic = YES;
-			self.reflection.image = [image reflectionWithAlpha:0.3];
-			[self refreshProgressColor];
-		});
+
+	[self.nowCover sd_setImageWithURL:[NSURL URLWithString:urlStr] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+		self.reflection.image = [image reflectionWithAlpha:0.4];
+		[self refreshProgressColor:image];
+		self.lrcView.renderStatic = NO;
+		self.lrcView.renderStatic = YES;
 	}];
 }
-- (void)refreshProgressColor {
-	LEColorPicker* colorPicker = [[LEColorPicker alloc] init];
-	LEColorScheme* colorScheme = [colorPicker colorSchemeFromImage:self.nowCover.image];
-	self.progress.color = colorScheme.backgroundColor;
-	self.name.textColor = colorScheme.backgroundColor;
-	self.artist.textColor = colorScheme.backgroundColor;
-	self.album.textColor = colorScheme.backgroundColor;
+- (void)refreshProgressColor:(UIImage*)image {
+	TDImageColors* imageColors= [[TDImageColors alloc] initWithImage:image count:2];
+	self.progress.color = imageColors.colors[1];
+	self.name.textColor = imageColors.colors[1];
+	self.artist.textColor = imageColors.colors[1];
+	self.album.textColor = imageColors.colors[1];
 }
 #pragma mark - Notifications
 - (void)getNotification {
@@ -701,7 +728,6 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 		}
 		
 		if (state == kFSAudioStreamEndOfFile) {
-			NSLog(@"缓冲结束");
 			if (self.playbackTimer == nil) return;
 			[self.playbackTimer invalidate];
 			self.playbackTimer = nil;
@@ -719,12 +745,12 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 	//设置锁屏信息
 	NSMutableDictionary *info = [NSMutableDictionary dictionary];
 	MPMediaItemArtwork* artwork = [[MPMediaItemArtwork alloc] initWithImage:self.nowCover.image];
-	NSTimeInterval duration = self.streamer.activeStream.duration.minute + self.streamer.activeStream.duration.second;
+	int duration = self.streamer.activeStream.duration.minute * 60 + self.streamer.activeStream.duration.second;
 	int elapsedPlaybackTime = cur.minute * 60 + cur.second;
 	Track* track = self.tracks[self.index];
-	
-	info[MPMediaItemPropertyPlaybackDuration] = @(duration);
-	info[MPNowPlayingInfoPropertyElapsedPlaybackTime] = @(elapsedPlaybackTime);
+	NSLog(@"%d", elapsedPlaybackTime);
+	info[MPMediaItemPropertyPlaybackDuration] = [NSNumber numberWithInt:duration];
+	info[MPNowPlayingInfoPropertyElapsedPlaybackTime] = [NSNumber numberWithInt:elapsedPlaybackTime];
 	info[MPMediaItemPropertyAlbumTitle] = self.album.text;
 	info[MPMediaItemPropertyArtist] = track.artist;
 	info[MPMediaItemPropertyTitle] = track.name;
@@ -777,11 +803,10 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 		NSURL* url = [NSURL URLWithString:urlStr];
 		
 		[cover sd_setImageWithURL:url placeholderImage:[UIImage imageNamed:@"noArtwork"]
-						completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-							if (index == self.index) {
-								self.reflection.image = [image reflectionWithAlpha:0.4];
-								self.nowCover = cover;
-							}
+						completed:^(UIImage *image,
+									NSError *error,
+									SDImageCacheType cacheType,
+									NSURL *imageURL) {
 		}];
 	} else {
 		cover.image = [UIImage imageNamed:@"noArtwork"];
@@ -792,8 +817,8 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 - (void)updateView:(UIView *)view withProgress:(CGFloat)progress scrollDirection:(ScrollDirection)direction {}
 - (void)scrollView:(LTInfiniteScrollView *)scrollView didScrollToIndex:(NSInteger)index {
 	if (self.tracks.count == 0) return;
-	self.index = index;
 	[self playTracks:self.tracks index:index];
 }
+
 @end
 
