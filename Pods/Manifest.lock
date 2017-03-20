@@ -20,7 +20,7 @@ PODS:
   - AFNetworking/UIKit (2.6.3):
     - AFNetworking/NSURLConnection
     - AFNetworking/NSURLSession
-  - Alamofire (4.0.1)
+  - Alamofire (4.4.0)
   - AMap3DMap (4.6.1):
     - AMapFoundation (~> 1.3)
   - AMapFoundation (1.3.4)
@@ -49,7 +49,7 @@ PODS:
 
 DEPENDENCIES:
   - AFNetworking (= 2.6.3)
-  - Alamofire (~> 4.0)
+  - Alamofire (~> 4.4)
   - AMapLocation
   - AMapNavi
   - AMapSearch
@@ -67,7 +67,7 @@ DEPENDENCIES:
 
 SPEC CHECKSUMS:
   AFNetworking: cb8d14a848e831097108418f5d49217339d4eb60
-  Alamofire: 7682d43245de14874acd142ec137b144aa1dd335
+  Alamofire: dc44b1600b800eb63da6a19039a0083d62a6a62d
   AMap3DMap: eb6656fb441ed7eb310b3c121032e947d4d649e5
   AMapFoundation: 486493b8e9ae4a1cb7ce2d8d8978ee1aabf9bb34
   AMapLocation: 5fb51fe0e35e68a899199651942e6234d6257d91
@@ -85,6 +85,6 @@ SPEC CHECKSUMS:
   TDImageColors: 73feaadb478d4ffa9c3d5c09e2621f8768aa02f9
   UMengAnalytics-NO-IDFA: f1b08b540eba6ebad044a574cae6d988cf40cfda
 
-PODFILE CHECKSUM: 57bc7edeba00a96ad8d434d4cf8ac9205c37e1de
+PODFILE CHECKSUM: 3de068c5807e58c0a2650ad4b9cb5bb115e684fa
 
 COCOAPODS: 1.1.1

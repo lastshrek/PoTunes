@@ -22,38 +22,23 @@ class LrcCell: UITableViewCell {
 	
 	}
 	
-	var lyricLabel: LrcLabel?
+	var lyricLabel: UILabel?
 	
 	override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-	
 		super.init(style: style, reuseIdentifier: reuseIdentifier)
-		
-		self.backgroundColor = UIColor.clear
-		
-		self.selectionStyle = .none
-		
-		self.lyricLabel = LrcLabel()
-		
-		self.lyricLabel?.textColor = UIColor.gray
-		
-		self.lyricLabel?.lineBreakMode = .byWordWrapping
-		
-		self.lyricLabel?.textAlignment = .center
-		
-		self.lyricLabel?.numberOfLines = 0
-		
-		self.lyricLabel?.font = UIFont(name: "BebasNeue", size: 13)
-		
-		self.contentView.addSubview(self.lyricLabel!)
-	
+		backgroundColor = UIColor.clear
+		selectionStyle = .none
+		lyricLabel = UILabel()
+		lyricLabel?.textColor = UIColor.gray
+		lyricLabel?.lineBreakMode = .byWordWrapping
+		lyricLabel?.textAlignment = .center
+		lyricLabel?.numberOfLines = 0
+		lyricLabel?.font = UIFont(name: "BebasNeue", size: 13)
+		contentView.addSubview(self.lyricLabel!)
 	}
 	
 	
-	required init?(coder aDecoder: NSCoder) {
-	
-		fatalError("init(coder:) has not been implemented")
-	
-	}
+	required init?(coder aDecoder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 	
 	override func layoutSubviews() {
 	

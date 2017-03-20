@@ -16,8 +16,8 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "3CB2E2F11BA7B26800805D4F"
                BuildableName = "PoTunes.app"
-               BlueprintName = "&#x7834;&#x97f3;&#x4e07;&#x91cc;"
-               ReferencedContainer = "container:&#x7834;&#x97f3;&#x4e07;&#x91cc;.xcodeproj">
+               BlueprintName = "&#x7834;&#x7834;"
+               ReferencedContainer = "container:&#x7834;&#x7834;.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -29,9 +29,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "3CB2E30A1BA7B26800805D4F"
-               BuildableName = "&#x7834;&#x97f3;&#x4e07;&#x91cc;.xctest"
-               BlueprintName = "&#x7834;&#x97f3;&#x4e07;&#x91cc;Tests"
-               ReferencedContainer = "container:&#x7834;&#x97f3;&#x4e07;&#x91cc;.xcodeproj">
+               BuildableName = "&#x7834;&#x7834;.xctest"
+               BlueprintName = "&#x7834;&#x7834;Tests"
+               ReferencedContainer = "container:&#x7834;&#x7834;.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -48,8 +48,8 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "3CB2E2F11BA7B26800805D4F"
             BuildableName = "PoTunes.app"
-            BlueprintName = "&#x7834;&#x97f3;&#x4e07;&#x91cc;"
-            ReferencedContainer = "container:&#x7834;&#x97f3;&#x4e07;&#x91cc;.xcodeproj">
+            BlueprintName = "&#x7834;&#x7834;"
+            ReferencedContainer = "container:&#x7834;&#x7834;.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -71,8 +71,8 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "3CB2E2F11BA7B26800805D4F"
             BuildableName = "PoTunes.app"
-            BlueprintName = "&#x7834;&#x97f3;&#x4e07;&#x91cc;"
-            ReferencedContainer = "container:&#x7834;&#x97f3;&#x4e07;&#x91cc;.xcodeproj">
+            BlueprintName = "&#x7834;&#x7834;"
+            ReferencedContainer = "container:&#x7834;&#x7834;.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <EnvironmentVariables>
@@ -97,8 +97,8 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "3CB2E2F11BA7B26800805D4F"
             BuildableName = "PoTunes.app"
-            BlueprintName = "&#x7834;&#x97f3;&#x4e07;&#x91cc;"
-            ReferencedContainer = "container:&#x7834;&#x97f3;&#x4e07;&#x91cc;.xcodeproj">
+            BlueprintName = "&#x7834;&#x7834;"
+            ReferencedContainer = "container:&#x7834;&#x7834;.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

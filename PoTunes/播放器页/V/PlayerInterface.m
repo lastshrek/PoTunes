@@ -9,7 +9,7 @@
 #import "PlayerInterface.h"
 #import "LDProgressView.h"
 #import "UIImage+Reflection.h"
-#import "PotunesRemix-swift.h"
+#import "PotunesRemix-Swift.h"
 #import "FSAudioController.h"
 #import <SDWebImage/UIImageView+WebCache.h>
 #import "Reachability.h"
@@ -114,8 +114,6 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 	LTInfiniteScrollView *coverScroll = [[LTInfiniteScrollView alloc] init];
 	coverScroll.delegate = self;
 	coverScroll.dataSource = self;
-	coverScroll.pagingEnabled = YES;
-	coverScroll.bounces = NO;
 	coverScroll.maxScrollDistance = 2;
 	[coverScroll reloadDataWithInitialIndex:0];
 	[self.backgroundView addSubview:coverScroll];
@@ -461,18 +459,17 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 	
 	AFHTTPRequestOperationManager* manager = [AFHTTPRequestOperationManager manager];
 	[manager GET:lrcUrl parameters:nil success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
-		self.lrcView.noLrcLabel.hidden = YES;
-		NSDictionary* dict = responseObject;
-		LrcString* lrcString = [[LrcString alloc] init];
-		lrcString.lrc = dict[@"lrc"];
-		lrcString.lrc_cn = dict[@"lrc_cn"];
-		if (lrcString.lrc.length == 0 || [lrcString.lrc isEqualToString:@"unwritten"]) {
+		NSString* lrc = responseObject[@"lrc"];
+		NSString* lrc_cn = responseObject[@"lrc_cn"];
+		if ((NSNull *)lrc == [NSNull null]) {
 			self.lrcView.noLrcLabel.text = @"暂无歌词";
+			self.lrcView.noLrcLabel.hidden = NO;
 			return;
 		}
-		[self.lrcView parseLyricsWithLyrics:[lrcString.lrc stringByReplacingOccurrencesOfString:@"\\n" withString:@" "]];
-		if (lrcString.lrc_cn.length > 0 && ![lrcString.lrc_cn isEqualToString:@"unwritten"]) {
-			[self.lrcView parseChLyricsWithLyrics:[lrcString.lrc_cn stringByReplacingOccurrencesOfString:@"\\n" withString:@" "]];
+		[self.lrcView parseLyricsWithLyrics:[lrc stringByReplacingOccurrencesOfString:@"\\n" withString:@" "]];
+		if ((NSNull *)lrc_cn == [NSNull null]) return;
+		if (lrc_cn.length > 0 && ![lrc_cn isEqualToString:@"unwritten"]) {
+			[self.lrcView parseChLyricsWithLyrics:[lrc_cn stringByReplacingOccurrencesOfString:@"\\n" withString:@" "]];
 		}
 		
 
@@ -597,15 +594,21 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 	if (self.lrcView.hidden == NO) {
 		[self loadLyrics:track.ID];
 	}
-	self.lrcView.noLrcLabel.hidden = YES;
-
 	[self.nowCover sd_setImageWithURL:[NSURL URLWithString:urlStr] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
 		self.reflection.image = [image reflectionWithAlpha:0.4];
 		[self refreshProgressColor:image];
-		self.lrcView.renderStatic = NO;
-		self.lrcView.renderStatic = YES;
+		[self refreshBlurView];
 	}];
 }
+- (void)refreshBlurView {
+	NSLog(@"前台");
+	self.lrcView.renderStatic = NO;
+	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+		self.lrcView.renderStatic = YES;
+	});
+}
+
+
 - (void)refreshProgressColor:(UIImage*)image {
 	TDImageColors* imageColors= [[TDImageColors alloc] initWithImage:image count:2];
 	self.progress.color = imageColors.colors[1];
@@ -620,6 +623,14 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 	[center addObserver:self selector:@selector(nonspeaking) name:@"nonspeaking" object:nil];
 	[center addObserver:self selector:@selector(audioSessionDidChangeInterruptionType:)
 				   name:AVAudioSessionRouteChangeNotification object:[AVAudioSession sharedInstance]];
+	[center addObserver:self selector:@selector(refreshBlurView) name:@"becomeActive" object:nil];
+}
+- (void)dealloc {
+	NSNotificationCenter* center = [NSNotificationCenter defaultCenter];
+	[center removeObserver:self name:@"speaking" object:nil];
+	[center removeObserver:self name:@"nonspeaking" object:nil];
+	[center removeObserver:self name:AVAudioSessionRouteChangeNotification object:nil];
+	[center removeObserver:self name:@"becomeActive" object:nil];
 }
 - (void)speaking { self.streamer.volume = 0.1; }
 - (void)nonspeaking { self.streamer.volume = 1; }
@@ -686,6 +697,7 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 }
 - (void)updateCurrentTime {
 	//计算进度值
+	if (self.streamer.activeStream == nil) { return; }
 	if (self.streamer.activeStream.duration.minute == 0 && self.streamer.activeStream.duration.second == 0) return;
 	//取出当前播放时长以及总时长
 	FSStreamPosition cur = self.streamer.activeStream.currentTimePlayed;
@@ -748,7 +760,6 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 	int duration = self.streamer.activeStream.duration.minute * 60 + self.streamer.activeStream.duration.second;
 	int elapsedPlaybackTime = cur.minute * 60 + cur.second;
 	Track* track = self.tracks[self.index];
-	NSLog(@"%d", elapsedPlaybackTime);
 	info[MPMediaItemPropertyPlaybackDuration] = [NSNumber numberWithInt:duration];
 	info[MPNowPlayingInfoPropertyElapsedPlaybackTime] = [NSNumber numberWithInt:elapsedPlaybackTime];
 	info[MPMediaItemPropertyAlbumTitle] = self.album.text;
@@ -763,7 +774,6 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 		FSSeekByteOffset currentOffset = self.streamer.activeStream.currentSeekByteOffset;
 		UInt64 totalBufferedData = currentOffset.start + self.streamer.activeStream.prebufferedByteCount;
 		float bufferedDataFromTotal = (float)totalBufferedData / self.streamer.activeStream.contentLength;
-		
 		self.bufferingIndicator.progress = bufferedDataFromTotal;
 	} else {
 		self.bufferingIndicator.progress = (float)self.streamer.activeStream.prebufferedByteCount / _maxPrebufferedByteCount;

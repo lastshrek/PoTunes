@@ -109,6 +109,7 @@
 		3CF1E2BF1DEB0ABE00DD48DC /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CF1E2BE1DEB0ABE00DD48DC /* JavaScriptCore.framework */; };
 		3CF1E2C11DEB0AE400DD48DC /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CF1E2C01DEB0AE400DD48DC /* Security.framework */; };
 		3CFFC8031D5DC65D00696F66 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3CFFC8021D5DC65D00696F66 /* Main.storyboard */; };
+		F40DE0D7B64728BFF56EFF32 /* Pods___.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 408D8D46FD807C936F7F8802 /* Pods___.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -135,7 +136,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		0D348453E5A357FD09B587CE /* Pods-破音万里.ad hoc distribution.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-破音万里.ad hoc distribution.xcconfig"; path = "Pods/Target Support Files/Pods-破音万里/Pods-破音万里.ad hoc distribution.xcconfig"; sourceTree = "<group>"; };
 		28F6DD77EB623BF8E85E58B2 /* Pods-破音万里.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-破音万里.debug.xcconfig"; path = "Pods/Target Support Files/Pods-破音万里/Pods-破音万里.debug.xcconfig"; sourceTree = "<group>"; };
 		3C0A1A951DD5B35400E90306 /* MainScrollview.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainScrollview.swift; sourceTree = "<group>"; };
 		3C0A1A971DD5B5B000E90306 /* MainPageControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainPageControl.swift; sourceTree = "<group>"; };
@@ -247,7 +247,7 @@
 		3CB2E2FA1BA7B26800805D4F /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		3CB2E3021BA7B26800805D4F /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		3CB2E3051BA7B26800805D4F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
-		3CB2E30B1BA7B26800805D4F /* 破音万里.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "破音万里.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		3CB2E30B1BA7B26800805D4F /* 破破.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "破破.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3CB2E3101BA7B26800805D4F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3CB2E3111BA7B26800805D4F /* PoTunesTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PoTunesTests.m; sourceTree = "<group>"; };
 		3CB2E3B01BA7CF2200805D4F /* BebasNeue.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = BebasNeue.otf; sourceTree = "<group>"; };
@@ -287,8 +287,12 @@
 		3CF1E2C01DEB0AE400DD48DC /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		3CFFC7F61D5DBF3500696F66 /* 破音万里-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "破音万里-Bridging-Header.h"; sourceTree = "<group>"; };
 		3CFFC8021D5DC65D00696F66 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		408D8D46FD807C936F7F8802 /* Pods___.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods___.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		56644B5F0A38C97D868D908B /* Pods-破破.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-破破.debug.xcconfig"; path = "Pods/Target Support Files/Pods-破破/Pods-破破.debug.xcconfig"; sourceTree = "<group>"; };
 		5ACE65060298DC83FD3A5186 /* Pods-破音万里.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-破音万里.release.xcconfig"; path = "Pods/Target Support Files/Pods-破音万里/Pods-破音万里.release.xcconfig"; sourceTree = "<group>"; };
-		AEEF67891B1F3F39F233DA7F /* Pods_____.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = "Pods_____.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		8F2935EA201F2341DF188AA9 /* Pods-破破.ad hoc distribution.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-破破.ad hoc distribution.xcconfig"; path = "Pods/Target Support Files/Pods-破破/Pods-破破.ad hoc distribution.xcconfig"; sourceTree = "<group>"; };
+		AEEF67891B1F3F39F233DA7F /* Pods_____.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_____.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C18635346D49DC003E4C8D2B /* Pods-破破.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-破破.release.xcconfig"; path = "Pods/Target Support Files/Pods-破破/Pods-破破.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -314,6 +318,7 @@
 				3CB2E4001BA7D1B300805D4F /* AVFoundation.framework in Frameworks */,
 				3CB2E3FC1BA7D18900805D4F /* CFNetwork.framework in Frameworks */,
 				17E37971ECD9FCACBAFB3599 /* Pods_____.framework in Frameworks */,
+				F40DE0D7B64728BFF56EFF32 /* Pods___.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -332,7 +337,9 @@
 			children = (
 				28F6DD77EB623BF8E85E58B2 /* Pods-破音万里.debug.xcconfig */,
 				5ACE65060298DC83FD3A5186 /* Pods-破音万里.release.xcconfig */,
-				0D348453E5A357FD09B587CE /* Pods-破音万里.ad hoc distribution.xcconfig */,
+				56644B5F0A38C97D868D908B /* Pods-破破.debug.xcconfig */,
+				C18635346D49DC003E4C8D2B /* Pods-破破.release.xcconfig */,
+				8F2935EA201F2341DF188AA9 /* Pods-破破.ad hoc distribution.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -623,7 +630,7 @@
 			isa = PBXGroup;
 			children = (
 				3CB2E2F21BA7B26800805D4F /* PoTunes.app */,
-				3CB2E30B1BA7B26800805D4F /* 破音万里.xctest */,
+				3CB2E30B1BA7B26800805D4F /* 破破.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -883,6 +890,7 @@
 				3CF1E2A71DEB032400DD48DC /* libstdc++.6.0.9.tbd */,
 				3CF1E2A51DEB031200DD48DC /* libz.tbd */,
 				AEEF67891B1F3F39F233DA7F /* Pods_____.framework */,
+				408D8D46FD807C936F7F8802 /* Pods___.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -890,9 +898,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		3CB2E2F11BA7B26800805D4F /* 破音万里 */ = {
+		3CB2E2F11BA7B26800805D4F /* 破破 */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 3CB2E3151BA7B26800805D4F /* Build configuration list for PBXNativeTarget "破音万里" */;
+			buildConfigurationList = 3CB2E3151BA7B26800805D4F /* Build configuration list for PBXNativeTarget "破破" */;
 			buildPhases = (
 				7EE5935B1BE81D435FDC23C7 /* [CP] Check Pods Manifest.lock */,
 				3CB2E2EE1BA7B26800805D4F /* Sources */,
@@ -907,14 +915,14 @@
 			);
 			dependencies = (
 			);
-			name = "破音万里";
+			name = "破破";
 			productName = PoTunes;
 			productReference = 3CB2E2F21BA7B26800805D4F /* PoTunes.app */;
 			productType = "com.apple.product-type.application";
 		};
-		3CB2E30A1BA7B26800805D4F /* 破音万里Tests */ = {
+		3CB2E30A1BA7B26800805D4F /* 破破Tests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 3CB2E3181BA7B26800805D4F /* Build configuration list for PBXNativeTarget "破音万里Tests" */;
+			buildConfigurationList = 3CB2E3181BA7B26800805D4F /* Build configuration list for PBXNativeTarget "破破Tests" */;
 			buildPhases = (
 				3CB2E3071BA7B26800805D4F /* Sources */,
 				3CB2E3081BA7B26800805D4F /* Frameworks */,
@@ -925,9 +933,9 @@
 			dependencies = (
 				3CB2E30D1BA7B26800805D4F /* PBXTargetDependency */,
 			);
-			name = "破音万里Tests";
+			name = "破破Tests";
 			productName = PoTunesTests;
-			productReference = 3CB2E30B1BA7B26800805D4F /* 破音万里.xctest */;
+			productReference = 3CB2E30B1BA7B26800805D4F /* 破破.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -963,7 +971,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 3CB2E2ED1BA7B26800805D4F /* Build configuration list for PBXProject "破音万里" */;
+			buildConfigurationList = 3CB2E2ED1BA7B26800805D4F /* Build configuration list for PBXProject "破破" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -976,8 +984,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				3CB2E2F11BA7B26800805D4F /* 破音万里 */,
-				3CB2E30A1BA7B26800805D4F /* 破音万里Tests */,
+				3CB2E2F11BA7B26800805D4F /* 破破 */,
+				3CB2E30A1BA7B26800805D4F /* 破破Tests */,
 			);
 		};
 /* End PBXProject section */
@@ -1046,7 +1054,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-破音万里/Pods-破音万里-frameworks.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-破破/Pods-破破-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		DE0CC367A410652EA072BC2C /* [CP] Copy Pods Resources */ = {
@@ -1061,7 +1069,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-破音万里/Pods-破音万里-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-破破/Pods-破破-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -1164,7 +1172,7 @@
 /* Begin PBXTargetDependency section */
 		3CB2E30D1BA7B26800805D4F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 3CB2E2F11BA7B26800805D4F /* 破音万里 */;
+			target = 3CB2E2F11BA7B26800805D4F /* 破破 */;
 			targetProxy = 3CB2E30C1BA7B26800805D4F /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -1183,7 +1191,6 @@
 /* Begin XCBuildConfiguration section */
 		3C947D4A1BB7BBBA008039B9 /* ad hoc distribution */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0D348453E5A357FD09B587CE /* Pods-破音万里.ad hoc distribution.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -1227,7 +1234,7 @@
 		};
 		3C947D4B1BB7BBBA008039B9 /* ad hoc distribution */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0D348453E5A357FD09B587CE /* Pods-破音万里.ad hoc distribution.xcconfig */;
+			baseConfigurationReference = 8F2935EA201F2341DF188AA9 /* Pods-破破.ad hoc distribution.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -1280,7 +1287,6 @@
 		};
 		3C947D4C1BB7BBBA008039B9 /* ad hoc distribution */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0D348453E5A357FD09B587CE /* Pods-破音万里.ad hoc distribution.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_IDENTITY = "iPhone Distribution: PengCheng Zhao (7LKFCH3GR5)";
@@ -1289,9 +1295,9 @@
 				INFOPLIST_FILE = PoTunesTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "fm.poche.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = "破音万里";
+				PRODUCT_NAME = "破破";
 				PROVISIONING_PROFILE = "";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/破音万里.app/破音万里";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/破破.app/破破";
 			};
 			name = "ad hoc distribution";
 		};
@@ -1393,7 +1399,7 @@
 		};
 		3CB2E3161BA7B26800805D4F /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 28F6DD77EB623BF8E85E58B2 /* Pods-破音万里.debug.xcconfig */;
+			baseConfigurationReference = 56644B5F0A38C97D868D908B /* Pods-破破.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -1447,7 +1453,7 @@
 		};
 		3CB2E3171BA7B26800805D4F /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5ACE65060298DC83FD3A5186 /* Pods-破音万里.release.xcconfig */;
+			baseConfigurationReference = C18635346D49DC003E4C8D2B /* Pods-破破.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -1513,9 +1519,9 @@
 				INFOPLIST_FILE = PoTunesTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "fm.poche.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = "破音万里";
+				PRODUCT_NAME = "破破";
 				PROVISIONING_PROFILE = "";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/破音万里.app/破音万里";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/破破.app/破破";
 			};
 			name = Debug;
 		};
@@ -1529,16 +1535,16 @@
 				INFOPLIST_FILE = PoTunesTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "fm.poche.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = "破音万里";
+				PRODUCT_NAME = "破破";
 				PROVISIONING_PROFILE = "";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/破音万里.app/破音万里";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/破破.app/破破";
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		3CB2E2ED1BA7B26800805D4F /* Build configuration list for PBXProject "破音万里" */ = {
+		3CB2E2ED1BA7B26800805D4F /* Build configuration list for PBXProject "破破" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				3CB2E3131BA7B26800805D4F /* Debug */,
@@ -1548,7 +1554,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		3CB2E3151BA7B26800805D4F /* Build configuration list for PBXNativeTarget "破音万里" */ = {
+		3CB2E3151BA7B26800805D4F /* Build configuration list for PBXNativeTarget "破破" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				3CB2E3161BA7B26800805D4F /* Debug */,
@@ -1558,7 +1564,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		3CB2E3181BA7B26800805D4F /* Build configuration list for PBXNativeTarget "破音万里Tests" */ = {
+		3CB2E3181BA7B26800805D4F /* Build configuration list for PBXNativeTarget "破破Tests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				3CB2E3191BA7B26800805D4F /* Debug */,

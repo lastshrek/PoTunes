@@ -30,7 +30,7 @@
 static const CGFloat kDRNRealTimeBlurViewScreenshotCompression = 0.01;
 
 //the blur radius
-static const CGFloat kDRNRealTimeBlurViewBlurRadius = 20;
+static const CGFloat kDRNRealTimeBlurViewBlurRadius = 10;
 
 //the default corner radius for all the DRNRealTimeBlurViews
 static const CGFloat kDRNRealTimeBlurViewDefaultCornerRadius = 0;
@@ -40,7 +40,7 @@ static const CGFloat kDRNRealTimeBlurViewDefaultCornerRadius = 0;
 static const CGFloat kDRNRealTimeBlurViewRenderFps = 20.f;
 
 //the alpha component of the tint color
-static const CGFloat kDNRRealTimeBlurTintColorAlpha = 0.1f;
+static const CGFloat kDNRRealTimeBlurTintColorAlpha = 0.6f;
 
 @interface DRNRealTimeBlurView : UIView
 

@@ -256,17 +256,13 @@ class PlaylistController: UITableViewController {
 		
 		cell.textLabel?.text = "『" + playlist.title + "』"
 		
-		// MARK: - 设置count==3和4时分别显示的封面
-		if self.playlists.count == 3 {
-			
-			cell.imageView?.image = UIImage(named:"defaultArtCover")
-	
-		} else {
-			
-			let url = URL(string: playlist.cover)
+		let url = URL(string: playlist.cover)
 		
-			cell.imageView?.sd_setImage(with: url, placeholderImage: UIImage(named:"defaultArtCover"))
-			
+		cell.imageView?.sd_setImage(with: url, placeholderImage: UIImage(named:"defaultArtCover"))
+
+		
+		// MARK: - 设置count==3和4时分别显示的封面
+		if self.playlists.count != 3 {
 			// MARK: - 添加下载手势 - TODO
 			let downloadSwipe: UISwipeGestureRecognizer = UISwipeGestureRecognizer.init(target: self, action: #selector(download(recognizer:)))
 			
@@ -275,7 +271,6 @@ class PlaylistController: UITableViewController {
 			downloadSwipe.numberOfTouchesRequired = 1
 			
 			cell.addGestureRecognizer(downloadSwipe)
-		
 		}
 		
 		return cell

@@ -95,9 +95,7 @@
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_10_0
 	
 	UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
-	
 	center.delegate = self;
-	
 	
 	[center requestAuthorizationWithOptions:UNAuthorizationOptionBadge | UNAuthorizationOptionSound | UNAuthorizationOptionAlert completionHandler:^(BOOL granted, NSError * _Nullable error) {
 		if (granted) {
@@ -119,9 +117,7 @@
 }
 
 - (void)percent:(NSNotification *)sender {
-	
 	self.isDownloading = 1;
-	
 }
 
 - (void)complete:(NSNotification *)sender {
@@ -234,20 +230,18 @@
     // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
 }
 
+- (void)applicationDidBecomeActive:(UIApplication *)application {
+	NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+	[center postNotificationName:@"becomeActive" object:nil];
+}
+
 - (void)applicationDidEnterBackground:(UIApplication *)application {
-    //    [application beginBackgroundTaskWithExpirationHandler:nil];
-	
 	if (self.isDownloading) {
-		
 		self.backIdentifier = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
-			
 			self.timer = [NSTimer timerWithTimeInterval:1 target:self selector:@selector(repeatTimer) userInfo:nil repeats:YES];
-			
 			[[NSRunLoop mainRunLoop] addTimer:self.timer forMode:NSDefaultRunLoopMode];
-		
 		}];
 	}
-
 }
 
 - (void)repeatTimer {
@@ -265,6 +259,7 @@
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
 	[self removeBgTimer];
+	NSLog(@"要来啦");
 }
 
 /** 接收远程事件 */
@@ -275,9 +270,7 @@
 }
 
 
-- (void)applicationDidBecomeActive:(UIApplication *)application {
-    // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-}
+
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.

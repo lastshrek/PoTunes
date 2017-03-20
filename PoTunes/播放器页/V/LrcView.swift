@@ -12,37 +12,30 @@ import UIKit
 class LrcView: DRNRealTimeBlurView {
 	
 	var noLrcLabel = UILabel()
-	
 	lazy var chLrcArray: Array<LrcLine> = {[]}()
-	
 	var tableView = UITableView()
-	
+	let hover = UIView()
 	fileprivate var currentIndex: Int = -1
-	
 	lazy var lyricsLines: Array<LrcLine> = {[]}()
 	
 	override init(frame: CGRect) {
-		
 		super.init(frame: frame)
-		
 		setup()
-	
 	}
 
-	required init?(coder aDecoder: NSCoder) {
-		
-		fatalError("init(coder:) has not been implemented")
-	
-	}
+	required init?(coder aDecoder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 	
 	func setup() {
-//		self.backgroundColor = UIColor.lightGray
+		hover.backgroundColor = UIColor.black
+		hover.alpha = 0.5
+		self.addSubview(hover)
 		// 暂无歌词页面
 		noLrcLabel.backgroundColor = UIColor.clear
 		noLrcLabel.textAlignment = .center
 		noLrcLabel.text = "暂无歌词"
-		noLrcLabel.textColor = UIColor.gray
-		self.addSubview(noLrcLabel)
+		noLrcLabel.textColor = UIColor.lightText
+		addSubview(noLrcLabel)
+		
 		// 歌词
 		tableView.delegate = self
 		tableView.dataSource = self
@@ -50,27 +43,31 @@ class LrcView: DRNRealTimeBlurView {
 		tableView.showsVerticalScrollIndicator = false
 		tableView.backgroundColor = UIColor.clear
 		tableView.register(LrcCell.self, forCellReuseIdentifier: "lrc")
-		self.addSubview(tableView)
+		addSubview(tableView)
 	}
 	
 	override func layoutSubviews() {
 		super.layoutSubviews()
 		tableView.frame = self.bounds
-		self.tableView.contentInset = UIEdgeInsetsMake(self.bounds.size.height * 0.5, 0, self.bounds.size.height * 0.5, 0)
+		tableView.contentInset = UIEdgeInsetsMake(self.bounds.size.height * 0.5, 0, self.bounds.size.height * 0.5, 0)
 		noLrcLabel.frame = self.bounds
+		hover.frame = self.bounds
 	}
 }
 
 extension LrcView {
 	func parseLyrics(lyrics: String) {
 		if lyricsLines.count != 0 {
-			self.lyricsLines.removeAll()
+			lyricsLines.removeAll()
 		}
 		currentIndex = 0
 		lyricsLines = divideArray(lyrics: lyrics)
-		self.tableView.reloadData()
+		tableView.reloadData()
 		if lyricsLines.count > 0 {
 			tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
+		} else {
+			noLrcLabel.text = "暂无歌词"
+			noLrcLabel.isHidden = false
 		}
 	}
 	
@@ -101,11 +98,8 @@ extension LrcView {
 		let sepArr = lyrics.components(separatedBy: "[")
 		
 		if sepArr.count <= 1 {
-			
 			self.tableView.reloadData()
-			
 			return []
-			
 		}
 		
 		self.noLrcLabel.isHidden = true
@@ -215,11 +209,7 @@ extension LrcView {
 
 extension LrcView: UITableViewDataSource {
 	
-	private func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-		
-		return 1
-		
-	}
+	private func numberOfSectionsInTableView(tableView: UITableView) -> Int { return 1 }
 	
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 		
@@ -230,25 +220,16 @@ extension LrcView: UITableViewDataSource {
 }
 
 extension LrcView: UITableViewDelegate {
-	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		
 		let cell = tableView.dequeueReusableCell(withIdentifier: "lrc", for: indexPath) as! LrcCell
 		
 		cell.lrcLine = self.lyricsLines[indexPath.row]
-
-		
 		if self.currentIndex == indexPath.row {
-			
 			cell.lyricLabel?.textColor = UIColor.white
-			
 		} else {
-			
-			cell.lyricLabel?.textColor = UIColor.gray
-			
+			cell.lyricLabel?.textColor = UIColor.lightText
 		}
-
-		
 		return cell
 	}
 	
