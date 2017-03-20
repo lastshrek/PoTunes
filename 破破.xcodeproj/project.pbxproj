@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		17E37971ECD9FCACBAFB3599 /* Pods_____.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AEEF67891B1F3F39F233DA7F /* Pods_____.framework */; };
 		3C0A1A961DD5B35400E90306 /* MainScrollview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C0A1A951DD5B35400E90306 /* MainScrollview.swift */; };
 		3C0A1A981DD5B5B000E90306 /* MainPageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C0A1A971DD5B5B000E90306 /* MainPageControl.swift */; };
 		3C0A1A9A1DD5B72000E90306 /* MainControllers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C0A1A991DD5B72000E90306 /* MainControllers.swift */; };
@@ -287,11 +286,11 @@
 		3CF1E2C01DEB0AE400DD48DC /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		3CFFC7F61D5DBF3500696F66 /* 破音万里-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "破音万里-Bridging-Header.h"; sourceTree = "<group>"; };
 		3CFFC8021D5DC65D00696F66 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
-		408D8D46FD807C936F7F8802 /* Pods___.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods___.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		408D8D46FD807C936F7F8802 /* Pods___.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = "Pods___.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
 		56644B5F0A38C97D868D908B /* Pods-破破.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-破破.debug.xcconfig"; path = "Pods/Target Support Files/Pods-破破/Pods-破破.debug.xcconfig"; sourceTree = "<group>"; };
 		5ACE65060298DC83FD3A5186 /* Pods-破音万里.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-破音万里.release.xcconfig"; path = "Pods/Target Support Files/Pods-破音万里/Pods-破音万里.release.xcconfig"; sourceTree = "<group>"; };
 		8F2935EA201F2341DF188AA9 /* Pods-破破.ad hoc distribution.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-破破.ad hoc distribution.xcconfig"; path = "Pods/Target Support Files/Pods-破破/Pods-破破.ad hoc distribution.xcconfig"; sourceTree = "<group>"; };
-		AEEF67891B1F3F39F233DA7F /* Pods_____.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_____.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		AEEF67891B1F3F39F233DA7F /* Pods_____.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = "Pods_____.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C18635346D49DC003E4C8D2B /* Pods-破破.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-破破.release.xcconfig"; path = "Pods/Target Support Files/Pods-破破/Pods-破破.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -317,7 +316,6 @@
 				3CB2E4041BA7D1CB00805D4F /* MediaPlayer.framework in Frameworks */,
 				3CB2E4001BA7D1B300805D4F /* AVFoundation.framework in Frameworks */,
 				3CB2E3FC1BA7D18900805D4F /* CFNetwork.framework in Frameworks */,
-				17E37971ECD9FCACBAFB3599 /* Pods_____.framework in Frameworks */,
 				F40DE0D7B64728BFF56EFF32 /* Pods___.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1268,7 +1266,6 @@
 					"$(PROJECT_DIR)/PoTunes",
 					"$(PROJECT_DIR)/PoTunes/3rdParty",
 					"$(PROJECT_DIR)/PoTunes/3rdParty/Wechat",
-					"$(PROJECT_DIR)/PoTunes/3rdParty/BaiduPush",
 					"$(PROJECT_DIR)/PoTunes/3rdParty/XGPush",
 				);
 				OTHER_LDFLAGS = (
@@ -1433,7 +1430,6 @@
 					"$(PROJECT_DIR)/PoTunes",
 					"$(PROJECT_DIR)/PoTunes/3rdParty",
 					"$(PROJECT_DIR)/PoTunes/3rdParty/Wechat",
-					"$(PROJECT_DIR)/PoTunes/3rdParty/BaiduPush",
 					"$(PROJECT_DIR)/PoTunes/3rdParty/XGPush",
 				);
 				OTHER_LDFLAGS = (
@@ -1487,7 +1483,6 @@
 					"$(PROJECT_DIR)/PoTunes",
 					"$(PROJECT_DIR)/PoTunes/3rdParty",
 					"$(PROJECT_DIR)/PoTunes/3rdParty/Wechat",
-					"$(PROJECT_DIR)/PoTunes/3rdParty/BaiduPush",
 					"$(PROJECT_DIR)/PoTunes/3rdParty/XGPush",
 				);
 				OTHER_LDFLAGS = (
