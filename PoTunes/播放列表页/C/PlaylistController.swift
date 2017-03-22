@@ -279,51 +279,48 @@ class PlaylistController: UITableViewController {
 		let album = playlist.title
 		let url = URL(string: O_URL + "\(playlist.ID)")
 
-		DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
 			
-			Alamofire.request(url!).response(completionHandler: { (response) in
-				let tracks: Array = Reflect<Track>.mapObjects(data: response.data)
-				var downloadArray: Array<Track> = []
+        Alamofire.request(url!).response(completionHandler: { (response) in
+            let tracks: Array = Reflect<Track>.mapObjects(data: response.data)
+            var downloadArray: Array<Track> = []
 
-				for track in tracks {
-					let artist = self.doubleQuotation(single: track.artist)
-					let title = self.doubleQuotation(single: track.name)
-					let album = playlist.title
-					let query = "SELECT * FROM t_downloading WHERE author = ? and title = ? and album = ?;"
+            for track in tracks {
+                let artist = self.doubleQuotation(single: track.artist)
+                let title = self.doubleQuotation(single: track.name)
+                let album = playlist.title
+                let query = "SELECT * FROM t_downloading WHERE author = ? and title = ? and album = ?;"
 
-					self.queue.inDatabase({ (database) in
-						let s = database?.executeQuery(query, withArgumentsIn: [artist, title, album])
+                self.queue.inDatabase({ (database) in
+                    let s = database?.executeQuery(query, withArgumentsIn: [artist, title, album])
+                    if s?.next() == false {
+                        downloadArray.append(track)
+                    }
+                    s?.close()
+                })
+            }
+            
+            if downloadArray.count == 0 {
+                HUD.flash(.label("专辑已下载"), delay: 0.4)
+                
+            } else {
+                
+                HUD.flash(.label("开始下载"), delay: 0.3, completion: { (_) in
+                    
+                    let name = Notification.Name("fullAlbum")
+                    
+                    let userInfo = ["album": album, "tracks": downloadArray] as [String : Any]
+                    
+                    let notify = Notification.init(name: name, object: nil, userInfo: userInfo)
+                    
+                    NotificationCenter.default.post(notify)
+                    
+                })
+                
+                
+            }
+            
+        })
 
-						if s?.next() == false {
-							downloadArray.append(track)
-						}
-						s?.close()
-					})
-				}
-				
-				if downloadArray.count == 0 {
-					
-					HUD.flash(.label("专辑已下载"), delay: 0.4)
-					
-				} else {
-					
-					HUD.flash(.label("开始下载"), delay: 0.3, completion: { (_) in
-						
-						let name = Notification.Name("fullAlbum")
-						
-						let userInfo = ["album": album, "tracks": downloadArray] as [String : Any]
-						
-						let notify = Notification.init(name: name, object: nil, userInfo: userInfo)
-						
-						NotificationCenter.default.post(notify)
-						
-					})
-					
-					
-				}
-				
-			})
-		}
 
 		
 	}

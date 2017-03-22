@@ -448,68 +448,71 @@ extension AlbumDownloadController {
 	}
 	
 	func beginDownloadMusic(urlStr: String, identifier: String, newIdentifier: String)  {
-		
-		let user = UserDefaults.standard
-		// MARK: 检查网络状况是否允许下载
-		
-		let yes = user.bool(forKey: "wwanDownload")
-		
-		let monitor = Reachability.forInternetConnection()
-		
-		let reachable = monitor?.currentReachabilityStatus().rawValue
-		
-		if !yes && reachable != 2 {
-			
-			let appearance = SCLAlertView.SCLAppearance(
-				
-				showCloseButton: false
-			)
-			
-			let alertView = SCLAlertView(appearance: appearance)
-			
-			alertView.addButton("取消") {
-				
-				HUD.flash(.labeledError(title: "取消下载", subtitle: nil), delay: 1.0)
-			}
-			
-			alertView.addButton("继续下载") {
-				
-				if reachable == 0 {
-					
-					HUD.flash(.labeledError(title: "请检查网络状况", subtitle: nil), delay: 1.0)
-					
-					return
-					
-				}
-				
-				
-				user.set(1, forKey: "wwanDownload")
-				
-				NotificationCenter.default.post(name: Notification.Name("wwanDownload"), object: nil)
-				
-				self.download(urlStr: urlStr, identifier: identifier, newIdentifier: newIdentifier)
-				
-			}
-			
-			alertView.showWarning("温馨提示", subTitle: "您当前处于运营商网络中，是否继续下载")
-			
-			return
-			
-			
-		}
-		
-		if reachable == 2 || yes {
-			
-			self.download(urlStr: urlStr, identifier: identifier, newIdentifier: newIdentifier)
-			
-		}
-		
-		if reachable == 0 {
-			
-			HUD.flash(.labeledError(title: "请检查网络状况", subtitle: nil), delay: 1.0)
-			
-		}
+        
+        alertView.showWarning("温馨提示", subTitle: "您当前处于运营商网络中，是否继续下载")
 
+		
+//		let user = UserDefaults.standard
+//		// MARK: 检查网络状况是否允许下载
+//		
+//		let yes = user.bool(forKey: "wwanDownload")
+//		
+//		let monitor = Reachability.forInternetConnection()
+//		
+//		let reachable = monitor?.currentReachabilityStatus().rawValue
+//		
+//		if !yes && reachable != 2 {
+//			
+//			let appearance = SCLAlertView.SCLAppearance(
+//				
+//				showCloseButton: false
+//			)
+//			
+//			let alertView = SCLAlertView(appearance: appearance)
+//			
+//			alertView.addButton("取消") {
+//				
+//				HUD.flash(.labeledError(title: "取消下载", subtitle: nil), delay: 1.0)
+//			}
+//			
+//			alertView.addButton("继续下载") {
+//				
+//				if reachable == 0 {
+//					
+//					HUD.flash(.labeledError(title: "请检查网络状况", subtitle: nil), delay: 1.0)
+//					
+//					return
+//					
+//				}
+//				
+//				
+//				user.set(1, forKey: "wwanDownload")
+//				
+//				NotificationCenter.default.post(name: Notification.Name("wwanDownload"), object: nil)
+//				
+//				self.download(urlStr: urlStr, identifier: identifier, newIdentifier: newIdentifier)
+//				
+//			}
+//			
+//			alertView.showWarning("温馨提示", subTitle: "您当前处于运营商网络中，是否继续下载")
+//			
+//			return
+//			
+//			
+//		}
+//		
+//		if reachable == 2 || yes {
+//			
+//			self.download(urlStr: urlStr, identifier: identifier, newIdentifier: newIdentifier)
+//			
+//		}
+//		
+//		if reachable == 0 {
+//			
+//			HUD.flash(.labeledError(title: "请检查网络状况", subtitle: nil), delay: 1.0)
+//			
+//		}
+//
 		
 		
 	}
