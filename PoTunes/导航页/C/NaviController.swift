@@ -298,6 +298,8 @@ extension NaviController: DrivingCalculateControllerDelegate {
 			self.present(self.naviView!, animated: false, completion: nil)
 			
 			self.driveManager?.startGPSNavi()
+			
+//			self.driveManager?.startEmulatorNavi()
 
 		}
 	}

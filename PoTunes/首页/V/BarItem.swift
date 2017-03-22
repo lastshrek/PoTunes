@@ -10,6 +10,8 @@ import UIKit
 
 class BarItem: UIButton {
 	
+	var bgImage = UIImageView()
+	
 	override init(frame: CGRect) {
 		
 		super.init(frame: frame)
@@ -27,6 +29,9 @@ class BarItem: UIButton {
 		self.setTitleColor(UIColor.colorByRGB(red: 17, green: 133, blue: 117, alpha: 0.8), for: .normal)
 		
 		self.setTitleColor(UIColor.colorByRGB(red: 225, green: 49, blue: 114, alpha: 1), for: .selected)
+		
+		bgImage.contentMode = .scaleAspectFit
+		self.addSubview(bgImage)
 
 	}
 	
@@ -39,22 +44,15 @@ class BarItem: UIButton {
 		return CGRect(x: 0, y: 0, width: imageW, height: imageH)
 		
 	}
-	
-//	override var isHighlighted: Bool {
-//		
-//		didSet {
-//			
-//			super.isSelected = true
-//			super.isHighlighted = false
-//
-//		}
-//		
-//	}
-
 
 	required init?(coder aDecoder: NSCoder) {
 		
 		fatalError("init(coder:) has not been implemented")
 	
+	}
+	
+	override func layoutSubviews() {
+		super.layoutSubviews()
+		self.bgImage.frame = CGRect(x: Int((self.bounds.size.width - 25) / 2), y: 20, width: 30, height: 30)
 	}
 }

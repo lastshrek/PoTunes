@@ -122,7 +122,8 @@ class MainControllers: UIView {
 	
 	func setupTabBarItem(_ count: Int, frame: CGRect) {
 		
-		let iconArr: Array<FontAwesome> = [.home, .music, .road, .wrench]
+		let iconArr:Array<FontAwesome> = [.home, .music, .road, .wrench]
+		let nameArr:Array<String> = ["home", "music", "nav", "home"]
 		
 		for i in 0..<count {
 			
@@ -136,7 +137,10 @@ class MainControllers: UIView {
 				
 			} else if count == 4 || i == 0 {
 				
-				button.setTitle(String.fontAwesomeIcon(name: iconArr[i]), for: .normal)
+//				button.setTitle(String.fontAwesomeIcon(name: iconArr[i]), for: .normal)
+				
+//				button.setImage(UIImage(named:"home"), for: .normal)
+				button.bgImage.image = UIImage(named:nameArr[i])
 				
 				button.tag = i
 				
