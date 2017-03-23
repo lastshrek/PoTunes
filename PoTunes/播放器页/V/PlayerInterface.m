@@ -53,6 +53,7 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 @property (nonatomic, assign) PCAudioPlayState repeatMode;
 @property (nonatomic, assign) Boolean paused;
 @property (nonatomic, assign) CGFloat maxPrebufferedByteCount;
+@property (nonatomic, assign) FSSeekByteOffset offset;
 
 
 @property (nonatomic, strong) FSAudioController* streamer;
@@ -284,9 +285,13 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 		return;
 	}
 	self.paused = !(self.paused);
-	
 	if (self.paused == false) {
 		[SVProgressHUD showImage:[UIImage imageNamed:@"playB"] status:@"继续播放"];
+		if (self.streamer.activeStream) {
+			FSStreamPosition seek;
+			seek.position = self.progress.progress;
+			[self.streamer.activeStream seekToPosition:seek];
+		}
 	} else {
 		[SVProgressHUD showImage:[UIImage imageNamed:@"pauseB"] status:@"暂停播放"];
 	}
@@ -295,7 +300,7 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 		[self playTracks:self.tracks index:self.index];
 		return;
 	}
-	[self.streamer pause];
+	[self.streamer.activeStream pause];
 }
 - (void)playPrevious {
 	if (self.tracks.count == 0) {
@@ -501,7 +506,6 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 	} else {
 		self.playModeView.image = [UIImage imageNamed:@"repeatOnB"];
 	}
-
 	
 	[self.coverScroll reloadDataWithInitialIndex:self.index];
 	[self changeInterface:self.index];
@@ -600,14 +604,11 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 	}];
 }
 - (void)refreshBlurView {
-	NSLog(@"前台");
 	self.lrcView.renderStatic = NO;
 	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
 		self.lrcView.renderStatic = YES;
 	});
 }
-
-
 - (void)refreshProgressColor:(UIImage*)image {
 	TDImageColors* imageColors= [[TDImageColors alloc] initWithImage:image count:2];
 	self.progress.color = imageColors.colors[1];
@@ -617,11 +618,16 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 }
 #pragma mark - Notifications
 - (void)getNotification {
+	AVAudioSession *sessionInstance = [AVAudioSession sharedInstance];
 	NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
 	[center addObserver:self selector:@selector(speaking) name:@"speaking" object:nil];
 	[center addObserver:self selector:@selector(nonspeaking) name:@"nonspeaking" object:nil];
 	[center addObserver:self selector:@selector(audioSessionDidChangeInterruptionType:)
-				   name:AVAudioSessionRouteChangeNotification object:[AVAudioSession sharedInstance]];
+				   name:AVAudioSessionRouteChangeNotification object:sessionInstance];
+	[[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(audioSessionWasInterrupted:)
+												 name:AVAudioSessionInterruptionNotification
+											   object:sessionInstance];
 	[center addObserver:self selector:@selector(refreshBlurView) name:@"becomeActive" object:nil];
 }
 - (void)dealloc {
@@ -630,6 +636,7 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 	[center removeObserver:self name:@"nonspeaking" object:nil];
 	[center removeObserver:self name:AVAudioSessionRouteChangeNotification object:nil];
 	[center removeObserver:self name:@"becomeActive" object:nil];
+	[center removeObserver:self name:AVAudioSessionInterruptionNotification object:nil];
 }
 - (void)speaking { self.streamer.volume = 0.1; }
 - (void)nonspeaking { self.streamer.volume = 1; }
@@ -641,6 +648,19 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 					[self playOrPause];
 			});
 		});
+	}
+}
+
+
+- (void)audioSessionWasInterrupted:(NSNotification *)notification {
+	if (AVAudioSessionInterruptionTypeBegan == [notification.userInfo[AVAudioSessionInterruptionTypeKey] intValue]) {
+		if (self.streamer.activeStream) {
+			[self.streamer.activeStream pause];
+			self.paused = YES;
+		}
+	}
+	else if (AVAudioSessionInterruptionTypeEnded == [notification.userInfo[AVAudioSessionInterruptionTypeKey] intValue]) {
+		NSLog(@"begin - end");
 	}
 }
 #pragma mark - DelegateBlock
@@ -701,10 +721,10 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 	//取出当前播放时长以及总时长
 	FSStreamPosition cur = self.streamer.activeStream.currentTimePlayed;
 	FSStreamPosition total = self.streamer.activeStream.duration;
-	//设置进度条进度
-	double progress = (float)(cur.minute * 60 + cur.second) / (float)(total.minute * 60 + total.second);
+	if (self.streamer.isPlaying) self.offset = self.streamer.activeStream.currentSeekByteOffset;
 
-	self.progress.progress = progress;
+	//设置进度条进度
+	self.progress.progress = self.streamer.activeStream.currentTimePlayed.position;
 	//设置当前时间以及剩余时间
 	int totalLeftSecond = total.minute * 60 + total.second - cur.minute * 60 - cur.second;
 	NSString *curSecond = [NSString stringWithFormat:@"%d",cur.second];
@@ -754,7 +774,7 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 		}
 	};
 	//设置锁屏信息
-	NSMutableDictionary *info = [NSMutableDictionary dictionary];
+	NSMutableDictionary* info = [NSMutableDictionary dictionary];
 	MPMediaItemArtwork* artwork = [[MPMediaItemArtwork alloc] initWithImage:self.nowCover.image];
 	int duration = self.streamer.activeStream.duration.minute * 60 + self.streamer.activeStream.duration.second;
 	int elapsedPlaybackTime = cur.minute * 60 + cur.second;

@@ -107,7 +107,7 @@
    </AnalyzeAction>
    <ArchiveAction
       buildConfiguration = "ad hoc distribution"
-      customArchiveName = "&#x7834;&#x97f3;&#x4e07;&#x91cc;"
+      customArchiveName = "&#x7834;&#x7834;"
       revealArchiveInOrganizer = "YES">
    </ArchiveAction>
 </Scheme>
