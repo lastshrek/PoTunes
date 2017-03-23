@@ -185,7 +185,6 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 	
 	CGFloat height = [self height];
 	CGFloat width = [self width];
-	
 	self.backgroundView.frame = self.bounds;
 	self.reflection.frame = CGRectMake(0, height - width, width, width);
 	self.nowCover.frame = CGRectMake(0, 0, width, width);

@@ -262,7 +262,6 @@ class PlaylistController: UITableViewController {
 	}
 	// MARK: - 下载每月歌曲 - TODO
 	func download(recognizer: UIGestureRecognizer) {
-		
 		// check user network and whether allow to play
 		let user = UserDefaults.standard
 		let online = user.object(forKey: "online")
@@ -285,13 +284,10 @@ class PlaylistController: UITableViewController {
             var downloadArray: Array<Track> = []
 
             for track in tracks {
-                let artist = self.doubleQuotation(single: track.artist)
-                let title = self.doubleQuotation(single: track.name)
-                let album = playlist.title
+				let album = playlist.title
                 let query = "SELECT * FROM t_downloading WHERE author = ? and title = ? and album = ?;"
-
                 self.queue.inDatabase({ (database) in
-                    let s = database?.executeQuery(query, withArgumentsIn: [artist, title, album])
+                    let s = database?.executeQuery(query, withArgumentsIn: [track.artist, track.name, album])
                     if s?.next() == false {
                         downloadArray.append(track)
                     }
@@ -301,7 +297,6 @@ class PlaylistController: UITableViewController {
             
             if downloadArray.count == 0 {
                 HUD.flash(.label("专辑已下载"), delay: 0.4)
-                
             } else {
                 
                 HUD.flash(.label("开始下载"), delay: 0.3, completion: { (_) in

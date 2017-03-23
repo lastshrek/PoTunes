@@ -397,22 +397,12 @@ extension AlbumDownloadController {
 			
 			let sql = "INSERT INTO t_downloading(author,title,sourceURL,indexPath,thumb,album,downloaded,identifier) VALUES('\(artist)','\(name)','\(track.url)','\(track.ID)','\(track.cover)','\(album)','0', '\(identifier)');"
 			
-			
-			DispatchQueue.global(qos: .background).async {
-				
-				self.queue.inDeferredTransaction({ (database, roolback) in
-					
-					database?.executeUpdate(sql, withArgumentsIn: nil)
-					
-				})
-				
-				if self.op == nil || (self.op?.isCancelled)! || (self.op?.isFinished)! || (self.op?.isPaused())! {
-					
-					if track == tracks.first {
-						
-						self.beginDownloadMusic(urlStr: track.url, identifier: identifier, newIdentifier: newIdentifier)
-						
-					}
+			self.queue.inDeferredTransaction({ (database, roolback) in
+				database?.executeUpdate(sql, withArgumentsIn: nil)
+			})
+			if self.op == nil || (self.op?.isCancelled)! || (self.op?.isFinished)! || (self.op?.isPaused())! {
+				if track == tracks.first {
+					self.beginDownloadMusic(urlStr: track.url, identifier: identifier, newIdentifier: newIdentifier)
 				}
 			}
 		}
@@ -448,73 +438,46 @@ extension AlbumDownloadController {
 	}
 	
 	func beginDownloadMusic(urlStr: String, identifier: String, newIdentifier: String)  {
-        
-        alertView.showWarning("温馨提示", subTitle: "您当前处于运营商网络中，是否继续下载")
+		let user = UserDefaults.standard
+		// MARK: 检查网络状况是否允许下载
+		let yes = user.bool(forKey: "wwanDownload")
+		let monitor = Reachability.forInternetConnection()
+		let reachable = monitor?.currentReachabilityStatus().rawValue
+		
+		if !yes && reachable != 2 {
+			let appearance = SCLAlertView.SCLAppearance(
+				showCloseButton: false
+			)
+			let alertView = SCLAlertView(appearance: appearance)
 
+			alertView.addButton("取消") {
+				HUD.flash(.labeledError(title: "取消下载", subtitle: nil), delay: 1.0)
+			}
+			alertView.addButton("继续下载") {
+				if reachable == 0 {
+					HUD.flash(.labeledError(title: "请检查网络状况", subtitle: nil), delay: 1.0)
+					return
+				}
+				
+				alertView.showWarning("温馨提示", subTitle: "您当前处于运营商网络中，是否继续下载")
+				user.set(1, forKey: "wwanDownload")
+				
+				NotificationCenter.default.post(name: Notification.Name("wwanDownload"), object: nil)
+				
+				self.download(urlStr: urlStr, identifier: identifier, newIdentifier: newIdentifier)
+				
+			}
+			alertView.showWarning("温馨提示", subTitle: "您当前处于运营商网络中，是否继续下载")
+			return
+		}
 		
-//		let user = UserDefaults.standard
-//		// MARK: 检查网络状况是否允许下载
-//		
-//		let yes = user.bool(forKey: "wwanDownload")
-//		
-//		let monitor = Reachability.forInternetConnection()
-//		
-//		let reachable = monitor?.currentReachabilityStatus().rawValue
-//		
-//		if !yes && reachable != 2 {
-//			
-//			let appearance = SCLAlertView.SCLAppearance(
-//				
-//				showCloseButton: false
-//			)
-//			
-//			let alertView = SCLAlertView(appearance: appearance)
-//			
-//			alertView.addButton("取消") {
-//				
-//				HUD.flash(.labeledError(title: "取消下载", subtitle: nil), delay: 1.0)
-//			}
-//			
-//			alertView.addButton("继续下载") {
-//				
-//				if reachable == 0 {
-//					
-//					HUD.flash(.labeledError(title: "请检查网络状况", subtitle: nil), delay: 1.0)
-//					
-//					return
-//					
-//				}
-//				
-//				
-//				user.set(1, forKey: "wwanDownload")
-//				
-//				NotificationCenter.default.post(name: Notification.Name("wwanDownload"), object: nil)
-//				
-//				self.download(urlStr: urlStr, identifier: identifier, newIdentifier: newIdentifier)
-//				
-//			}
-//			
-//			alertView.showWarning("温馨提示", subTitle: "您当前处于运营商网络中，是否继续下载")
-//			
-//			return
-//			
-//			
-//		}
-//		
-//		if reachable == 2 || yes {
-//			
-//			self.download(urlStr: urlStr, identifier: identifier, newIdentifier: newIdentifier)
-//			
-//		}
-//		
-//		if reachable == 0 {
-//			
-//			HUD.flash(.labeledError(title: "请检查网络状况", subtitle: nil), delay: 1.0)
-//			
-//		}
-//
+		if reachable == 2 || yes {
+			self.download(urlStr: urlStr, identifier: identifier, newIdentifier: newIdentifier)
+		}
 		
-		
+		if reachable == 0 {
+			HUD.flash(.labeledError(title: "请检查网络状况", subtitle: nil), delay: 1.0)
+		}
 	}
 	
 	func download(urlStr: String, identifier: String, newIdentifier: String) {
@@ -803,115 +766,69 @@ extension AlbumDownloadController: DownloadingControllerDelegate {
 	func didClickThePauseButton(button: UIButton) {
 		
 		if self.op == nil || (self.op?.isPaused())! {
-			
 			let newIdentifier = self.downloadingArray.first
-			
 			let splitArr = newIdentifier?.components(separatedBy: " - ")
-			
 			let artist = self.doubleQuotation(single: (splitArr?.first)!)
-			
 			var title = ""
-			
+
 			if splitArr?.count == 2 {
-				
 				title = self.doubleQuotation(single: (splitArr?.last)!)
-				
 			} else if (splitArr?.count)! > 2 {
-				
 				for (index, split) in splitArr!.enumerated() {
-					
 					if index > 0  && index != (splitArr?.count)! - 1{
-						
 						title = title + self.doubleQuotation(single: split) + " - "
-						
 					} else if index > 0 && index == (splitArr?.count)! - 1 {
-						
 						title = title + self.doubleQuotation(single: split)
-						
 					}
-					
 				}
-				
 			}
 			
-			
-			
 			let query = "SELECT * FROM t_downloading WHERE author = ? and title = ?;"
-			
 			let s = tracksDB.executeQuery(query, withArgumentsIn: [artist, title])
 			
 			if s?.next() == true {
-				
 				let url = s?.string(forColumn: "sourceURL")
-				
 				let identifier = s?.string(forColumn: "identifier")
-				
 				self.beginDownloadMusic(urlStr: url!, identifier: identifier!, newIdentifier: newIdentifier!)
-				
 			} else {
-				
 				debugPrint("没有找到这首歌，请排查原因")
-				
 			}
-			
 			s?.close()
-			
 			return
-			
 		}
 		
 		if (self.op?.isPaused())! {
-			
 			self.op?.resume()
-			
 		} else {
-			
 			self.op?.pause()
-			
 		}
-		
 	}
 	
 	func didClickTheDeleteButton(button: UIButton) {
 		
-		self.op?.cancel()
+		self.op?.pause()
 		
 		// 删除本地文件
-		
 		let select = "SELECT * FROM t_downloading WHERE downloaded = 0;"
-		
 		let s = tracksDB.executeQuery(select, withArgumentsIn: nil)
-		
 		let manager = FileManager.default
-		
+
 		while s?.next() == true {
-			
 			let identifier = s?.string(forColumn: "identifier")
-			
 			let filepath = self.dirDoc() + "/\(identifier)"
-			
 			do {
-				
 				if manager.fileExists(atPath: filepath) {
-					
 					try manager.removeItem(atPath: filepath)
-					
 				}
-				
 			} catch {
-				
 				print("删除文件失败: \(error)")
-				
 			}
-			
 		}
 		
 		s?.close()
 		
 		//delete the not downloaded datas
-		
 		let delete = "DELETE FROM t_downloading WHERE downloaded = 0;"
-		
 		queue.inTransaction { (database, _) in
 			
 			database?.executeUpdate(delete, withArgumentsIn: nil)
