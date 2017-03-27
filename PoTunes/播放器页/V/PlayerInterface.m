@@ -175,6 +175,7 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 	self.lrcView = lrcView;
 	//当前封面
 	UIImageView* nowCover = [[UIImageView alloc] init];
+	nowCover.image = [UIImage imageNamed:@"noArtwork"];
 	self.nowCover = nowCover;
 	self.nowCover.hidden = YES;
 	[self addSubview:nowCover];
@@ -597,11 +598,16 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 	if (self.lrcView.hidden == NO) {
 		[self loadLyrics:track.ID];
 	}
-	[self.nowCover sd_setImageWithURL:[NSURL URLWithString:urlStr] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-		self.reflection.image = [image reflectionWithAlpha:0.4];
-		[self refreshProgressColor:image];
-		[self refreshBlurView];
-	}];
+	dispatch_async(dispatch_get_main_queue(), ^{
+		// 更新界面
+		[self.nowCover sd_setImageWithURL:[NSURL URLWithString:urlStr] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+			self.reflection.image = [image reflectionWithAlpha:0.4];
+			self.nowCover.image = image;
+			[self refreshProgressColor:image];
+			[self refreshBlurView];
+		}];
+	});
+	
 }
 - (void)refreshBlurView {
 	self.lrcView.renderStatic = NO;
@@ -645,7 +651,9 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 	if (interruptReason == 2) {
 		dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
 				dispatch_sync(dispatch_get_main_queue(), ^{
-					[self playOrPause];
+					if (self.paused == NO) {
+						[self playOrPause];
+					}
 			});
 		});
 	}
@@ -653,14 +661,16 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 
 
 - (void)audioSessionWasInterrupted:(NSNotification *)notification {
-	if (AVAudioSessionInterruptionTypeBegan == [notification.userInfo[AVAudioSessionInterruptionTypeKey] intValue]) {
+	int reason = [notification.userInfo[AVAudioSessionInterruptionTypeKey] intValue];
+	if (AVAudioSessionInterruptionTypeBegan == reason) {
 		if (self.streamer.activeStream) {
 			[self.streamer.activeStream pause];
 			self.paused = YES;
 		}
-	}
-	else if (AVAudioSessionInterruptionTypeEnded == [notification.userInfo[AVAudioSessionInterruptionTypeKey] intValue]) {
-		NSLog(@"begin - end");
+	} else if (AVAudioSessionInterruptionTypeEnded == reason) {
+		if (self.paused == YES) {
+			[self playOrPause];
+		}
 	}
 }
 #pragma mark - DelegateBlock
@@ -751,7 +761,10 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 		}
 		
 		if (state == kFsAudioStreamFailed) {
-			NSLog(@"播放失败fsAudioStreamFailed");
+			FSStreamPosition seek;
+			seek.position = self.progress.progress;
+			
+			[self.streamer.activeStream seekToPosition:seek];
 		}
 		
 		if (state == kFsAudioStreamRetryingFailed) {
@@ -775,7 +788,13 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 	};
 	//设置锁屏信息
 	NSMutableDictionary* info = [NSMutableDictionary dictionary];
-	MPMediaItemArtwork* artwork = [[MPMediaItemArtwork alloc] initWithImage:self.nowCover.image];
+	MPMediaItemArtwork* artwork;
+	if (self.nowCover.image) {
+		artwork = [[MPMediaItemArtwork alloc] initWithImage:self.nowCover.image];
+	} else {
+		artwork = [[MPMediaItemArtwork alloc] initWithImage:[UIImage imageNamed:@"noArtwork"]];
+	}
+	
 	int duration = self.streamer.activeStream.duration.minute * 60 + self.streamer.activeStream.duration.second;
 	int elapsedPlaybackTime = cur.minute * 60 + cur.second;
 	Track* track = self.tracks[self.index];
@@ -836,6 +855,7 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 									NSError *error,
 									SDImageCacheType cacheType,
 									NSURL *imageURL) {
+							
 		}];
 	} else {
 		cover.image = [UIImage imageNamed:@"noArtwork"];
