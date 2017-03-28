@@ -45,6 +45,7 @@ PODS:
   - SDWebImage/Core (3.8.2)
   - SVProgressHUD (2.1.2)
   - TDImageColors (0.3.1)
+  - Then (2.1.0)
   - UMengAnalytics-NO-IDFA (4.1.5)
 
 DEPENDENCIES:
@@ -63,6 +64,7 @@ DEPENDENCIES:
   - SDWebImage
   - SVProgressHUD
   - TDImageColors (~> 0.2)
+  - Then (~> 2.1)
   - UMengAnalytics-NO-IDFA
 
 SPEC CHECKSUMS:
@@ -83,8 +85,9 @@ SPEC CHECKSUMS:
   SDWebImage: 098e97e6176540799c27e804c96653ee0833d13c
   SVProgressHUD: c404a55d78acbeb7ebb78b76d3faf986475a6994
   TDImageColors: 73feaadb478d4ffa9c3d5c09e2621f8768aa02f9
+  Then: 8496793c8fcac95482b943909b440724c7d8d82c
   UMengAnalytics-NO-IDFA: f1b08b540eba6ebad044a574cae6d988cf40cfda
 
-PODFILE CHECKSUM: 3de068c5807e58c0a2650ad4b9cb5bb115e684fa
+PODFILE CHECKSUM: 405a91932cede284d8eb23758a0327c5ba016a13
 
 COCOAPODS: 1.1.1

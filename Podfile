@@ -17,4 +17,5 @@ target '破破' do
 	pod 'SVProgressHUD'
 	pod 'SCLAlertView-Objective-C'
 	pod 'SCLAlertView'
+	pod 'Then', '~> 2.1'
 end
