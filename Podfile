@@ -18,4 +18,5 @@ target '破破' do
 	pod 'SCLAlertView-Objective-C'
 	pod 'SCLAlertView'
 	pod 'Then', '~> 2.1'
+	pod 'AsyncSwift'
 end

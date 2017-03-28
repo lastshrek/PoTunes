@@ -15,7 +15,5 @@ enum NaviPointAnnotationType: Int {
 }
 
 class NaviPointAnnotation: MAPointAnnotation {
-	
 	var naviPointType: NaviPointAnnotationType?
-	
 }

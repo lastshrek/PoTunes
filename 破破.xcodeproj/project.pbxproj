@@ -772,7 +772,6 @@
 			children = (
 				3CDFB3961DD776AE006C0975 /* V */,
 				3CDFB3901DD76E5D006C0975 /* C */,
-				3CDFB3921DD76E5D006C0975 /* M */,
 			);
 			path = "歌曲列表页";
 			sourceTree = "<group>";
@@ -783,13 +782,6 @@
 				3CDFB3911DD76E5D006C0975 /* TrackListController.swift */,
 			);
 			path = C;
-			sourceTree = "<group>";
-		};
-		3CDFB3921DD76E5D006C0975 /* M */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = M;
 			sourceTree = "<group>";
 		};
 		3CDFB3961DD776AE006C0975 /* V */ = {
@@ -1300,7 +1292,7 @@
 		};
 		3CB2E3131BA7B26800805D4F /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 28F6DD77EB623BF8E85E58B2 /* Pods-破音万里.debug.xcconfig */;
+			baseConfigurationReference = 56644B5F0A38C97D868D908B /* Pods-破破.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -1351,7 +1343,7 @@
 		};
 		3CB2E3141BA7B26800805D4F /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5ACE65060298DC83FD3A5186 /* Pods-破音万里.release.xcconfig */;
+			baseConfigurationReference = C18635346D49DC003E4C8D2B /* Pods-破破.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ALWAYS_SEARCH_USER_PATHS = NO;

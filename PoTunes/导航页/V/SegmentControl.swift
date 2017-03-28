@@ -11,27 +11,15 @@ import UIKit
 class SegmentControl: UISegmentedControl {
 	
 	override func draw(_ rect: CGRect) {
-		
-		self.selectedSegmentIndex = 0
-		
-		self.backgroundColor = UIColor.white
-
-		self.tintColor = UIColor.white
-		
-		self.setTitleTextAttributes([NSForegroundColorAttributeName: UIColor.black], for: .selected)
-		
-		self.setTitleTextAttributes([NSForegroundColorAttributeName: UIColor.lightGray], for: .normal)
-		
-		self.layer.shadowRadius = 3
-		
-		self.layer.shadowOpacity = 0.2
-		
-		self.layer.shadowOffset = CGSize(width: 1, height: 1)
-		
+		selectedSegmentIndex = 0
+		backgroundColor = UIColor.white
+		tintColor = UIColor.white
+		layer.shadowRadius = 3
+		layer.shadowOpacity = 0.2
+		layer.shadowOffset = CGSize(width: 1, height: 1)
+		setTitleTextAttributes([NSForegroundColorAttributeName: UIColor.black], for: .selected)
+		setTitleTextAttributes([NSForegroundColorAttributeName: UIColor.lightGray], for: .normal)
 		UIColor.white.setFill()
-		
 		UIRectFill(rect)
-		
 	}
-	
 }

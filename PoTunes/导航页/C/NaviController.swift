@@ -10,31 +10,18 @@ import UIKit
 import PKHUD
 
 class NaviController: UIViewController, MAMapViewDelegate, AMapSearchDelegate {
-		
 	let backgroundView = UIImageView(image: UIImage(named: "outtake_mid"))
-	
 	let routeSeletcion = Routes()
-	
 	let width = UIScreen.main.bounds.size.width
-	
 	var mapView = MAMapView()
-	
 	var annotations = [MAPointAnnotation]()
-	
 	var driveManager: AMapNaviDriveManager?
-	
 	var walkManager: AMapNaviWalkManager?
-	
 	var segmentedDrivingStrategy: SegmentControl?
-	
 	var navBtn: NavButton?
-	
 	var startLocation: CLLocationCoordinate2D?
-	
 	var endLocation: CLLocationCoordinate2D?
-	
 	var naviView: DriveNaviViewController?
-	
 	var speecher: AVSpeechSynthesizer?
 
 
@@ -294,13 +281,9 @@ extension NaviController: DrivingCalculateControllerDelegate {
 		driveManager?.addDataRepresentative((naviView?.driveView)!)
 		
 		DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
-			
 			self.present(self.naviView!, animated: false, completion: nil)
-			
 			self.driveManager?.startGPSNavi()
-			
 //			self.driveManager?.startEmulatorNavi()
-
 		}
 	}
 		

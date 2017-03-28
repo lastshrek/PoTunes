@@ -18,7 +18,6 @@ class PreferenceView: UIView {
 	//MARK: Life Cycle
 	override init(frame: CGRect) {
 		super.init(frame: frame)
-		
 		buildPreferenceView()
 	}
 	
@@ -88,18 +87,16 @@ class PreferenceView: UIView {
 	}
 	
 	private func buttonForTitle(_ title: String) -> UIButton {
-		let reBtn = UIButton(type: .custom)
-		
-		reBtn.layer.borderColor = UIColor.lightGray.cgColor
-		reBtn.layer.borderWidth = 1.0
-		reBtn.layer.cornerRadius = 5
-		
-		reBtn.bounds = CGRect(x: 0, y: 0, width: 80, height: 30)
-		reBtn.setTitle(title, for: .normal)
-		reBtn.setTitleColor(UIColor.black, for: .normal)
-		reBtn.setTitleColor(UIColor.red, for: .selected)
-		reBtn.titleLabel?.font = UIFont.systemFont(ofSize: 13)
-		
+		let reBtn = UIButton(type: .custom).then({
+			$0.layer.borderColor = UIColor.lightGray.cgColor
+			$0.layer.borderWidth = 1.0
+			$0.layer.cornerRadius = 5
+			$0.bounds = CGRect(x: 0, y: 0, width: 80, height: 30)
+			$0.setTitle(title, for: .normal)
+			$0.setTitleColor(UIColor.black, for: .normal)
+			$0.setTitleColor(UIColor.red, for: .selected)
+			$0.titleLabel?.font = UIFont.systemFont(ofSize: 13)
+		})
 		return reBtn
 	}
 	

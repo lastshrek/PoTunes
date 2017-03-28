@@ -14,57 +14,35 @@ class TrackCell: UITableViewCell {
 	let divider: UIView = UIView()
 	
 	override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-	
 		super.init(style: .subtitle, reuseIdentifier: reuseIdentifier)
-		
-		self.imageView?.contentMode = .scaleAspectFit
-		
-		self.textLabel?.textAlignment = .left
-		
-		self.textLabel?.adjustsFontSizeToFitWidth = true
-		
-		self.textLabel?.textColor = UIColor.colorByRGB(red: 224, green: 0, blue: 81, alpha: 0.8)
-		
-		self.textLabel?.font = UIFont(name: "BebasNeue", size: 18)
-		
-		self.detailTextLabel?.textColor = UIColor.colorByRGB(red: 224, green: 0, blue: 81, alpha: 0.8)
-		
-		self.detailTextLabel?.textAlignment = .left
-		
-		self.detailTextLabel?.font = UIFont(name: "BebasNeue", size: 12)
-		
-		self.detailTextLabel?.adjustsFontSizeToFitWidth = true
-
-		
+		imageView?.contentMode = .scaleAspectFit
+		textLabel?.textAlignment = .left
+		textLabel?.adjustsFontSizeToFitWidth = true
+		textLabel?.textColor = UIColor.colorByRGB(red: 224, green: 0, blue: 81, alpha: 0.8)
+		textLabel?.font = UIFont(name: "BebasNeue", size: 18)
+		detailTextLabel?.textColor = UIColor.colorByRGB(red: 224, green: 0, blue: 81, alpha: 0.8)
+		detailTextLabel?.textAlignment = .left
+		detailTextLabel?.font = UIFont(name: "BebasNeue", size: 12)
+		detailTextLabel?.adjustsFontSizeToFitWidth = true
 		// 分割线
 		divider.backgroundColor = UIColor.lightGray
-		
-		self.addSubview(divider)
-		
+		addSubview(divider)
 	}
 	
 	required init?(coder aDecoder: NSCoder) {
-		
 		fatalError("init(coder:) has not been implemented")
-	
 	}
 	
 	override func layoutSubviews() {
-		
 		super.layoutSubviews()
-		
+
 		let width: CGFloat = self.frame.size.width
-		
 		let height: CGFloat = self.frame.size.height
 		
-		self.imageView?.frame = CGRect(x: 10, y: 3, width: height - 20, height: height - 6)
-		
-		self.textLabel?.frame = CGRect(x: ((self.imageView?.frame)?.maxX)! + 10, y: 5, width: width - ((self.imageView?.frame)!).maxX - 15, height: height * 0.6)
-		
-		self.detailTextLabel?.frame = CGRect(x: ((self.imageView?.frame)?.maxX)! + 10, y: height * 0.6, width: width - ((self.imageView?.frame)!).maxX - 15, height: height * 0.3)
-		
-		self.divider.frame = CGRect(x: ((self.imageView?.frame)?.maxX)! + 10, y: height - 0.3, width: width, height: 0.3)
-		
+		imageView?.frame = CGRect(x: 10, y: 3, width: height - 20, height: height - 6)
+		textLabel?.frame = CGRect(x: ((self.imageView?.frame)?.maxX)! + 10, y: 5, width: width - ((self.imageView?.frame)!).maxX - 15, height: height * 0.6)
+		detailTextLabel?.frame = CGRect(x: ((self.imageView?.frame)?.maxX)! + 10, y: height * 0.6, width: width - ((self.imageView?.frame)!).maxX - 15, height: height * 0.3)
+		divider.frame = CGRect(x: ((self.imageView?.frame)?.maxX)! + 10, y: height - 0.3, width: width, height: 0.3)
 	}
 
 }

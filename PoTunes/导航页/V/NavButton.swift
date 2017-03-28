@@ -11,21 +11,12 @@ import UIKit
 class NavButton: UIButton {
 
 	override func draw(_ rect: CGRect) {
-				
-		self.setTitleColor(UIColor.colorByRGB(red: 225, green: 49, blue: 114, alpha: 1), for: .normal)
-		
-		self.titleLabel?.font = UIFont.init(name: "BebasNeue.otf", size: 16)
-		
-		self.layer.shadowRadius = 3
-		
-		self.layer.shadowOpacity = 0.2
-		
-		self.layer.shadowOffset = CGSize(width: 1, height: 1)
-		
+		setTitleColor(UIColor.colorByRGB(red: 225, green: 49, blue: 114, alpha: 1), for: .normal)
+		titleLabel?.font = UIFont.init(name: "BebasNeue.otf", size: 16)
+		layer.shadowRadius = 3
+		layer.shadowOpacity = 0.2
+		layer.shadowOffset = CGSize(width: 1, height: 1)
 		UIColor.white.setFill()
-		
 		UIRectFill(rect)
-		
 	}
-	
 }
