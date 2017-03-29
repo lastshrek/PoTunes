@@ -11,15 +11,10 @@ import UIKit
 class LrcCell: UITableViewCell {
 	
 	var lrcLine: LrcLine? {
-	
 		didSet {
-		
 			guard let `lrcLine` = lrcLine else { return }
-			
 			self.lyricLabel?.text = lrcLine.lyrics
-	
 		}
-	
 	}
 	
 	var lyricLabel: UILabel?
@@ -41,10 +36,7 @@ class LrcCell: UITableViewCell {
 	required init?(coder aDecoder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 	
 	override func layoutSubviews() {
-	
 		super.layoutSubviews()
-		
 		self.lyricLabel?.frame = CGRect(x: 0, y: self.bounds.size.height * 0.1, width: self.bounds.size.width, height: self.bounds.size.height * 0.8)
-	
 	}
 }

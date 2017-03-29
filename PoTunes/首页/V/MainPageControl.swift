@@ -11,35 +11,21 @@ import UIKit
 class MainPageControl: UIPageControl {
 
 	override init(frame: CGRect) {
-		
 		super.init(frame: frame)
-		
-		self.numberOfPages = 2
-		
-		self.isHidden = true
-		
-		self.isUserInteractionEnabled = true
-
+		numberOfPages = 2
+		isHidden = true
+		isUserInteractionEnabled = true
 	}
 	
 	required init(coder aDecoder: NSCoder) {
-		
 		super.init(coder: NSCoder())!
-	
 	}
 	
 	override func layoutSubviews() {
-	
 		super.layoutSubviews()
-		
 		let centerX = self.bounds.size.width * 0.5
-		
 		let centerY = self.bounds.size.height - 30
-		
-		self.center = CGPoint(x: centerX, y: centerY)
-		
-		self.bounds = CGRect(x: 0, y: 0, width: 100, height: 30)
-	
+		center = CGPoint(x: centerX, y: centerY)
+		bounds = CGRect(x: 0, y: 0, width: 100, height: 30)
 	}
-
 }

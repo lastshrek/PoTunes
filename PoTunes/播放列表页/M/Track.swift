@@ -9,24 +9,15 @@
 import UIKit
 
 class Track: NSObject {
-	
 	var ID: Int = 0
-	
 	var name: String = ""
-	
 	var artist: String = ""
-	
 	var cover: String = ""
-	
 	var url: String = ""
 
-	
 	func setupMappingReplaceProperty() -> [String : String] {
-	
 		return ["ID": "id"]
-	
 	}
-	
 }
 
 

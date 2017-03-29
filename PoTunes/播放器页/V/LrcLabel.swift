@@ -11,12 +11,9 @@ import UIKit
 class LrcLabel: UILabel {
 
 	override init(frame: CGRect) {
-		
 		super.init(frame: frame)
-				
-		self.textColor = UIColor.white
-		
-		self.textAlignment = .center
+		textColor = UIColor.white
+		textAlignment = .center
 	}
 	
 	required init?(coder aDecoder: NSCoder) {
@@ -24,33 +21,20 @@ class LrcLabel: UILabel {
 	}
 	
 	override func drawText(in rect: CGRect) {
-		
 		let shadowOffset: CGSize = self.shadowOffset
-		
 		let textColor = self.textColor
-		
 		let c: CGContext = UIGraphicsGetCurrentContext()!
 		
 		c.setLineWidth(1)
-		
 		c.setLineJoin(.round)
-		
 		c.setTextDrawingMode(.stroke)
-		
 		self.textColor = UIColor.black
-		
 		super.drawText(in: rect)
-		
+
 		c.setTextDrawingMode(.fill)
-		
 		self.textColor = textColor
-		
 		self.shadowOffset = CGSize(width: 0, height: 0)
-		
 		super.drawText(in: rect)
-		
 		self.shadowOffset = shadowOffset
 	}
-
-
 }

@@ -27,32 +27,22 @@ let P_URL = "http://poche.fm/api/app/playlists?v=" + version
 
 class PlaylistController: UITableViewController {
 	
+	let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString")
 	var playlists: Array<Playlist> = []
 	var nowListening: Playlist?
-	
-	let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString")
-	
-	lazy var queue: FMDatabaseQueue = DBHelper.sharedInstance.queue!
-
 	weak var delegate: PlaylistDelegate?
-	
+	lazy var queue: FMDatabaseQueue = DBHelper.sharedInstance.queue!
 	lazy var playlistsDB: FMDatabase = {
-		
 		let path = self.dirDoc() + "/downloadingSong.db"
-		
 		let db: FMDatabase = FMDatabase(path: path)
-		
 		db.open()
-		
 		return db
 	}()
 	
 	var recognizer: UIGestureRecognizer?
 	
 	override func viewDidLoad() {
-		
 		super.viewDidLoad()
-		
 		let width = self.view.bounds.size.width
 		// Initialize tableView
 		tableView.rowHeight = width * 300 / 640

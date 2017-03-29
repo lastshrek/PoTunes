@@ -15,15 +15,13 @@
 #import "XGSetting.h"
 #import "Debug.h"
 #import "UMMobClick/MobClick.h"
+#import <SVProgressHUD/SVProgressHUD.h>
 
 @interface AppDelegate ()<WXApiDelegate, UNUserNotificationCenterDelegate>
 
 @property (nonatomic, strong) NSTimer *timer;
-
 @property (nonatomic, assign) int bgTime;
-
 @property (nonatomic, assign) UIBackgroundTaskIdentifier backIdentifier;
-
 @property (nonatomic, assign) BOOL isDownloading;
 
 
@@ -37,9 +35,7 @@
     
     //设置音乐后台播放的会话类型
     AVAudioSession *session = [AVAudioSession sharedInstance];
-	
 	[session setActive:YES error:nil];
-	
 	[session setCategory:AVAudioSessionCategoryPlayback error:nil];
 
     // 接受远程事件
@@ -53,15 +49,12 @@
 	
 	// 后台下载注册
 	NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
-	
 	[center addObserver:self selector:@selector(percent:) name:@"percent" object:nil];
-	
 	[center addObserver:self selector:@selector(complete:) name:@"downloadComplete" object:nil];
 	
 	// 注册推送
 	[[XGSetting getInstance] enableDebug:YES];
 	[XGPush startApp:2200248301 appKey:@"I6ZG8X127DEV"];
-	
 	[XGPush isPushOn:^(BOOL isPushOn) {
 		NSSLog(@"[XGDemo] Push Is %@", isPushOn ? @"ON" : @"OFF");
 	}];
@@ -121,9 +114,7 @@
 }
 
 - (void)complete:(NSNotification *)sender {
-	
 	self.isDownloading = 0;
-	
 }
 
 
@@ -197,12 +188,10 @@
 //重写AppDelegate的handleOpenURL和openURL方法：
 
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url {
-    
     return [WXApi handleOpenURL:url delegate:self];
 }
 
 - (BOOL)application:(UIApplication *)application openURL:(nonnull NSURL *)url sourceApplication:(nullable NSString *)sourceApplication annotation:(nonnull id)annotation {
-    
     return [WXApi handleOpenURL:url delegate:self];
 }
 
@@ -211,17 +200,12 @@
 }
 
 - (void) onResp:(BaseResp*)resp {
-    
     if([resp isKindOfClass:[SendMessageToWXResp class]]) {
-    
-        if (resp.errCode == 0) {
-        
-//            [MBProgressHUD showSuccess:@"分享成功"];
-					
+		if (resp.errCode == 0) {
+			[SVProgressHUD showSuccessWithStatus:@"分享成功"];
         } else {
-        
-//            [MBProgressHUD showError:@"分享失败"];
-        }
+			[SVProgressHUD showErrorWithStatus:@"分享失败"];
+		}
     }
 }
 

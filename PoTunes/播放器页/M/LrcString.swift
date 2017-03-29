@@ -9,9 +9,6 @@
 import UIKit
 
 class LrcString: NSObject {
-	
 	var lrc: String = ""
-	
 	var lrc_cn: String = ""
-	
 }

@@ -14,20 +14,19 @@ class PlaylistCell: UITableViewCell {
 	
 	override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
 		super.init(style: style, reuseIdentifier: reuseIdentifier)
-		self.imageView?.contentMode = .scaleAspectFit
-		self.backgroundColor = UIColor.clear
+		imageView?.contentMode = .scaleAspectFit
+		backgroundColor = UIColor.clear
 		// 前景
-		let foregroundView = UIView()
-		foregroundView.backgroundColor = UIColor.black
-		foregroundView.alpha = 0.4
-		self.foregroundView = foregroundView
-		self.contentView.addSubview(foregroundView)
-		self.bringSubview(toFront: self.textLabel!)
-		self.selectionStyle = .none
-		self.textLabel?.textAlignment = .center
-		self.textLabel?.textColor = UIColor.white
-		self.textLabel?.font = UIFont(name: "BebasNeue", size: 18)
-
+		foregroundView = UIView().then({
+			$0.backgroundColor = UIColor.black
+			$0.alpha = 0.4
+			contentView.addSubview($0)
+		})
+		bringSubview(toFront: self.textLabel!)
+		selectionStyle = .none
+		textLabel?.textAlignment = .center
+		textLabel?.textColor = UIColor.white
+		textLabel?.font = UIFont(name: "BebasNeue", size: 18)
 	}
 	
 	required init?(coder aDecoder: NSCoder) {
@@ -36,10 +35,10 @@ class PlaylistCell: UITableViewCell {
 	
 	override func layoutSubviews() {
 		super.layoutSubviews()
-		self.contentView.frame = self.bounds
-		self.imageView?.frame = self.bounds
-		self.textLabel?.frame = self.bounds;
-		self.foregroundView?.frame = self.bounds
+		contentView.frame = self.bounds
+		imageView?.frame = self.bounds
+		textLabel?.frame = self.bounds;
+		foregroundView?.frame = self.bounds
 	}
 
 }
