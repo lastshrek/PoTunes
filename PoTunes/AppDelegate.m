@@ -243,7 +243,6 @@
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
 	[self removeBgTimer];
-	NSLog(@"要来啦");
 }
 
 /** 接收远程事件 */

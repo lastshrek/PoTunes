@@ -54,6 +54,7 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 @property (nonatomic, assign) Boolean paused;
 @property (nonatomic, assign) CGFloat maxPrebufferedByteCount;
 @property (nonatomic, assign) FSSeekByteOffset offset;
+@property (nonatomic, assign) int interuptReason;
 
 
 @property (nonatomic, strong) FSAudioController* streamer;
@@ -295,6 +296,7 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 		}
 	} else {
 		[SVProgressHUD showImage:[UIImage imageNamed:@"pauseB"] status:@"暂停播放"];
+		self.interuptReason = 0;
 	}
 	
 	if (self.streamer.activeStream == nil) {
@@ -476,8 +478,6 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 		if (lrc_cn.length > 0 && ![lrc_cn isEqualToString:@"unwritten"]) {
 			[self.lrcView parseChLyricsWithLyrics:[lrc_cn stringByReplacingOccurrencesOfString:@"\\n" withString:@" "]];
 		}
-		
-
 	} failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
 		self.lrcView.noLrcLabel.text = @"暂无歌词";
 	}];
@@ -660,16 +660,26 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 }
 
 
+
+
 - (void)audioSessionWasInterrupted:(NSNotification *)notification {
+	NSLog(@"%@", notification);
 	int reason = [notification.userInfo[AVAudioSessionInterruptionTypeKey] intValue];
 	if (AVAudioSessionInterruptionTypeBegan == reason) {
-		if (self.streamer.activeStream) {
+		NSLog(@"打断来了");
+		if (self.streamer.activeStream.isPlaying) {
 			[self.streamer.activeStream pause];
 			self.paused = YES;
+			self.interuptReason = 1;
 		}
-	} else if (AVAudioSessionInterruptionTypeEnded == reason) {
-		if (self.paused == YES) {
+		return;
+	}
+	if (AVAudioSessionInterruptionTypeEnded == reason) {
+		NSLog(@"打断走了");
+		if (notification.userInfo[@"refreshProgress"] != nil) return;
+		if (self.paused == YES && self.interuptReason == 1) {
 			[self playOrPause];
+			self.interuptReason = 0;
 		}
 	}
 }
@@ -736,10 +746,15 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 	//设置进度条进度
 	self.progress.progress = self.streamer.activeStream.currentTimePlayed.position;
 	//设置当前时间以及剩余时间
-	int totalLeftSecond = total.minute * 60 + total.second - cur.minute * 60 - cur.second;
+	NSInteger totalLeftSecond = total.minute * 60 + total.second - cur.minute * 60 - cur.second;
+	
+//	printf("总时长%u\n", total.minute * 60 + total.second);
+//	printf("已播放%u\n", cur.minute * 60 + cur.second);
+	
+
 	NSString *curSecond = [NSString stringWithFormat:@"%d",cur.second];
-	NSString *leftMin = [NSString stringWithFormat:@"%d",totalLeftSecond / 60];
-	NSString *leftSec = [NSString stringWithFormat:@"%d",totalLeftSecond % 60];
+	NSString *leftMin = [NSString stringWithFormat:@"%ld",totalLeftSecond / 60];
+	NSString *leftSec = [NSString stringWithFormat:@"%ld",totalLeftSecond % 60];
 	
 	if (cur.second < 10) curSecond = [NSString stringWithFormat:@"0%@",curSecond];
 	if ([leftSec intValue] < 10) leftSec = [NSString stringWithFormat:@"0%@",leftSec];
@@ -749,21 +764,18 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 	__weak PlayerInterface *weakSelf = self;
 	self.streamer.onStateChange = ^(FSAudioStreamState state) {
 		if (state == kFsAudioStreamPlaybackCompleted) {
-			NSLog(@"播放完毕");
 			[weakSelf playTracks:weakSelf.tracks index:weakSelf.index + 1];
 		}
 	};
 	
 	self.streamer.activeStream.onStateChange = ^(FSAudioStreamState state) {
 		if (state == kFsAudioStreamPlaybackCompleted) {
-			NSLog(@"播放完成");
 			[self playNext];
 		}
 		
 		if (state == kFsAudioStreamFailed) {
 			FSStreamPosition seek;
 			seek.position = self.progress.progress;
-			
 			[self.streamer.activeStream seekToPosition:seek];
 		}
 		
