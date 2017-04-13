@@ -191,9 +191,10 @@ class PlaylistController: UITableViewController {
 		
 		let url = URL(string: playlist.cover)
 		cell.textLabel?.text = "『" + playlist.title + "』"
-		cell.imageView?.sd_setImage(with: url, placeholderImage: UIImage(named:"defaultArtCover"))
+		
+		cell.imageView?.sd_setImage(with: url, placeholderImage: UIImage(named:"defaultArtCover"), options: .refreshCached)
 
-
+		
 		// MARK: - 设置count==3和4时分别显示的封面
 		if playlists.count != 3 {
 			// MARK: - 添加下载手势 - TODO
@@ -211,7 +212,7 @@ class PlaylistController: UITableViewController {
 		// 取消点击效果
 		tableView.deselectRow(at: indexPath, animated: false)
 		var playlist = Playlist()
-		if playlists.count != 3 && indexPath.section == 0{
+		if playlists.count != 3 && indexPath.section == 0 {
 			playlist = nowListening!
 		} else {
 			playlist = playlists[indexPath.row]
@@ -240,11 +241,10 @@ class PlaylistController: UITableViewController {
 			HUD.hide()
 			
 			// MARK: - Push Controller - TODO
-			let trackList: TrackListController = TrackListController()
-			
-			trackList.tracks = temp
-			
-			trackList.title = playlist.title
+			let trackList: TrackListController = TrackListController().then({
+				$0.tracks = temp
+				$0.title = playlist.title
+			})
 			
 			self.navigationController?.pushViewController(trackList, animated: true)
 			

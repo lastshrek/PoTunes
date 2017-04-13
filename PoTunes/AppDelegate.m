@@ -16,6 +16,7 @@
 #import "Debug.h"
 #import "UMMobClick/MobClick.h"
 #import <SVProgressHUD/SVProgressHUD.h>
+#import <SDWebImage/UIImageView+WebCache.h>
 
 @interface AppDelegate ()<WXApiDelegate, UNUserNotificationCenterDelegate>
 
@@ -71,6 +72,36 @@
 	UMConfigInstance.appKey = @"58b79080ae1bf8640300208e";
 	UMConfigInstance.channelId = @"App Store";
 	[MobClick startWithConfigure:UMConfigInstance];
+	
+	
+	//刷新缓存图片图片
+	SDWebImageDownloader *imageDownloader = SDWebImageManager.sharedManager.imageDownloader;
+	imageDownloader.headersFilter  = ^NSDictionary *(NSURL *url, NSDictionary *headers) {
+		
+		NSFileManager *fileManager = [[NSFileManager alloc] init];
+		NSString *imageKey = [SDWebImageManager.sharedManager cacheKeyForURL:url];
+		NSString *imagePath = [SDWebImageManager.sharedManager.imageCache defaultCachePathForKey:imageKey];
+		NSDictionary *fileAttribute = [fileManager attributesOfItemAtPath:imagePath error:nil];
+		NSMutableDictionary *mutableHeaders = [headers mutableCopy];
+		NSDate *lastModifiedDate = nil;
+		
+		if (fileAttribute.count > 0) {
+			if (fileAttribute.count > 0) {
+				lastModifiedDate = (NSDate *)fileAttribute[NSFileModificationDate];
+			}
+			
+		}
+		NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+		formatter.timeZone = [NSTimeZone timeZoneWithAbbreviation:@"GMT"];
+		formatter.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
+		formatter.dateFormat = @"EEE, dd MMM yyyy HH:mm:ss z";
+		
+		NSString *lastModifiedString = [formatter stringFromDate:lastModifiedDate];
+		lastModifiedString = lastModifiedString.length > 0 ? lastModifiedString : @"";
+		[mutableHeaders setValue:lastModifiedString forKey:@"If-Modified-Since"];
+		
+		return mutableHeaders;
+	};
 
     return YES;
 }
