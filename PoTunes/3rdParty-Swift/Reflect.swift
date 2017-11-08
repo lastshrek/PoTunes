@@ -237,11 +237,11 @@ extension NSObject: TTReflectProtocol {
     var propNum: UInt32 = 0
     let propList = class_copyPropertyList(cls, &propNum)
     for index in 0..<numericCast(propNum) {
-      let prop: objc_property_t = propList![index]!
+		let prop: objc_property_t = propList![index]
       keys.append(String(validatingUTF8: property_getName(prop))!)
     }
     if class_getSuperclass(cls) != NSObject.self {
-      keys.append(contentsOf: getObjectKeys(class_getSuperclass(cls)))
+		keys.append(contentsOf: getObjectKeys(class_getSuperclass(cls)!))
     }
     return keys
   }

@@ -29,4 +29,20 @@
  */
 + (instancetype)polygonWithPoints:(MAMapPoint *)points count:(NSUInteger)count;
 
+/**
+ * @brief 重新设置多边形顶点. since 5.0.0
+ * @param points 指定的直角坐标点数组, C数组，内部会做copy，调用者负责内存管理
+ * @param count 坐标点的个数
+ * @return 是否设置成功
+ */
+- (BOOL)setPolygonWithPoints:(MAMapPoint *)points count:(NSInteger)count;
+
+/**
+ * @brief 重新设置多边形顶点. since 5.0.0
+ * @param coords 指定的经纬度坐标点数组, C数组，内部会做copy，调用者负责内存管理
+ * @param count 坐标点的个数
+ * @return 是否设置成功
+ */
+- (BOOL)setPolygonWithCoordinates:(CLLocationCoordinate2D *)coords count:(NSInteger)count;
+
 @end

@@ -504,7 +504,9 @@
 ///此方案收费路段长度（单位：米）
 @property (nonatomic, assign) NSInteger  tollDistance; 
 ///此方案交通信号灯个数
-@property (nonatomic, assign) NSInteger  totalTrafficLights; 
+@property (nonatomic, assign) NSInteger  totalTrafficLights;
+///限行信息。0 代表限行已规避或未限行; 1 代表限行无法规避
+@property (nonatomic, assign) NSInteger restriction;
 @end
 
 ///步行换乘信息
@@ -593,7 +595,7 @@
 @end
 
 
-///公交换乘路段
+///公交换乘路段，如果walking和buslines同时有值，则是先walking后buslines
 @interface AMapSegment : AMapSearchObject
 ///此路段步行导航信息
 @property (nonatomic, strong) AMapWalking  *walking; 
@@ -716,6 +718,51 @@
 @property (nonatomic, assign) CGFloat         distance; 
 ///最后更新的时间戳，单位秒
 @property (nonatomic, assign) NSTimeInterval  updatetime; 
+@end
+
+#pragma mark - 交通态势
+
+///道路路况评价 since 5.1.0
+@interface AMapTrafficEvaluation : AMapSearchObject
+///综述
+@property (nonatomic, copy) NSString *evaluationDescription;
+///0：未知;1：畅通;2：缓行;3：拥堵
+@property (nonatomic, assign) NSInteger status;
+///畅通所占百分比
+@property (nonatomic, copy) NSString *expedite;
+///缓行所占百分比
+@property (nonatomic, copy) NSString *congested;
+///拥堵所占百分比
+@property (nonatomic, copy) NSString *blocked;
+///未知路段所占百分比
+@property (nonatomic, copy) NSString *unknown;
+@end
+
+///道路路况返回的道路信息 since 5.1.0
+@interface AMapTrafficRoad : AMapSearchObject
+///道路名称
+@property (nonatomic, copy) NSString *name;
+///0：未知;1：畅通;2：缓行;3：拥堵
+@property (nonatomic, assign) NSInteger status;
+///方向描述
+@property (nonatomic, copy) NSString *direction;
+///车行角度，判断道路正反向使用。	以正东方向为0度，逆时针方向为正，取值范围：[0,360]
+@property (nonatomic, assign) float angle;
+///速度 单位：千米/小时
+@property (nonatomic, assign) float speed;
+///道路坐标集，经度和纬度使用","分隔，坐标之间使用";"分隔。例如：x1,y1;x2,y2
+@property (nonatomic, copy) NSString *polyline;
+@end
+
+///道路路况信息 since 5.1.0
+@interface AMapTrafficInfo : AMapSearchObject
+///路况综述
+@property (nonatomic, copy) NSString *statusDescription;
+///路况评价
+@property (nonatomic, strong) AMapTrafficEvaluation *evaluation;
+///道路信息
+@property (nonatomic, strong) NSArray<AMapTrafficRoad*>* roads;
+
 @end
 
 #pragma mark - 云图基础数据类型

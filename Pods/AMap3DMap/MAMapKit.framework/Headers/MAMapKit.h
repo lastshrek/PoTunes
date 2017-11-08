@@ -7,12 +7,15 @@
 //
 
 #import <MAMapKit/MAConfig.h>
+#import <MAMapKit/MAMapAccessibilityIdentifier.h>
+
 #import <MAMapKit/MAMapVersion.h>
 #import <MAMapKit/MAMapView.h>
 #import <MAMapKit/MAMapStatus.h>
 #import <MAMapKit/MAGeometry.h>
 #import <MAMapKit/MAAnnotation.h>
 #import <MAMapKit/MAAnnotationView.h>
+#import <MAMapKit/MAAnnotationMoveAnimation.h>
 #import <MAMapKit/MAPointAnnotation.h>
 #import <MAMapKit/MAAnimatedAnnotation.h>
 #import <MAMapKit/MAPinAnnotationView.h>
@@ -36,6 +39,10 @@
 #import <MAMapKit/MAGroundOverlayRenderer.h>
 #import <MAMapKit/MATileOverlay.h>
 #import <MAMapKit/MATileOverlayRenderer.h>
+
+#import <MAMapKit/MAMultiPointOverlay.h>
+#import <MAMapKit/MAMultiPointOverlayRenderer.h>
+
 #import <MAMapKit/MAHeatMapTileOverlay.h>
 #import <MAMapKit/MATouchPoi.h>
 #import <MAMapKit/MAIndoorInfo.h>
@@ -47,4 +54,8 @@
 #import <MAMapKit/MAOfflineItemNationWide.h>
 #import <MAMapKit/MAOfflineProvince.h>
 #import <MAMapKit/MAUserLocationRepresentation.h>
+#import <MAMapKit/MACustomCalloutView.h>
+#import <MAMapKit/MATraceLocation.h>
+#import <MAMapKit/MATraceManager.h>
+#import <MAMapKit/MALineDrawType.h>
 

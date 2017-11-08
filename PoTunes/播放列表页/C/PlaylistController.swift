@@ -8,10 +8,10 @@
 
 import UIKit
 import Alamofire
-import DGElasticPullToRefresh
 import PKHUD
 import FMDB
 import SCLAlertView
+import PullToRefreshKit
 
 
 protocol PlaylistDelegate: class {
@@ -22,7 +22,7 @@ let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionStri
 //let P_URL = "http://localhost:3000/api/app/playlists?v=" + version
 //let O_URL = "http://localhost:3000/api/app/playlists/"
 let O_URL = "https://poche.fm/api/app/playlists/"
-let P_URL = "http://poche.fm/api/app/playlists?v=" + version
+let P_URL = "https://poche.fm/api/app/playlists?v=" + version
 
 
 class PlaylistController: UITableViewController {
@@ -49,8 +49,25 @@ class PlaylistController: UITableViewController {
 		tableView.separatorStyle = .none
 		tableView.backgroundColor = UIColor.black
 		tableView.register(PlaylistCell.self, forCellReuseIdentifier: "playlist")
-		tableView.contentInset = UIEdgeInsetsMake(0, 0, 64, 0)
-		tableView.contentOffset = CGPoint(x: 0, y: 0)
+        if #available(iOS 11.0, *) {
+            tableView.contentInsetAdjustmentBehavior = .never
+            if UIScreen.main.bounds.size.height == 812 {
+                tableView.contentInset = UIEdgeInsetsMake(44, 0, 88, 0)//iPhoneX这里是88
+            } else {
+                tableView.contentInset = UIEdgeInsetsMake(64, 0, 88, 0)//iPhoneX这里是88
+            }
+            tableView.scrollIndicatorInsets = tableView.contentInset
+            tableView.insetsContentViewsToSafeArea = false
+        } else {
+            // Fallback on earlier versions
+            self.automaticallyAdjustsScrollViewInsets = false
+        }
+        
+//        if UIScreen.main.bounds.size.height == 812 {
+//        } else {
+//            tableView.contentInset = UIEdgeInsetsMake(0, 0, 10, 0)
+//        }
+//        tableView.contentOffset = CGPoint(x: 0, y: 0)
 		// Refresh
 		addPullToRefresh()
 		// MARK: -  检查本地缓存播放列表
@@ -60,13 +77,13 @@ class PlaylistController: UITableViewController {
 	
 	func checkLocalPlaylists() {
 		let query = "select * from t_playlists"
-		let s = playlistsDB.executeQuery(query, withArgumentsIn: nil)
+		let s = playlistsDB.executeQuery(query, withArgumentsIn: [])
 
 		if s?.next() == false {
 			loadNewPlaylist()
 		} else {
 			let sql = "select * from t_playlists order by p_id desc"
-			let s = playlistsDB.executeQuery(sql, withArgumentsIn: nil)
+			let s = playlistsDB.executeQuery(sql, withArgumentsIn: [])
 
 			while s?.next() == true {
 				let playlist = Playlist()
@@ -91,13 +108,9 @@ class PlaylistController: UITableViewController {
 	
 	func addPullToRefresh() {
 		// Initialize tableView
-		let loadingView = DGElasticPullToRefreshLoadingViewCircle()
-		loadingView.tintColor = UIColor(red: 78/255.0, green: 221/255.0, blue: 200/255.0, alpha: 1.0)
-		tableView.dg_addPullToRefreshWithActionHandler({ [weak self] () -> Void in
-			self?.loadNewPlaylist()
-			}, loadingView: loadingView)
-		tableView.dg_setPullToRefreshFillColor(UIColor(red: 57/255.0, green: 67/255.0, blue: 89/255.0, alpha: 1.0))
-		tableView.dg_setPullToRefreshBackgroundColor(tableView.backgroundColor!)
+        tableView.setUpHeaderRefresh {
+            self.loadNewPlaylist()
+        }
 	}
 	
 	func loadNewPlaylist() {
@@ -105,15 +118,15 @@ class PlaylistController: UITableViewController {
 		Alamofire.request(P_URL).response(completionHandler: { (response) in
 			if response.error != nil {
 				HUD.flash(.labeledError(title: "请检查网络", subtitle: nil), delay: 0.4)
-				self.tableView.dg_stopLoading()
+				self.tableView.endHeaderRefreshing()
 				self.delegate?.tabBarCount(count: 3)
 				return
 			}
-			self.tableView.dg_stopLoading()
+            self.tableView.endHeaderRefreshing()
 
 			let playlists: Array = Reflect<Playlist>.mapObjects(data: response.data)
 			let query = "select * from t_playlists where p_id=(select max(p_id)from t_playlists);"
-			let s = self.playlistsDB.executeQuery(query, withArgumentsIn: nil)
+			let s = self.playlistsDB.executeQuery(query, withArgumentsIn: [])
 
 			if s?.next() == true {
 				let maxID = (Int)((s?.int(forColumn: "p_id"))!)
@@ -137,7 +150,6 @@ class PlaylistController: UITableViewController {
 			}
 			self.tableView.reloadData()
 
-
 			let user = UserDefaults.standard
 			user.set("online", forKey: "online")
 			user.synchronize()
@@ -151,7 +163,7 @@ class PlaylistController: UITableViewController {
 			DispatchQueue.global(qos: .background).async {
 				let title = self.doubleQuotation(single: playlist.title)
 				self.queue.inDeferredTransaction({ (database, roolback) in
-					database?.executeUpdate(sql, withArgumentsIn: [playlist.ID, title, playlist.cover])
+					database.executeUpdate(sql, withArgumentsIn: [playlist.ID, title, playlist.cover])
 				})
 			}
 		}
@@ -218,6 +230,8 @@ class PlaylistController: UITableViewController {
 			playlist = playlists[indexPath.row]
 		}
 		let url = URL(string: O_URL + "\(playlist.ID)")
+	
+		
 		
 		Alamofire.request(url!).response(completionHandler: { (response) in
 			
@@ -231,11 +245,8 @@ class PlaylistController: UITableViewController {
 			var temp: Array<TrackEncoding> = []
 			
 			for track in tracks {
-				
 				let trackEncoding = TrackEncoding(ID: track.ID, name: track.name, artist: track.artist, cover: track.cover, url: track.url)
-				
 				temp.append(trackEncoding)
-				
 			}
 			
 			HUD.hide()
@@ -251,7 +262,7 @@ class PlaylistController: UITableViewController {
 		})
 	}
 	// MARK: - 下载每月歌曲 - TODO
-	func download(recognizer: UIGestureRecognizer) {
+	@objc func download(recognizer: UIGestureRecognizer) {
 		// check user network and whether allow to play
 		let user = UserDefaults.standard
 		let online = user.object(forKey: "online")
@@ -277,7 +288,7 @@ class PlaylistController: UITableViewController {
 				let album = playlist.title
                 let query = "SELECT * FROM t_downloading WHERE author = ? and title = ? and album = ?;"
                 self.queue.inDatabase({ (database) in
-                    let s = database?.executeQuery(query, withArgumentsIn: [track.artist, track.name, album])
+					let s = database.executeQuery(query, withArgumentsIn: [track.artist, track.name, album])
                     if s?.next() == false {
                         downloadArray.append(track)
                     }
@@ -292,18 +303,13 @@ class PlaylistController: UITableViewController {
                 HUD.flash(.label("开始下载"), delay: 0.3, completion: { (_) in
                     
                     let name = Notification.Name("fullAlbum")
-                    
                     let userInfo = ["album": album, "tracks": downloadArray] as [String : Any]
-                    
                     let notify = Notification.init(name: name, object: nil, userInfo: userInfo)
-                    
+
                     NotificationCenter.default.post(notify)
                     
                 })
-                
-                
             }
-            
         })
 
 

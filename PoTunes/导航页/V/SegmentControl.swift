@@ -17,8 +17,8 @@ class SegmentControl: UISegmentedControl {
 		layer.shadowRadius = 3
 		layer.shadowOpacity = 0.2
 		layer.shadowOffset = CGSize(width: 1, height: 1)
-		setTitleTextAttributes([NSForegroundColorAttributeName: UIColor.black], for: .selected)
-		setTitleTextAttributes([NSForegroundColorAttributeName: UIColor.lightGray], for: .normal)
+		setTitleTextAttributes([NSAttributedStringKey.foregroundColor: UIColor.black], for: .selected)
+		setTitleTextAttributes([NSAttributedStringKey.foregroundColor: UIColor.lightGray], for: .normal)
 		UIColor.white.setFill()
 		UIRectFill(rect)
 	}

@@ -13,7 +13,7 @@
 @interface MAMultiPolyline : MAPolyline
 
 ///绘制索引数组(纹理、颜色索引数组), 成员为NSNumber, 且为非负数
-@property (nonatomic, strong, readonly) NSArray *drawStyleIndexes;
+@property (nonatomic, strong) NSArray *drawStyleIndexes;
 
 /**
  * @brief 分段绘制，根据map point数据生成多段线
@@ -24,7 +24,7 @@
  *
  * @param points           指定的直角坐标点数组，注意：如果有连续重复点，需要去重处理，只保留一个，否则会导致绘制有问题。
  * @param count            坐标点的个数
- * @param drawStyleIndexes 纹理索引数组(颜色索引数组), 成员为NSNumber, 且为非负数
+ * @param drawStyleIndexes 纹理索引数组(颜色索引数组), 成员为NSNumber, 且为非负数。例子：[1,3,6] 表示 0-1使用第一种颜色\纹理，1-3使用第二种，3-6使用第三种，6-最后使用第四种
  * @return 生成的折线对象
  */
 + (instancetype)polylineWithPoints:(MAMapPoint *)points count:(NSUInteger)count drawStyleIndexes:(NSArray*) drawStyleIndexes;
@@ -38,9 +38,31 @@
  *
  * @param coords           指定的经纬度坐标点数组，注意：如果有连续重复点，需要去重处理，只保留一个，否则会导致绘制有问题。
  * @param count            坐标点的个数
- * @param drawStyleIndexes 纹理索引数组(颜色索引数组), 成员为NSNumber, 且为非负数
+ * @param drawStyleIndexes 纹理索引数组(颜色索引数组), 成员为NSNumber, 且为非负数。例子：[1,3,6] 表示 0-1使用第一种颜色\纹理，1-3使用第二种，3-6使用第三种，6-最后使用第四种
  * @return 生成的折线对象
  */
 + (instancetype)polylineWithCoordinates:(CLLocationCoordinate2D *)coords count:(NSUInteger)count drawStyleIndexes:(NSArray*) drawStyleIndexes;
+
+/**
+ * @brief 重新设置坐标点. since 5.0.0
+ * @param points 指定的直角坐标点数组,C数组，内部会做copy，调用者负责内存管理。注意：如果有连续重复点，需要去重处理，只保留一个，否则会导致绘制有问题。
+ * @param count 坐标点的个数
+ * @param drawStyleIndexes 纹理索引数组(颜色索引数组), 成员为NSNumber, 且为非负数。例子：[1,3,6] 表示 0-1使用第一种颜色\纹理，1-3使用第二种，3-6使用第三种，6-最后使用第四种
+ * @return 是否设置成功
+ */
+- (BOOL)setPolylineWithPoints:(MAMapPoint *)points
+                        count:(NSUInteger)count
+             drawStyleIndexes:(NSArray*)drawStyleIndexes;
+
+/**
+ * @brief 重新设置坐标点. since 5.0.0
+ * @param coords 指定的经纬度坐标点数组,C数组，内部会做copy，调用者负责内存管理。注意：如果有连续重复点，需要去重处理，只保留一个，否则会导致绘制有问题。
+ * @param count 坐标点的个数
+ * @param drawStyleIndexes 纹理索引数组(颜色索引数组), 成员为NSNumber, 且为非负数。例子：[1,3,6] 表示 0-1使用第一种颜色\纹理，1-3使用第二种，3-6使用第三种，6-最后使用第四种
+ * @return 是否设置成功
+ */
+- (BOOL)setPolylineWithCoordinates:(CLLocationCoordinate2D *)coords
+                             count:(NSUInteger)count
+                  drawStyleIndexes:(NSArray*)drawStyleIndexes;
 
 @end

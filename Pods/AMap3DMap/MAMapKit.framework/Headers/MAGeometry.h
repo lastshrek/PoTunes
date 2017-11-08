@@ -383,6 +383,23 @@ extern "C" {
      */
     extern CLLocationDirection MAGetDirectionFromCoords(CLLocationCoordinate2D fromCoord, CLLocationCoordinate2D toCoord);
     
+    /**
+     * @brief 获取矢量坐标方向
+     * @param fromPoint 矢量坐标起点
+     * @param toPoint   矢量坐标终点
+     * @return 方向，详情参考系统 CLLocationDirection
+     */
+    extern CLLocationDirection MAGetDirectionFromPoints(MAMapPoint fromPoint, MAMapPoint toPoint);
+    
+    /**
+     * @brief 获取点到线的垂直距离
+     * @param point 起点
+     * @param lineBegin 线的起点
+     * @param lineEnd   线的终点
+     * @return 距离，单位米
+     */
+    extern double MAGetDistanceFromPointToLine(MAMapPoint point, MAMapPoint lineBegin, MAMapPoint lineEnd);
+    
 #ifdef __cplusplus
 }
 #endif

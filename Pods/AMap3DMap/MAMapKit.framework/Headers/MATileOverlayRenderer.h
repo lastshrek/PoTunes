@@ -18,7 +18,7 @@
 
 /**
  * @brief 根据指定的tileOverlay生成将tiles显示在地图上的Renderer
- * @param tileOverlay 制定了覆盖图片，以及图片的覆盖区域的groundOverlay
+ * @param tileOverlay 制定了覆盖图片
  * @return 以tileOverlay新生成Renderer
  */
 - (instancetype)initWithTileOverlay:(MATileOverlay *)tileOverlay;

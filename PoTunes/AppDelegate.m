@@ -34,6 +34,10 @@
     // Override point for customization after application launch.
     [NSThread sleepForTimeInterval:1];
     
+    if (@available(iOS 11.0, *)){
+        [[UIScrollView appearance] setContentInsetAdjustmentBehavior:UIScrollViewContentInsetAdjustmentNever];
+    }
+    
     //设置音乐后台播放的会话类型
     AVAudioSession *session = [AVAudioSession sharedInstance];
 	[session setActive:YES error:nil];

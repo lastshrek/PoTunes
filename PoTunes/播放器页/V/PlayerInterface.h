@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "LTInfiniteScrollView.h"
+#import <AsyncDisplayKit/AsyncDisplayKit.h>
 
-@interface PlayerInterface : UIView
+@interface PlayerInterface : ASDisplayNode
 
 @property (nonatomic, strong) NSArray* tracks;
 @property (nonatomic, assign) NSInteger index;
@@ -19,5 +20,11 @@
 
 
 - (void)playTracks:(NSArray *)tracks index:(NSInteger)index;
-
+- (void)playOrPause;
+- (void)playNext;
+- (void)playPrevious;
+- (void)doSeeking:(UILongPressGestureRecognizer*)recognizer;
+- (void)playShuffle:(UISwipeGestureRecognizer*)recognizer;
+- (void)singleRewind;
+- (void)showLyrics;
 @end

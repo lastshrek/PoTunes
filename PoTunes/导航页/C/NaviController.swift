@@ -37,7 +37,11 @@ class NaviController: UIViewController, MAMapViewDelegate, AMapSearchDelegate {
 	
 	// MARK: - initialization
 	func initRoutesSelection() {
-		routeSeletcion.frame = CGRect(x: 10, y: 20, width: width - 20, height: 130)
+		if UIScreen.main.bounds.size.height == 812 {
+			routeSeletcion.frame = CGRect(x: 10, y: 64, width: width - 20, height: 130)
+		} else {
+			routeSeletcion.frame = CGRect(x: 10, y: 84, width: width - 20, height: 130)
+		}
 		routeSeletcion.start.text.delegate = self
 		routeSeletcion.end.text.delegate = self
 		routeSeletcion.switcher.addTarget(self, action: #selector(switchRoutes), for: .touchUpInside)
@@ -51,7 +55,7 @@ class NaviController: UIViewController, MAMapViewDelegate, AMapSearchDelegate {
 		})
 	}
 	
-	func btnClick(_: NavButton) {
+	@objc func btnClick(_: NavButton) {
 		if navBtn?.titleLabel?.text == "路径规划" {
 			let driving = DrivingCalculateController().then({
 				$0.startPoint = AMapNaviPoint.location(withLatitude: CGFloat((startLocation?.latitude)!), longitude: CGFloat((startLocation?.longitude)!))
@@ -65,7 +69,7 @@ class NaviController: UIViewController, MAMapViewDelegate, AMapSearchDelegate {
 		}
 	}
 	
-	func switchRoutes() {
+	@objc func switchRoutes() {
 		if routeSeletcion.start.text.text?.characters.count == 0 || routeSeletcion.end.text.text?.characters.count == 0 {
 			HUD.flash(.labeledError(title: "请选择线路", subtitle: nil), delay: 0.7)
 			return

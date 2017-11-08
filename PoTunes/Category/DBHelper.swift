@@ -31,7 +31,7 @@ class DBHelper: NSObject {
 		
 		self.queue!.inDatabase({ (db) in
 			
-			complete(db!)
+			complete(db)
 		
 		})
 		

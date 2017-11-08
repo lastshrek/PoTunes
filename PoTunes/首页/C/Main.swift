@@ -41,14 +41,18 @@ class Main: UIViewController, UIGestureRecognizerDelegate, UIAlertViewDelegate {
 	override var prefersStatusBarHidden : Bool {
 		return true
 	}
-	
+	// 设置导航栏颜色
 	override var preferredStatusBarStyle: UIStatusBarStyle {
 		return .lightContent
 	}
 	
 	// MARK: - 添加ScrollView
 	func setupScrollView() {
-		scrollView.frame = self.view.bounds
+		if UIScreen.main.bounds.size.height == 812 {
+			scrollView.frame = CGRect(x: 0, y: 0, width:self.view.bounds.size.width, height: self.view.bounds.size.height)
+		} else {
+			scrollView.frame = self.view.bounds
+		}
 		scrollView.delegate = self
 		view.addSubview(scrollView)
 	}
@@ -76,7 +80,7 @@ class Main: UIViewController, UIGestureRecognizerDelegate, UIAlertViewDelegate {
 		db?.open()
 		let createStr = "CREATE TABLE IF NOT EXISTS t_downloading (id integer PRIMARY KEY, author text, title text, sourceURL text,indexPath integer,thumb text,album text,downloaded bool, identifier text);CREATE TABLE IF NOT EXISTS t_playlists (id integer PRIMARY KEY, title text, cover text, p_id integer);"
 		db?.executeStatements(createStr)
-		db?.shouldCacheStatements()
+		db?.shouldCacheStatements
 	}
 }
 // MARK: - 向下滑动BarItem

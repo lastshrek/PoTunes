@@ -12,8 +12,8 @@
 ///该类是覆盖在球面墨卡托投影上的图片tiles的数据源
 @interface MATileOverlay : NSObject <MAOverlay>
 
-///默认tileSize 256x256
-@property (readonly) CGSize tileSize;
+///瓦片大小，默认是256x256, 最小支持64*64
+@property (nonatomic, assign) CGSize tileSize;
 
 ///tileOverlay的可见最小Zoom值
 @property NSInteger minimumZ;
@@ -29,6 +29,9 @@
 
 ///区域外接矩形，可用来设定tileOverlay的可渲染区域
 @property (nonatomic) MAMapRect boundingMapRect;
+
+///是否停止不在显示区域内的瓦片下载，默认NO. since 5.3.0
+@property (nonatomic, assign) BOOL disableOffScreenTileLoading;
 
 /**
  * @brief 根据指定的URLTemplate生成tileOverlay
@@ -64,5 +67,11 @@ typedef struct MATileOverlayPath MATileOverlayPath;
  * @param result 用来传入tile数据或加载tile失败的error访问的回调block
  */
 - (void)loadTileAtPath:(MATileOverlayPath)path result:(void (^)(NSData *tileData, NSError *error))result;
+
+/**
+ * @brief 取消请求瓦片，当地图显示区域发生变化时，会取消显示区域外的瓦片的下载, 当disableOffScreenTileLoading=YES时会被调用。since 5.3.0
+ * @param path  tile path
+ */
+- (void)cancelLoadOfTileAtPath:(MATileOverlayPath)path;
 
 @end

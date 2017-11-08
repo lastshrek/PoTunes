@@ -7,10 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "AMapSearchError.h"
+#import "AMapNearbyUploadInfo.h"
 
 @class AMapNearbySearchManager;
-@class AMapNearbyUploadInfo;
 
 ///附近搜索代理
 @protocol AMapNearbySearchManagerDelegate <NSObject>

@@ -26,7 +26,7 @@ class AlbumDownloadController: UITableViewController {
 	lazy var downloadingArray: Array<String> = {
 		var temp: Array = [] as Array<String>
 		let query = "SELECT * FROM t_downloading WHERE downloaded = 0;"
-		let s = self.tracksDB.executeQuery(query, withArgumentsIn: nil)
+		let s = self.tracksDB.executeQuery(query, withArgumentsIn: [])
 		while (s?.next())! {
 			let identifier = (s?.string(forColumn: "author")!)! + " - " + (s?.string(forColumn: "title")!)!
 			temp.append(identifier)
@@ -38,7 +38,12 @@ class AlbumDownloadController: UITableViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		tableView.separatorStyle = .none
-		tableView.contentInset = UIEdgeInsetsMake(0, 0, 64, 0)
+        //TODO: 宏
+		if UIScreen.main.bounds.size.height == 812 {
+			tableView.contentInset = UIEdgeInsetsMake(44, 0, 34, 0)
+		} else {
+            tableView.contentInset = UIEdgeInsetsMake(64, 0, 0, 0)
+		}
 		tableView.register(DownloadedCell.self, forCellReuseIdentifier: "downloaded")
 		downloadAlbums = reloadDownloadAlbums()
 		getNotification()
@@ -66,7 +71,6 @@ extension AlbumDownloadController {
 	}
 	
 	override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		// #warning Incomplete implementation, return the number of rows
 		if section == 0 {
 			return 2
 		}
@@ -88,7 +92,7 @@ extension AlbumDownloadController {
 		} else {
 			let album = downloadAlbums?[indexPath.row]
 			let query = "SELECT * FROM t_downloading WHERE album = '\(album!)';"
-			let s = tracksDB.executeQuery(query, withArgumentsIn: nil)
+			let s = tracksDB.executeQuery(query, withArgumentsIn: [])
 
 			cell.textLabel?.text = album!
             if (s?.next())! {
@@ -111,7 +115,7 @@ extension AlbumDownloadController {
 			var tracks: Array<TrackEncoding> = []
 			let title = downloadAlbums?[indexPath.row]
 			let query = "SELECT * FROM t_downloading WHERE album = '\(title!)' and downloaded = 1 order by indexPath;"
-            let s = tracksDB.executeQuery(query, withArgumentsIn: nil)
+            let s = tracksDB.executeQuery(query, withArgumentsIn: [])
             
             while (s?.next())! {
 				let artist = (s?.string(forColumn: "author"))!
@@ -152,7 +156,7 @@ extension AlbumDownloadController {
 				let download = DownloadController()
 				var tracks: Array<TrackEncoding> = []
 				let query = "SELECT * FROM t_downloading WHERE downloaded = 1;"
-				let s = tracksDB.executeQuery(query, withArgumentsIn: nil)
+				let s = tracksDB.executeQuery(query, withArgumentsIn: [])
 				
 				while (s?.next())! {
 					let artist = (s?.string(forColumn: "author"))!
@@ -192,7 +196,7 @@ extension AlbumDownloadController {
 		if editingStyle == .delete {
 			let album = self.downloadAlbums?[indexPath.row]
 			let query = "SELECT * FROM t_downloading WHERE album = '\(album!)' and downloaded = 1;"
-			let s = tracksDB.executeQuery(query, withArgumentsIn: nil)
+			let s = tracksDB.executeQuery(query, withArgumentsIn: [])
 			let path = self.dirDoc()
 			let manager = FileManager.default
 
@@ -208,7 +212,7 @@ extension AlbumDownloadController {
 				}
 			}
 			let delete = "DELETE FROM t_downloading WHERE album = '\(album!)' and downloaded = 1;"
-			tracksDB.executeUpdate(delete, withArgumentsIn: nil)
+			tracksDB.executeUpdate(delete, withArgumentsIn: [])
 			s?.close()
 			downloadAlbums?.remove(at: indexPath.row)
 			// Delete the row from the data source
@@ -227,7 +231,7 @@ extension AlbumDownloadController {
 		center.addObserver(self, selector: #selector(download(sender:)), name: Notification.Name("download"), object: nil)
 	}
 	
-	func fullAlbum(sender: Notification) {
+    @objc func fullAlbum(sender: Notification) {
 		let userInfo: Dictionary = sender.userInfo!
 		let tracks = (userInfo["tracks"] as! Array<Track>?)!
 		let title = userInfo["album"] as! String
@@ -249,7 +253,7 @@ extension AlbumDownloadController {
 			let sql = "INSERT INTO t_downloading(author,title,sourceURL,indexPath,thumb,album,downloaded,identifier) VALUES('\(artist)','\(name)','\(track.url)','\(track.ID)','\(track.cover)','\(album)','0', '\(identifier)');"
 			
 			queue.inDeferredTransaction({ (database, roolback) in
-				database?.executeUpdate(sql, withArgumentsIn: nil)
+				database.executeUpdate(sql, withArgumentsIn: [])
 			})
 			
 			if self.op == nil || (self.op?.isCancelled)! || (self.op?.isFinished)! || (self.op?.isPaused())! {
@@ -260,7 +264,7 @@ extension AlbumDownloadController {
 		}
 	}
 	
-	func download(sender: Notification) {
+    @objc func download(sender: Notification) {
 		let userInfo: Dictionary = sender.userInfo!
 		let track = userInfo["track"] as! TrackEncoding
 		let title = userInfo["title"] as! String
@@ -348,11 +352,11 @@ extension AlbumDownloadController {
 			op?.setCompletionBlockWithSuccess({ (operation, responseObject) in
 				// change download Status
 				self.queue.inDatabase({ (database) in
-					database?.executeUpdate("UPDATE t_downloading SET downloaded = 1 WHERE identifier = '\(identifier)';", withArgumentsIn: nil)
+					database.executeUpdate("UPDATE t_downloading SET downloaded = 1 WHERE identifier = '\(identifier)';", withArgumentsIn: [])
 					// delete identifier and other infos
 					let query = "SELECT * FROM t_downloading WHERE downloaded = 0;"
 					var tempArray: Array<String> = []
-					let s = database?.executeQuery(query, withArgumentsIn: nil)
+					let s = database.executeQuery(query, withArgumentsIn: [])
 					
 					while (s?.next())! {
 						let identifier = (s?.string(forColumn: "author"))! + " - " + (s?.string(forColumn: "title"))!
@@ -382,7 +386,7 @@ extension AlbumDownloadController {
 							
 						}
 						let query = "SELECT * FROM t_downloading WHERE author = '\(author)' and title = '\(title)';"
-						let s = database?.executeQuery(query, withArgumentsIn: nil)
+						let s = database.executeQuery(query, withArgumentsIn: [])
 						
 						if (s?.next())! {
 							let urlStr = s?.string(forColumn: "sourceURL")
@@ -412,7 +416,7 @@ extension AlbumDownloadController {
 			queue.inDatabase({ (database) in
 				HUD.show(.label("数据升级中请稍候"))
 
-				let s = database?.executeQuery(query, withArgumentsIn: nil)
+				let s = database.executeQuery(query, withArgumentsIn: [])
 				let manager = FileManager.default
 				let rootPath = self.dirDoc()
 				
@@ -425,7 +429,7 @@ extension AlbumDownloadController {
 						let identifier = self.getIdentifier(urlStr: urlStr)
 						let identifierUpdate = "UPDATE t_downloading SET identifier = '\(identifier)' WHERE sourceURL = '\(urlStr)'"
 						DispatchQueue.global(qos: .background).async {
-							database?.executeUpdate(identifierUpdate, withArgumentsIn: nil)
+							database.executeUpdate(identifierUpdate, withArgumentsIn: [])
 						}
 						
 						let artist = s?.string(forColumn: "author")
@@ -463,7 +467,7 @@ extension AlbumDownloadController: TrackListDelegate {
 		
 		op?.cancel()
 		queue.inDatabase { (database) in
-			database?.executeUpdate(delete, withArgumentsIn: [identifier])
+			database.executeUpdate(delete, withArgumentsIn: [identifier])
 			let index = self.downloadAlbums?.index(of: album)
 			
 			if index != nil {
@@ -536,7 +540,7 @@ extension AlbumDownloadController: DownloadingControllerDelegate {
 		
 		// 删除本地文件
 		let select = "SELECT * FROM t_downloading WHERE downloaded = 0;"
-		let s = tracksDB.executeQuery(select, withArgumentsIn: nil)
+		let s = tracksDB.executeQuery(select, withArgumentsIn: [])
 		let manager = FileManager.default
 
 		while s?.next() == true {
@@ -555,7 +559,7 @@ extension AlbumDownloadController: DownloadingControllerDelegate {
 		//delete the not downloaded datas
 		let delete = "DELETE FROM t_downloading WHERE downloaded = 0;"
 		queue.inTransaction { (database, _) in
-			database?.executeUpdate(delete, withArgumentsIn: nil)
+			database.executeUpdate(delete, withArgumentsIn: [])
 			// query dinstint albums
 			self.downloadingArray.removeAll()
 			self.tableView.reloadData()
@@ -565,7 +569,7 @@ extension AlbumDownloadController: DownloadingControllerDelegate {
 	func reloadDownloadAlbums() -> Array<String>{
 		var temp: Array = [] as Array<String>
 		let distinct = "SELECT distinct album FROM t_downloading;"
-		let s = self.tracksDB.executeQuery(distinct, withArgumentsIn: nil)
+		let s = self.tracksDB.executeQuery(distinct, withArgumentsIn: [])
 		
 		while (s?.next())! {
 			let album = s?.string(forColumn: "album")!

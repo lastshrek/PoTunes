@@ -34,19 +34,20 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 
 @interface PlayerInterface()<LTInfiniteScrollViewDelegate, LTInfiniteScrollViewDataSource, UIApplicationDelegate>
 
-@property (nonatomic, weak) UIView* backgroundView;
-@property (nonatomic, weak) UIImageView* reflection;
-@property (nonatomic, weak) LDProgressView* progress;
-@property (nonatomic, weak) LDProgressView* bufferingIndicator;
-@property (nonatomic, weak) UIView* timeView;
+@property (nonatomic, weak) ASDisplayNode *backgroundView;
+@property (nonatomic, weak) ASImageNode *reflection;
+@property (nonatomic, weak) LDProgressView *progress;
+@property (nonatomic, weak) LDProgressView *bufferingIndicator;
+@property (nonatomic, weak) ASDisplayNode *timeView;
 @property (nonatomic, weak) UILabel* currentTime;
 @property (nonatomic, weak) UILabel* leftTime;
 @property (nonatomic, weak) TrackLabel* name;
 @property (nonatomic, weak) TrackLabel* artist;
-@property (nonatomic, weak) UIImageView* playModeView;
+@property (nonatomic, weak) UIImageView *playModeView;
 @property (nonatomic, weak) LrcView* lrcView;
-@property (nonatomic, weak) UIImageView* nowCover;
-@property (nonatomic, weak) UIColor* currentProgressColor;
+@property (nonatomic, weak) ASNetworkImageNode *nowCover;
+@property (nonatomic, weak) UIColor *currentProgressColor;
+
 
 @property (nonatomic, assign) CGFloat progressOriginal;
 @property (nonatomic, assign) CGPoint originalPoint;
@@ -62,6 +63,7 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 @property (nonatomic, strong) NSTimer* playbackTimer;
 @property (nonatomic, strong) CADisplayLink* lrcTimer;
 @property (nonatomic, strong) FMDatabase* tracksDB;
+
 @end
 
 @implementation PlayerInterface
@@ -75,8 +77,8 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 	}
 	return _tracksDB;
 }
-- (instancetype)initWithFrame:(CGRect)frame {
-	self = [super initWithFrame:frame];
+- (instancetype)init {
+	self = [super init];
 	if (self) {
 		[self setup];
 	}
@@ -85,7 +87,6 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 - (void)setup {
 	[[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
 	[self initialSubviews];
-	[self addGestureRecognizer];
 	//获取上次播放曲目
 	[self getLastPlayTrackAndPlaystate];
 	/** 注册通知 */
@@ -93,45 +94,48 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 	//设置appdelegate的block
 	[self setupDelegateBlock];
 }
+
 #pragma mark - initialSubViews
 - (void)initialSubviews {
 	self.streamer = [[FSAudioController alloc] init];
 	self.currentProgressColor = [UIColor whiteColor];
-	self.streamer = [[FSAudioController alloc] init];
 	self.repeatMode = PCAudioRepeatModeTowards;
 	self.paused = YES;
+	self.userInteractionEnabled = YES;
 	//底
-	UIView *backgroundView = [[UIView alloc] init];
-	backgroundView.backgroundColor = [UIColor blackColor];
-	[self addSubview:backgroundView];
+	ASDisplayNode *backgroundView = [[ASDisplayNode alloc] init];
+	[self addSubnode:backgroundView];
 	self.backgroundView = backgroundView;
+	self.backgroundColor = [UIColor whiteColor];
 	//倒影封面
-	UIImageView *reflection = [[UIImageView alloc] init];
+	ASImageNode *reflection = [[ASImageNode alloc] init];
 	reflection.image = [[UIImage imageNamed:@"noArtwork"] reflectionWithAlpha:0.4];
 	reflection.contentMode = UIViewContentModeScaleAspectFit;
+    reflection.userInteractionEnabled = true;
 	self.reflection = reflection;
-	[self.backgroundView addSubview:reflection];
-	[self.backgroundView sendSubviewToBack:reflection];
+	[self.backgroundView addSubnode:reflection];
+	[self.backgroundView addSubnode:reflection];
 	//封面队列
 	LTInfiniteScrollView *coverScroll = [[LTInfiniteScrollView alloc] init];
+	coverScroll.backgroundColor = [UIColor whiteColor];
 	coverScroll.delegate = self;
 	coverScroll.dataSource = self;
 	coverScroll.maxScrollDistance = 2;
 	[coverScroll reloadDataWithInitialIndex:0];
-	[self.backgroundView addSubview:coverScroll];
 	self.coverScroll = coverScroll;
+	[self.backgroundView.view addSubview:coverScroll];
 	//缓冲条
 	LDProgressView* bufferingIndicator = [self createProgressViewByShowBackground:@YES type:LDProgressSolid backgroundColor:[UIColor blackColor]];
-	[self.backgroundView addSubview:bufferingIndicator];
+	[self.backgroundView.view addSubview:bufferingIndicator];
 	self.bufferingIndicator = bufferingIndicator;
 	
 	//进度条
 	LDProgressView* progress = [self createProgressViewByShowBackground:@NO type:LDProgressGradient backgroundColor:[UIColor clearColor]];
-	[self.backgroundView addSubview:progress];
+	[self.backgroundView.view addSubview:progress];
 	self.progress = progress;
 	//开始时间和剩余时间
-	UIView* timeView = [[UIView alloc] init];
-	[self.backgroundView addSubview:timeView];
+	ASDisplayNode *timeView = [[ASDisplayNode alloc] init];
+	[self.backgroundView addSubnode:timeView];
 	self.timeView = timeView;
 	//当前播放时间
 	UILabel* currentTime = [self createLabelByAutoresizingMask:UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleLeftMargin
@@ -139,7 +143,7 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 													 textColor:[UIColor whiteColor]
 														  text:nil
 												 textAlignment:NSTextAlignmentLeft];
-	[self.timeView addSubview:currentTime];
+	[self.timeView.view addSubview:currentTime];
 	self.currentTime = currentTime;
 	//剩余时间
 	UILabel* leftTime = [self createLabelByAutoresizingMask:UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleLeftMargin
@@ -147,54 +151,56 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 													 textColor:[UIColor whiteColor]
 														  text:nil
 												 textAlignment:NSTextAlignmentRight];
-	[self.timeView addSubview:leftTime];
+	[self.timeView.view addSubview:leftTime];
 	self.leftTime = leftTime;
 	/** 歌曲名 */
 	TrackLabel* name = [[TrackLabel alloc] init];
-	[self.backgroundView addSubview:name];
+	[self.backgroundView.view addSubview:name];
 	self.name = name;
 	//歌手名
 	TrackLabel* artist = [[TrackLabel alloc] init];
-	[self.backgroundView addSubview:artist];
+	[self.backgroundView.view addSubview:artist];
 	self.artist = artist;
 	//专辑名
 	TrackLabel* album = [[TrackLabel alloc] init];
-	[self.backgroundView addSubview:album];
+	[self.backgroundView.view addSubview:album];
 	album.text = @"尚未播放歌曲";
 	self.album = album;
 	//播放模式
 	UIImageView* playModeView = [[UIImageView alloc] init];
 	playModeView.image = [UIImage imageNamed:@"repeatOnB.png"];
 	playModeView.contentMode = UIViewContentModeScaleAspectFit;
-	[self.backgroundView addSubview:playModeView];
+	[self.backgroundView.view addSubview:playModeView];
 	self.playModeView = playModeView;
 	//歌词
 	LrcView* lrcView = [[LrcView alloc] init];
 	lrcView.hidden = YES;
 	lrcView.renderStatic = NO;
-	[self addSubview:lrcView];
+	[self.view addSubview:lrcView];
 	self.lrcView = lrcView;
 	//当前封面
-	UIImageView* nowCover = [[UIImageView alloc] init];
-	nowCover.image = [UIImage imageNamed:@"noArtwork"];
+	ASNetworkImageNode* nowCover = [[ASNetworkImageNode alloc] init];
+	nowCover.defaultImage = [UIImage imageNamed:@"noArtwork"];
 	self.nowCover = nowCover;
-	self.nowCover.hidden = YES;
-	[self addSubview:nowCover];
-	[self sendSubviewToBack:self.nowCover];
+	self.nowCover.view.hidden = YES;
+	[self addSubnode:nowCover];
+	[self.view sendSubviewToBack:self.nowCover.view];
 	
 }
-- (void)layoutSubviews {
-	[super layoutSubviews];
+
+- (ASLayout *)calculateLayoutThatFits:(ASSizeRange)constrainedSize {
+	[super calculateLayoutThatFits:constrainedSize];
+	CGFloat height = constrainedSize.max.height;
+	CGFloat width = constrainedSize.max.width;
+	self.backgroundView.frame = CGRectMake(0, 0, width, height);
+	self.reflection.frame = CGRectMake(0, width, width, width);
 	
-	CGFloat height = [self height];
-	CGFloat width = [self width];
-	self.backgroundView.frame = self.bounds;
-	self.reflection.frame = CGRectMake(0, height - width, width, width);
-	self.nowCover.frame = CGRectMake(0, 0, width, width);
-	self.coverScroll.frame = CGRectMake(0, 0, width, width);
 	self.bufferingIndicator.frame = CGRectMake(0, width, width, 10);
 	self.progress.frame = CGRectMake(0, width, width, 10);
+	// 针对iPhone X脚底适配
 	self.playModeView.frame = CGRectMake(width / 2 - 10, height - 50, 20, 20);
+	self.nowCover.frame = CGRectMake(0, 0, width, width);
+	self.coverScroll.frame = CGRectMake(0, 0, width, width);
 	self.name.frame = CGRectMake(0, width + 20, width, 40);
 	self.artist.frame = CGRectMake(0, width + 60, width, 40);
 	self.album.frame = CGRectMake(0, width + 100, width, 40);
@@ -202,7 +208,11 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 	self.currentTime.frame = CGRectMake(2, 0, width / 2, 20);
 	self.leftTime.frame = CGRectMake(width / 2 - 2, 0, width / 2, self.timeView.bounds.size.height);
 	self.lrcView.frame = CGRectMake(0, 0, width, width);
+	NSArray *children = [NSArray arrayWithObjects:self.backgroundView, self.reflection, self.nowCover, nil];
+	return (ASLayout *)[ASStackLayoutSpec stackLayoutSpecWithDirection:ASStackLayoutDirectionVertical spacing:0 justifyContent:ASStackLayoutJustifyContentStart alignItems:ASStackLayoutAlignItemsEnd children:children];
+
 }
+
 - (LDProgressView *)createProgressViewByShowBackground:(NSNumber*)showBackground
 												  type: (LDProgressType)type
 									   backgroundColor:(UIColor*)backgroundColor {
@@ -235,52 +245,7 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 	label.text = text;
 	return label;
 }
-#pragma mark - GestureRecognizer
-- (void)addGestureRecognizer {
-	//播放和暂停
-	UITapGestureRecognizer* singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(playOrPause)];
-	singleTap.numberOfTapsRequired = 1;
-	singleTap.numberOfTouchesRequired = 1;
-	[self addGestureRecognizer:singleTap];
-	//上一首
-	UISwipeGestureRecognizer* swipeFromLeft = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(playNext)];
-	swipeFromLeft.direction = UISwipeGestureRecognizerDirectionRight;
-	swipeFromLeft.numberOfTouchesRequired = 1;
-	[self addGestureRecognizer:swipeFromLeft];
-	//下一首
-	UISwipeGestureRecognizer* swipeFromRight = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(playPrevious)];
-	swipeFromLeft.direction = UISwipeGestureRecognizerDirectionLeft;
-	swipeFromLeft.numberOfTouchesRequired = 1;
-	[self addGestureRecognizer:swipeFromRight];
-	//快进
-	UILongPressGestureRecognizer* longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(doSeeking:)];
-	longPress.numberOfTouchesRequired = 1;
-	longPress.minimumPressDuration = 0.5;
-	[self addGestureRecognizer:longPress];
-	//随机
-	UISwipeGestureRecognizer* doubleswipeFromRight = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(playShuffle:)];
-	doubleswipeFromRight.direction = UISwipeGestureRecognizerDirectionRight;
-	doubleswipeFromRight.numberOfTouchesRequired = 2;
-	[self addGestureRecognizer:doubleswipeFromRight];
-	//顺序播放
-	UISwipeGestureRecognizer* doubleswipeFromLeft = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(playShuffle:)];
-	doubleswipeFromLeft.direction = UISwipeGestureRecognizerDirectionRight;
-	doubleswipeFromLeft.numberOfTouchesRequired = 2;
-	[self addGestureRecognizer:doubleswipeFromLeft];
-	//单曲循环
-	UITapGestureRecognizer* doubleTouch = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleRewind)];
-	doubleTouch.numberOfTouchesRequired = 2;
-	doubleTouch.numberOfTapsRequired = 1;
-	[self addGestureRecognizer:doubleTouch];
-	//展示歌词
-	UITapGestureRecognizer* doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showLyrics)];
-	doubleTap.numberOfTapsRequired = 2;
-	doubleTap.numberOfTouchesRequired = 1;
-	[self addGestureRecognizer:doubleTap];
-	
-	[singleTap requireGestureRecognizerToFail:doubleTouch];
-	[singleTap requireGestureRecognizerToFail:doubleTap];
-}
+
 - (void)playOrPause {
 	if (self.tracks.count == 0) {
 		[SVProgressHUD showErrorWithStatus:@"向上滑动，更多精彩"];
@@ -361,33 +326,28 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 	FSStreamPosition seek;
 	CGPoint lastPoint;
 	if (recognizer.state == UIGestureRecognizerStateBegan) {
-		//缩小
-		CGRect tempBounds = self.backgroundView.bounds;
-		tempBounds.size.width -= 40;
-		tempBounds.size.height -= 40;
-		self.backgroundView.bounds = tempBounds;
+//        //缩小
+//        CGRect tempBounds = self.backgroundView.bounds;
+//        tempBounds.size.width -= 40;
+//        tempBounds.size.height -= 40;
+//        self.backgroundView.bounds = tempBounds;
 		
 		//获取按住播放时间
 		FSStreamPosition now = self.streamer.activeStream.currentTimePlayed;
 		self.progressOriginal = now.position;
-		self.originalPoint = [recognizer locationInView:self];
+		self.originalPoint = [recognizer locationInView:self.view];
 	}
 	//改变进度条的值
 	if (recognizer.state == UIGestureRecognizerStateChanged) {
-		CGPoint changingPoint = [recognizer locationInView:self];
-		CGFloat seekForwardPercent =  self.progressOriginal + ((changingPoint.x - self.originalPoint.x) / self.width);
+		CGPoint changingPoint = [recognizer locationInView:self.view];
+		CGFloat seekForwardPercent =  self.progressOriginal + ((changingPoint.x - self.originalPoint.x) / [[UIScreen mainScreen] bounds].size.width);
 		if (seekForwardPercent >= 1 || seekForwardPercent < 0) { return; }
 		self.progress.progress = seekForwardPercent;
 	}
 	
 	if (recognizer.state == UIGestureRecognizerStateEnded) {
-		//还原
-		lastPoint = [recognizer locationInView:self];
-		
-		self.backgroundView.frame = self.frame;
-		self.playModeView.frame = CGRectMake(self.width / 2 - 10, self.height - 20, 20, 20);
 		//如果没有移动不移动进度条
-		if (lastPoint.x == self.originalPoint.x) { return; }
+        if (lastPoint.x == self.originalPoint.x) { return; }
 		seek.position = self.progress.progress;
 		[self.streamer.activeStream seekToPosition:seek];
 	}
@@ -588,7 +548,6 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 - (void)changeInterface:(NSInteger)index {
 	Track* track = self.tracks[self.index];
 	NSString* urlStr = [NSString stringWithFormat:@"%@!/fw/600", track.cover];
-
 	self.name.text = track.name;
 	self.artist.text = track.artist;
 	self.progress.progress = 0;
@@ -598,15 +557,24 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 	if (self.lrcView.hidden == NO) {
 		[self loadLyrics:track.ID];
 	}
-	dispatch_async(dispatch_get_main_queue(), ^{
+	self.nowCover.URL = [NSURL URLWithString:urlStr];
+	self.nowCover.imageModificationBlock = ^UIImage * _Nullable(UIImage * _Nonnull image) {
+		self.reflection.image = [image reflectionWithAlpha:0.4];
+		[self refreshProgressColor:image];
+		[self refreshBlurView];
+		return image;
+	};
+//	dispatch_async(dispatch_get_main_queue(), ^{
 		// 更新界面
-		[self.nowCover sd_setImageWithURL:[NSURL URLWithString:urlStr] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-			self.reflection.image = [image reflectionWithAlpha:0.4];
-			self.nowCover.image = image;
-			[self refreshProgressColor:image];
-			[self refreshBlurView];
-		}];
-	});
+//		[self.nowCover sd_setImageWithURL:[NSURL URLWithString:urlStr] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+//			self.reflection.image = [image reflectionWithAlpha:0.4];
+//			self.nowCover.image = image;
+//			[self refreshProgressColor:image];
+//			[self refreshBlurView];
+//		}];
+//		self.nowCover.URL = [NSURL URLWithString:urlStr];
+//
+//	});
 	
 }
 - (void)refreshBlurView {
@@ -658,15 +626,9 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 		});
 	}
 }
-
-
-
-
 - (void)audioSessionWasInterrupted:(NSNotification *)notification {
-	NSLog(@"%@", notification);
 	int reason = [notification.userInfo[AVAudioSessionInterruptionTypeKey] intValue];
 	if (AVAudioSessionInterruptionTypeBegan == reason) {
-		NSLog(@"打断来了");
 		if (self.streamer.activeStream.isPlaying) {
 			[self.streamer.activeStream pause];
 			self.paused = YES;
@@ -675,7 +637,6 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 		return;
 	}
 	if (AVAudioSessionInterruptionTypeEnded == reason) {
-		NSLog(@"打断走了");
 		if (notification.userInfo[@"refreshProgress"] != nil) return;
 		if (self.paused == YES && self.interuptReason == 1) {
 			[self playOrPause];
@@ -747,10 +708,6 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 	self.progress.progress = self.streamer.activeStream.currentTimePlayed.position;
 	//设置当前时间以及剩余时间
 	NSInteger totalLeftSecond = total.minute * 60 + total.second - cur.minute * 60 - cur.second;
-	
-//	printf("总时长%u\n", total.minute * 60 + total.second);
-//	printf("已播放%u\n", cur.minute * 60 + cur.second);
-	
 
 	NSString *curSecond = [NSString stringWithFormat:@"%d",cur.second];
 	NSString *leftMin = [NSString stringWithFormat:@"%ld",totalLeftSecond / 60];
@@ -854,25 +811,20 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 	return 1;
 }
 - (UIView *)viewAtIndex:(NSInteger)index reusingView:(UIView *)view {
-	CGFloat size = self.bounds.size.width;
-	UIImageView* cover = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, size, size)];
+	CGFloat width = [[UIScreen mainScreen] bounds].size.width;
+	ASNetworkImageNode *cover = [[ASNetworkImageNode alloc] init];
+	cover.bounds = CGRectMake(0, 0, width, width);
+	cover.backgroundColor = [UIColor whiteColor];
+	cover.defaultImage = [UIImage imageNamed:@"noArtwork"];
 	
 	if (self.tracks.count > 0) {
-		Track* track = self.tracks[index];
-		NSString* urlStr = [NSString stringWithFormat:@"%@!/fw/600", track.cover];
-		NSURL* url = [NSURL URLWithString:urlStr];
-		
-		[cover sd_setImageWithURL:url placeholderImage:[UIImage imageNamed:@"noArtwork"]
-						completed:^(UIImage *image,
-									NSError *error,
-									SDImageCacheType cacheType,
-									NSURL *imageURL) {
-							
-		}];
-	} else {
-		cover.image = [UIImage imageNamed:@"noArtwork"];
+		Track *track = self.tracks[index];
+		NSString *urlStr = [NSString stringWithFormat:@"%@!/fw/600", track.cover];
+		NSURL *url = [NSURL URLWithString:urlStr];
+		cover.URL = url;
 	}
-	return cover;
+	NSLog(@"%ld", index);
+	return cover.view;
 }
 #pragma mark - LTInfiniteScrollViewDelegate
 - (void)updateView:(UIView *)view withProgress:(CGFloat)progress scrollDirection:(ScrollDirection)direction {}

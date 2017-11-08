@@ -26,7 +26,8 @@ typedef NS_ENUM(NSInteger, AMapLocationErrorCode)
     AMapLocationErrorBadURL = 7,                ///<URL异常
     AMapLocationErrorNotConnectedToInternet = 8,///<连接异常
     AMapLocationErrorCannotConnectToHost = 9,   ///<服务器连接失败
-    AMapLocationErrorRegionMonitoringFailure = 10,///<地理围栏错误
+    AMapLocationErrorRegionMonitoringFailure=10,///<地理围栏错误
+    AMapLocationErrorRiskOfFakeLocation = 11,   ///<存在虚拟定位风险
 };
 
 ///AMapLocation Region State
@@ -56,13 +57,13 @@ typedef NS_ENUM(NSInteger, AMapLocationRegionState)
 @property (nonatomic, copy) NSString *district;
 
 ///乡镇
-@property (nonatomic, copy) NSString *township __attribute((deprecated("该字段从v2.2.0版本起不再返回数据,建议您使用AMapSearchKit的逆地理功能获取.")));
+@property (nonatomic, copy) NSString *township __attribute__((deprecated("该字段从v2.2.0版本起不再返回数据,建议您使用AMapSearchKit的逆地理功能获取.")));
 
 ///社区
-@property (nonatomic, copy) NSString *neighborhood __attribute((deprecated("该字段从v2.2.0版本起不再返回数据,建议您使用AMapSearchKit的逆地理功能获取.")));
+@property (nonatomic, copy) NSString *neighborhood __attribute__((deprecated("该字段从v2.2.0版本起不再返回数据,建议您使用AMapSearchKit的逆地理功能获取.")));
 
 ///建筑
-@property (nonatomic, copy) NSString *building __attribute((deprecated("该字段从v2.2.0版本起不再返回数据,建议您使用AMapSearchKit的逆地理功能获取.")));
+@property (nonatomic, copy) NSString *building __attribute__((deprecated("该字段从v2.2.0版本起不再返回数据,建议您使用AMapSearchKit的逆地理功能获取.")));
 
 ///城市编码
 @property (nonatomic, copy) NSString *citycode;

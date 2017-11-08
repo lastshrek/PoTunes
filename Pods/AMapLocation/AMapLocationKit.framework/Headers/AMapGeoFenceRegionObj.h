@@ -21,7 +21,7 @@ typedef NS_ENUM(NSInteger, AMapGeoFenceRegionStatus)
 #pragma mark - AMapGeoFenceRegion
 
 
-///地理围栏基类，不可直接使用。（since v2.3.0）
+///地理围栏基类，不可直接使用。（since 2.3.0）
 @interface AMapGeoFenceRegion : NSObject<NSCopying>
 
 
@@ -42,7 +42,7 @@ typedef NS_ENUM(NSInteger, AMapGeoFenceRegionStatus)
 #pragma mark - AMapLocationCircleRegion
 
 
-///圆形地理围栏（since v2.3.0）
+///圆形地理围栏（since 2.3.0）
 @interface AMapGeoFenceCircleRegion : AMapGeoFenceRegion
 
 
@@ -59,7 +59,7 @@ typedef NS_ENUM(NSInteger, AMapGeoFenceRegionStatus)
 #pragma mark -AMapGeoFencePolygonRegion
 
 
-///多边形地理围栏（since v2.3.0）
+///多边形地理围栏（since 2.3.0）
 @interface AMapGeoFencePolygonRegion : AMapGeoFenceRegion
 
 
@@ -77,7 +77,7 @@ typedef NS_ENUM(NSInteger, AMapGeoFenceRegionStatus)
 #pragma mark -AMapGeoFencePOIRegion
 
 
-///兴趣点（POI）地理围栏（since v2.3.0）
+///兴趣点（POI）地理围栏（since 2.3.0）
 @interface AMapGeoFencePOIRegion : AMapGeoFenceCircleRegion
 
 
@@ -91,7 +91,7 @@ typedef NS_ENUM(NSInteger, AMapGeoFenceRegionStatus)
 #pragma mark -AMapGeoFenceDistrictRegion
 
 
-///行政区划地理围栏（since v2.3.0）
+///行政区划地理围栏（since 2.3.0）
 @interface AMapGeoFenceDistrictRegion : AMapGeoFenceRegion
 
 

@@ -23,7 +23,11 @@ class UserGuideController: UIViewController {
 			$0.frame = self.view.bounds
 			$0.dataSource = self
 			$0.delegate = self
-			$0.contentInset = UIEdgeInsetsMake(0, 0, 64, 0)
+			if UIScreen.main.bounds.size.height == 812 {
+				$0.contentInset = UIEdgeInsetsMake(44, 0, 64, 0)
+			} else {
+				$0.contentInset = UIEdgeInsetsMake(64, 0, 64, 0)
+			}
 			$0.register(UITableViewCell.self, forCellReuseIdentifier: "guide")
 		})
 		self.view.addSubview(tableView)

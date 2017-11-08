@@ -16,7 +16,7 @@
 #import <CoreLocation/CoreLocation.h>
 
 ///返回轨迹点定义
-@interface MATracePoint : NSObject
+@interface MATracePoint : NSObject<NSCoding>
 
 ///纬度坐标
 @property (nonatomic, assign) CLLocationDegrees latitude;

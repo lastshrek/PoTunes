@@ -3,7 +3,7 @@
 //  AMapNaviKit
 //
 //  Created by AutoNavi on 16/1/7.
-//  Copyright © 2016年 AutoNavi. All rights reserved.
+//  Copyright © 2016年 Amap. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -13,9 +13,9 @@
 #ifndef AMapNaviVersion_h
 #define AMapNaviVersion_h
 
-#define AMapNaviVersionNumber                   20300
-#define AMapNaviFoundationVersionMinRequired    10200
-#define AMapNavi3DMapVersionMinRequired         40200
+#define AMapNaviVersionNumber                   50300
+#define AMapNaviFoundationVersionMinRequired    10400
+#define AMapNavi3DMapVersionMinRequired         50300
 
 /// 依赖库版本检测
 #if AMapFoundationVersionNumber < AMapNaviFoundationVersionMinRequired

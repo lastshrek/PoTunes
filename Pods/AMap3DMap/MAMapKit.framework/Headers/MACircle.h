@@ -16,10 +16,10 @@
     MAMapRect _boundingMapRect;
 }
 
-///中心点经纬度坐标
+///中心点经纬度坐标，无效坐标按照{0，0}处理
 @property (nonatomic, assign) CLLocationCoordinate2D coordinate;
 
-///半径，单位：米
+///半径，单位：米 负数按照0处理
 @property (nonatomic, assign) CLLocationDistance radius;
 
 ///该圆的外接map rect
@@ -27,8 +27,8 @@
 
 /**
  * @brief 根据中心点和半径生成圆
- * @param coord  中心点的经纬度坐标
- * @param radius 半径，单位：米
+ * @param coord  中心点的经纬度坐标，无效坐标按照{0，0}处理
+ * @param radius 半径，单位：米, 负数按照0处理
  * @return 新生成的圆
  */
 + (instancetype)circleWithCenterCoordinate:(CLLocationCoordinate2D)coord
@@ -40,5 +40,13 @@
  * @return 新生成的圆
  */
 + (instancetype)circleWithMapRect:(MAMapRect)mapRect;
+
+/**
+ * @brief 设置圆的中心点和半径. since 5.0.0
+ * @param coord 中心点的经纬度坐标，无效坐标按照{0，0}处理
+ * @param radius 半径，单位：米 负数按照0处理
+ * @return 是否设置成功
+ */
+- (BOOL)setCircleWithCenterCoordinate:(CLLocationCoordinate2D)coord radius:(CLLocationDistance)radius;
 
 @end

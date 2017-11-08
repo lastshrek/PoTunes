@@ -8,13 +8,13 @@
 
 #import "MAConfig.h"
 #import <Foundation/Foundation.h>
-#import "MAAnnotation.h"
+#import "MAAnimatedAnnotation.h"
 
 @class CLLocation;
 @class CLHeading;
 
 ///定位信息类
-@interface MAUserLocation : NSObject<MAAnnotation>
+@interface MAUserLocation : MAAnimatedAnnotation
 
 ///位置更新状态，如果正在更新位置信息，则该值为YES
 @property (readonly, nonatomic, getter = isUpdating) BOOL updating;
@@ -24,11 +24,5 @@
 
 ///heading信息
 @property (readonly, nonatomic, strong) CLHeading *heading;
-
-///定位标注点要显示的标题信息
-@property (nonatomic, copy) NSString *title;
-
-///定位标注点要显示的子标题信息
-@property (nonatomic, copy) NSString *subtitle;
 
 @end

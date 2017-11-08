@@ -12,8 +12,15 @@ class NavigationController: UINavigationController {
 	
 	var hidden: Bool?
 
-	override class func initialize() {
-		//设置导航栏样式
+//	override class func initialize() {
+//		//设置导航栏样式
+//		let navBar: UINavigationBar = UINavigationBar.appearance()
+//		navBar.isHidden = true
+//		UINavigationBar.appearance().isTranslucent = true
+//	}
+	
+	required init?(coder aDecoder: NSCoder) {
+		super.init(coder: aDecoder)
 		let navBar: UINavigationBar = UINavigationBar.appearance()
 		navBar.isHidden = true
 		UINavigationBar.appearance().isTranslucent = true

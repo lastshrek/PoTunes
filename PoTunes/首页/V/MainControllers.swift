@@ -15,7 +15,7 @@ protocol MainPageControllersDelegate: class {
 
 class MainControllers: UIView {
 	
-	lazy var controllers: Array<NavigationController> = { [] }()
+	lazy var controllers: Array<UINavigationController> = { [] }()
 	var selectedView: UIView?
 	var selectedBtn: BarItem?
 	var size: CGRect?
@@ -36,7 +36,11 @@ class MainControllers: UIView {
 	override func layoutSubviews() {
 		super.layoutSubviews()
 		for controller in self.controllers {
-			controller.view.frame = CGRect(x: 0, y: 64, width: frame.size.width, height: frame.size.height)
+			if UIScreen.main.bounds.size.height == 812 {
+				controller.view.frame = CGRect(x: 0, y: 50, width: frame.size.width, height: frame.size.height)
+			} else {
+				controller.view.frame = CGRect(x: 0, y: 0, width: frame.size.width, height: frame.size.height)
+			}
 		}
 	}
 	
@@ -56,7 +60,7 @@ class MainControllers: UIView {
 	
 	//MARK: - TODO
 	func setupSingleViewControllerToScrollView(_ controller: UIViewController, hidden: Bool, frame: CGRect) {
-		let nav: NavigationController = NavigationController(rootViewController: controller)
+		let nav = UINavigationController(rootViewController: controller)
 		self.controllers.append(nav)
 		self.addSubview(nav.view)
 		nav.view.isHidden = hidden
@@ -84,10 +88,14 @@ class MainControllers: UIView {
 	}
 	
 	func setupTabBarItem(_ count: Int, frame: CGRect) {
-		let nameArr:Array<String> = ["home", "music", "nav", "mine"]
+		let nameArr: Array<String> = ["home", "music", "nav", "mine"]
 		
 		for i in 0..<count {
-			let button: BarItem = BarItem(frame: CGRect(x: CGFloat(i) * self.bounds.size.width / CGFloat(count), y: 0, width: self.bounds.size.width / CGFloat(count), height: 64))
+			var button: BarItem = BarItem(frame: CGRect(x: CGFloat(i) * self.bounds.size.width / CGFloat(count), y: 0, width: self.bounds.size.width / CGFloat(count), height: 64))
+			if UIScreen.main.bounds.size.height == 812 {
+				button = BarItem(frame: CGRect(x: CGFloat(i) * self.bounds.size.width / CGFloat(count), y: 30, width: self.bounds.size.width / CGFloat(count), height: 64))
+			}
+			
 			
 			if count == 3 && (i == 1 || i == 2) {
 				button.tag = i + 1

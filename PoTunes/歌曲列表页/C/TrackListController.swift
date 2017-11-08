@@ -35,7 +35,11 @@ class TrackListController: UITableViewController {
 		super.viewDidLoad()
 		tableView.register(TrackCell.self, forCellReuseIdentifier: "track")
 		tableView.separatorStyle = .none
-		tableView.contentInset = UIEdgeInsetsMake(0, 0, 64, 0)
+		if UIScreen.main.bounds.size.height == 812 {
+			tableView.contentInset = UIEdgeInsetsMake(44, 0, 34, 0)
+		} else {
+			tableView.contentInset = UIEdgeInsetsMake(64, 0, 0, 0)
+		}
 	}
 	
 }
@@ -142,7 +146,7 @@ extension TrackListController {
 	override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
 		if tableView.tag != 2 {
 			let rotationAngleDegrees: CGFloat = 0
-			let rotationAngleRadians: CGFloat = rotationAngleDegrees * (CGFloat)(M_PI/180)
+			let rotationAngleRadians: CGFloat = rotationAngleDegrees * (CGFloat)(Double.pi/180)
 			let offsetPositioning: CGPoint = CGPoint(x: -200,y: -20)
 			var transform: CATransform3D = CATransform3DIdentity
 			transform = CATransform3DRotate(transform, rotationAngleRadians, 0.0, 0.0, 1.0);
@@ -175,8 +179,9 @@ extension TrackListController {
 				$0.frame = self.tableView.bounds
 				$0.backgroundColor = UIColor.black
 				$0.alpha = 0
-				self.view.addSubview(hover!)
+				self.view.addSubview($0)
 			})
+
 			
             self.tableView.isScrollEnabled = false
 			

@@ -22,17 +22,16 @@ typedef void (^AMapLocatingCompletionBlock)(CLLocation *location, AMapLocationRe
 
 #pragma mark - AMapLocationManager
 
-
-///MapLocationManager类。初始化之前请设置 AMapLocationServices 中的APIKey，否则将无法正常使用服务.
+///AMapLocationManager类。初始化之前请设置 AMapServices 中的apikey(例如：[AMapServices sharedServices].apiKey = @"您的key")，否则将无法正常使用服务.
 @interface AMapLocationManager : NSObject
 
 ///实现了 AMapLocationManagerDelegate 协议的类指针。
 @property (nonatomic, weak) id<AMapLocationManagerDelegate> delegate;
 
-///设定定位的最小更新距离。默认为 kCLDistanceFilterNone。
+///设定定位的最小更新距离。单位米，默认为 kCLDistanceFilterNone，表示只要检测到设备位置发生变化就会更新位置信息。
 @property(nonatomic, assign) CLLocationDistance distanceFilter;
 
-///设定定位精度。默认为 kCLLocationAccuracyBest。
+///设定期望的定位精度。单位米，默认为 kCLLocationAccuracyBest。定位服务会尽可能去获取满足desiredAccuracy的定位结果，但不保证一定会得到满足期望的结果。 \n注意：设置为kCLLocationAccuracyBest或kCLLocationAccuracyBestForNavigation时，单次定位会在达到locationTimeout设定的时间后，将时间内获取到的最高精度的定位结果返回。
 @property(nonatomic, assign) CLLocationAccuracy desiredAccuracy;
 
 ///指定定位是否会被系统自动暂停。默认为NO。
@@ -53,6 +52,8 @@ typedef void (^AMapLocatingCompletionBlock)(CLLocation *location, AMapLocationRe
 ///获取被监控的region集合。
 @property (nonatomic, readonly, copy) NSSet *monitoredRegions;
 
+///检测是否存在虚拟定位风险，默认为NO，不检测。 \n注意:设置为YES时，单次定位通过 AMapLocatingCompletionBlock 的error给出虚拟定位风险提示；连续定位通过 amapLocationManager:didFailWithError: 方法的error给出虚拟定位风险提示。error格式为error.domain==AMapLocationErrorDomain; error.code==AMapLocationErrorRiskOfFakeLocation;
+@property (nonatomic, assign) BOOL detectRiskOfFakeLocation;
 
 /**
  *  @brief 单次定位。如果当前正在连续定位，调用此方法将会失败，返回NO。\n该方法将会根据设定的 desiredAccuracy 去获取定位信息。如果获取的定位信息精确度低于 desiredAccuracy ，将会持续的等待定位信息，直到超时后通过completionBlock返回精度最高的定位信息。\n可以通过 stopUpdatingLocation 方法去取消正在进行的单次定位请求。

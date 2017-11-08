@@ -8,6 +8,7 @@
 
 #import "MAConfig.h"
 #import <UIKit/UIKit.h>
+#import "MACustomCalloutView.h"
 
 ///MAAnnotationView拖动状态
 typedef NS_ENUM(NSInteger, MAAnnotationViewDragState)
@@ -27,7 +28,7 @@ typedef NS_ENUM(NSInteger, MAAnnotationViewDragState)
 ///复用标识
 @property (nonatomic, readonly, copy) NSString *reuseIdentifier;
 
-///z值，大值在上，默认为0。类似CALayer的zPosition
+///z值，大值在上，默认为0。类似CALayer的zPosition。zIndex属性只有在viewForAnnotation或者didAddAnnotationViews回调中设置有效。
 @property (nonatomic, assign) NSInteger zIndex;
 
 ///关联的annotation
@@ -36,10 +37,16 @@ typedef NS_ENUM(NSInteger, MAAnnotationViewDragState)
 ///显示的image
 @property (nonatomic, strong) UIImage *image;
 
+///image所对应的UIImageView since 5.0.0
+@property (nonatomic, strong, readonly) UIImageView *imageView;
+
+///自定制弹出框view, 用于替换默认弹出框. 注意:此弹出框不会触发-(void)mapView: didAnnotationViewCalloutTapped: since 5.0.0
+@property (nonatomic, strong) MACustomCalloutView *customCalloutView;
+
 ///annotationView的中心默认位于annotation的坐标位置，可以设置centerOffset改变view的位置，正的偏移使view朝右下方移动，负的朝左上方，单位是屏幕坐标
 @property (nonatomic) CGPoint centerOffset;
 
-///弹出气泡默认位于view正中上方，可以设置calloutOffset改变view的位置，正的偏移使view朝右下方移动，负的朝左上方，单位是屏幕坐标
+///弹出框默认位于view正中上方，可以设置calloutOffset改变view的位置，正的偏移使view朝右下方移动，负的朝左上方，单位是屏幕坐标
 @property (nonatomic) CGPoint calloutOffset;
 
 ///默认为YES,当为NO时view忽略触摸事件
@@ -51,14 +58,14 @@ typedef NS_ENUM(NSInteger, MAAnnotationViewDragState)
 ///设置是否处于选中状态, 外部如果要选中请使用mapView的selectAnnotation方法
 @property (nonatomic, getter=isSelected) BOOL selected;
 
-///是否允许弹出默认callout
+///是否允许弹出callout
 @property (nonatomic) BOOL canShowCallout;
 
-///显示在气泡左侧的view
-@property (strong, nonatomic) UIView *leftCalloutAccessoryView;
+///显示在默认弹出框左侧的view
+@property (nonatomic, strong) UIView *leftCalloutAccessoryView;
 
-///显示在气泡右侧的view
-@property (strong, nonatomic) UIView *rightCalloutAccessoryView;
+///显示在默认弹出框右侧的view
+@property (nonatomic, strong) UIView *rightCalloutAccessoryView;
 
 ///是否支持拖动
 @property (nonatomic, getter=isDraggable) BOOL draggable;

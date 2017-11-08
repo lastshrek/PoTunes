@@ -55,5 +55,11 @@
  */
 - (BOOL)isCancelled;
 
+/**
+ * @brief 获取当前动画已走过点的总个数
+ * @return 个数
+ */
+- (NSInteger)passedPointCount;
+
 
 @end

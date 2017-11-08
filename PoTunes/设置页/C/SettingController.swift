@@ -18,7 +18,11 @@ class SettingController: UITableViewController {
 
     override func viewDidLoad() {
 		super.viewDidLoad()
-		tableView.contentInset = UIEdgeInsetsMake(0, 0, 64, 0)
+		if UIScreen.main.bounds.size.height == 812 {
+			tableView.contentInset = UIEdgeInsetsMake(44, 0, 64, 0)
+		} else {
+			tableView.contentInset = UIEdgeInsetsMake(64, 0, 64, 0)
+		}
 		tableView.register(UITableViewCell.self, forCellReuseIdentifier: "setting")
 		tableView.isScrollEnabled = false
 		initFooterView()
