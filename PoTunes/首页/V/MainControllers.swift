@@ -70,7 +70,7 @@ class MainControllers: UIView {
 	}
 	
 	//MARK: - 点击tabBarButton事件
-	func buttonClick(_ btn: BarItem) {
+	@objc func buttonClick(_ btn: BarItem) {
 		self.selectedBtn?.isSelected = false
 		self.selectedBtn?.bgImage.isHidden = true
 		
@@ -120,7 +120,7 @@ class MainControllers: UIView {
 	}
 	
 	// MARK: - 下拉Button
-	func panTheButton(btn: BarItem) {
+	@objc func panTheButton(btn: BarItem) {
 		self.delegate?.pan()
 	}
 

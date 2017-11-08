@@ -100,12 +100,11 @@ extension PlayerController {
 // MARK: - getNotifications
 extension PlayerController {
 	func getNotification() {
-		let center: NotificationCenter = NotificationCenter.default
 		// 播放歌曲通知
-		center.addObserver(self, selector: #selector(didSelectTrack(_:)), name: Notification.Name("player"), object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(didSelectTrack(_:)), name: Notification.Name("player"), object: nil)
 	}
 	
-	func didSelectTrack(_ notification: Notification) {
+    @objc func didSelectTrack(_ notification: Notification) {
 		let userInfo: Dictionary = notification.userInfo!
 		let tracks = (userInfo["tracks"] as! Array<TrackEncoding>?)!
 		let index = userInfo["indexPath"] as? NSInteger

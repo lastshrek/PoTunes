@@ -47,7 +47,7 @@ class PlaylistController: UITableViewController {
 		// Initialize tableView
 		tableView.rowHeight = width * 300 / 640
 		tableView.separatorStyle = .none
-		tableView.backgroundColor = UIColor.black
+		tableView.backgroundColor = .white
 		tableView.register(PlaylistCell.self, forCellReuseIdentifier: "playlist")
         if #available(iOS 11.0, *) {
             tableView.contentInsetAdjustmentBehavior = .never
@@ -62,12 +62,6 @@ class PlaylistController: UITableViewController {
             // Fallback on earlier versions
             self.automaticallyAdjustsScrollViewInsets = false
         }
-        
-//        if UIScreen.main.bounds.size.height == 812 {
-//        } else {
-//            tableView.contentInset = UIEdgeInsetsMake(0, 0, 10, 0)
-//        }
-//        tableView.contentOffset = CGPoint(x: 0, y: 0)
 		// Refresh
 		addPullToRefresh()
 		// MARK: -  检查本地缓存播放列表
@@ -110,6 +104,14 @@ class PlaylistController: UITableViewController {
 		// Initialize tableView
         tableView.setUpHeaderRefresh {
             self.loadNewPlaylist()
+        }.SetUp { (header) in
+                header.setText("获取最新歌单", mode: .pullToRefresh)
+                header.setText("松手刷新", mode: .releaseToRefresh)
+                header.setText("刷新成功", mode: .refreshSuccess)
+                header.setText("获取新歌单列表中", mode: .refreshing)
+                header.setText("获取失败，请检查网络", mode: .refreshFailure)
+                header.textLabel.textColor = .black
+                header.imageView.image = nil
         }
 	}
 	
@@ -118,11 +120,11 @@ class PlaylistController: UITableViewController {
 		Alamofire.request(P_URL).response(completionHandler: { (response) in
 			if response.error != nil {
 				HUD.flash(.labeledError(title: "请检查网络", subtitle: nil), delay: 0.4)
-				self.tableView.endHeaderRefreshing()
+                self.tableView.endHeaderRefreshing(.failure, delay: 0.5)
 				self.delegate?.tabBarCount(count: 3)
 				return
 			}
-            self.tableView.endHeaderRefreshing()
+            self.tableView.endHeaderRefreshing(.success, delay:0.5)
 
 			let playlists: Array = Reflect<Playlist>.mapObjects(data: response.data)
 			let query = "select * from t_playlists where p_id=(select max(p_id)from t_playlists);"
@@ -202,9 +204,9 @@ class PlaylistController: UITableViewController {
 		}
 		
 		let url = URL(string: playlist.cover)
-		cell.textLabel?.text = "『" + playlist.title + "』"
+        cell.textLabel?.text = "『" + playlist.title + "』"
 		
-		cell.imageView?.sd_setImage(with: url, placeholderImage: UIImage(named:"defaultArtCover"), options: .refreshCached)
+        cell.imageView?.sd_setImage(with: url, placeholderImage: UIImage(named:"defaultArtCover"), options: .refreshCached)
 
 		
 		// MARK: - 设置count==3和4时分别显示的封面

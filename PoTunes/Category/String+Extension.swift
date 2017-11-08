@@ -10,20 +10,14 @@ import UIKit
 
 extension NSObject {
 	
-	func dirDoc() -> String {
-		
+	@objc func dirDoc() -> String {
 		let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true) as [String]
-	
 		return paths[0]
-	
 	}
 	
 	func cachesDir() -> String {
-		
 		let paths = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true) as [String]
-		
 		return paths[0]
-	
 	}
 	
 	func doubleQuotation(single: String) -> String {
