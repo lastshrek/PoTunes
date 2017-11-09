@@ -69,8 +69,6 @@ extension TrackListController {
 			})
 			let url: URL = URL(string: track.cover + "!/fw/100")!
 			let longPress = UILongPressGestureRecognizer.init(target: self, action: #selector(shareToWechat(recognizer:)))
-
-			// Configure the cell...
             cell.textLabel?.text = track.name
             cell.detailTextLabel?.text = track.artist
             cell.imageView?.sd_setImage(with: url, placeholderImage: UIImage(named:"noArtwork"))
@@ -165,7 +163,7 @@ extension TrackListController {
 		}
 	}
 	
-    func shareToWechat(recognizer: UIGestureRecognizer) {
+    @objc func shareToWechat(recognizer: UIGestureRecognizer) {
         if recognizer.state.rawValue == 1 {
 			let height = self.view.bounds.size.height
 			let width = self.view.bounds.size.width
@@ -181,12 +179,8 @@ extension TrackListController {
 				$0.alpha = 0
 				self.view.addSubview($0)
 			})
-
-			
             self.tableView.isScrollEnabled = false
-			
             hover?.addGestureRecognizer(tap)
-            
             // Create shareTable
 			shareTable = UITableView.init(frame: CGRect(x: 0, y: height, width: width, height: 100), style: .plain).then({
 				$0.tag = 2
@@ -199,7 +193,12 @@ extension TrackListController {
             tableView.superview?.addSubview(shareTable!)
 
 			UIView.animate(withDuration: 0.2, animations: {
-                self.shareTable?.frame = CGRect(x: 0, y: height - 164, width: width, height: 100)
+                if UIScreen.main.bounds.size.height == 812 {
+                    self.shareTable?.frame = CGRect(x: 0, y: height - 150, width: width, height: 100)
+                } else {
+                    self.shareTable?.frame = CGRect(x: 0, y: height - 100, width: width, height: 100)
+                }
+                
                 self.hover?.alpha = 0.5
             })
             UIView.commitAnimations()
@@ -220,7 +219,7 @@ extension TrackListController {
         tableView.isScrollEnabled = true
     }
 	
-	func downloadSingle(recognizer: UIGestureRecognizer) {
+    @objc func downloadSingle(recognizer: UIGestureRecognizer) {
 		// check user network and whether allow to play
 		let user = UserDefaults.standard
 		let online = user.object(forKey: "online")

@@ -12,8 +12,7 @@ import AsyncDisplayKit
 class PlayerController: UIViewController {
 
 	var player: PlayerInterface!
-
-
+	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		// 添加播放器界面
