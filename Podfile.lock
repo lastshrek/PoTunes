@@ -36,6 +36,14 @@ PODS:
   - FMDB/standard (2.7.2)
   - FontAwesome.swift (1.3.1)
   - LDProgressView (1.2.1)
+  - mob_sharesdk (4.0.4):
+    - mob_sharesdk/ShareSDK (= 4.0.4)
+    - MOBFoundation
+  - mob_sharesdk/ShareSDK (4.0.4):
+    - MOBFoundation
+  - mob_sharesdk/ShareSDKPlatforms/WeChat (4.0.4):
+    - MOBFoundation
+  - MOBFoundation (3.0.6)
   - PINCache (3.0.1-beta.5):
     - PINCache/Arc-exception-safe (= 3.0.1-beta.5)
     - PINCache/Core (= 3.0.1-beta.5)
@@ -79,6 +87,8 @@ DEPENDENCIES:
   - FMDB
   - FontAwesome.swift
   - LDProgressView (>= 1.1)
+  - mob_sharesdk
+  - mob_sharesdk/ShareSDKPlatforms/WeChat
   - PKHUD (~> 5.0)
   - PullToRefreshKit
   - SCLAlertView
@@ -101,6 +111,8 @@ SPEC CHECKSUMS:
   FMDB: 6198a90e7b6900cfc046e6bc0ef6ebb7be9236aa
   FontAwesome.swift: 050a75c6b94db0b082f39bde5b111c5c64d62a83
   LDProgressView: f6afc7c30d2a9edf33001515f3189338567a32d2
+  mob_sharesdk: b3ac49261b0e56d9e305d473c70bcde2e3a6e8ff
+  MOBFoundation: 6f6ec1c2513278551f1a808b5692e983d99e5069
   PINCache: 98e7b1ef782824ad231ade51987c218b758c30d8
   PINOperation: ac23db44796d4a564ecf9b5ea7163510f579b71d
   PINRemoteImage: 0cefe720c2612960bd360710efbd6c73a1991d5f
@@ -115,6 +127,6 @@ SPEC CHECKSUMS:
   Then: 665607ef49c6c3f66c722cd02b7b53745a622f49
   UMengAnalytics-NO-IDFA: 16666e32edce5be44ae5b14aaaa7f3582e09d6ab
 
-PODFILE CHECKSUM: 980fdcf5b90804969186c23c7b2d46fab8f9b292
+PODFILE CHECKSUM: 4f5075db9bd20dd084db1a03d2c0d3c75a788720
 
 COCOAPODS: 1.1.1

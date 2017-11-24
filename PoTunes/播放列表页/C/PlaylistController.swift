@@ -52,9 +52,9 @@ class PlaylistController: UITableViewController {
         if #available(iOS 11.0, *) {
             tableView.contentInsetAdjustmentBehavior = .never
             if UIScreen.main.bounds.size.height == 812 {
-                tableView.contentInset = UIEdgeInsetsMake(44, 0, 88, 0)//iPhoneX这里是88
+                tableView.contentInset = UIEdgeInsetsMake(44, 0, 88, 0)
             } else {
-                tableView.contentInset = UIEdgeInsetsMake(64, 0, 88, 0)//iPhoneX这里是88
+                tableView.contentInset = UIEdgeInsetsMake(64, 0, 88, 0)
             }
             tableView.scrollIndicatorInsets = tableView.contentInset
             tableView.insetsContentViewsToSafeArea = false

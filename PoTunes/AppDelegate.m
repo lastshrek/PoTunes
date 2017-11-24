@@ -17,8 +17,10 @@
 #import "UMMobClick/MobClick.h"
 #import <SVProgressHUD/SVProgressHUD.h>
 #import <SDWebImage/UIImageView+WebCache.h>
+#import <ShareSDK/ShareSDK.h>
+#import <ShareSDKConnector/ShareSDKConnector.h>
 
-@interface AppDelegate ()<WXApiDelegate, UNUserNotificationCenterDelegate>
+@interface AppDelegate ()<UNUserNotificationCenterDelegate>
 
 @property (nonatomic, strong) NSTimer *timer;
 @property (nonatomic, assign) int bgTime;
@@ -47,9 +49,6 @@
     [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
 	
 	[self becomeFirstResponder];
-	
-    //向微信注册
-    [WXApi registerApp:@"wx0fc8d0673ec86694"];
 	
 	
 	// 后台下载注册
@@ -106,6 +105,28 @@
 		
 		return mutableHeaders;
 	};
+	
+	// 注册微信
+	[ShareSDK registerActivePlatforms:@[ @(SSDKPlatformTypeWechat)]
+									 onImport:^(SSDKPlatformType platformType) {
+		switch (platformType) {
+			case SSDKPlatformTypeWechat:
+				[ShareSDKConnector connectWeChat:[WXApi class]];
+				break;
+			default:
+				break;
+		}
+	 }
+			  onConfiguration:^(SSDKPlatformType platformType, NSMutableDictionary *appInfo) {
+		switch (platformType) {
+			case SSDKPlatformTypeWechat:
+				[appInfo SSDKSetupWeChatByAppId:@"wx0fc8d0673ec86694"
+									  appSecret:@"5806384daf38c8a03e76f3c894312521"];
+				break;
+			default:
+				  break;
+		  }
+	}];
 
     return YES;
 }
@@ -220,29 +241,7 @@
 #endif
 
 
-//重写AppDelegate的handleOpenURL和openURL方法：
 
-- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url {
-    return [WXApi handleOpenURL:url delegate:self];
-}
-
-- (BOOL)application:(UIApplication *)application openURL:(nonnull NSURL *)url sourceApplication:(nullable NSString *)sourceApplication annotation:(nonnull id)annotation {
-    return [WXApi handleOpenURL:url delegate:self];
-}
-
-- (void)onReq:(BaseReq*)req {
-    
-}
-
-- (void) onResp:(BaseResp*)resp {
-    if([resp isKindOfClass:[SendMessageToWXResp class]]) {
-		if (resp.errCode == 0) {
-			[SVProgressHUD showSuccessWithStatus:@"分享成功"];
-        } else {
-			[SVProgressHUD showErrorWithStatus:@"分享失败"];
-		}
-    }
-}
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

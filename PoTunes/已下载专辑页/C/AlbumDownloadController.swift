@@ -47,8 +47,6 @@ class AlbumDownloadController: UITableViewController {
 		tableView.register(DownloadedCell.self, forCellReuseIdentifier: "downloaded")
 		downloadAlbums = reloadDownloadAlbums()
 		getNotification()
-		// 修复之前的下载文件名称
-		repaireFormerTrackName()
 	}
 	
 	
@@ -406,56 +404,6 @@ extension AlbumDownloadController {
 			queue.addOperation(self.op!)
 		}
 	}
-	
-	func repaireFormerTrackName() {
-		let user = UserDefaults.standard
-		let repaired = user.object(forKey: "repaired")
-		
-		if repaired == nil {
-			let query = "SELECT * FROM t_downloading"
-			queue.inDatabase({ (database) in
-				HUD.show(.label("数据升级中请稍候"))
-
-				let s = database.executeQuery(query, withArgumentsIn: [])
-				let manager = FileManager.default
-				let rootPath = self.dirDoc()
-				
-				while (s?.next())! {
-					let identy = s?.string(forColumn: "identifier")
-
-					if identy == nil {
-						// 修改数据库
-						let urlStr: String = (s?.string(forColumn: "sourceURL"))!
-						let identifier = self.getIdentifier(urlStr: urlStr)
-						let identifierUpdate = "UPDATE t_downloading SET identifier = '\(identifier)' WHERE sourceURL = '\(urlStr)'"
-						DispatchQueue.global(qos: .background).async {
-							database.executeUpdate(identifierUpdate, withArgumentsIn: [])
-						}
-						
-						let artist = s?.string(forColumn: "author")
-						let title = s?.string(forColumn: "title")
-						let filePath = rootPath + "/\(artist!)" + " - " + "\(title!).mp3"
-						let realPath = filePath.replacingOccurrences(of: " / ", with: " ")
-						
-						do {
-							if manager.fileExists(atPath: realPath) {
-								let dstPath = rootPath + "/\(identifier)"
-								try manager.moveItem(at: URL(string:realPath)! , to: URL(string:dstPath)!)
-							}
-						} catch {
-							print("Could not clear temp folder: \(error)")
-						}
-					}
-				}
-				s?.close()
-				DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-					HUD.hide()
-					HUD.flash(.success, delay: 0.3)
-				}
-				user.set("repaired", forKey: "repaired")
-			})
-		}
-	}
 }
 
 extension AlbumDownloadController: TrackListDelegate {
@@ -545,7 +493,7 @@ extension AlbumDownloadController: DownloadingControllerDelegate {
 
 		while s?.next() == true {
 			let identifier = s?.string(forColumn: "identifier")
-			let filepath = self.dirDoc() + "/\(identifier)"
+			let filepath = self.dirDoc() + "/\(String(describing: identifier))"
 			do {
 				if manager.fileExists(atPath: filepath) {
 					try manager.removeItem(atPath: filepath)

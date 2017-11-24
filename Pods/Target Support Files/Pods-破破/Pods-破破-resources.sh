@@ -76,14 +76,17 @@ EOM
 if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_resource "AMap3DMap/MAMapKit.framework/AMap.bundle"
   install_resource "AMapNavi/AMapNaviKit.framework/AMapNavi.bundle"
+  install_resource "mob_sharesdk/SDK/ShareSDK/Support/Required/ShareSDK.bundle"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_resource "AMap3DMap/MAMapKit.framework/AMap.bundle"
   install_resource "AMapNavi/AMapNaviKit.framework/AMapNavi.bundle"
+  install_resource "mob_sharesdk/SDK/ShareSDK/Support/Required/ShareSDK.bundle"
 fi
 if [[ "$CONFIGURATION" == "ad hoc distribution" ]]; then
   install_resource "AMap3DMap/MAMapKit.framework/AMap.bundle"
   install_resource "AMapNavi/AMapNaviKit.framework/AMapNavi.bundle"
+  install_resource "mob_sharesdk/SDK/ShareSDK/Support/Required/ShareSDK.bundle"
 fi
 
 mkdir -p "${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}"

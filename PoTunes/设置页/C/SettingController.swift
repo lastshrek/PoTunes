@@ -44,7 +44,7 @@ class SettingController: UITableViewController {
 		footer.addSubview(clearBtn)
 	}
 	
-	func clearCaches() {
+	@objc func clearCaches() {
 		HUD.flash(.label("清除缓存中"), delay: 0.5)
 		let manager = FileManager.default
 		let rootPath = self.dirDoc()

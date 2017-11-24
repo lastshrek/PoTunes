@@ -19,4 +19,7 @@ target '破破' do
 	pod 'Then', '~> 2.1'
 	pod 'Texture', '>= 2.0'
     pod 'PullToRefreshKit'
+	
+	pod 'mob_sharesdk'
+	pod 'mob_sharesdk/ShareSDKPlatforms/WeChat'
 end

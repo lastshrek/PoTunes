@@ -92,31 +92,56 @@ extension TrackListController {
 	}
 	
 	override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+		tableView.deselectRow(at: indexPath, animated: true)
+
         if tableView.tag == 2 {
-			let ext = WXMusicObject().then({
-				$0.musicUrl = "https://poche.fm/api/app/track/\(sharedTrack!.ID)"
-				$0.musicDataUrl = self.sharedTrack!.url
-			})
-			let message = WXMediaMessage().then({
-				$0.title = sharedTrack?.name
-				$0.description = sharedTrack?.artist
-				$0.setThumbImage(self.selectedCell?.imageView?.image)
-				$0.mediaObject = ext
-			})
-			let req = SendMessageToWXReq.init().then({
-				$0.bText = false
-				$0.message = message
-				if indexPath.row == 0 {
-					$0.scene = Int32(WXSceneSession.rawValue)
-				} else {
-					$0.scene = Int32(WXSceneTimeline.rawValue)
-				}
-			})
-			WXApi.send(req)
-			dismissHover()
-        } else {
-            tableView.deselectRow(at: indexPath, animated: true)
+			let description = sharedTrack?.artist
+			let title = sharedTrack?.name
+			let musicUrl = NSURL(string: "https://poche.fm/api/app/track/\(sharedTrack!.ID)") as URL!
+			let thumbImage = self.selectedCell?.imageView?.image
+			let musicFileURL = NSURL(string: self.sharedTrack!.url) as URL!
+			var scene:SSDKPlatformType
+			if indexPath.row == 0 {
+				scene = SSDKPlatformType.subTypeWechatSession
+			} else {
+				scene = SSDKPlatformType.subTypeWechatTimeline
+			}
 			
+			let shareParams = NSMutableDictionary()
+			shareParams.ssdkSetupWeChatParams(byText: description,
+			                                   title: title,
+			                                   url: musicUrl,
+			                                   thumbImage:thumbImage ,
+			                                   image: nil,
+			                                   musicFileURL: musicFileURL,
+			                                   extInfo: nil,
+			                                   fileData: nil,
+			                                   emoticonData: nil,
+			                                   sourceFileExtension: nil,
+			                                   sourceFileData: nil,
+			                                   type: SSDKContentType.audio,
+			                                   forPlatformSubType: scene)
+			
+			ShareSDK.share(scene, parameters: shareParams) { (state : SSDKResponseState, nil, entity : SSDKContentEntity?, error :Error?) in
+				switch state {
+				case SSDKResponseState.success:
+					HUD.flash(.label("分享成功"), delay: 0.5)
+					self.dismissHover()
+					break
+				case SSDKResponseState.fail:
+					HUD.flash(.label("授权失败,错误描述:\(String(describing: error))"), delay: 0.5)
+					print("授权失败,错误描述:\(String(describing: error))")
+					self.dismissHover()
+					break
+				case SSDKResponseState.cancel:
+					HUD.flash(.label("操作取消"), delay: 0.5)
+					self.dismissHover()
+					break
+				default:
+					break
+				}
+			}
+        } else {
             let main  = Notification.Name("selected")
             let player  = Notification.Name("player")
             let userInfo = [
@@ -159,6 +184,7 @@ extension TrackListController {
 				card.layer.transform = CATransform3DIdentity
 				card.layer.opacity = 1
 			})
+			
 			UIView.commitAnimations()
 		}
 	}
@@ -213,7 +239,7 @@ extension TrackListController {
         }
     }
     
-    func dismissHover() {
+	@objc func dismissHover() {
         hover?.removeFromSuperview()
         shareTable?.removeFromSuperview()
         tableView.isScrollEnabled = true

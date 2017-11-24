@@ -13,7 +13,7 @@ class Playlist: NSObject {
 	var title: String = ""
 	var cover: String = ""
 
-	func setupMappingReplaceProperty() -> [String : String] {
+	@objc func setupMappingReplaceProperty() -> [String : String] {
 		return ["ID": "id"]
 	}
 }
