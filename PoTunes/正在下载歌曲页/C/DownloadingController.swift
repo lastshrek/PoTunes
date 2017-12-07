@@ -30,8 +30,19 @@ class DownloadingController: UITableViewController {
 		super.viewDidLoad()
 		tableView.register(DownloadingCell.self, forCellReuseIdentifier: "Track")
 		tableView.separatorStyle = .none
-		tableView.contentInset = UIEdgeInsetsMake(0, 0, 64, 0)
-		tableView.contentOffset = CGPoint(x: 0, y: 0)
+		if #available(iOS 11.0, *) {
+			tableView.contentInsetAdjustmentBehavior = .never
+			if UIScreen.main.bounds.size.height == 812 {
+				tableView.contentInset = UIEdgeInsetsMake(44, 0, 88, 0)
+			} else {
+				tableView.contentInset = UIEdgeInsetsMake(64, 0, 88, 0)
+			}
+			tableView.scrollIndicatorInsets = tableView.contentInset
+			tableView.insetsContentViewsToSafeArea = false
+		} else {
+			// Fallback on earlier versions
+			self.automaticallyAdjustsScrollViewInsets = false
+		}
 		getNotification()
 	}
 	
@@ -44,7 +55,6 @@ class DownloadingController: UITableViewController {
 // MARK: - Table view data source
 extension DownloadingController {
 	override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		// #warning Incomplete implementation, return the number of rows
 		return downloadingArray!.count
 	}
 }
@@ -96,12 +106,11 @@ extension DownloadingController {
 	override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		tableView.deselectRow(at: indexPath, animated: false)
 	}
-	
 }
 
 // MARK: - Button Operations
 extension DownloadingController {
-	func pause(button: OperationButton) {
+	@objc func pause(button: OperationButton) {
 		if downloadingArray?.count == 0 {
 			HUD.flash(.labeledError(title: "当前并无正在缓存歌曲", subtitle: nil), delay: 0.6)
 			return
@@ -114,7 +123,7 @@ extension DownloadingController {
 		}
 	}
 	
-	func delete(button: OperationButton) {
+	@objc func delete(button: OperationButton) {
 		if downloadingArray?.count == 0 {
 			HUD.flash(.labeledError(title: "当前并无正在缓存歌曲", subtitle: nil), delay: 0.6)
 			return
@@ -143,62 +152,36 @@ extension DownloadingController {
 extension DownloadingController {
 	
 	func getNotification() {
-		
 		let center = NotificationCenter.default
-		
 		center.addObserver(self, selector: #selector(percentChange(sender:)), name: Notification.Name("percent"), object: nil)
-		
 		center.addObserver(self, selector: #selector(downloadComplete), name: Notification.Name("downloadComplete"), object: nil)
-
-		
 	}
 	
-	func percentChange(sender: Notification) {
-		
+	@objc func percentChange(sender: Notification) {
 		let userInfo = sender.userInfo!
-		
 		let index = userInfo["index"] as! Int
-		
 		self.index = index
-		
 		let indexPath = IndexPath(row: index, section: 0)
-		
 		let cell = tableView.cellForRow(at: indexPath) as? DownloadingCell
-        
-        if cell == nil {
-            
+		
+		if cell == nil {
             return
-            
         }
 		
 		let progress = userInfo["percent"] as! Double
-		
 		cell?.progressView.isHidden = false
-		
 		cell?.progressView.setProgress(CGFloat(progress), animated: true)
-		
 	}
 	
 	
-	func downloadComplete() {
-		
+	@objc func downloadComplete() {
 		downloadingArray?.remove(at: index!)
-		
 		DispatchQueue.main.async {
-            
             self.tableView.deleteRows(at: [IndexPath(row: self.index!, section: 0)], with: .fade)
-			
 			if self.downloadingArray?.count == 0 {
-				
 				self.setStart(button: self.start!)
-				
 				self.navigationController!.popToRootViewController(animated: true)
-				
 			}
-			
 		}
-		
 	}
-	
-	
 }

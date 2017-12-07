@@ -47,7 +47,6 @@ class MainControllers: UIView {
 	func setupControllers(frame: CGRect) {
 		//每月文章列表页
 		let playlist: PlaylistController = PlaylistController()
-
 		playlist.delegate = self
 		setupSingleViewControllerToScrollView(playlist, hidden: false, frame: frame)
 		//已下载专辑页面
@@ -115,12 +114,22 @@ class MainControllers: UIView {
 			swipeFromTop.direction = .down
 			swipeFromTop.numberOfTouchesRequired = 1
 			button.addGestureRecognizer(swipeFromTop)
+			// 添加双击时间
+			let doubleTaps: UITapGestureRecognizer = UITapGestureRecognizer.init(target: self, action: #selector(MainControllers.doubleTaps(btn:)))
+			doubleTaps.numberOfTapsRequired = 2
+			doubleTaps.numberOfTouchesRequired = 1
+			button.addGestureRecognizer(doubleTaps)
 			self.addSubview(button)
 		}
 	}
 	
 	// MARK: - 下拉Button
 	@objc func panTheButton(btn: BarItem) {
+		self.delegate?.pan()
+	}
+	
+	// MARK: - 下拉Button
+	@objc func doubleTaps(btn: BarItem) {
 		self.delegate?.pan()
 	}
 

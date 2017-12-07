@@ -17,6 +17,7 @@
 #import <SVProgressHUD/SVProgressHUD.h>
 #import <SCLAlertView_Objective_C/SCLAlertView.h>
 #import <TDImageColors/TDImageColors.h>
+#import <ShareSDK/ShareSDK.h>
 /** 播放模式 */
 typedef NS_ENUM(NSUInteger, PCAudioRepeatMode) {
 	PCAudioRepeatModeSingle,
@@ -32,7 +33,7 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 	PCAudioPlayStatePrevious,
 };
 
-@interface PlayerInterface()<LTInfiniteScrollViewDelegate, LTInfiniteScrollViewDataSource, UIApplicationDelegate>
+@interface PlayerInterface()<LTInfiniteScrollViewDelegate, LTInfiniteScrollViewDataSource, UIApplicationDelegate, UITableViewDelegate, UITableViewDataSource>
 
 @property (nonatomic, weak) ASDisplayNode *backgroundView;
 @property (nonatomic, weak) ASImageNode *reflection;
@@ -47,6 +48,10 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 @property (nonatomic, weak) LrcView* lrcView;
 @property (nonatomic, weak) ASNetworkImageNode *nowCover;
 @property (nonatomic, weak) UIColor *currentProgressColor;
+@property (nonatomic, weak) UITableView *shareTable;
+@property (nonatomic, weak) UIView *hover;
+
+
 
 
 @property (nonatomic, assign) CGFloat progressOriginal;
@@ -63,6 +68,8 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 @property (nonatomic, strong) NSTimer* playbackTimer;
 @property (nonatomic, strong) CADisplayLink* lrcTimer;
 @property (nonatomic, strong) FMDatabase* tracksDB;
+@property (nonatomic, strong) Track* nowPlayingTrack;
+
 
 @end
 
@@ -444,6 +451,56 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 	
 
 }
+
+- (void)shareToWechat:(int)scene {
+	NSInteger type;
+	if (scene == 0) {
+		type = 22;
+	} else {
+		type = 23;
+	}
+	NSMutableDictionary *shareParams = [NSMutableDictionary dictionary];
+	NSString *artist = self.nowPlayingTrack.artist;
+	NSURL *musicUrl = [NSURL URLWithString:[NSString stringWithFormat:@"https://poche.fm/api/app/track/%ld", self.nowPlayingTrack.ID]];
+	NSString *title = self.nowPlayingTrack.name;
+	NSURL *musicFileUrl = [NSURL URLWithString:self.nowPlayingTrack.url];
+	[shareParams SSDKSetupWeChatParamsByText:artist title:title url:musicUrl thumbImage:self.nowCover.image
+ image:nil musicFileURL:musicFileUrl extInfo:nil fileData:nil emoticonData:nil sourceFileExtension:nil sourceFileData:nil type:SSDKContentTypeAudio forPlatformSubType:type];
+	[ShareSDK share:type parameters:shareParams onStateChanged:^(SSDKResponseState state, NSDictionary *userData, SSDKContentEntity *contentEntity, NSError *error) {
+		switch (state) {
+			case SSDKResponseStateSuccess:
+				[SVProgressHUD showSuccessWithStatus:@"分享成功"];
+				break;
+			case SSDKResponseStateFail:
+				NSLog(@"%@", error);
+				[SVProgressHUD showErrorWithStatus:@"分享失败"];
+				break;
+			case SSDKResponseStateCancel:
+				[SVProgressHUD showInfoWithStatus:@"取消分享"];
+				break;
+			default:
+				break;
+		}
+	}];
+}
+
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+	return 2;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+	UITableViewCell *cell = [self.shareTable dequeueReusableCellWithIdentifier:@"wechat"];
+	if (indexPath.row == 0) {
+		cell.textLabel.text = @"分享给微信好友";
+		cell.imageView.image = [UIImage imageNamed:@"cm2_mlogo_weixin"];
+	} else {
+		cell.textLabel.text = @"分享到微信朋友圈";
+		cell.imageView.image = [UIImage imageNamed:@"cm2_mlogo_pyq"];
+	}
+	return cell;
+}
+
 #pragma mark - getLastPlayTrackAndPlaystate
 - (void)getLastPlayTrackAndPlaystate {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -459,7 +516,7 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 	self.type = [defaults stringForKey:@"type"];
 	self.album.text = album;
 	self.repeatMode = [defaults integerForKey:@"repeatMode"];
-	
+	self.nowPlayingTrack = self.tracks[self.index];
 	if (self.repeatMode == PCAudioRepeatModeSingle) {
 		self.playModeView.image = [UIImage imageNamed:@"repeatOneB"];
 	} else if (self.repeatMode == PCAudioRepeatModeShuffle) {
@@ -514,6 +571,7 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 	self.streamer = [[FSAudioController alloc] init];
 	
 	Track* track = self.tracks[self.index];
+	self.nowPlayingTrack = track;
 	NSString* rootPath = [self dirDoc];
 	NSString* query = @"SELECT * FROM t_downloading WHERE sourceURL = ?;";
 	FMResultSet* s = [self.tracksDB executeQuery:query withArgumentsInArray:@[track.url]];
@@ -543,7 +601,16 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 	[defaults setInteger:self.index forKey:@"index"];
 	[defaults setObject:self.type forKey:@"type"];
 	[defaults setValue:self.album.text forKey:@"album"];
+	[defaults setInteger:track.ID forKey:@"trackID"];
 	[defaults synchronize];
+	// 发送当前播放TrackID通知
+	NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+	NSDictionary *userinfo = [NSDictionary dictionaryWithObjectsAndKeys:
+								 @(self.playlistID), @"playlistID",
+								 @(track.ID), @"trackID",
+							  self.album.text, @"album",
+								 nil];
+	[center postNotificationName:@"nowPlayingTrack" object:nil userInfo:userinfo];
 }
 - (void)changeInterface:(NSInteger)index {
 	Track* track = self.tracks[self.index];
@@ -564,6 +631,7 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 		[self refreshBlurView];
 		return image;
 	};
+	
 //	dispatch_async(dispatch_get_main_queue(), ^{
 		// 更新界面
 //		[self.nowCover sd_setImageWithURL:[NSURL URLWithString:urlStr] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {

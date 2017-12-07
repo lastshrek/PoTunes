@@ -12,6 +12,9 @@ import FontAwesome_swift
 class TrackCell: UITableViewCell {
 	
 	let divider: UIView = UIView()
+	let playing: UIImageView = UIImageView(image: UIImage.fontAwesomeIcon(name: .volumeUp,
+	                                                                      textColor: UIColor.colorByRGB(red: 225, green: 49, blue: 114, alpha: 1),
+	                                                                      size: CGSize(width: 20, height: 20)))
 	
 	override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
 		super.init(style: .subtitle, reuseIdentifier: reuseIdentifier)
@@ -26,6 +29,8 @@ class TrackCell: UITableViewCell {
 		detailTextLabel?.adjustsFontSizeToFitWidth = true
 		// 分割线
 		divider.backgroundColor = UIColor.lightGray
+		accessoryView = playing
+		accessoryView?.isHidden = true
 		addSubview(divider)
 	}
 	
@@ -43,6 +48,10 @@ class TrackCell: UITableViewCell {
 		textLabel?.frame = CGRect(x: ((self.imageView?.frame)?.maxX)! + 10, y: 5, width: width - ((self.imageView?.frame)!).maxX - 15, height: height * 0.6)
 		detailTextLabel?.frame = CGRect(x: ((self.imageView?.frame)?.maxX)! + 10, y: height * 0.6, width: width - ((self.imageView?.frame)!).maxX - 15, height: height * 0.3)
 		divider.frame = CGRect(x: ((self.imageView?.frame)?.maxX)! + 10, y: height - 0.3, width: width, height: 0.3)
+	}
+	
+	@objc func refreshPlayingStatus () {
+		
 	}
 
 }

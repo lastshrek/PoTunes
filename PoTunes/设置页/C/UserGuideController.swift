@@ -77,4 +77,8 @@ extension UserGuideController: UITableViewDelegate {
 		let header = view as! UITableViewHeaderFooterView
 		header.textLabel?.textColor = UIColor.colorByRGB(red: 225, green: 49, blue: 114, alpha: 1)
 	}
+	
+	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+		tableView.deselectRow(at: indexPath, animated: false)
+	}
 }

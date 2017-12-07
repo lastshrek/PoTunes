@@ -9,11 +9,13 @@
 import UIKit
 
 class DownloadedCell:  UITableViewCell {
-	
+	// 分割线
 	let divider = UIView().then({
-		// 分割线
 		$0.backgroundColor = UIColor.lightGray
 	})
+	let playing: UIImageView = UIImageView(image: UIImage.fontAwesomeIcon(name: .volumeUp,
+	                                                                      textColor: UIColor.colorByRGB(red: 17, green: 133, blue: 117, alpha: 0.8),
+	                                                                      size: CGSize(width: 20, height: 20)))
 	
 	override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
 		super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -22,6 +24,8 @@ class DownloadedCell:  UITableViewCell {
 		textLabel?.adjustsFontSizeToFitWidth = true
 		textLabel?.textColor = UIColor.colorByRGB(red: 17, green: 133, blue: 117, alpha: 0.8)
 		textLabel?.font = UIFont(name: "BebasNeue", size: 18)
+		accessoryView = playing
+		playing.isHidden = true
 		addSubview(divider)
 	}
 	

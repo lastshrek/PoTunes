@@ -30,7 +30,10 @@ class PlaylistController: UITableViewController {
 	let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString")
 	var playlists: Array<Playlist> = []
 	var nowListening: Playlist?
+	var nowPlayingListID: Int?
 	weak var delegate: PlaylistDelegate?
+	var recognizer: UIGestureRecognizer?
+	var nowPlayingTitle: String?
 	lazy var queue: FMDatabaseQueue = DBHelper.sharedInstance.queue!
 	lazy var playlistsDB: FMDatabase = {
 		let path = self.dirDoc() + "/downloadingSong.db"
@@ -38,8 +41,6 @@ class PlaylistController: UITableViewController {
 		db.open()
 		return db
 	}()
-	
-	var recognizer: UIGestureRecognizer?
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -66,7 +67,40 @@ class PlaylistController: UITableViewController {
 		addPullToRefresh()
 		// MARK: -  检查本地缓存播放列表
 		checkLocalPlaylists()
+		getNotification()
 	}
+	
+	override func viewWillAppear(_ animated: Bool) {
+		super.viewWillAppear(animated)
+		let user = UserDefaults.standard
+		let playlistID = user.integer(forKey: "playlistID")
+		let isPlaying = user.bool(forKey: "isPlaying")
+		if (isPlaying && playlistID != -1) {
+			nowPlayingListID = playlistID
+			self.nowPlayingTitle = nil
+		}
+		tableView.reloadData()
+	}
+	
+	func getNotification() {
+		let center = NotificationCenter.default
+		center.addObserver(self, selector: #selector(reloadData), name: Notification.Name("player"), object: nil)
+		center.addObserver(self, selector: #selector(reloadData), name: Notification.Name("nowPlayingTrack"), object: nil)
+	}
+	
+	@objc func reloadData() {
+		let user = UserDefaults.standard
+		let title = user.string(forKey: "album")
+		nowPlayingListID = -1
+		self.nowPlayingTitle = title
+		tableView.reloadData()
+	}
+	
+	deinit {
+		NotificationCenter.default.removeObserver(self, name: Notification.Name("player"), object: nil)
+		NotificationCenter.default.removeObserver(self, name: Notification.Name("nowPlayingTrack"), object: nil)
+	}
+	
 	
 	
 	func checkLocalPlaylists() {
@@ -97,7 +131,6 @@ class PlaylistController: UITableViewController {
 		}
 		
 		s?.close()
-		
 	}
 	
 	func addPullToRefresh() {
@@ -193,6 +226,7 @@ class PlaylistController: UITableViewController {
 	
 		let cell = tableView.dequeueReusableCell(withIdentifier: "playlist", for: indexPath) as! PlaylistCell
 		var playlist = Playlist()
+		cell.nowPlaying.isHidden = true
 
 		if playlists.count != 3 && indexPath.section == 0 {
 			playlist.cover = "https://s.poche.fm/nowlistening/cover.png"
@@ -217,7 +251,10 @@ class PlaylistController: UITableViewController {
 			downloadSwipe.numberOfTouchesRequired = 1
 			cell.addGestureRecognizer(downloadSwipe)
 		}
-		
+		let album = playlist.title.components(separatedBy: " - ").last
+		if playlist.ID == nowPlayingListID  || self.nowPlayingTitle == album {
+			cell.nowPlaying.isHidden = false
+		}
 		return cell
 	}
 	
@@ -257,10 +294,9 @@ class PlaylistController: UITableViewController {
 			let trackList: TrackListController = TrackListController().then({
 				$0.tracks = temp
 				$0.title = playlist.title
+				$0.playlistID = playlist.ID
 			})
-			
 			self.navigationController?.pushViewController(trackList, animated: true)
-			
 		})
 	}
 	// MARK: - 下载每月歌曲 - TODO
@@ -301,21 +337,14 @@ class PlaylistController: UITableViewController {
             if downloadArray.count == 0 {
                 HUD.flash(.label("专辑已下载"), delay: 0.4)
             } else {
-                
                 HUD.flash(.label("开始下载"), delay: 0.3, completion: { (_) in
-                    
                     let name = Notification.Name("fullAlbum")
                     let userInfo = ["album": album, "tracks": downloadArray] as [String : Any]
                     let notify = Notification.init(name: name, object: nil, userInfo: userInfo)
-
                     NotificationCenter.default.post(notify)
-                    
                 })
             }
         })
-
-
-		
 	}
 }
 

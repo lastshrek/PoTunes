@@ -18,10 +18,13 @@ import SCLAlertView
 
 class TrackListController: UITableViewController {
 	var tracks: Array<TrackEncoding> = []
+	var playlistID: Int?
 	var shareTable: UITableView?
 	var hover: UIView?
 	var sharedTrack: TrackEncoding?
 	var selectedCell: TrackCell?
+	var nowPlayingCell: TrackCell?
+	var nowPlayingTrackID: Int?
 	weak var delegate: TrackListDelegate?
 	lazy var queue: FMDatabaseQueue = DBHelper.sharedInstance.queue!
     lazy var tracksDB: FMDatabase = {
@@ -40,9 +43,27 @@ class TrackListController: UITableViewController {
 		} else {
 			tableView.contentInset = UIEdgeInsetsMake(64, 0, 0, 0)
 		}
+		getNotification()
+	}
+	
+	func getNotification() {
+		let center = NotificationCenter.default
+		center.addObserver(self, selector: #selector(nowPlayingTrackChange(sender:)), name: Notification.Name("nowPlayingTrack"), object: nil)
+	}
+	
+	deinit {
+		NotificationCenter.default.removeObserver(self, name: Notification.Name("nowPlayingTrack"), object: nil)
+	}
+	
+	@objc func nowPlayingTrackChange(sender: Notification) {
+		let userinfo = sender.userInfo
+		let trackID = userinfo!["trackID"] as! Int
+		self.nowPlayingTrackID = trackID
+		self.tableView.reloadData()
 	}
 	
 }
+
 // MARK: - UITableViewDataSource
 extension TrackListController {
 	override func numberOfSections(in tableView: UITableView) -> Int {
@@ -72,10 +93,19 @@ extension TrackListController {
             cell.textLabel?.text = track.name
             cell.detailTextLabel?.text = track.artist
             cell.imageView?.sd_setImage(with: url, placeholderImage: UIImage(named:"noArtwork"))
+			cell.playing.isHidden = true
             // Add download gesture recognizer
             // Add share to wechat gesture recognizer
 			cell.addGestureRecognizer(downloadSwipe)
             cell.addGestureRecognizer(longPress)
+			if (self.nowPlayingTrackID != nil && track.ID == self.nowPlayingTrackID) {
+				cell.playing.isHidden = false
+			}
+			let user = UserDefaults.standard
+			let trackID = user.integer(forKey: "trackID")
+			if trackID == track.ID {
+				cell.playing.isHidden = false
+			}
             return cell
         }
         
@@ -130,7 +160,6 @@ extension TrackListController {
 					break
 				case SSDKResponseState.fail:
 					HUD.flash(.label("授权失败,错误描述:\(String(describing: error))"), delay: 0.5)
-					print("授权失败,错误描述:\(String(describing: error))")
 					self.dismissHover()
 					break
 				case SSDKResponseState.cancel:
@@ -141,6 +170,7 @@ extension TrackListController {
 					break
 				}
 			}
+			
         } else {
             let main  = Notification.Name("selected")
             let player  = Notification.Name("player")
@@ -148,13 +178,23 @@ extension TrackListController {
                 "indexPath": indexPath.row,
                 "tracks": self.tracks,
                 "type": "online",
-                "title": self.title!
-                ] as [String : Any]
+                "title": self.title!,
+                "playlistID": self.playlistID!
+                ] as [String : AnyObject]
             let mainNotify: Notification = Notification.init(name: main, object: nil, userInfo: nil)
             let playerNotify: Notification = Notification.init(name: player, object: nil, userInfo: userInfo)
+			let cell = tableView.cellForRow(at: indexPath) as! TrackCell
+			self.nowPlayingCell?.accessoryView?.isHidden = true
+			self.nowPlayingCell = cell
+			cell.accessoryView?.isHidden = false			
 			
             NotificationCenter.default.post(mainNotify)
             NotificationCenter.default.post(playerNotify)
+			let userDefaults = UserDefaults.standard
+			userDefaults.set(self.playlistID, forKey: "playlistID")
+			userDefaults.set(true, forKey: "isPlaying")
+			userDefaults.set(nil, forKey: "title")
+			userDefaults.synchronize()
         }
 	}
 	
@@ -228,7 +268,6 @@ extension TrackListController {
                 self.hover?.alpha = 0.5
             })
             UIView.commitAnimations()
-            
             // Get shared Track
             let position = recognizer.location(in: self.tableView)
             let indexPath = self.tableView.indexPathForRow(at: position)

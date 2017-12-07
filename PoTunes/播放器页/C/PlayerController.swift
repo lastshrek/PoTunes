@@ -8,6 +8,8 @@
 
 import UIKit
 import AsyncDisplayKit
+import SCLAlertView
+
 
 class PlayerController: UIViewController {
 
@@ -66,9 +68,17 @@ extension PlayerController {
         doubleTap.numberOfTapsRequired = 2
         doubleTap.numberOfTouchesRequired = 1
         self.view.addGestureRecognizer(doubleTap)
+		
+		// 分享歌曲
+		let doubleLongPress = UILongPressGestureRecognizer.init(target: self, action: #selector(shareToWechat))
+		doubleLongPress.numberOfTouchesRequired = 2
+		doubleLongPress.minimumPressDuration = 0.5
+		self.view.addGestureRecognizer(doubleLongPress)
         
         singleTap.require(toFail: doubleTouch)
         singleTap.require(toFail: doubleTap)
+		
+		
     }
 }
 // MARK: -
@@ -95,6 +105,26 @@ extension PlayerController {
     @objc func showLyrics() {
         self.player.showLyrics()
     }
+	
+	@objc func shareToWechat(sender: UILongPressGestureRecognizer) {
+		if (sender.state == .began) {
+			let appearance = SCLAlertView.SCLAppearance(
+				showCloseButton: false
+			)
+			let alertView = SCLAlertView(appearance: appearance)
+			
+			alertView.addButton("朋友圈") {
+				self.player.share(toWechat: 1)
+			}
+			alertView.addButton("微信好友") {
+				self.player.share(toWechat: 0)
+
+			}
+			alertView.addButton("取消") {
+			}
+			alertView.showSuccess("分享至微信", subTitle: "")
+		}
+	}
 }
 // MARK: - getNotifications
 extension PlayerController {
@@ -108,10 +138,14 @@ extension PlayerController {
 		let tracks = (userInfo["tracks"] as! Array<TrackEncoding>?)!
 		let index = userInfo["indexPath"] as? NSInteger
 		let title = userInfo["title"] as? String
+		let playlistID = userInfo["playlistID"]
 		self.player?.type = userInfo["type"] as? String
 		self.player?.playTracks(tracks, index: index!)
 		self.player?.coverScroll.reloadData(withInitialIndex: index!)
 		self.player?.album?.text = title?.components(separatedBy: " - ").last
+		if (playlistID != nil) {
+			self.player?.playlistID = Int32(playlistID as! Int)
+		}
 	}
 }
 

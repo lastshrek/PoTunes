@@ -17,6 +17,7 @@
 @property (nonatomic, strong) LTInfiniteScrollView *coverScroll;
 @property (nonatomic, weak)	  UILabel *album;
 @property (nonatomic, strong) NSString* type;
+@property (nonatomic, assign) int playlistID;
 
 
 - (void)playTracks:(NSArray *)tracks index:(NSInteger)index;
@@ -27,4 +28,5 @@
 - (void)playShuffle:(UISwipeGestureRecognizer*)recognizer;
 - (void)singleRewind;
 - (void)showLyrics;
+- (void)shareToWechat:(int)scene;
 @end

@@ -13,9 +13,22 @@ class DownloadController: TrackListController {
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
+		getNotification()
 	}
 	//MARK: 禁止本地下载
 	override func downloadSingle(recognizer: UIGestureRecognizer) {}
+	override func getNotification() {
+		super.getNotification()
+		let center = NotificationCenter.default
+		center.addObserver(self, selector: #selector(nowPlayingTrackChange(sender:)), name: Notification.Name("nowPlayingTrack"), object: nil)
+	}
+	deinit {
+		NotificationCenter.default.removeObserver(self, name: Notification.Name("nowPlayingTrack"), object: nil)
+	}
+	override func nowPlayingTrackChange(sender: Notification) {
+		super.nowPlayingTrackChange(sender: sender)
+		tableView.reloadData()
+	}
 }
 
 extension DownloadController {
@@ -70,6 +83,14 @@ extension DownloadController {
 			dismissHover()
 		} else {
 			tableView.deselectRow(at: indexPath, animated: true)
+			if nowPlayingCell == nil {
+				tableView.reloadData()
+			}
+			nowPlayingCell?.playing.isHidden = true
+			
+			let cell = self.tableView.cellForRow(at: indexPath) as! TrackCell
+			cell.playing.isHidden = false
+			nowPlayingCell = cell
 			let main  = Notification.Name("selected")
 			let player  = Notification.Name("player")
 			let userInfo = [
@@ -80,7 +101,11 @@ extension DownloadController {
 				] as [String : Any]
 			let mainNotify: Notification = Notification.init(name: main, object: nil, userInfo: nil)
 			let playerNotify: Notification = Notification.init(name: player, object: nil, userInfo: userInfo)
-			
+			let user = UserDefaults.standard
+			user.set(self.title!, forKey: "title")
+			user.set(-1, forKey: "playlistID")
+			user.set(true, forKey: "isPlaying")
+			user.synchronize()
 			NotificationCenter.default.post(mainNotify)
 			NotificationCenter.default.post(playerNotify)
 		}

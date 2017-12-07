@@ -15,6 +15,10 @@ import SCLAlertView
 
 class AlbumDownloadController: UITableViewController {
 	var downloadAlbums: Array<String>?
+	var nowPlayingTitle: String?
+	var nowPlayingCell: DownloadedCell?
+	var downloadingCell: DownloadedCell?
+	var allTracksCell: DownloadedCell?
 	var op: AFHTTPRequestOperation?
 	lazy var queue: FMDatabaseQueue = DBHelper.sharedInstance.queue!
     lazy var tracksDB: FMDatabase = {
@@ -49,6 +53,15 @@ class AlbumDownloadController: UITableViewController {
 		getNotification()
 	}
 	
+	override func viewWillAppear(_ animated: Bool) {
+		super.viewWillAppear(animated)
+		let user = UserDefaults.standard
+		let title = user.string(forKey: "title")
+		nowPlayingTitle = title
+		debugPrint(nowPlayingTitle)
+		tableView.reloadData()
+	}
+	
 	
 	override func viewDidAppear(_ animated: Bool) {
 		super.viewDidAppear(animated)
@@ -81,11 +94,13 @@ extension AlbumDownloadController {
 		if indexPath.section == 0 {
 			if (indexPath.row == 0) {
 				cell.imageView?.image = UIImage.fontAwesomeIcon(name: .download, textColor: UIColor.colorByRGB(red: 17, green: 133, blue: 117, alpha: 0.8), size: CGSize(width: 30, height: 30))
-				cell.textLabel?.text = "正在缓存"
+				cell.textLabel?.text = String(self.downloadingArray.count) + "首正在缓存"
+				downloadingCell = cell
 			}
 			if (indexPath.row == 1) {
 				cell.imageView?.image = UIImage.fontAwesomeIcon(name: .list, textColor: UIColor.colorByRGB(red: 17, green: 133, blue: 117, alpha: 0.8), size: CGSize(width: 30, height: 30))
 				cell.textLabel?.text = "所有歌曲"
+				allTracksCell = cell
 			}
 		} else {
 			let album = downloadAlbums?[indexPath.row]
@@ -97,6 +112,11 @@ extension AlbumDownloadController {
                 let url = URL(string: (s?.string(forColumn: "thumb"))! + "!/fw/100" )
                 cell.imageView?.sd_setImage(with: url, placeholderImage: UIImage(named: "defaultCover"))
             }
+			if album?.components(separatedBy: " - ").last == nowPlayingTitle {
+				nowPlayingCell?.playing.isHidden = true
+				cell.playing.isHidden = false
+				nowPlayingCell = cell
+			}
             s?.close()
 		}
 		return cell
@@ -129,7 +149,6 @@ extension AlbumDownloadController {
 			download.title = title?.components(separatedBy: " - ").last
             download.tracks = tracks
             download.delegate = self
-            
             self.navigationController?.pushViewController(download, animated: true)
 		} else {
 			if (indexPath.row == 0) {
@@ -227,6 +246,7 @@ extension AlbumDownloadController {
 		let center = NotificationCenter.default
 		center.addObserver(self, selector: #selector(fullAlbum(sender:)), name: Notification.Name("fullAlbum"), object: nil)
 		center.addObserver(self, selector: #selector(download(sender:)), name: Notification.Name("download"), object: nil)
+		center.addObserver(self, selector: #selector(playingOnline(sender:)), name: Notification.Name("nowPlayingTrack"), object: nil)
 	}
 	
     @objc func fullAlbum(sender: Notification) {
@@ -344,8 +364,13 @@ extension AlbumDownloadController {
 						"percent": downloadProgress
 						] as [String : Any]
 					NotificationCenter.default.post(name: Notification.Name("percent"), object: nil, userInfo: userInfo)
+					self.downloadingCell?.textLabel?.text = String(self.downloadingArray.count) + "首正在缓存"
+				}
+				if progress == 100 && self.downloadingArray.count == 1 {
+					self.downloadingCell?.textLabel?.text = "0首正在缓存"
 				}
 			})
+
 			
 			op?.setCompletionBlockWithSuccess({ (operation, responseObject) in
 				// change download Status
@@ -402,6 +427,18 @@ extension AlbumDownloadController {
 				debugPrint(error)
 			})
 			queue.addOperation(self.op!)
+		}
+	}
+	@objc func playingOnline(sender: Notification) {
+		let title = sender.userInfo!["album"] as! String
+		if title == "本地歌曲" {
+			nowPlayingCell?.playing.isHidden = true
+			allTracksCell?.playing.isHidden = false
+			nowPlayingCell = allTracksCell
+			return
+		}
+		if (nowPlayingCell?.playing.isHidden == false) {
+			nowPlayingCell?.playing.isHidden = true
 		}
 	}
 }

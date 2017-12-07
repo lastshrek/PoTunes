@@ -70,7 +70,7 @@ class SettingController: UITableViewController {
 		center.addObserver(self, selector: #selector(switchOn), name: Notification.Name("wwanDownload"), object: nil)
 	}
 	
-	func switchOn() {
+	@objc func switchOn() {
 		DispatchQueue.main.async {
 			self.tableView.reloadData()
 		}
@@ -117,7 +117,7 @@ extension SettingController {
 		return cell
 	}
 	
-	func switchAction(sender: UISwitch) {
+	@objc func switchAction(sender: UISwitch) {
 		let index = sender.tag
 		let user = UserDefaults.standard
 		user.set(sender.isOn, forKey: infos[index + 2])
