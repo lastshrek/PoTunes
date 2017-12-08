@@ -9,26 +9,26 @@
 import UIKit
 
 //MARK: - 代理
-class LrcView: DRNRealTimeBlurView {
+@objc class LrcView: DRNRealTimeBlurView {
 	
-	var noLrcLabel = UILabel().then({
+	@objc var noLrcLabel = UILabel().then({
 		$0.backgroundColor = UIColor.clear
 		$0.textAlignment = .center
 		$0.text = "暂无歌词"
 		$0.textColor = UIColor.lightText
 	})
-	var tableView = UITableView().then({
+	@objc var tableView = UITableView().then({
 		$0.separatorStyle = .none
 		$0.showsVerticalScrollIndicator = false
 		$0.backgroundColor = UIColor.clear
 		$0.register(LrcCell.self, forCellReuseIdentifier: "lrc")
 	})
-	let hover = UIView().then({
+	@objc let hover = UIView().then({
 		$0.backgroundColor = UIColor.black
 		$0.alpha = 0.5
 	})
-	lazy var lyricsLines: Array<LrcLine> = {[]}()
-	lazy var chLrcArray: Array<LrcLine> = {[]}()
+	@objc lazy var lyricsLines: Array<LrcLine> = {[]}()
+	@objc lazy var chLrcArray: Array<LrcLine> = {[]}()
 
 	fileprivate var currentIndex: Int = -1
 	
@@ -59,7 +59,7 @@ class LrcView: DRNRealTimeBlurView {
 }
 
 extension LrcView {
-	func parseLyrics(lyrics: String) {
+	@objc func parseLyrics(lyrics: String) {
 		if lyricsLines.count != 0 {
 			lyricsLines.removeAll()
 		}
@@ -74,18 +74,18 @@ extension LrcView {
 		}
 	}
 	
-	func parseChLyrics(lyrics: String) {
+	@objc func parseChLyrics(lyrics: String) {
 		chLrcArray.removeAll()
 		chLrcArray = divideArray(lyrics: lyrics)
 
 		for lrc in self.lyricsLines {
 			let lrcTime = lrc.time
-			if lrcTime?.characters.count == 0 { continue }
+			if lrcTime?.count == 0 { continue }
 			for chlrc in self.chLrcArray {
 				let chlrcTime = chlrc.time
-				if chlrcTime?.characters.count == 0 { continue }
+				if chlrcTime?.count == 0 { continue }
 				if chlrcTime == lrcTime {
-					if lrc.lyrics?.characters.count == 0 {
+					if lrc.lyrics?.count == 0 {
 						continue
 					}
 					lrc.lyrics = lrc.lyrics! + "\r" + chlrc.lyrics!
@@ -116,12 +116,13 @@ extension LrcView {
 			
 			lrc.time = array.first?.replacingOccurrences(of: "[", with: "")
 			
-			if lrc.time?.characters.count == 0 {
+			if lrc.time?.count == 0 {
 				continue
 			}
-			if ((lrc.time?.characters.count)! > 8) {
+			if ((lrc.time?.count)! > 8) {
 				let index = lrc.time?.index((lrc.time?.startIndex)!, offsetBy: 8)
 				lrc.time = lrc.time?.substring(to: index!)
+
 			}
 			lrc.lyrics = array.last
 			temp.append(lrc)
@@ -129,7 +130,7 @@ extension LrcView {
 		return temp
 	}
 	
-	func currentTime(time:TimeInterval) {
+	@objc func currentTime(time:TimeInterval) {
 		let minute: Int = (Int)(time / 60)
 		let second: Int = (Int)(time) % 60
 		let currentTimeStr = String(format: "%02d:%02d", minute, second)

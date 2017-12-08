@@ -383,14 +383,36 @@ typedef NS_ENUM(NSInteger, AMapNearbySearchType)
 @end
 
 #pragma mark - AMapRoadTrafficSearchRequest
-///道路实时路况查询请求 since 5.1.0
-@interface AMapRoadTrafficSearchRequest : AMapSearchObject
-///道路名称，可通过逆地理编码查询获取
-@property (nonatomic, copy)   NSString *roadName;
-///城市adcode，可参考http://a.amap.com/lbs/static/zip/AMap_adcode_citycode.zip
-@property (nonatomic, copy)   NSString *adcode;
+
+@interface AMapRoadTrafficSearchBaseRequest : AMapSearchObject
+
+///道路等级，1：高速（京藏高速）2：城市快速路、国道(西三环、103国道) 3：高速辅路（G6辅路）4：主要道路（长安街、三环辅路路）5：一般道路（彩和坊路）6：无名道路。默认为5. since 5.5.0
+@property (nonatomic, assign)   NSInteger level;
+
 ///是否返回扩展信息，默认为 NO
 @property (nonatomic, assign) BOOL requireExtension;
+
+@end
+
+///道路实时路况查询请求 since 5.1.0
+@interface AMapRoadTrafficSearchRequest : AMapRoadTrafficSearchBaseRequest
+
+///道路名称，可通过逆地理编码查询获取
+@property (nonatomic, copy)   NSString *roadName;
+
+///城市adcode，可参考http://a.amap.com/lbs/static/zip/AMap_adcode_citycode.zip
+@property (nonatomic, copy)   NSString *adcode;
+
+@end
+
+///圆形区域道路实时路况查询请求 since 5.5.0  注意:返回路况结果取决于发起请求时刻的实时路况，不保证范围内的所有路线路况都会返回，也不保证返回的路况长度一定在限制半径内
+@interface AMapRoadTrafficCircleSearchRequest : AMapRoadTrafficSearchBaseRequest
+
+///必填，中心点坐标。
+@property (nonatomic, copy) AMapGeoPoint *location;
+///查询半径,单位：米。[0, 5000], 默认值为1000.
+@property (nonatomic, assign) NSInteger radius;
+
 @end
 
 ///道路实时路况查询返回 since 5.1.0

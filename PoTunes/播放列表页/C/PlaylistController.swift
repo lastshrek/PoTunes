@@ -128,24 +128,25 @@ class PlaylistController: UITableViewController {
 				self.delegate?.tabBarCount(count: 4)
 			}
 			tableView.reloadData()
-		}
-		
+		}		
 		s?.close()
 	}
 	
 	func addPullToRefresh() {
-		// Initialize tableView
-        tableView.setUpHeaderRefresh {
-            self.loadNewPlaylist()
-        }.SetUp { (header) in
-                header.setText("获取最新歌单", mode: .pullToRefresh)
-                header.setText("松手刷新", mode: .releaseToRefresh)
-                header.setText("刷新成功", mode: .refreshSuccess)
-                header.setText("获取新歌单列表中", mode: .refreshing)
-                header.setText("获取失败，请检查网络", mode: .refreshFailure)
-                header.textLabel.textColor = .black
-                header.imageView.image = nil
-        }
+		let header = DefaultRefreshHeader.header()
+		header.setText("获取最新歌单", mode: .pullToRefresh)
+		header.setText("松手刷新", mode: .releaseToRefresh)
+		header.setText("刷新成功", mode: .refreshSuccess)
+		header.setText("获取新歌单列表中", mode: .refreshing)
+		header.setText("获取失败，请检查网络", mode: .refreshFailure)
+		header.textLabel.textColor = .black
+		header.imageView.image = nil
+		header.imageRenderingWithTintColor = true
+		header.durationWhenHide = 0.4
+		
+		tableView.configRefreshHeader(with: header) {
+			self.loadNewPlaylist()
+		}
 	}
 	
 	func loadNewPlaylist() {

@@ -32,6 +32,9 @@
 @property CGFloat miterLimit;
 
 ///是否绘制成虚线, 默认是NO
-@property BOOL lineDash;
+@property (nonatomic, assign) BOOL lineDash __deprecated_msg("已废弃，请使用lineDashType");
+
+///虚线类型, since 5.5.0
+@property (nonatomic, assign) MALineDashType lineDashType;
 
 @end

@@ -154,6 +154,12 @@ typedef NS_ENUM(NSInteger, AMapSearchLanguage)
  */
 - (void)AMapRoadTrafficSearch:(AMapRoadTrafficSearchRequest *)request;
 
+/**
+ * @brief 查询圆形区域内道路的实时路况 since 5.5.0
+ * @param request 查询选项。具体属性字段请参考 AMapRoadTrafficSearchRequest 类。
+ */
+- (void)AMapRoadTrafficCircleSearch:(AMapRoadTrafficCircleSearchRequest *)request;
+
 #pragma mark - 附近搜索相关
 
 /**
@@ -302,10 +308,10 @@ typedef NS_ENUM(NSInteger, AMapSearchLanguage)
 
 /**
  * @brief 道路路况查询回调 since 5.1.0
- * @param request  发起的请求，具体字段参考 AMapRoadTrafficSearchRequest 。
+ * @param request  发起的请求，具体字段参考 AMapRoadTrafficSearchBaseRequest 及其子类 。
  * @param response 响应结果，具体字段参考 AMapRoadTrafficSearchResponse 。
  */
-- (void)onRoadTrafficSearchDone:(AMapRoadTrafficSearchRequest *)request response:(AMapRoadTrafficSearchResponse *)response;
+- (void)onRoadTrafficSearchDone:(AMapRoadTrafficSearchBaseRequest *)request response:(AMapRoadTrafficSearchResponse *)response;
 #pragma mark - 附近搜索回调
 
 /**

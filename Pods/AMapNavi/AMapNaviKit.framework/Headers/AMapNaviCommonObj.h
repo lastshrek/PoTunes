@@ -219,6 +219,24 @@ typedef NS_ENUM(NSInteger, AMapNaviParallelRoadStatusFlag)
     AMapNaviParallelRoadStatusFlagMain = 2,         ///< 2 可切换到主路
 };
 
+///导航组件主题皮肤类型 since 5.4.0
+typedef NS_ENUM(NSInteger, AMapNaviCompositeThemeType)
+{
+    AMapNaviCompositeThemeTypeDefault = 0,          ///< 0 蓝色系
+    AMapNaviCompositeThemeTypeLight = 1,            ///< 1 浅色系
+    AMapNaviCompositeThemeTypeDark = 2,             ///< 2 暗色系
+};
+
+///导航过程中提示音的类型 since 5.4.0
+typedef NS_ENUM(NSInteger, AMapNaviRingType)
+{
+    AMapNaviRingTypeNULL = 0,                       ///< 0 无
+    AMapNaviRingTypeReroute = 1,                    ///< 1 偏航重算的提示音
+    AMapNaviRingTypeDing = 100,                     ///< 100 即将到达转向路口时的提示音
+    AMapNaviRingTypeDong = 101,                     ///< 101 导航状态下通过测速电子眼的提示音
+    AMapNaviRingTypeElecDing = 102,                 ///< 102 巡航状态下通过电子眼（所有类型）的提示音
+};
+
 #pragma mark - LaneInfo Image
 
 /**

@@ -57,19 +57,11 @@ class PreferenceView: UIView {
 		addSubview(prioritiseHighway)
 	}
 	
-	func avoidCongestionAction(sender: UIButton) {
+	@objc func avoidCongestionAction(sender: UIButton) {
 		changeButtonState(sender, selected: !sender.isSelected)
 	}
 	
-	func avoidCostAction(sender: UIButton) {
-		changeButtonState(sender, selected: !sender.isSelected)
-		
-		if sender.isSelected {
-			changeButtonState(prioritiseHighway, selected: false)
-		}
-	}
-	
-	func avoidHighwayAction(sender: UIButton) {
+	@objc func avoidCostAction(sender: UIButton) {
 		changeButtonState(sender, selected: !sender.isSelected)
 		
 		if sender.isSelected {
@@ -77,7 +69,15 @@ class PreferenceView: UIView {
 		}
 	}
 	
-	func prioritiseHighwayAction(sender: UIButton) {
+	@objc func avoidHighwayAction(sender: UIButton) {
+		changeButtonState(sender, selected: !sender.isSelected)
+		
+		if sender.isSelected {
+			changeButtonState(prioritiseHighway, selected: false)
+		}
+	}
+	
+	@objc func prioritiseHighwayAction(sender: UIButton) {
 		changeButtonState(sender, selected: !sender.isSelected)
 		
 		if sender.isSelected {

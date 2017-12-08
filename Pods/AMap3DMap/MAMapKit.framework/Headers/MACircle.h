@@ -16,6 +16,9 @@
     MAMapRect _boundingMapRect;
 }
 
+///设置中空区域，用来创建中间带空洞的复杂图形。注意：传入的overlay只支持MAPolgon类型和MACircle类型,不支持与此circle边相交或在circle外部,不支持hollowShapes彼此间相交,和空洞顺序有关,不支持嵌套. since 5.5.0
+@property (nonatomic, strong) NSArray<id<MAOverlay>> *hollowShapes;
+
 ///中心点经纬度坐标，无效坐标按照{0，0}处理
 @property (nonatomic, assign) CLLocationCoordinate2D coordinate;
 

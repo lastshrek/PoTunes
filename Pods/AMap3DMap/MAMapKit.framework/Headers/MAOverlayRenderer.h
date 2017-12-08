@@ -11,6 +11,14 @@
 #import "MAOverlay.h"
 #import "MALineDrawType.h"
 
+///虚线类型
+typedef NS_ENUM(NSUInteger, MALineDashType) {
+    kMALineDashTypeNone = 0,     ///<不画虚线
+    kMALineDashTypeSquare,       ///<方块样式
+    kMALineDashTypeDot,          ///<圆点样式
+};
+
+
 #define kMAOverlayRendererDefaultStrokeColor [UIColor colorWithRed:0.3 green:0.63 blue:0.89 alpha:0.8]
 #define kMAOverlayRendererDefaultFillColor [UIColor colorWithRed:0.77 green:0.88 blue:0.94 alpha:0.8]
 
@@ -158,7 +166,7 @@
  * @param looped       是否闭合, 如polyline会设置NO, polygon会设置YES
  * @param lineJoinType 线连接点样式
  * @param lineCapType  线端点样式
- * @param lineDash     是否是虚线
+ * @param lineDash     虚线类型
  */
 - (void)renderLinesWithPoints:(CGPoint *)points
                    pointCount:(NSUInteger)pointCount
@@ -167,7 +175,7 @@
                        looped:(BOOL)looped
                  LineJoinType:(MALineJoinType)lineJoinType
                   LineCapType:(MALineCapType)lineCapType
-                     lineDash:(BOOL)lineDash;
+                     lineDash:(MALineDashType)lineDash;
 
 /**
  * @brief 使用OpenGLES 按指定纹理绘制线
@@ -211,7 +219,7 @@
  * @param looped           是否闭合, 如polyline会设置NO, polygon会设置YES
  * @param lineJoinType     线连接点样式
  * @param lineCapType      线端点样式
- * @param lineDash         是否虚线
+ * @param lineDash         虚线类型
  */
 - (void)renderLinesWithPoints:(CGPoint *)points
                    pointCount:(NSUInteger)pointCount
@@ -222,7 +230,7 @@
                        looped:(BOOL)looped
                  LineJoinType:(MALineJoinType)lineJoinType
                   LineCapType:(MALineCapType)lineCapType
-                     lineDash:(BOOL)lineDash;
+                     lineDash:(MALineDashType)lineDash;
 
 
 /**
@@ -246,7 +254,7 @@
  * @param strokeColor        轮廓线颜色
  * @param strokeLineWidth    轮廓线宽。OpenGLES支持线宽尺寸, 参考 - (CGFloat)glWidthForWindowWidth:(CGFloat)windowWidth
  * @param strokeLineJoinType 轮廓线连接点样式
- * @param strokeLineDash     轮廓线是否是虚线
+ * @param strokeLineDash     轮廓虚线类型
  * @param usingTriangleFan   若必为凸多边形输入YES，可能为凹多边形输入NO
  */
 - (void)renderStrokedRegionWithPoints:(CGPoint *)points pointCount:(NSUInteger)pointCount
@@ -254,7 +262,7 @@
                           strokeColor:(UIColor *)strokeColor
                       strokeLineWidth:(CGFloat)strokeLineWidth
                    strokeLineJoinType:(MALineJoinType)strokeLineJoinType
-                       strokeLineDash:(BOOL)strokeLineDash
+                       strokeLineDash:(MALineDashType)strokeLineDash
                      usingTriangleFan:(BOOL)usingTriangleFan;
 
 

@@ -8,13 +8,13 @@
 
 import UIKit
 
-class TrackEncoding: NSObject, NSCoding {
+@objc class TrackEncoding: NSObject, NSCoding {
 	
-	let ID: Int
-	let name: String
-	let artist: String
-	let cover: String
-	let url: String
+	@objc let ID: Int
+	@objc let name: String
+	@objc let artist: String
+	@objc let cover: String
+	@objc let url: String
 	
 	required init(ID: Int, name: String, artist: String, cover: String, url: String) {
 		self.ID = ID

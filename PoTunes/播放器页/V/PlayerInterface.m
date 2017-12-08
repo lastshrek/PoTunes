@@ -653,10 +653,13 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 }
 - (void)refreshProgressColor:(UIImage*)image {
 	TDImageColors* imageColors= [[TDImageColors alloc] initWithImage:image count:2];
-	self.progress.color = imageColors.colors[1];
-	self.name.textColor = imageColors.colors[1];
-	self.artist.textColor = imageColors.colors[1];
-	self.album.textColor = imageColors.colors[1];
+	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+		self.progress.color = imageColors.colors[1];
+		self.name.textColor = imageColors.colors[1];
+		self.artist.textColor = imageColors.colors[1];
+		self.album.textColor = imageColors.colors[1];
+	});
+	
 }
 #pragma mark - Notifications
 - (void)getNotification {

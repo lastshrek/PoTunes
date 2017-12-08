@@ -58,7 +58,6 @@ class AlbumDownloadController: UITableViewController {
 		let user = UserDefaults.standard
 		let title = user.string(forKey: "title")
 		nowPlayingTitle = title
-		debugPrint(nowPlayingTitle)
 		tableView.reloadData()
 	}
 	

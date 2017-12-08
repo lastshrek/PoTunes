@@ -18,10 +18,43 @@ NS_ASSUME_NONNULL_BEGIN
 ///驾车导航管理类
 @interface AMapNaviDriveManager : AMapNaviBaseManager
 
+#pragma mark - Singleton
+
+/**
+ * @brief AMapNaviDriveManager单例. since 5.4.0
+ * @return AMapNaviDriveManager实例
+ */
++ (AMapNaviDriveManager *)sharedInstance;
+
+/**
+ * @brief 销毁AMapNaviDriveManager单例. AMapNaviDriveManager内存开销比较大，建议不使用时可销毁. since 5.4.0
+ * @return 是否销毁成功. 如果返回NO，请检查单例是否被强引用
+ */
++ (BOOL)destroyInstance;
+
+/**
+ * @brief 请使用单例替代. since 5.4.0 init已被禁止使用，请使用单例 [AMapNaviDriveManager sharedInstance] 替代，且在调用类的 dealloc 函数或其他适当时机(如导航ViewController被pop时)，调用 [AMapNaviDriveManager destroyInstance] 来销毁单例（需要注意如未销毁成功，请检查单例是否被强引用)
+ */
+- (instancetype)init __attribute__((unavailable("since 5.4.0 init 已被禁止使用，请使用单例 [AMapNaviDriveManager sharedInstance] 替代，且在调用类的 dealloc 函数里或其他适当时机(如导航ViewController被pop时)，调用 [AMapNaviDriveManager destroyInstance] 来销毁单例（需要注意如未销毁成功，请检查单例是否被强引用)")));
+
 #pragma mark - Delegate
 
 ///实现了 AMapNaviDriveManagerDelegate 协议的类指针
 @property (nonatomic, weak) id<AMapNaviDriveManagerDelegate> delegate;
+
+#pragma mark - Event Listener
+
+/**
+ * @brief 增加用于接收导航回调事件的Listener, 效果等同于delegate. 注意:该方法不会增加实例对象的引用计数(Weak Reference). since 5.4.0
+ * @param aListener 实现了 AMapNaviDriveManagerDelegate 协议的实例
+ */
+- (void)addEventListener:(id<AMapNaviDriveManagerDelegate>)aListener;
+
+/**
+ * @brief 移除用于接收导航回调事件的Listener. since 5.4.0
+ * @param aListener 实现了 AMapNaviDriveManagerDelegate 协议的实例
+ */
+- (void)removeEventListener:(id<AMapNaviDriveManagerDelegate>)aListener;
 
 #pragma mark - Data Representative
 
@@ -90,7 +123,7 @@ NS_ASSUME_NONNULL_BEGIN
  * @param endPoints    终点坐标.终点列表的尾点为实际导航终点.
  * @param wayPoints    途经点坐标,最多支持16个途经点.
  * @param strategy     路径的计算策略
- * @return 规划路径是否成功
+ * @return 规划路径所需条件和参数校验是否成功，不代表算路成功与否
  */
 - (BOOL)calculateDriveRouteWithEndPoints:(NSArray<AMapNaviPoint *> *)endPoints
                                wayPoints:(nullable NSArray<AMapNaviPoint *> *)wayPoints
@@ -102,7 +135,7 @@ NS_ASSUME_NONNULL_BEGIN
  * @param endPoints    终点坐标.终点列表的尾点为实际导航终点,其他坐标点为辅助信息,带有方向性,可有效避免算路到马路的另一侧.
  * @param wayPoints    途经点坐标,最多支持16个途经点.
  * @param strategy     路径的计算策略
- * @return 规划路径是否成功
+ * @return 规划路径所需条件和参数校验是否成功，不代表算路成功与否
  */
 - (BOOL)calculateDriveRouteWithStartPoints:(NSArray<AMapNaviPoint *> *)startPoints
                                  endPoints:(NSArray<AMapNaviPoint *> *)endPoints
@@ -112,7 +145,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  * @brief 导航过程中重新规划路径(起点为当前位置,途经点和终点位置不变)
  * @param strategy 路径的计算策略
- * @return 规划路径是否成功
+ * @return 规划路径所需条件和参数校验是否成功，不代表算路成功与否
  */
 - (BOOL)recalculateDriveRouteWithDrivingStrategy:(AMapNaviDrivingStrategy)strategy;
 
@@ -246,6 +279,13 @@ NS_ASSUME_NONNULL_BEGIN
  * @param driveManager 驾车导航管理类
  */
 - (void)driveManagerOnArrivedDestination:(AMapNaviDriveManager *)driveManager;
+
+/**
+ * @brief 导航(巡航)过程中播放提示音的回调函数. since 5.4.0
+ * @param driveManager 驾车导航管理类
+ * @param ringType 提示音类型,参考 AMapNaviRingType .
+ */
+- (void)driveManager:(AMapNaviDriveManager *)driveManager onNaviPlayRing:(AMapNaviRingType)ringType;
 
 @end
 

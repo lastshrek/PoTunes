@@ -20,21 +20,21 @@ PODS:
   - AFNetworking/UIKit (2.6.3):
     - AFNetworking/NSURLConnection
     - AFNetworking/NSURLSession
-  - Alamofire (4.5.1)
-  - AMap3DMap (5.4.0):
-    - AMapFoundation (~> 1.3)
+  - Alamofire (4.6.0)
+  - AMap3DMap (5.6.0):
+    - AMapFoundation (~> 1.4)
   - AMapFoundation (1.4.2)
   - AMapLocation (2.5.0):
     - AMapFoundation (~> 1.4)
-  - AMapNavi (5.3.0):
-    - AMap3DMap (>= 5.3.0)
+  - AMapNavi (5.4.0):
+    - AMap3DMap (>= 5.6.0)
     - AMapFoundation (~> 1.4)
-  - AMapSearch (5.4.0):
+  - AMapSearch (5.5.0):
     - AMapFoundation (~> 1.4)
   - FMDB (2.7.2):
     - FMDB/standard (= 2.7.2)
   - FMDB/standard (2.7.2)
-  - FontAwesome.swift (1.3.1)
+  - FontAwesome.swift (1.3.2)
   - LDProgressView (1.2.1)
   - mob_sharesdk (4.0.4):
     - mob_sharesdk/ShareSDK (= 4.0.4)
@@ -60,12 +60,12 @@ PODS:
     - PINCache (= 3.0.1-beta.5)
     - PINRemoteImage/Core
   - PKHUD (5.0.0)
-  - PullToRefreshKit (0.7.0)
+  - PullToRefreshKit (0.8.2)
   - SCLAlertView (0.7.0)
   - SCLAlertView-Objective-C (1.1.2)
-  - SDWebImage (4.2.1):
-    - SDWebImage/Core (= 4.2.1)
-  - SDWebImage/Core (4.2.1)
+  - SDWebImage (4.2.2):
+    - SDWebImage/Core (= 4.2.2)
+  - SDWebImage/Core (4.2.2)
   - SVProgressHUD (2.2.2)
   - TDImageColors (0.3.1)
   - Texture (2.5.1):
@@ -75,7 +75,7 @@ PODS:
     - PINRemoteImage/iOS (= 3.0.0-beta.12)
     - PINRemoteImage/PINCache
     - Texture/Core
-  - Then (2.2.1)
+  - Then (2.3.0)
   - UMengAnalytics-NO-IDFA (4.2.5)
 
 DEPENDENCIES:
@@ -102,14 +102,14 @@ DEPENDENCIES:
 
 SPEC CHECKSUMS:
   AFNetworking: cb8d14a848e831097108418f5d49217339d4eb60
-  Alamofire: 2d95912bf4c34f164fdfc335872e8c312acaea4a
-  AMap3DMap: 3eb906ac6b9d488413ab26c24f67eca4b4ad4641
+  Alamofire: f41a599bd63041760b26d393ec1069d9d7b917f4
+  AMap3DMap: 2ac4f9ad7f2f8b015013d8d282c55882bcd68dc9
   AMapFoundation: 6c0471c9a6a0ad17dad46e3d800ad56ca170f82a
   AMapLocation: d02bd8c0081b0bc51b2e4cf89925ef57448263c9
-  AMapNavi: 3f553beb42afdc4c18b2ca8137f9363038d8783d
-  AMapSearch: 97042f81c1c8ea8adc4b1dadf1b1a688210aa141
+  AMapNavi: 2c1a58663249e4e638031888941513a6be8fefaf
+  AMapSearch: dc9958acfb61b58dcbce79736bf14a39dde7506f
   FMDB: 6198a90e7b6900cfc046e6bc0ef6ebb7be9236aa
-  FontAwesome.swift: 050a75c6b94db0b082f39bde5b111c5c64d62a83
+  FontAwesome.swift: b4e4c8ccbbecb12f9b592bc533ff237af3706667
   LDProgressView: f6afc7c30d2a9edf33001515f3189338567a32d2
   mob_sharesdk: b3ac49261b0e56d9e305d473c70bcde2e3a6e8ff
   MOBFoundation: 6f6ec1c2513278551f1a808b5692e983d99e5069
@@ -117,14 +117,14 @@ SPEC CHECKSUMS:
   PINOperation: ac23db44796d4a564ecf9b5ea7163510f579b71d
   PINRemoteImage: 0cefe720c2612960bd360710efbd6c73a1991d5f
   PKHUD: 3c001512c6e002091184197a8de7a20420786e3b
-  PullToRefreshKit: 8a1de4451090e30094f266393cb4642d4a47d899
+  PullToRefreshKit: 0a2a019bf094b8beba18c8a1bedfb1fb67ee70fd
   SCLAlertView: 8a14ffc40590c619e183eed2298b854385f30be1
   SCLAlertView-Objective-C: 0e54351fa4f98a5c7c6ad3727e6dbb46784534e5
-  SDWebImage: 1fa4c9edf525b744f002db89f3f5a38b3cd4c541
+  SDWebImage: 89a9d32cd520bbb46eb14e541d5109b3564af198
   SVProgressHUD: 59b2d3dabacbd051576d21d32293ca7228dc18b0
   TDImageColors: 73feaadb478d4ffa9c3d5c09e2621f8768aa02f9
   Texture: c3f06e344aa091667b7a56002e525cde674d021a
-  Then: 665607ef49c6c3f66c722cd02b7b53745a622f49
+  Then: ee21c97b85ff6062b9b0080c9abb1eea46743345
   UMengAnalytics-NO-IDFA: 16666e32edce5be44ae5b14aaaa7f3582e09d6ab
 
 PODFILE CHECKSUM: 4f5075db9bd20dd084db1a03d2c0d3c75a788720

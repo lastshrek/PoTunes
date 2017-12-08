@@ -70,7 +70,7 @@ class NaviController: UIViewController, MAMapViewDelegate, AMapSearchDelegate {
 	}
 	
 	@objc func switchRoutes() {
-		if routeSeletcion.start.text.text?.characters.count == 0 || routeSeletcion.end.text.text?.characters.count == 0 {
+		if routeSeletcion.start.text.text?.count == 0 || routeSeletcion.end.text.text?.count == 0 {
 			HUD.flash(.labeledError(title: "请选择线路", subtitle: nil), delay: 0.7)
 			return
 		}

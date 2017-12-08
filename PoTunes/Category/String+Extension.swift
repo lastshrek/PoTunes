@@ -28,7 +28,7 @@ extension NSObject {
 		
 	}
 	
-	func getIdentifier(urlStr: String) -> String {
+	@objc func getIdentifier(urlStr: String) -> String {
 		
 		let urlComponent: Array = urlStr.components(separatedBy: "/")
 		

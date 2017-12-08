@@ -21,7 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Navi Mode
 
-///当前导航模式,参考AMapNaviMode
+///当前导航模式,参考 AMapNaviMode .
 @property (nonatomic, readonly) AMapNaviMode naviMode;
 
 #pragma mark - Options

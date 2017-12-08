@@ -58,7 +58,7 @@ class DrivingCalculateController: UIViewController, AMapNaviDriveManagerDelegate
 	}
 	
 	func initDriveManager() {
-		driverManager = AMapNaviDriveManager().then({
+		driverManager = AMapNaviDriveManager.sharedInstance().then({
 			$0.delegate = self
 			$0.allowsBackgroundLocationUpdates = true
 			$0.pausesLocationUpdatesAutomatically = false
