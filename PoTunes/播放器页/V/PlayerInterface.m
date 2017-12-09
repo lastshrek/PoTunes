@@ -464,8 +464,19 @@ typedef NS_ENUM(NSUInteger, PCAudioPlayState) {
 	NSURL *musicUrl = [NSURL URLWithString:[NSString stringWithFormat:@"https://poche.fm/api/app/track/%ld", self.nowPlayingTrack.ID]];
 	NSString *title = self.nowPlayingTrack.name;
 	NSURL *musicFileUrl = [NSURL URLWithString:self.nowPlayingTrack.url];
-	[shareParams SSDKSetupWeChatParamsByText:artist title:title url:musicUrl thumbImage:self.nowCover.image
- image:nil musicFileURL:musicFileUrl extInfo:nil fileData:nil emoticonData:nil sourceFileExtension:nil sourceFileData:nil type:SSDKContentTypeAudio forPlatformSubType:type];
+	[shareParams SSDKSetupWeChatParamsByText:artist
+									   title:title
+										 url:musicUrl
+								  thumbImage:self.nowCover.image
+									   image:nil
+								musicFileURL:musicFileUrl
+									 extInfo:nil
+									fileData:nil
+								emoticonData:nil
+						 sourceFileExtension:nil
+							  sourceFileData:nil
+										type:SSDKContentTypeAudio
+						  forPlatformSubType:type];
 	[ShareSDK share:type parameters:shareParams onStateChanged:^(SSDKResponseState state, NSDictionary *userData, SSDKContentEntity *contentEntity, NSError *error) {
 		switch (state) {
 			case SSDKResponseStateSuccess:

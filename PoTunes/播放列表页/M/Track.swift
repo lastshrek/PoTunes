@@ -15,7 +15,7 @@ class Track: NSObject {
 	@objc var cover: String = ""
 	@objc var url: String = ""
 
-	func setupMappingReplaceProperty() -> [String : String] {
+	@objc func setupMappingReplaceProperty() -> [String : String] {
 		return ["ID": "id"]
 	}
 }

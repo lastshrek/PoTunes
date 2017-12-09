@@ -8,10 +8,10 @@
 
 import UIKit
 
-class Playlist: NSObject {
-	var ID: Int = 0
-	var title: String = ""
-	var cover: String = ""
+@objc class Playlist: NSObject {
+	@objc var ID: Int = 0
+	@objc var title: String = ""
+	@objc var cover: String = ""
 
 	@objc func setupMappingReplaceProperty() -> [String : String] {
 		return ["ID": "id"]
